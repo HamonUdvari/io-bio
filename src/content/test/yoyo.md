@@ -1,5 +1,5 @@
 ---
-slug: hi
+slug: yoyo
 ---
 
 yoyooy

@@ -197,6 +197,8 @@ const docxEntryType: ContentEntryType = {
     };
   },
   getRenderFunction: async (config) => {
+    console.log("GET RENDER FUNCTION");
+
     console.log("get render function", "config", config);
     const render: ContentEntryRenderFunction = async ({
       id,
@@ -206,9 +208,10 @@ const docxEntryType: ContentEntryType = {
       digest,
     }) => {
       return {
-        Content: (body || "<p>No content found for this DOCX file.</p>") as any,
-        headings: [],
-        remarkPluginFrontmatter: {},
+        html: (body || "<p>No content found for this DOCX file.</p>") as any,
+        metadata: {
+          headings: ["test heading"],
+        },
       };
     };
     return render;
