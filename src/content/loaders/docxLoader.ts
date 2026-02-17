@@ -181,7 +181,7 @@ const docxEntryType: ContentEntryType = {
 
     let archives = "";
     let publications = "";
-    let litarature = "";
+    let literature = "";
 
     // Need to parse out sections
     // without the bio
@@ -247,49 +247,48 @@ const docxEntryType: ContentEntryType = {
       const html = toHtml(hastTree);
       parsedContent = html;
 
-      const archiveNodeIndex = ast.content.findIndex(
-        (n) => n.type === "paragraph" && n.text?.startsWith("ARCHIVES"),
-      );
-
-      const archiveNodes = [];
-      if (archiveNodeIndex >= 0) {
-        console.log("archive node index", archiveNodeIndex);
-        // deep copy
-        // clean children
-
-        const clone = structuredClone(ast.content.at(archiveNodeIndex));
-        clone.children = clone.children.filter(
-          (cn) => (cn.text !== "ARCHIVES") & (cn.text !== ":"),
+      const extractSectionHtml = (label: string) => {
+        const startIndex = ast.content.findIndex(
+          (n) => n.type === "paragraph" && n.text?.startsWith(label),
         );
-        archiveNodes.push(clone);
-
-        let i = archiveNodeIndex + 1;
-
-        let exit = false;
-        while (!exit) {
-          if (i > ast.content.length - 1) {
-            exit = true;
-            continue;
+        console.log("label ", label, "start index", startIndex);
+        const nodes: any[] = [];
+        if (startIndex >= 0) {
+          const head = structuredClone(ast.content.at(startIndex));
+          head.children = head.children.filter((cn: any) => {
+            const t = typeof cn.text === "string" ? cn.text.trim() : cn.text;
+            return t !== label && t !== ":";
+          });
+          nodes.push(head);
+          let i = startIndex + 1;
+          let exit = false;
+          while (!exit) {
+            if (i > ast.content.length - 1) {
+              exit = true;
+              continue;
+            }
+            const node = ast.content.at(i);
+            if (
+              node &&
+              node.children &&
+              node.children.at(0) &&
+              node.children.at(0)?.formatting?.bold
+            ) {
+              exit = true;
+              continue;
+            }
+            nodes.push(node);
+            i++;
           }
-
-          let node = ast.content.at(i);
-          if (
-            node &&
-            node.children &&
-            node.children.at(0) &&
-            node.children.at(0)?.formatting?.font?.bold
-          ) {
-            // Bold text found, another section starts
-            exit = true;
-            continue;
-          }
-          archiveNodes.push(node);
-          i++;
+          const sectionHastTree = h(null, nodes.map(transformNode));
+          return toHtml(sectionHastTree);
         }
-        console.log("an", archiveNodes);
-        const archiveHastTree = h(null, archiveNodes.map(transformNode));
-        archives = toHtml(archiveHastTree);
-      }
+        return "";
+      };
+
+      archives = extractSectionHtml("ARCHIVES");
+      publications = extractSectionHtml("PUBLICATIONS");
+      literature = extractSectionHtml("LITERATURE");
 
       // iterate until paragraph with bold found
       // Archive nodes
@@ -308,6 +307,8 @@ const docxEntryType: ContentEntryType = {
       imageSource,
       life,
       archives,
+      publications,
+      literature,
     };
 
     console.log("parsed content is there", !!parsedContent);
@@ -319,7 +320,7 @@ const docxEntryType: ContentEntryType = {
   getRenderFunction: async (config) => {
     console.log("GET RENDER FUNCTION");
 
-    console.log("get render function", "config", config);
+    // console.log("get render function", "config", config);
     const render: ContentEntryRenderFunction = async ({
       id,
       data,
@@ -444,7 +445,7 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
           filePath,
         );
 
-        console.log("data here", data);
+        // console.log("data here", data);
 
         let parsedData = data;
         // TODO(Tibor): check why this overrides the data with nothing
@@ -457,7 +458,7 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
           });
         }
 
-        console.log("data here", parsedData);
+        // console.log("data here", parsedData);
 
         if (
           existingEntry &&
