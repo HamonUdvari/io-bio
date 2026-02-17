@@ -169,7 +169,7 @@ const docxEntryType: ContentEntryType = {
   name: "Docx",
   getEntryInfo: async ({ contents, fileUrl }) => {
     const filePath = fileURLToPath(fileUrl);
-    let parsedContent = "";
+    let html = "";
 
     let firstName = "";
     let lastName = "";
@@ -182,39 +182,34 @@ const docxEntryType: ContentEntryType = {
     let archives = "";
     let publications = "";
     let literature = "";
+    let version = "";
+    let authors = "";
+    let body = "";
+    let organisation = "";
+    let nationality = "";
+    let startYear = "";
+    let endYear = "";
 
-    // Need to parse out sections
-    // without the bio
+    let extractedNodes = [];
 
     try {
-      // todo - parse content raw
-      // todo - get image attachment
-      // todo - separate metadatas
-      // todo - extract image
-      // todo - extract different info parts
-      // todo - archives
-      // todo - publications
-      // todo - literature
-      // find the paragraph that contains the text
-      // iterate - stop condition next stop word or a direct child that is bold?
-
-      console.log("filepath is", filePath);
       const ast = await OfficeParser.parseOffice(filePath, {
         extractAttachments: true,
       });
-      const str = ast.content.at(0).text;
 
       const imageSourceNode = ast.content.find(
         (c) => c.type === "paragraph" && c.text.startsWith("Source:"),
       );
-
       const sourceMatch = imageSourceNode.text.match(/Source:\s*(.+)/i);
-
       if (sourceMatch) {
         imageSource = sourceMatch[1].trim();
+        extractedNodes.push(imageSourceNode);
       }
 
-      // console.log(firstParagraph)
+      const introNode = ast.content.at(0);
+      extractedNodes.push(introNode);
+
+      const str = introNode.text;
       const nameMatch = str.match(/^([^,]+),\s*([^,]+),/);
 
       if (nameMatch) {
@@ -224,9 +219,25 @@ const docxEntryType: ContentEntryType = {
       }
 
       const titleMatch = str.match(/^[^,]+,\s*[^,]+,\s*(.+?)\s*,\s*was born/i);
-
       if (titleMatch) {
         title = titleMatch[1].trim();
+
+        const orgMatch = title.match(/\(([^)]+)\)/);
+        if (orgMatch) {
+          organisation = orgMatch[1].trim();
+        }
+
+        // TODO: This will fail for exceptions like “Dutch,” “Finn,” “French,” or multi-word nationalities (“South African”)
+        const natMatch = title.match(/\b(\w+(?:ian|ese|ish|i|ic))\b/i);
+        if (natMatch) {
+          nationality = natMatch[1].trim();
+        }
+
+        const yearsMatch = title.match(/(\d{4})-(\d{4})/);
+        if (yearsMatch) {
+          startYear = yearsMatch[1];
+          endYear = yearsMatch[2];
+        }
       }
 
       const lifeMatch = str.match(/(was.+)$/i);
@@ -237,28 +248,49 @@ const docxEntryType: ContentEntryType = {
         }
       }
 
-      console.log("ast attachments", ast.attachments);
+      // Version
+      const versionNode = ast.content.find(
+        (c) => c.type === "paragraph" && c.text.startsWith("Version"),
+      );
+
+      if (versionNode) {
+        version = versionNode.text;
+        extractedNodes.push(versionNode);
+      }
+
+      const citationNode = ast.content.find(
+        (c) =>
+          c.type === "paragraph" &&
+          c.text.includes(
+            "in IO BIO, Biographical Dictionary of Secretaries-General",
+          ),
+      );
+
+      if (citationNode) {
+        authors = citationNode.text.split(",")[0].trim();
+        extractedNodes.push(citationNode);
+      }
+
       if (ast.attachments && ast.attachments.length > 0) {
         image = ast.attachments.at(0);
       }
 
-      // parsedContent = ast.toText();
-      const hastTree = h(null, ast.content.map(transformNode));
-      const html = toHtml(hastTree);
-      parsedContent = html;
-
-      const extractSectionHtml = (label: string) => {
+      const extractSectionNodes = (label: string) => {
         const startIndex = ast.content.findIndex(
           (n) => n.type === "paragraph" && n.text?.startsWith(label),
         );
-        console.log("label ", label, "start index", startIndex);
+
+        // console.log("label ", label, "start index", startIndex);
         const nodes: any[] = [];
         if (startIndex >= 0) {
-          const head = structuredClone(ast.content.at(startIndex));
+          // const head = structuredClone(ast.content.at(startIndex));
+          const head = ast.content.at(startIndex);
+
           head.children = head.children.filter((cn: any) => {
             const t = typeof cn.text === "string" ? cn.text.trim() : cn.text;
             return t !== label && t !== ":";
           });
+
           nodes.push(head);
           let i = startIndex + 1;
           let exit = false;
@@ -280,19 +312,65 @@ const docxEntryType: ContentEntryType = {
             nodes.push(node);
             i++;
           }
-          const sectionHastTree = h(null, nodes.map(transformNode));
-          return toHtml(sectionHastTree);
+
+          return nodes;
         }
         return "";
       };
 
-      archives = extractSectionHtml("ARCHIVES");
-      publications = extractSectionHtml("PUBLICATIONS");
-      literature = extractSectionHtml("LITERATURE");
+      const archiveNodes = extractSectionNodes("ARCHIVES");
+      const publicationsNodes = extractSectionNodes("PUBLICATIONS");
+      const literatureNodes = extractSectionNodes("LITERATURE");
 
-      // iterate until paragraph with bold found
-      // Archive nodes
-      // First child node is bold true
+      const archiveHastTree = h(null, archiveNodes.map(transformNode));
+      const publicationsHastTree = h(
+        null,
+        publicationsNodes.map(transformNode),
+      );
+      const literatureHastTree = h(null, literatureNodes.map(transformNode));
+
+      archives = toHtml(archiveHastTree);
+      publications = toHtml(publicationsHastTree);
+      literature = toHtml(literatureHastTree);
+
+      extractedNodes = [
+        ...extractedNodes,
+        ...archiveNodes,
+        ...publicationsNodes,
+        ...literatureNodes,
+      ];
+
+      const howToCiteNode = ast.content.find(
+        (c) =>
+          c.type === "paragraph" &&
+          c.text.toLowerCase().includes("how to cite this io bio entry"),
+      );
+      if (howToCiteNode) {
+        extractedNodes.push(howToCiteNode);
+      }
+
+      const authorNode = ast.content.find(
+        (c) =>
+          c.type === "paragraph" &&
+          c.text.toLowerCase().includes(authors.toLowerCase()),
+      );
+      if (authorNode) {
+        extractedNodes.push(authorNode);
+      }
+
+      const remainingNodes = ast.content.filter(
+        (n) =>
+          !extractedNodes.some((e) => JSON.stringify(e) === JSON.stringify(n)),
+      );
+
+      // const remainingNodes = ast.content.filter(
+      //   (n) => !extractedNodes.includes(n),
+      // );
+      const bodyHastTree = remainingNodes.map(transformNode);
+      body = toHtml(bodyHastTree);
+
+      const hastTree = h(null, ast.content.map(transformNode));
+      html = toHtml(hastTree);
     } catch (error) {
       // Log the error but don't prevent processing
       console.error(`Error parsing DOCX file ${filePath}: ${error}`);
@@ -309,11 +387,17 @@ const docxEntryType: ContentEntryType = {
       archives,
       publications,
       literature,
+      version,
+      authors,
+      organisation,
+      nationality,
+      startYear,
+      endYear,
+      html,
     };
 
-    console.log("parsed content is there", !!parsedContent);
     return {
-      body: parsedContent,
+      body,
       data: data,
     };
   },

@@ -1,0 +1,22 @@
+---
+import "@styles/global.css"
+import { getEntry, getCollection } from "astro:content";
+
+const bios = await getCollection("bios");
+---
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>io-bio</title>
+	</head>
+	<body>
+    <h1>List</h1>
+    <div>
+      {bios && bios.map(({data}) => {
+      const {firstName, lastName, image, authors, organisation, nationality, startYear, endYear } = data;
+      return (<div>{lastName}, {firstName}, {organisation}, {nationality}, {startYear}-{endYear},{authors}<img src={"data:image/png;base64," + image.data} class="inline-block h-32"/> </div>)
+      })}
+    </div>
+	</body>
+</html>

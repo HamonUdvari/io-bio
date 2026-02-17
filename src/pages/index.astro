@@ -6,8 +6,8 @@ import { render } from "astro:content";
 
 
 const testEntries = await getCollection("tests");
-const entries = await getCollection("entries");
-const entry = await getEntry("entries", "annan-ka-2019");
+const entries = await getCollection("bios");
+const entry = await getEntry("bios", "annan-ka-2019");
 
 if (!entry) {
   throw new Error("Entry not found");
@@ -37,6 +37,7 @@ const {Content:TestContent} = await render(testEntry);
     <div>
       <h2>Rendered stuff</h2>
       {JSON.stringify(entry.data)}
+      <hr/>
       <Content />
       <TestContent />
       <!-- {entries && entries.map(e => <div>{JSON.stringify(e)}</div>)} -->

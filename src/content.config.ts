@@ -15,8 +15,8 @@ const tests = defineCollection({
   }),
 });
 
-const entries = defineCollection({
-  loader: docxLoader({ pattern: "**/*.docx", base: "./src/content/entries" }),
+const bios = defineCollection({
+  loader: docxLoader({ pattern: "**/*.docx", base: "./src/content/bios" }),
   schema: z.object({
     slug: z.string().optional(),
   }),
@@ -24,5 +24,5 @@ const entries = defineCollection({
 
 export const collections = {
   tests,
-  entries,
+  bios,
 };
