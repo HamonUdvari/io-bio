@@ -661,7 +661,7 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
           return;
         }
         const entryType = configForFile(changedPath);
-        const baseUrl = pathToFileToURL(basePath);
+        const baseUrl = pathToFileURL(basePath);
         const oldId = fileToIdMap.get(changedPath);
         await syncData(entry, baseUrl, entryType, oldId);
         logger.info(`Reloaded data from ${colors.green(entry)}`);
