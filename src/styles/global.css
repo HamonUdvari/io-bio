@@ -1,1 +1,283 @@
+@import '@fontsource/roboto';
+@import '@fontsource/roboto-condensed';
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Roboto";
+  --font-hero: "Roboto Condensed";
+
+  --breakpoint-tablet: 48rem; /* 768 px */ 
+  --breakpoint-desktop: 80rem; /* 80rem (1280px), tailwind xl breakpoint */
+
+  --color-io-red: #FF5309;
+  --color-io-gray-100: #EDEDED;
+  --color-io-gray-600: #4A4A4A;
+  --color-io-gray-900: #1E1D1D;
+  --color-io-black: #000000;
+
+  --color-brand: var(--color-io-red);
+
+  --color-io-neutral: var(--color-io-black);
+  --color-io-onneutral: var(--color-io-gray-100);
+  
+  --color-io-brand: var(--color-io-red);
+  --color-io-onbrand: var(--color-io-black);
+  
+  --color-io-primary: var(--color-io-black);
+  --color-io-onprimary: var(--color-io-gray-100);
+
+  --color-io-secondary: var(--color-io-gray-900);
+  --color-io-onsecondary: var(--color-io-gray-100);
+
+  --color-io-secondary: var(--color-io-gray-900);
+  --color-io-onsecondary: var(--color-io-gray-100);
+
+  --color-io-tertiary: var(--color-io-gray-600);
+  --color-io-ontertiary: var(--color-io-gray-100);
+
+  --gap-x-base: calc(var(--spacing) * 4);
+  --gap-x-tablet: calc(var(--spacing) * 5);
+  --gap-x-desktop: calc(var(--spacing) * 6);
+  
+  --gap-y-base: calc(var(--spacing) * 4);
+  --gap-y-tablet: calc(var(--spacing) * 5);
+  /* --gap-y-desktop: calc(var(--spacing) * 6); */
+  --gap-y-desktop: 1.875rem;
+
+  --px-base: calc(0.75rem);
+  --px-tablet: calc(0.75rem);
+  --px-desktop: calc(2rem);
+
+  /* --max-content-width: 85rem; */
+  /* --max-content-width: 80ch; */
+  --max-content-width: 1280px;
+  --content-width: min(calc(100svw - var(--px) * 2), var(--max-content-width));
+
+  --text-hover: var(--color-io-red);
+}
+
+@utility text-h1 {
+  @apply text-base desktop:text-[4.375rem];
+  @apply leading-none;
+  @apply print:text-[4.375rem];
+}
+
+@utility text-h2 {
+  @apply text-base desktop:text-[2.5rem];
+  @apply leading-tight;
+  @apply print:text-[2.5rem];
+}
+
+@utility text-h3 {
+  @apply text-xl;
+}
+
+@utility text-body {
+  @apply text-base desktop:text-[1.25rem];
+  @apply leading-[1.2];
+  @apply print:text-[1.25rem];
+}
+
+@utility text-caption {
+  @apply text-base;
+}
+
+@utility io-transition {
+  @apply transition-all duration-200;
+}
+
+@layer base {
+  :root {
+    --gap-x: var(--gap-x-base);
+    --gap-y: var(--gap-y-base);
+    --px: var(--px-base);
+
+    @variant tablet {
+      --gap-x: var(--gap-x-tablet);
+      --gap-y: var(--gap-y-tablet);
+      --px: var(--px-tablet);
+    }
+
+    @variant desktop {
+      --gap-x: var(--gap-x-desktop);
+      --gap-y: var(--gap-y-desktop);
+      --px: var(--px-desktop);
+    }
+
+    @variant print {
+      --px: var(--px-desktop);
+    }
+  }
+  
+  body {
+    @apply bg-io-primary;
+    @apply text-io-onprimary;
+    overflow-y: scroll;
+  }   
+
+  * {
+    text-box-trim: trim;
+    text-box-edge: cap alphabetic;
+    text-wrap: pretty;
+  }
+
+  a {
+    @apply io-transition; 
+    @apply hover:text-(--text-hover);
+  }
+}
+
+@layer components {
+  .columns {
+    &.columns--default {
+      @apply columns-1; 
+    }
+
+    &.columns--compact {
+      @apply columns-xs;
+    }
+
+    ul {
+      li {
+        /* @apply mb-[0.25em]; */
+        @apply leading-normal;
+      }
+      /* @apply flex flex-col ; */
+      /* @apply gap-y-[0.25em];  */
+    }
+  }
+
+  section {
+
+    @variant print {
+      background-color: white !important;
+      color: black !important;
+    }
+
+    @apply desktop:pt-10 desktop:pb-7.5; 
+    @apply text-body;
+    @apply flex flex-col;
+    @apply gap-y-(--gap-y);
+    @apply border-t border-io-gray-100;
+    @apply bg-io-secondary;
+    
+    & .section__title {
+      @apply px-(--px);
+      @apply pb-(--gap-y);
+      @apply max-w-[1900px];
+    }
+
+    &.section--nav {
+      @apply border-b;
+      @apply pb-4 pt-[2.5rem];
+    }
+
+    &.section--footer {
+      --text-hover: var(--color-io-gray-100);
+      @apply bg-io-brand text-io-black;
+      @apply border-t-0;
+      
+      & .footer__text {
+        @apply text-[40px] leading-[1.15];
+      }
+    }
+
+    & > *, & > astro-island > * {
+      @apply max-w-(--content-width) w-full mx-auto;
+    }
+   
+    h2 {
+      @apply text-h2;
+    }
+
+    &.section--primary {
+      @apply bg-io-primary text-io-onprimary;
+      @apply border-t-0;
+
+      & .section__title {
+        @apply text-center w-[80%] pb-(--gap-y);
+      }
+    }
+    
+    &.section--secondary {
+      @apply bg-io-secondary text-io-onsecondary;
+    }
+
+    &+.section--primary {
+      @apply border-t-0;
+    }
+  }
+
+  .flex, .grid {
+    @apply gap-x-(--gap-x) gap-y-(--gap-y);
+  }
+
+  .hero {
+    & .hero__text-container__text {
+      font-family: var(--font-hero);
+    }
+  }
+
+  .entries {
+    @apply text-left; 
+    @apply max-w-[90%];
+    
+    table {
+      @apply -ml-4;
+      @apply border-separate border-spacing-x-4 border-spacing-y-2;   
+      th {
+        @apply cursor-pointer select-none;
+      }
+      td {
+        vertical-align: baseline;
+      }
+    }
+  }
+
+  .button {
+    @apply text-h3 leading-none;
+    @apply px-9 py-4; 
+    @apply io-transition;
+    @apply inline-block; 
+    @apply cursor-pointer;
+
+    @apply bg-(--btn-bg) text-(--btn-text);
+    @apply border border-(--btn-border);
+
+    --btn-bg: var(--color-io-onprimary);
+    --btn-text: var(--color-io-primary);
+
+    --btn-bg-hover: var(--color-io-brand);
+    --btn-text-hover: var(--color-io-onbrand);
+
+    --btn-border: var(--btn-text);
+    --btn-border-hover: var(--btn-text-hover);
+
+    &.button--primary {
+      @apply border-0;
+    }
+
+    &.button--secondary {
+      --btn-bg: transparent;
+      --btn-text: var(--color-io-onsecondary);
+
+      --btn-bg-hover: var(--color-io-onsecondary);
+      --btn-text-hover: var(--color-io-secondary);
+
+      --btn-border: var(--btn-text);
+      --btn-border-hover: var(--btn-bg-hover);
+    }
+
+    &:hover:not(:disabled):not([aria-disabled="true"]) {
+      @apply bg-(--btn-bg-hover) text-(--btn-text-hover);
+      @apply border-(--btn-border-hover);
+    }
+
+    &:active:not(:disabled):not([aria-disabled="true"]),
+    &:focus-visible:not(:disabled):not([aria-disabled="true"]) {
+      @apply bg-(--btn-bg-hover) text-(--btn-text-hover);
+      @apply border-(--btn-border-hover);
+    }
+    
+  }
+}

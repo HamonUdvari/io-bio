@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+
+const pages = await getCollection("pages");
+let links = pages.map(({ data }) => ({
+  slug: data.slug,
+  title: data.title,
+  order: data.order,
+}));
+links = links.toSorted((a, b) => a.order - b.order);
+---
+
+<nav class="nav flex flex-row">
+  {
+    links &&
+      links.map(({ slug, title }) => (
+        <a href={`/${slug}`} class="last:ml-auto">
+          {title}
+        </a>
+      ))
+  }
+</nav>

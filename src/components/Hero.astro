@@ -1,0 +1,44 @@
+---
+import { type Link } from "../content.config";
+import { frontmatter as data, rawContent } from "@content/globals/hero.md";
+import { marked } from "marked";
+
+const html = marked(rawContent());
+const links = data.links as Link[];
+---
+
+<div
+  class:list={[
+    "hero",
+    "flex flex-col",
+    "items-center",
+    "justify-between",
+    "w-full h-[90svh]",
+    "bg-io-primary",
+    "pb-14",
+  ]}
+>
+  <div
+    class:list={[
+      "hero__text-container",
+      "uppercase",
+      "text-h1",
+      "text-center",
+      "flex-1",
+      "flex flex-col justify-center-safe",
+      "-translate-y-6",
+    ]}
+  >
+    <div class="hero__text-container__text" set:html={html} />
+  </div>
+  <div class:list={["hero__buttons", "flex flex-row"]}>
+    {
+      links &&
+        links.map(({ href, label }) => (
+          <a href={href} class="button button--primary">
+            {label}
+          </a>
+        ))
+    }
+  </div>
+</div>

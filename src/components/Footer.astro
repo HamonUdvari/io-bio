@@ -1,0 +1,11 @@
+---
+import Nav from "@components/Nav.astro";
+import { frontmatter as data, rawContent } from "@content/globals/footer.md";
+import { marked } from "marked";
+const html = marked(rawContent());
+---
+
+<footer class="footer flex flex-col">
+  <div class="footer__text" set:html={html} />
+  <Nav />
+</footer>

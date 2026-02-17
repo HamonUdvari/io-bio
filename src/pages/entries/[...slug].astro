@@ -1,0 +1,89 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { render } from "astro:content";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const bios = await getCollection("bios");
+
+  return bios.map((page) => {
+    const { id } = page;
+
+    return {
+      params: { slug: id },
+      props: { ...page },
+    };
+  });
+}
+
+const { data } = Astro.props;
+const {
+  image,
+  lastName,
+  firstName,
+  archives,
+  publications,
+  literature,
+  role,
+  organisation,
+  startYear,
+  endYear,
+  imageSource,
+  summary,
+  authors,
+  version,
+  life,
+} = data;
+
+if (!image) {
+  throw new Error("Image was missing");
+}
+
+const title = `${lastName.toUpperCase()}, ${firstName}`;
+const description = summary;
+const { Content } = await render(Astro.props);
+---
+
+<Layout title={title} description={description}>
+  <section class="border-t-0 bg-io-gray-600 pt-[5rem] pb-[10rem] text-center gap-y-[30px]">
+    <figure class="max-w-[345px] _max-h-[414px]">
+      <picture>
+        <img
+          class="w-full"
+          src={`data:${image!.mimeType};base64,${image!.data}`}
+        />
+      </picture>
+      <figcaption class="text-[6px] pt-1 text-left">Source: {imageSource}</figcaption>
+    </figure>
+    <div class="flex flex-col items-center gap-y-5 leading-none">
+      <h1 class="text-h2 leading-none">{title}</h1>
+      <h2 class="text-h2 max-w-[45ch] leading-none">{summary}</h2>
+    </div>
+    <div class="flex flex-row mx-auto items-center justify-center">
+      <span>By {authors}</span>
+      <span>{version}</span>
+    </div>
+    <span class="mt-[30px] text-balance">{life}</span>
+    <button class="button button--primary w-fit print:hidden" onclick="window.print()">Download Entry PDF</button>
+  </section>
+  <section id="biography">
+    <h2 class="section__title">Biography</h2>
+    <Content />
+  </section>
+  <section id="archives">
+    <h2 class="section__title">Archives</h2>
+    <div set:html={archives} />
+  </section>
+  <section id="publications">
+    <h2 class="section__title">Publications</h2>
+    <div set:html={publications} />
+  </section>
+  <section id="literature">
+    <h2 class="section__title">Literature</h2>
+    <div set:html={literature} />
+  </section>
+  <section id="cite">
+    <h2 class="section__title">How to cite</h2>
+    <p>todo</p>
+  </section>
+</Layout>
