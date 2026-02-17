@@ -1,5 +1,21 @@
 ---
+import { getCollection } from "astro:content"
 import "@styles/global.css"
+import { getEntry } from "astro:content";
+import { render } from "astro:content";
+
+
+const testEntries = await getCollection("tests");
+const entries = await getCollection("entries");
+const entry = await getEntry("entries", "annan-ka-2019");
+
+if (!entry) {
+  throw new Error("Entry not found");
+  }
+
+const { Content } = await render(entry);
+console.log(Content);
+
 ---
 
 <html lang="en">
@@ -9,6 +25,11 @@ import "@styles/global.css"
 		<title>io-bio</title>
 	</head>
 	<body>
-		<h1>io-bio</h1>
+    <h1>io-bio</h1>
+    <div>
+      <h2>Rendered stuff</h2>
+      <Content />
+      <!-- {entries && entries.map(e => <div>{JSON.stringify(e)}</div>)} -->
+    </div>
 	</body>
 </html>
