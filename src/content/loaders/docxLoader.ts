@@ -18,6 +18,8 @@ import { slug as githubSlug } from "github-slugger";
 import { h } from "hastscript";
 import { toHtml } from "hast-util-to-html";
 import { nameCase } from "@foundernest/namecase";
+import countries from "world-countries/countries.json";
+import internationalOrganisations from "./ios.json";
 
 /*
  * Transform officeparser AST nodes into HAST nodes
@@ -187,6 +189,7 @@ const docxEntryType: ContentEntryType = {
     let body = "";
     let organisation = "";
     let nationality = "";
+    let country = "";
     let startYear = "";
     let endYear = "";
 
@@ -217,6 +220,14 @@ const docxEntryType: ContentEntryType = {
         lastName = nameCase(lastName);
         firstName = nameMatch[2].trim();
       }
+      
+      const lifeMatch = str.match(/(was.+)$/i);
+      if (lifeMatch) {
+        life = lifeMatch[1].trim();
+        if (life && life.length > 1) {
+          life = life.charAt(0).toUpperCase() + life.slice(1);
+        }
+      }
 
       const titleMatch = str.match(/^[^,]+,\s*[^,]+,\s*(.+?)\s*,\s*was born/i);
       if (titleMatch) {
@@ -227,11 +238,57 @@ const docxEntryType: ContentEntryType = {
           organisation = orgMatch[1].trim();
         }
 
-        // TODO: This will fail for exceptions like “Dutch,” “Finn,” “French,” or multi-word nationalities (“South African”)
-        const natMatch = title.match(/\b(\w+(?:ian|ese|ish|i|ic))\b/i);
-        if (natMatch) {
-          nationality = natMatch[1].trim();
+        if (!orgMatch) {
+          const ios = internationalOrganisations;
+          const io = ios.find(io => {
+            return title.includes(io.name);
+          });
+          organisation = io.abbreviation || io.name; 
         }
+
+        // TODO: This will fail for exceptions like “Dutch,” “Finn,” “French,” or multi-word nationalities (“South African”)
+        // const natMatch = title.match(/\b(\w+(?:ian|ese|ish|i|ic))\b/i);
+        // if (natMatch) {
+        //   nationality = natMatch[1].trim();
+        // }
+
+        let countryObject = countries.find((c) => {
+          // console.log("country", c)
+          if (!c.unMember) {
+            return false;
+          }
+          const femaleDem = c.demonyms?.eng?.f || "UNDEFINED";
+          const maleDem = c.demonyms?.eng?.m || "UNDEFINED";
+          return title.includes(femaleDem) || title.includes(maleDem);
+        });
+        
+        if (!countryObject) {
+          // Problem with atlanta georgia
+          //
+          // countryObject = countries.find((c) => {
+          //   if (!c.unMember) {
+          //     return false;
+          //   }
+          //   const commonName = c.name.common;
+          //   return title.includes(commonName) || life.includes(commonName);
+          // });
+        }
+
+        if (countryObject) {
+          console.log("found country", countryObject);
+          country = countryObject.name.common;
+          const femaleDem = countryObject.demonyms?.eng?.f || "UNDEFINED";
+          const maleDem = countryObject.demonyms?.eng?.m || "UNDEFINED";
+
+          if (title.includes(femaleDem)) {
+            nationality = femaleDem;
+          }
+
+          if (title.includes(maleDem)) {
+            nationality = maleDem;
+          }
+        }
+
 
         const yearsMatch = title.match(/(\d{4})-(\d{4})/);
         if (yearsMatch) {
@@ -240,13 +297,6 @@ const docxEntryType: ContentEntryType = {
         }
       }
 
-      const lifeMatch = str.match(/(was.+)$/i);
-      if (lifeMatch) {
-        life = lifeMatch[1].trim();
-        if (life && life.length > 1) {
-          life = life.charAt(0).toUpperCase() + life.slice(1);
-        }
-      }
 
       // Version
       const versionNode = ast.content.find(
@@ -391,6 +441,7 @@ const docxEntryType: ContentEntryType = {
       authors,
       organisation,
       nationality,
+      country,
       startYear,
       endYear,
       html,
@@ -498,8 +549,9 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
           fileUrl,
         });
 
-        console.log("data is", data);
+        // console.log("data is", data);
         // console.log("body is", body);
+        // console.log(countries);
 
         const id = generateId({ entry, base, data });
 

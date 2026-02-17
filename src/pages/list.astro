@@ -14,8 +14,8 @@ const bios = await getCollection("bios");
     <h1>List</h1>
     <div>
       {bios && bios.map(({data}) => {
-      const {firstName, lastName, image, authors, organisation, nationality, startYear, endYear } = data;
-      return (<div>{lastName}, {firstName}, {organisation}, {nationality}, {startYear}-{endYear},{authors}<img src={"data:image/png;base64," + image.data} class="inline-block h-32"/> </div>)
+      const {firstName, lastName, image, authors, organisation, nationality, country, startYear, endYear } = data;
+      return (<div>{lastName}, {firstName}, {organisation}, {nationality}, {country}, {startYear}-{endYear},{authors}<img src={"data:image/png;base64," + image.data} class="inline-block h-32"/> </div>)
       })}
     </div>
 	</body>
