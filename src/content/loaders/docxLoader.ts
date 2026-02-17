@@ -17,6 +17,7 @@ import path from "node:path";
 import { slug as githubSlug } from "github-slugger";
 import { h } from "hastscript";
 import { toHtml } from "hast-util-to-html";
+import { nameCase } from "@foundernest/namecase";
 
 /*
  * Transform officeparser AST nodes into HAST nodes
@@ -169,28 +170,147 @@ const docxEntryType: ContentEntryType = {
   getEntryInfo: async ({ contents, fileUrl }) => {
     const filePath = fileURLToPath(fileUrl);
     let parsedContent = "";
+
+    let firstName = "";
+    let lastName = "";
+    let title = "";
+    let life = "";
+
+    let image = {};
+    let imageSource = "";
+
+    let archives = "";
+    let publications = "";
+    let litarature = "";
+
+    // Need to parse out sections
+    // without the bio
+
     try {
       // todo - parse content raw
       // todo - get image attachment
       // todo - separate metadatas
+      // todo - extract image
+      // todo - extract different info parts
+      // todo - archives
+      // todo - publications
+      // todo - literature
+      // find the paragraph that contains the text
+      // iterate - stop condition next stop word or a direct child that is bold?
 
       console.log("filepath is", filePath);
-      const ast = await OfficeParser.parseOffice(filePath);
+      const ast = await OfficeParser.parseOffice(filePath, {
+        extractAttachments: true,
+      });
+      const str = ast.content.at(0).text;
+
+      const imageSourceNode = ast.content.find(
+        (c) => c.type === "paragraph" && c.text.startsWith("Source:"),
+      );
+
+      const sourceMatch = imageSourceNode.text.match(/Source:\s*(.+)/i);
+
+      if (sourceMatch) {
+        imageSource = sourceMatch[1].trim();
+      }
+
+      // console.log(firstParagraph)
+      const nameMatch = str.match(/^([^,]+),\s*([^,]+),/);
+
+      if (nameMatch) {
+        lastName = nameMatch[1].trim();
+        lastName = nameCase(lastName);
+        firstName = nameMatch[2].trim();
+      }
+
+      const titleMatch = str.match(/^[^,]+,\s*[^,]+,\s*(.+?)\s*,\s*was born/i);
+
+      if (titleMatch) {
+        title = titleMatch[1].trim();
+      }
+
+      const lifeMatch = str.match(/(was.+)$/i);
+      if (lifeMatch) {
+        life = lifeMatch[1].trim();
+        if (life && life.length > 1) {
+          life = life.charAt(0).toUpperCase() + life.slice(1);
+        }
+      }
+
+      console.log("ast attachments", ast.attachments);
+      if (ast.attachments && ast.attachments.length > 0) {
+        image = ast.attachments.at(0);
+      }
+
       // parsedContent = ast.toText();
       const hastTree = h(null, ast.content.map(transformNode));
       const html = toHtml(hastTree);
       parsedContent = html;
 
-      // console.log(ast)
-      // console.log(parsedContent)
-      // parsedContent = await officeparser.parse(filePath);
+      const archiveNodeIndex = ast.content.findIndex(
+        (n) => n.type === "paragraph" && n.text?.startsWith("ARCHIVES"),
+      );
+
+      const archiveNodes = [];
+      if (archiveNodeIndex >= 0) {
+        console.log("archive node index", archiveNodeIndex);
+        // deep copy
+        // clean children
+
+        const clone = structuredClone(ast.content.at(archiveNodeIndex));
+        clone.children = clone.children.filter(
+          (cn) => (cn.text !== "ARCHIVES") & (cn.text !== ":"),
+        );
+        archiveNodes.push(clone);
+
+        let i = archiveNodeIndex + 1;
+
+        let exit = false;
+        while (!exit) {
+          if (i > ast.content.length - 1) {
+            exit = true;
+            continue;
+          }
+
+          let node = ast.content.at(i);
+          if (
+            node &&
+            node.children &&
+            node.children.at(0) &&
+            node.children.at(0)?.formatting?.font?.bold
+          ) {
+            // Bold text found, another section starts
+            exit = true;
+            continue;
+          }
+          archiveNodes.push(node);
+          i++;
+        }
+        console.log("an", archiveNodes);
+        const archiveHastTree = h(null, archiveNodes.map(transformNode));
+        archives = toHtml(archiveHastTree);
+      }
+
+      // iterate until paragraph with bold found
+      // Archive nodes
+      // First child node is bold true
     } catch (error) {
       // Log the error but don't prevent processing
       console.error(`Error parsing DOCX file ${filePath}: ${error}`);
     }
+
     const data = {
       title: path.basename(filePath, path.extname(filePath)),
+      firstName,
+      lastName,
+      summary: title,
+      image,
+      imageSource,
+      life,
+      archives,
     };
+
+    console.log("parsed content is there", !!parsedContent);
     return {
       body: parsedContent,
       data: data,
@@ -209,9 +329,7 @@ const docxEntryType: ContentEntryType = {
     }) => {
       return {
         html: (body || "<p>No content found for this DOCX file.</p>") as any,
-        metadata: {
-          headings: ["test heading"],
-        },
+        metadata: {},
       };
     };
     return render;
@@ -289,6 +407,7 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
         const fileBuffer = await fs.readFile(filePath);
         const digest = generateDigest(fileBuffer);
 
+        console.log("body deconstruct");
         const { body, data } = await entryType.getEntryInfo({
           contents: "", // Dummy string as officeparser uses path
           fileUrl,
@@ -325,11 +444,20 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
           filePath,
         );
 
-        const parsedData = await parseData({
-          id,
-          data,
-          filePath,
-        });
+        console.log("data here", data);
+
+        let parsedData = data;
+        // TODO(Tibor): check why this overrides the data with nothing
+        const parse = false;
+        if (parse && parseData) {
+          parsedData = await parseData({
+            id,
+            data,
+            filePath,
+          });
+        }
+
+        console.log("data here", parsedData);
 
         if (
           existingEntry &&
@@ -343,9 +471,8 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
             );
           }
         }
-        
-        console.log("here");
 
+        console.log("here");
         let render = renderFunctionByContentType.get(entryType);
         console.log("render is", render);
         if (!render) {
@@ -353,7 +480,7 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
           renderFunctionByContentType.set(entryType, render);
         }
         let rendered: RenderedContent | undefined = undefined;
-        
+
         try {
           rendered = await render?.({
             id,

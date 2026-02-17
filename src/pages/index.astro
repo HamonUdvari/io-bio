@@ -21,8 +21,12 @@ const testEntry = await getEntry("tests", "yoyo");
 const {Content:TestContent} = await render(testEntry);
 
 console.log(testEntry);
-console.log(entry);
+// console.log(entry);
+
+// todo - get the name in the data
+//
 ---
+
 
 <html lang="en">
 	<head>
@@ -34,7 +38,7 @@ console.log(entry);
     <h1>io-bio</h1>
     <div>
       <h2>Rendered stuff</h2>
-      {JSON.stringify(headings)}
+      {JSON.stringify(entry.data)}
       <Content />
       <TestContent />
       <!-- {entries && entries.map(e => <div>{JSON.stringify(e)}</div>)} -->
