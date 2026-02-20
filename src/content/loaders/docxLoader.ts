@@ -175,6 +175,7 @@ const docxEntryType: ContentEntryType = {
 
     let firstName = "";
     let lastName = "";
+    let knownAs = "";
     let title = "";
     let life = "";
 
@@ -213,14 +214,19 @@ const docxEntryType: ContentEntryType = {
       extractedNodes.push(introNode);
 
       const str = introNode.text;
-      const nameMatch = str.match(/^([^,]+),\s*([^,]+),/);
+      // const nameMatch = str.match(
+      //   /^([^,]+),\s*([^,(]+(?: [^,(]+)*)(?:\s*\(known as\s+(.+?)\))?,/i,
+      // );
+      const nameMatch = str.match(
+        /^([^,]+),\s*([^(,]+)(?:\s*\((?:known as|née)\s+(.+?)\))?,/i,
+      );
 
       if (nameMatch) {
-        lastName = nameMatch[1].trim();
-        lastName = nameCase(lastName);
+        lastName = nameCase(nameMatch[1].trim());
         firstName = nameMatch[2].trim();
+        knownAs = nameMatch[3]?.trim(); // undefined if not present
       }
-      
+
       const lifeMatch = str.match(/(was.+)$/i);
       if (lifeMatch) {
         life = lifeMatch[1].trim();
@@ -230,6 +236,7 @@ const docxEntryType: ContentEntryType = {
       }
 
       const titleMatch = str.match(/^[^,]+,\s*[^,]+,\s*(.+?)\s*,\s*was born/i);
+
       if (titleMatch) {
         title = titleMatch[1].trim();
 
@@ -239,11 +246,14 @@ const docxEntryType: ContentEntryType = {
         }
 
         if (!orgMatch) {
+          console.log("did not find org");
           const ios = internationalOrganisations;
-          const io = ios.find(io => {
+          const io = ios.find((io) => {
             return title.includes(io.name);
           });
-          organisation = io.abbreviation || io.name; 
+          if (io) {
+            organisation = io.abbreviation || io.name;
+          }
         }
 
         // TODO: This will fail for exceptions like “Dutch,” “Finn,” “French,” or multi-word nationalities (“South African”)
@@ -261,7 +271,7 @@ const docxEntryType: ContentEntryType = {
           const maleDem = c.demonyms?.eng?.m || "UNDEFINED";
           return title.includes(femaleDem) || title.includes(maleDem);
         });
-        
+
         if (!countryObject) {
           // Problem with atlanta georgia
           //
@@ -289,14 +299,12 @@ const docxEntryType: ContentEntryType = {
           }
         }
 
-
         const yearsMatch = title.match(/(\d{4})-(\d{4})/);
         if (yearsMatch) {
           startYear = yearsMatch[1];
           endYear = yearsMatch[2];
         }
       }
-
 
       // Version
       const versionNode = ast.content.find(
@@ -430,6 +438,7 @@ const docxEntryType: ContentEntryType = {
       title: path.basename(filePath, path.extname(filePath)),
       firstName,
       lastName,
+      knownAs,
       summary: title,
       image,
       imageSource,

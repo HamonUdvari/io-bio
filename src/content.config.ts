@@ -16,7 +16,7 @@ const tests = defineCollection({
 });
 
 const bios = defineCollection({
-  loader: docxLoader({ pattern: "**/*.docx", base: "./src/content/bios" }),
+  loader: docxLoader({ pattern: "**/*.{doc,docx}", base: "./src/content/bios" }),
   schema: z.object({
     slug: z.string().optional(),
   }),

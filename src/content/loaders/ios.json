@@ -14,6 +14,7 @@
   { "name": "Joint United Nations Programme on HIV/AIDS", "abbreviation": "UNAIDS" },
   { "name": "United Nations Capital Development Fund", "abbreviation": "UNCDF" },
   { "name": "United Nations Human Rights Council", "abbreviation": "UNHRC" },
+  { "name": "Office of the United Nations High Commissioner for Human Rights", "abbreviation": "OHCHR" },
   { "name": "United Nations International Children's Emergency Fund", "abbreviation": "UNICEF" },
   { "name": "United Nations Development Programme", "abbreviation": "UNDP" },
   { "name": "United Nations Educational, Scientific and Cultural Organization", "abbreviation": "UNESCO" },
@@ -268,7 +269,11 @@
   { "name": "League of Nations", "abbreviation": "LoN", "status": "defunct" },
   { "name": "Peloponnesian League", "abbreviation": null, "status": "defunct" },
   { "name": "Organisation of African Unity", "abbreviation": "OAU", "status": "defunct" },
+  { "name": "Organization of African Unity", "abbreviation": "OAU", "status": "defunct" },
   { "name": "Southeast Asia Treaty Organization", "abbreviation": "SEATO", "status": "defunct" },
   { "name": "Union of African States", "abbreviation": "UAS", "status": "defunct" },
-  { "name": "Warsaw Pact", "abbreviation": null, "status": "defunct" }
+  { "name": "Warsaw Pact", "abbreviation": null, "status": "defunct" },
+  { "name": "International Institute of Intellectual Cooperation", "abbreviation": "IIIC"},
+  { "name": "Rhine Shipping Octroit", "abbreviation": "Rhine Shipping Octroit"},
+  { "name": "European Commission of the Danube", "abbreviation": "Danube Comission"}
 ]
