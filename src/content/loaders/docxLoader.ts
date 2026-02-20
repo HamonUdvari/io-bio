@@ -189,6 +189,7 @@ const docxEntryType: ContentEntryType = {
     let authors = "";
     let body = "";
     let organisation = "";
+    let role = "";
     let nationality = "";
     let country = "";
     let startYear = "";
@@ -246,7 +247,6 @@ const docxEntryType: ContentEntryType = {
         }
 
         if (!orgMatch) {
-          console.log("did not find org");
           const ios = internationalOrganisations;
           const io = ios.find((io) => {
             return title.includes(io.name);
@@ -255,12 +255,6 @@ const docxEntryType: ContentEntryType = {
             organisation = io.abbreviation || io.name;
           }
         }
-
-        // TODO: This will fail for exceptions like “Dutch,” “Finn,” “French,” or multi-word nationalities (“South African”)
-        // const natMatch = title.match(/\b(\w+(?:ian|ese|ish|i|ic))\b/i);
-        // if (natMatch) {
-        //   nationality = natMatch[1].trim();
-        // }
 
         let countryObject = countries.find((c) => {
           // console.log("country", c)
@@ -285,7 +279,7 @@ const docxEntryType: ContentEntryType = {
         }
 
         if (countryObject) {
-          console.log("found country", countryObject);
+          // console.log("found country", countryObject);
           country = countryObject.name.common;
           const femaleDem = countryObject.demonyms?.eng?.f || "UNDEFINED";
           const maleDem = countryObject.demonyms?.eng?.m || "UNDEFINED";
@@ -303,6 +297,19 @@ const docxEntryType: ContentEntryType = {
         if (yearsMatch) {
           startYear = yearsMatch[1];
           endYear = yearsMatch[2];
+        }
+
+
+        const roleMatch = title.match(
+          /(?<=\b(?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|and)\s+|,\s+)([A-Z][A-Za-z]*(?:[\s-](?:and|&|[A-Z][A-Za-z]*))*)\s+of\s+(?:the\s+)?(?:[A-Z]|Board)/g,
+        );
+
+        if (roleMatch) {
+          // Grab the last match found
+          const lastRole = roleMatch[roleMatch.length - 1];
+
+          // Clean up: Remove everything from " of " onwards
+          role = lastRole.replace(/\s+of\s+.*$/, "").trim();
         }
       }
 
@@ -449,6 +456,7 @@ const docxEntryType: ContentEntryType = {
       version,
       authors,
       organisation,
+      role,
       nationality,
       country,
       startYear,

@@ -2,7 +2,10 @@
 import "@styles/global.css"
 import { getEntry, getCollection } from "astro:content";
 
+import ListView from "@components/ListView";
+
 const bios = await getCollection("bios");
+const biosData = bios.map(bio => bio.data);
 ---
 <html lang="en">
 	<head>
@@ -10,12 +13,13 @@ const bios = await getCollection("bios");
 		<meta name="viewport" content="width=device-width" />
 		<title>io-bio</title>
 	</head>
-	<body>
+  <body>
+    <ListView data={biosData} client:load />
     <h1>List</h1>
     <div>
       {bios && bios.map(({data}) => {
-      const {firstName, lastName, knownAs, image, authors, organisation, nationality, country, startYear, endYear } = data;
-      return (<div>{lastName}, {firstName}, aka: {knownAs}, {organisation}, {nationality}, {country}, {startYear}-{endYear},{authors}<img src={"data:image/png;base64," + image.data} class="inline-block h-32"/> </div>)
+      const {firstName, lastName, knownAs, image, authors, organisation, role, nationality, country, startYear, endYear } = data;
+      return (<div>{lastName}, {firstName}, aka: {knownAs}, {organisation}, {role}, {nationality}, {country}, {startYear}-{endYear},{authors}<img src={"data:image/png;base64," + image.data} class="inline-block h-32"/> </div>)
       })}
     </div>
 	</body>

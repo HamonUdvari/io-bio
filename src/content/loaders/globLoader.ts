@@ -1,6 +1,5 @@
 import { existsSync, promises as fs } from 'node:fs';
 import { relative } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
 import pLimit from 'p-limit';
 import colors from 'piccolore';
 import picomatch from 'picomatch';
