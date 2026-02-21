@@ -1,0 +1,58 @@
+---
+import "@styles/global.css";
+import { frontmatter as globals } from "@content/globals/global.md";
+
+const SITE = import.meta.env.SITE;
+const {title, description} = globals;
+const image = `${SITE}/og.jpg`;
+const currentUrl = new URL(Astro.url.pathname, SITE).toString();
+const locale = Astro.currentLocale;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={currentUrl} />
+    
+    <meta property="og:url" content={currentUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {image && <meta property="og:image" content={image} />}
+    <meta property="og:locale" content={locale} />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link
+      rel="icon"
+      href="/android-chrome-192x192.png"
+      sizes="192x192"
+      type="image/png"
+    />
+    <link
+      rel="icon"
+      href="/android-chrome-512x512.png"
+      sizes="512x512"
+      type="image/png"
+    />
+
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" href="/fav.jpg" type="image/jpeg" />
+    <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

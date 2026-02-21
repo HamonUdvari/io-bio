@@ -6,6 +6,10 @@ import preact from "@astrojs/preact";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://io-bio.graduateinstitute.ch",
+  server: {
+    allowedHosts: true,
+  },
   integrations: [preact({ compat: true })],
   vite: {
     plugins: [tailwindcss()],

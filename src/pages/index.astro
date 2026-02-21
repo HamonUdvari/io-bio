@@ -1,46 +1,9 @@
 ---
-import { getCollection } from "astro:content"
-import "@styles/global.css"
-import { getEntry } from "astro:content";
-import { render } from "astro:content";
-
-
-const testEntries = await getCollection("tests");
-const entries = await getCollection("bios");
-const entry = await getEntry("bios", "annan-ka-2019");
-
-if (!entry) {
-  throw new Error("Entry not found");
-  }
-
-  const { Content, headings } = await render(entry);
-//console.log(Content);
-
-const testEntry = await getEntry("tests", "yoyo");
-
-const {Content:TestContent} = await render(testEntry);
-
-//console.log(testEntry);
-// console.log(entry);
-
-// todo - get the name in the data
+import Layout from "@layouts/Layout.astro";
+import Hero from "@components/Hero.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>io-bio</title>
-	</head>
-	<body>
-    <h1>io-bio</h1>
-    <div>
-      <h2>Rendered stuff</h2>
-      {JSON.stringify(entry.data)}
-      <hr/>
-      <Content />
-      <TestContent />
-      <!-- {entries && entries.map(e => <div>{JSON.stringify(e)}</div>)} -->
-    </div>
-	</body>
-</html>
+<Layout>
+  <Hero />
+  Hello astro
+</Layout>

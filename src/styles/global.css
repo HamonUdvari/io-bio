@@ -1,1 +1,64 @@
+@import '@fontsource/roboto';
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Roboto";
+
+  --breakpoint-tablet: 48rem; /* 768 px */ 
+  --breakpoint-desktop: 80rem; /* 80rem (1280px), tailwind xl breakpoint */
+
+  --color-io-red: #FF5309;
+  --color-io-gray-100: #EDEDED;
+  --color-io-gray-600: #4A4A4A;
+  --color-io-gray-900: #1E1D1D;
+  --color-io-black: #000000;
+
+  --color-brand: var(--color-io-red);
+
+  --color-io-neutral: var(--color-io-black);
+  --color-io-onneutral: var(--color-io-gray-100);
+  
+
+  --color-io-brand: var(--color-io-red);
+  --color-io-onbrand: var(--color-io-black);
+  
+  --color-io-primary: var(--color-io-black);
+  --color-io-onprimary: var(--color-io-gray-100);
+
+  --color-io-secondary: var(--color-io-gray-900);
+  --color-io-onsecondary: var(--color-io-gray-100);
+
+  --color-io-secondary: var(--color-io-gray-900);
+  --color-io-onsecondary: var(--color-io-gray-100);
+
+  --color-io-tertiary: var(--color-io-gray-600);
+  --color-io-ontertiary: var(--color-io-gray-100);
+}
+
+@utility text-h1 {
+  @apply text-base desktop:text-[4.375rem];
+  @apply leading-none;
+}
+
+@utility text-h2 {
+  @apply text-base;
+}
+
+@utility text-h3 {
+  @apply text-base;
+}
+
+@utility text-body {
+  @apply text-base;
+}
+
+@utility text-caption {
+  @apply text-base;
+}
+
+@layer base {
+  body {
+    @apply bg-io-primary;
+    @apply text-io-onprimary;
+  }   
+}
