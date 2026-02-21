@@ -470,9 +470,6 @@ const docxEntryType: ContentEntryType = {
     };
   },
   getRenderFunction: async (config) => {
-    console.log("GET RENDER FUNCTION");
-
-    // console.log("get render function", "config", config);
     const render: ContentEntryRenderFunction = async ({
       id,
       data,
@@ -520,10 +517,10 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
       store.clear();
       // Ensure .docx entry type is registered
       if (!entryTypes.has(".docx")) {
-        console.log("not has docx");
+        // console.log("not has docx");
         entryTypes.set(".docx", docxEntryType);
       } else {
-        console.log("has docx");
+        // console.log("has docx");
 
         // If it already exists, merge contentModuleTypes to avoid overwriting
         const existingEntryType = entryTypes.get(".docx");
@@ -560,7 +557,6 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
         const fileBuffer = await fs.readFile(filePath);
         const digest = generateDigest(fileBuffer);
 
-        console.log("body deconstruct");
         const { body, data } = await entryType.getEntryInfo({
           contents: "", // Dummy string as officeparser uses path
           fileUrl,
@@ -626,9 +622,7 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
           }
         }
 
-        console.log("here");
         let render = renderFunctionByContentType.get(entryType);
-        console.log("render is", render);
         if (!render) {
           render = await entryType.getRenderFunction(config);
           renderFunctionByContentType.set(entryType, render);

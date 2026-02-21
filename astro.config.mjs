@@ -4,9 +4,17 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import preact from "@astrojs/preact";
 
+import { remarkSections } from "./src/remarkPlugins/remarkSections";
+import { remarkDemoteHeadings } from "./src/remarkPlugins/remarkDemoteHeadings";
+import { rehypeAddLinkClasses } from "./src/rehypePlugins/rehypeAddLinkClasses";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://io-bio.graduateinstitute.ch",
+  markdown: {
+    remarkPlugins: [remarkSections, remarkDemoteHeadings],
+    rehypePlugins: [rehypeAddLinkClasses],
+  },
   server: {
     allowedHosts: true,
   },

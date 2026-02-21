@@ -60,7 +60,18 @@ const bios = defineCollection({
   }),
 });
 
+export const pages = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/pages" }),
+  schema: z.object({
+    slug: z.string(),
+    isHomepage: z.boolean().optional(),
+    title: z.string().optional(),
+    description: z.string().optional()
+  }),
+});
+
 export const collections = {
   tests,
   bios,
+  pages,
 };

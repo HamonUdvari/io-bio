@@ -1,0 +1,35 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Hero from "@components/Hero.astro";
+import { render } from "astro:content";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+
+  return pages.map((page) => {
+    const { slug, isHomepage = false } = page.data;
+
+    return {
+      params: { slug: isHomepage ? "" : slug },
+      props: { ...page },
+    };
+  });
+}
+
+// Content is already wrapped inside sections
+
+const { Content } = await render(Astro.props);
+const { title, description, isHomepage } = Astro.props.data;
+---
+
+<Layout title={title} description={description}>
+  {
+    isHomepage && (
+    <section id="hero" class:list={["section section--primary"]}>
+        <Hero />
+      </section>
+    )
+  }
+  <Content />
+</Layout>

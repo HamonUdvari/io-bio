@@ -40,7 +40,15 @@
   
   --gap-y-base: calc(var(--spacing) * 4);
   --gap-y-tablet: calc(var(--spacing) * 5);
-  --gap-y-desktop: calc(var(--spacing) * 6);
+  /* --gap-y-desktop: calc(var(--spacing) * 6); */
+  --gap-y-desktop: 1.185rem;
+
+  --px-base: calc(0.75rem);
+  --px-tablet: calc(0.75rem);
+  --px-desktop: calc(0.75rem);
+
+  --max-content-width: 85rem;
+  --content-width: min(calc(100svw - var(--px) * 2), var(--max-content-width));
 }
 
 @utility text-h1 {
@@ -49,7 +57,8 @@
 }
 
 @utility text-h2 {
-  @apply text-base;
+  @apply text-base desktop:text-[2.5rem];
+  @apply leading-tight;
 }
 
 @utility text-h3 {
@@ -57,7 +66,8 @@
 }
 
 @utility text-body {
-  @apply text-base;
+  @apply text-base desktop:text-[1.25rem];
+  @apply leading-[1.2];
 }
 
 @utility text-caption {
@@ -69,28 +79,66 @@
 }
 
 @layer base {
-  body {
-    @apply bg-io-primary;
-    @apply text-io-onprimary;
-  }   
-
   :root {
     --gap-x: var(--gap-x-base);
     --gap-y: var(--gap-y-base);
+    --px: var(--px-base);
 
     @variant tablet {
       --gap-x: var(--gap-x-tablet);
       --gap-y: var(--gap-y-tablet);
+      --px: var(--px-tablet);
     }
 
     @variant desktop {
       --gap-x: var(--gap-x-desktop);
       --gap-y: var(--gap-y-desktop);
+      --px: var(--px-desktop);
     }
   }
+  
+  body {
+    @apply bg-io-primary;
+    @apply text-io-onprimary;
+  }   
+
+  * {
+    text-box-trim: trim;
+    text-box-edge: cap alphabetic;
+  }
+
 }
 
 @layer components {
+  section {
+    @apply desktop:pt-10 desktop:pb-7.5; 
+    @apply text-body;
+    @apply flex flex-col;
+    @apply gap-y-(--gap-y);
+    @apply border-t border-io-gray-100;
+    @apply bg-io-secondary;
+
+    & > * {
+      @apply max-w-(--content-width) w-full mx-auto;
+    }
+   
+    h2 {
+      @apply text-h2;
+    }
+
+    &.section--primary {
+      @apply bg-io-primary text-io-onprimary;
+      @apply border-t-0;
+    }
+    
+    &.section--secondary {
+      @apply bg-io-secondary text-io-onsecondary;
+    }
+
+    &+.section--primary {
+      @apply border-t-0;
+    }
+  }
 
   .flex, .grid {
     @apply gap-x-(--gap-x) gap-y-(--gap-y);
@@ -114,7 +162,6 @@
     --btn-border: var(--btn-text);
     --btn-border-hover: var(--btn-text-hover);
 
-    
     &.button--primary {
       @apply border-0;
     }

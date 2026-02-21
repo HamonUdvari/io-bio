@@ -1,6 +1,9 @@
 ---
 import { type Link } from "../content.config";
-import HeroContent, { frontmatter as data } from "@content/globals/hero.md";
+import { frontmatter as data, rawContent } from "@content/globals/hero.md";
+import { marked } from "marked";
+
+const html = marked(rawContent());
 const links = data.links as Link[];
 ---
 
@@ -10,7 +13,7 @@ const links = data.links as Link[];
     "flex flex-col",
     "items-center",
     "justify-between",
-    "w-full h-svh",
+    "w-full h-[90svh]",
     "bg-io-primary",
     "pb-14",
   ]}
@@ -26,9 +29,7 @@ const links = data.links as Link[];
       "-translate-y-6",
     ]}
   >
-    <div class="hero__text-container__text">
-      <HeroContent />
-    </div>
+    <div class="hero__text-container__text" set:html={html} />
   </div>
   <div class:list={["hero__buttons", "flex flex-row"]}>
     {

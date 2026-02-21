@@ -2,8 +2,6 @@
 links:
   - href: /entries
     label: See all entries
-  - href: /entries
-    label: See all entries
 ---
 
 IO BIO 
