@@ -12,6 +12,13 @@ const tests = defineCollection({
   }),
 });
 
+const linkSchema = z.object({
+  label: z.string(),
+  href: z.string(),
+});
+
+export type Link = z.infer<typeof linkSchema>;
+
 const imageSchema = z.object({
   type: z.string(),
   mimeType: z.string(),

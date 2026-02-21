@@ -33,6 +33,14 @@
 
   --color-io-tertiary: var(--color-io-gray-600);
   --color-io-ontertiary: var(--color-io-gray-100);
+
+  --gap-x-base: calc(var(--spacing) * 4);
+  --gap-x-tablet: calc(var(--spacing) * 5);
+  --gap-x-desktop: calc(var(--spacing) * 6);
+  
+  --gap-y-base: calc(var(--spacing) * 4);
+  --gap-y-tablet: calc(var(--spacing) * 5);
+  --gap-y-desktop: calc(var(--spacing) * 6);
 }
 
 @utility text-h1 {
@@ -45,7 +53,7 @@
 }
 
 @utility text-h3 {
-  @apply text-base;
+  @apply text-xl;
 }
 
 @utility text-body {
@@ -56,9 +64,82 @@
   @apply text-base;
 }
 
+@utility io-transition {
+  @apply transition-all duration-200;
+}
+
 @layer base {
   body {
     @apply bg-io-primary;
     @apply text-io-onprimary;
   }   
+
+  :root {
+    --gap-x: var(--gap-x-base);
+    --gap-y: var(--gap-y-base);
+
+    @variant tablet {
+      --gap-x: var(--gap-x-tablet);
+      --gap-y: var(--gap-y-tablet);
+    }
+
+    @variant desktop {
+      --gap-x: var(--gap-x-desktop);
+      --gap-y: var(--gap-y-desktop);
+    }
+  }
+}
+
+@layer components {
+
+  .flex, .grid {
+    @apply gap-x-(--gap-x) gap-y-(--gap-y);
+  }
+
+  .button {
+    @apply text-h3 leading-none;
+    @apply px-9 py-4; 
+    @apply io-transition;
+    @apply inline-block; 
+
+    @apply bg-(--btn-bg) text-(--btn-text);
+    @apply border border-(--btn-border);
+
+    --btn-bg: var(--color-io-onprimary);
+    --btn-text: var(--color-io-primary);
+
+    --btn-bg-hover: var(--color-io-brand);
+    --btn-text-hover: var(--color-io-onbrand);
+
+    --btn-border: var(--btn-text);
+    --btn-border-hover: var(--btn-text-hover);
+
+    
+    &.button--primary {
+      @apply border-0;
+    }
+
+    &.button--secondary {
+      --btn-bg: transparent;
+      --btn-text: var(--color-io-onsecondary);
+
+      --btn-bg-hover: var(--color-io-onsecondary);
+      --btn-text-hover: var(--color-io-secondary);
+
+      --btn-border: var(--btn-text);
+      --btn-border-hover: var(--btn-bg-hover);
+    }
+
+    &:hover:not(:disabled):not([aria-disabled="true"]) {
+      @apply bg-(--btn-bg-hover) text-(--btn-text-hover);
+      @apply border-(--btn-border-hover);
+    }
+
+    &:active:not(:disabled):not([aria-disabled="true"]),
+    &:focus-visible:not(:disabled):not([aria-disabled="true"]) {
+      @apply bg-(--btn-bg-hover) text-(--btn-text-hover);
+      @apply border-(--btn-border-hover);
+    }
+    
+  }
 }
