@@ -45,7 +45,9 @@ const { Content } = await render(Astro.props);
 ---
 
 <Layout title={title} description={description}>
-  <section class="border-t-0 bg-io-gray-600 pt-[5rem] pb-[10rem] text-center gap-y-[30px]">
+  <section
+    class="border-t-0 bg-io-gray-600 pt-[5rem] pb-[10rem] text-center gap-y-[30px]"
+  >
     <figure class="max-w-[345px] _max-h-[414px]">
       <picture>
         <img
@@ -53,7 +55,9 @@ const { Content } = await render(Astro.props);
           src={`data:${image!.mimeType};base64,${image!.data}`}
         />
       </picture>
-      <figcaption class="text-[6px] pt-1 text-left">Source: {imageSource}</figcaption>
+      <figcaption class="text-[6px] pt-1 text-left">
+        Source: {imageSource}
+      </figcaption>
     </figure>
     <div class="flex flex-col items-center gap-y-5 leading-none">
       <h1 class="text-h2 leading-none">{title}</h1>
@@ -64,24 +68,39 @@ const { Content } = await render(Astro.props);
       <span>{version}</span>
     </div>
     <span class="mt-[30px] text-balance">{life}</span>
-    <button class="button button--primary w-fit print:hidden" onclick="window.print()">Download Entry PDF</button>
+    <button
+      class="button button--primary w-fit print:hidden"
+      onclick="window.print()">Download Entry PDF</button
+    >
   </section>
   <section id="biography">
     <h2 class="section__title">Biography</h2>
     <Content />
   </section>
-  <section id="archives">
-    <h2 class="section__title">Archives</h2>
-    <div set:html={archives} />
-  </section>
-  <section id="publications">
-    <h2 class="section__title">Publications</h2>
-    <div set:html={publications} />
-  </section>
-  <section id="literature">
-    <h2 class="section__title">Literature</h2>
-    <div set:html={literature} />
-  </section>
+  {
+    archives && (
+      <section id="archives">
+        <h2 class="section__title">Archives</h2>
+        <div set:html={archives} />
+      </section>
+    )
+  }
+  {
+    publications && (
+      <section id="publications">
+        <h2 class="section__title">Publications</h2>
+        <div set:html={publications} />
+      </section>
+    )
+  }
+  {
+    literature && (
+      <section id="literature">
+        <h2 class="section__title">Literature</h2>
+        <div set:html={literature} />
+      </section>
+    )
+  }
   <section id="cite">
     <h2 class="section__title">How to cite</h2>
     <p>todo</p>
