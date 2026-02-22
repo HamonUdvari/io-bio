@@ -1,0 +1,27 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image as AstroImage } from "astro:assets";
+
+interface Props {
+  imagePath: string;
+  alt: string;
+  class?: string;
+}
+
+const { imagePath: inputImagePath, alt = "Image alt", ...props } = Astro.props;
+const prefix = "/src/assets/bios";
+const imagePath = `${prefix}/${inputImagePath}`;
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/bios/**/*.{svg,jpeg,jpg,png,gif}",
+);
+
+let imgExists = !!images[imagePath];
+
+if (!images[imagePath])
+  console.error(
+    `"${imagePath}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif}"`,
+  );
+---
+
+{imgExists && <AstroImage src={images[imagePath]()} alt={alt} {...props} />}

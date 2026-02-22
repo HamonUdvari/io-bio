@@ -1,3 +1,5 @@
+src/assets/bios
+
 # build output
 dist/
 # generated types

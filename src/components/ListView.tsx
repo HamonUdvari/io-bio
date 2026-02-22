@@ -195,6 +195,7 @@ export default function ListView({ data }: ListViewProps) {
             const { original } = row;
             const {
               image,
+              webImage,
               firstName,
               lastName,
               startYear,
@@ -210,10 +211,11 @@ export default function ListView({ data }: ListViewProps) {
                   key={row.id}
                   class="entry leading-none flex flex-col gap-y-[1.25rem]"
                 >
-                  <img
+                {webImage && <img
                     class="w-full"
-                    src={`data:${image!.mimeType};base64,${image!.data}`}
-                  />
+                    src={webImage.src}
+                  />}
+
                   <div class="grid grid-cols-2 grid-rows-2 gap-x-2.5 gap-y-2.5">
                     <span class="entry__name">
                       {lastName.toUpperCase()} {firstName}

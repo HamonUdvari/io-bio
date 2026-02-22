@@ -1,5 +1,5 @@
 import { existsSync, promises as fs } from "node:fs";
-import { relative } from "node:path";
+import { relative, basename } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import pLimit from "p-limit";
 import colors from "piccolore";
@@ -181,6 +181,7 @@ const docxEntryType: ContentEntryType = {
 
     let image = {};
     let imageSource = "";
+    let imageFn = "";
 
     let archives = "";
     let publications = "";
@@ -336,7 +337,27 @@ const docxEntryType: ContentEntryType = {
       }
 
       if (ast.attachments && ast.attachments.length > 0) {
-        image = ast.attachments.at(0);
+        let image = ast.attachments.at(0);
+
+        const base = basename(filePath)
+          .replaceAll(".", "-")
+          .replaceAll(" ", "-")
+          .toLowerCase();
+
+        const outputDir = path.resolve("./src/assets/bios");
+        const filename = `${base}-${image.name}`;
+        const outputPath = path.join(outputDir, filename);
+
+        if (!existsSync(outputDir)) {
+          await fs.mkdir(outputDir, { recursive: true });
+        }
+
+        const buffer = Buffer.from(image.data, "base64");
+        if (!(await fs.stat(outputPath).catch(() => false))) {
+          await fs.writeFile(outputPath, buffer);
+        }
+        // await fs.writeFile(outputPath, buffer);
+        imageFn = filename;
       }
 
       const extractSectionNodes = (label: string) => {
@@ -467,6 +488,7 @@ const docxEntryType: ContentEntryType = {
       knownAs,
       summary: title,
       image,
+      imageFn,
       imageSource,
       life,
       archives,

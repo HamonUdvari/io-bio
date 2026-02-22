@@ -1,40 +1,36 @@
 ---
-import { getEntry, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 import ListView from "@components/ListView";
+import { getImage } from "astro:assets";
 
 const bios = await getCollection("bios");
 const biosData = bios.map((bio) => ({ slug: bio.id, ...bio.data }));
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/bios/**/*.{svg,jpeg,jpg,png,gif}",
+);
+
+for (let bioData of biosData) {
+  let imageFn = bioData.imageFn;
+  if (!imageFn) {
+    continue;
+  }
+
+  const prefix = "/src/assets/bios";
+  const imagePath = `${prefix}/${imageFn}`;
+
+  const importedImg = images[imagePath] && (await images[imagePath]());
+  if (!importedImg) {
+    continue;
+  }
+
+  const webImage = await getImage({
+    src: importedImg.default,
+  });
+
+  bioData.webImage = webImage;
+}
+  
 ---
 
 <ListView data={biosData} client:load />
-
-<div class="hidden">
-  {
-    bios &&
-      bios.map(({ data }) => {
-        const {
-          firstName,
-          lastName,
-          knownAs,
-          image,
-          authors,
-          organisation,
-          role,
-          nationality,
-          country,
-          startYear,
-          endYear,
-        } = data;
-        return (
-          <div>
-            {lastName}, {firstName}, aka: {knownAs}, {organisation}, {role},{" "}
-            {nationality}, {country}, {startYear}-{endYear},{authors}
-            <img
-              src={"data:image/png;base64," + image.data}
-              class="inline-block h-32"
-            />{" "}
-          </div>
-        );
-      })
-  }
-</div>

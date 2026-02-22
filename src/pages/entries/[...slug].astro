@@ -1,5 +1,6 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import Image from "@components/Image.astro";
 import { render } from "astro:content";
 import { getCollection } from "astro:content";
 
@@ -32,6 +33,7 @@ const {
   summary,
   authors,
   version,
+  imageFn,
   life,
 } = data;
 
@@ -50,10 +52,7 @@ const { Content } = await render(Astro.props);
   >
     <figure class="max-w-[345px] _max-h-[414px]">
       <picture>
-        <img
-          class="w-full"
-          src={`data:${image!.mimeType};base64,${image!.data}`}
-        />
+        <Image class="w-full" imagePath={imageFn} alt={title} />
       </picture>
       <figcaption class="text-[6px] pt-1 text-left">
         Source: {imageSource}
