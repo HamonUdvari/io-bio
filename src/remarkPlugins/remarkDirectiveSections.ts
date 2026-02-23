@@ -8,11 +8,12 @@ export const remarkDirectiveSections: Plugin<[], Root> = () => {
       if (node.type === "containerDirective" && node.name === "section") {
         const title = node.attributes?.title;
         const variant = node.attributes?.variant ?? "secondary";
+        const stretch = node.attributes?.stretch ?? "base";
 
         node.data = node.data || {};
         node.data.hName = "section";
         node.data.hProperties = {
-          class: `section section--${variant}`,
+          class: `section section--${variant} section--${stretch}`,
         };
 
         if (title) {

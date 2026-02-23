@@ -50,6 +50,8 @@
 
   /* --max-content-width: 85rem; */
   /* --max-content-width: 80ch; */
+
+  --max-section-width: 780px;
   --max-content-width: 1280px;
   --content-width: min(calc(100svw - var(--px) * 2), var(--max-content-width));
 
@@ -182,7 +184,16 @@
       }
     }
 
+
     & > *, & > astro-island > * {
+      /* --max-content-width: var(--max-section-width); */
+      --content-width: min(calc(100svw - var(--px) * 2), var(--max-section-width));
+      @apply max-w-(--content-width) w-full mx-auto;
+    }
+    
+    &.section--wide > *, &.section--wide > astro-island > * {
+      /* --max-content-width: var(--max-section-width); */
+      --content-width: min(calc(100svw - var(--px) * 2), var(--max-content-width));
       @apply max-w-(--content-width) w-full mx-auto;
     }
    

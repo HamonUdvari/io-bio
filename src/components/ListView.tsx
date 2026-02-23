@@ -118,21 +118,26 @@ export default function ListView({ data }: ListViewProps) {
       header: "Nationality",
       filterFn: "includesString",
     }),
-    columnHelper.accessor((row) => row.startYear, {
-      id: "startYear",
-      header: "Start Year",
+    // columnHelper.accessor((row) => row.startYear, {
+    //   id: "startYear",
+    //   header: "Start Year",
+    //   filterFn: "includesString",
+    // }),
+    // columnHelper.accessor((row) => row.endYear, {
+    //   id: "endYear",
+    //   header: "End Year",
+    //   filterFn: "includesString",
+    // }),
+    columnHelper.accessor((row) => `${row.startYear ?? ""}–${row.endYear}`, {
+      id: "year",
+      header: "Years",
       filterFn: "includesString",
     }),
-    columnHelper.accessor((row) => row.endYear, {
-      id: "endYear",
-      header: "End Year",
-      filterFn: "includesString",
-    }),
-    columnHelper.accessor((row) => row.authors, {
-      id: "authors",
-      header: "Author(s)",
-      filterFn: "includesString",
-    }),
+    // columnHelper.accessor((row) => row.authors, {
+    //   id: "authors",
+    //   header: "Author(s)",
+    //   filterFn: "includesString",
+    // }),
   ];
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -209,25 +214,34 @@ export default function ListView({ data }: ListViewProps) {
               <a href={`/entries/${slug}`}>
                 <div
                   key={row.id}
-                  class="entry leading-none flex flex-col gap-y-[1.25rem]"
+                  class="entry leading-none flex flex-col gap-y-2"
                 >
-                {webImage && <img
-                    class="w-full"
-                    src={webImage.src}
-                  />}
+                  {webImage && <img class="w-full" src={webImage.src} />}
 
-                  <div class="grid grid-cols-2 grid-rows-2 gap-x-2.5 gap-y-2.5">
-                    <span class="entry__name">
+                  <div class="grid grid-cols-1 _grid-rows-2 gap-x-0 gap-y-2">
+                    <span
+                      class="entry__name"
+                      style={{
+                        textBoxTrim: "trim-both",
+                      }}
+                    >
                       {lastName.toUpperCase()} {firstName}
                     </span>
-                    <span class="entry__years text-right">
-                      {startYear}–{endYear}
-                    </span>
-                    <span class="entry__role">
-                      {organisation}/{role}
-                    </span>
-                    <span class="entry__nationality text-right">
-                      {nationality}
+                    <span class="text-xs"
+                      style={{
+                        textBoxTrim: "trim-both",
+                      }}
+
+                    >
+                      <span class="entry__organisation">{organisation}/</span>
+                      <span class="entry__role">{role} </span>
+                      <span class="entry__years text-right">
+                        {startYear}–{endYear}
+                      </span>
+                      <span> </span>
+                      <span class="entry__nationality text-right">
+                        {nationality}
+                      </span>
                     </span>
                   </div>
                 </div>
@@ -267,13 +281,14 @@ export default function ListView({ data }: ListViewProps) {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} class="group" onClick={() => {
-              }}>
+              <tr key={row.id} class="group" onClick={() => {}}>
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id}>
-                    <a href={`/entries/${row.original.slug}`}
-onClick={(e) => e.stopPropagation()} // Let the <a> handle itself
-                    class="group-hover:text-io-brand">
+                    <a
+                      href={`/entries/${row.original.slug}`}
+                      onClick={(e) => e.stopPropagation()} // Let the <a> handle itself
+                      class="group-hover:text-io-brand whitespace-nowrap"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

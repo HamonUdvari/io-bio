@@ -60,13 +60,13 @@ const locale = Astro.currentLocale;
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
   </head>
   <body>
-    <section class="section section--primary section--nav print:hidden">
+    <section class="section section--primary section--nav section--wide print:hidden">
       <Nav />
     </section>
     <slot />
     {
       !hideFooter && (
-        <section class="section section--footer print:hidden">
+        <section class="section section--wide section--footer print:hidden">
           <Footer />
         </section>
       )
