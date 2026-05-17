@@ -11,56 +11,10 @@ import type {
 } from "../../types/public/content.js";
 import type { RenderedContent } from "../data-store.js";
 import type { Loader } from "./types.js";
-import officeparser from "officeparser";
 import { OfficeParser } from "officeparser";
 import path from "node:path";
 import { slug as githubSlug } from "github-slugger";
-import { h } from "hastscript";
-import { toHtml } from "hast-util-to-html";
-import { nameCase } from "@foundernest/namecase";
-import countries from "world-countries/countries.json";
-import internationalOrganisations from "./ios.json";
-
-/*
- * Transform officeparser AST nodes into HAST nodes
- * */
-function transformNode(node) {
-  if (node.type === "text") {
-    let element = node.text || "";
-
-    // Wrap in formatting tags if necessary
-    if (node.formatting?.bold) element = h("strong", element);
-    if (node.formatting?.italic) element = h("em", element);
-    if (node.formatting?.underline) element = h("u", element);
-
-    return element;
-  }
-
-  // Recursively process children
-  const children = (node.children || []).map(transformNode);
-
-  // Map officeparser types to HTML tags
-  switch (node.type) {
-    case "paragraph":
-      return h("p", children);
-    case "heading":
-      const level = node.metadata?.level || 1;
-      return h(`h${level}`, children);
-    case "list":
-      // Note: officeparser usually gives items;
-      // higher-level logic may be needed to wrap in <ul>
-      return h("li", children);
-    case "table":
-      return h("table", h("tbody", children));
-    case "row":
-      return h("tr", children);
-    case "cell":
-      return h("td", children);
-    default:
-      // Return just the children if the type isn't recognized
-      return children;
-  }
-}
+import { extractAll } from "./parsers/extractAll";
 
 // --- Utility functions copied from globLoader.ts ---
 /**
@@ -171,343 +125,88 @@ const docxEntryType: ContentEntryType = {
   name: "Docx",
   getEntryInfo: async ({ contents, fileUrl }) => {
     const filePath = fileURLToPath(fileUrl);
-    let html = "";
 
-    let firstName = "";
-    let lastName = "";
-    let knownAs = "";
-    let title = "";
-    let life = "";
-
-    let image = {};
-    let imageSource = "";
-    let imageFn = "";
-
-    let archives = "";
-    let publications = "";
-    let literature = "";
-    let version = "";
-    let authors = "";
-    let body = "";
-    let organisation = "";
-    let role = "Non-Standard";
-    let nationality = "Non-Standard";
-    let country = "";
-    let startYear = "Non-Standard";
-    let endYear = "Non-Standard";
-
-    let extractedNodes = [];
+    let extracted: ReturnType<typeof extractAll>["value"] | null = null;
+    let warnings: ReturnType<typeof extractAll>["warnings"] = [];
 
     try {
       const ast = await OfficeParser.parseOffice(filePath, {
         extractAttachments: true,
       });
-
-      const imageSourceNode = ast.content.find(
-        (c) => c.type === "paragraph" && c.text.startsWith("Source:"),
-      );
-      const sourceMatch = imageSourceNode.text.match(/Source:\s*(.+)/i);
-      if (sourceMatch) {
-        imageSource = sourceMatch[1].trim();
-        extractedNodes.push(imageSourceNode);
-      }
-
-      const introNode = ast.content.at(0);
-      extractedNodes.push(introNode);
-
-      const str = introNode.text;
-      // const nameMatch = str.match(
-      //   /^([^,]+),\s*([^,(]+(?: [^,(]+)*)(?:\s*\(known as\s+(.+?)\))?,/i,
-      // );
-      const nameMatch = str.match(
-        /^([^,]+),\s*([^(,]+)(?:\s*\((?:known as|née)\s+(.+?)\))?,/i,
-      );
-
-      if (nameMatch) {
-        lastName = nameCase(nameMatch[1].trim());
-        firstName = nameMatch[2].trim();
-        knownAs = nameMatch[3]?.trim(); // undefined if not present
-      }
-
-      const lifeMatch = str.match(/(was.+)$/i);
-      if (lifeMatch) {
-        life = lifeMatch[1].trim();
-        if (life && life.length > 1) {
-          life = life.charAt(0).toUpperCase() + life.slice(1);
-        }
-      }
-
-      const titleMatch = str.match(/^[^,]+,\s*[^,]+,\s*(.+?)\s*,\s*was born/i);
-
-      if (titleMatch) {
-        title = titleMatch[1].trim();
-
-        const orgMatch = title.match(/\(([^)]+)\)/);
-        if (orgMatch) {
-          organisation = orgMatch[1].trim();
-        }
-
-        if (!orgMatch) {
-          const ios = internationalOrganisations;
-          const io = ios.find((io) => {
-            return title.includes(io.name);
-          });
-          if (io) {
-            organisation = io.abbreviation || io.name;
-          }
-        }
-
-        let countryObject = countries.find((c) => {
-          // console.log("country", c)
-          if (!c.unMember) {
-            return false;
-          }
-          const femaleDem = c.demonyms?.eng?.f || "UNDEFINED";
-          const maleDem = c.demonyms?.eng?.m || "UNDEFINED";
-          return title.includes(femaleDem) || title.includes(maleDem);
-        });
-
-        if (!countryObject) {
-          // Problem with atlanta georgia
-          //
-          // countryObject = countries.find((c) => {
-          //   if (!c.unMember) {
-          //     return false;
-          //   }
-          //   const commonName = c.name.common;
-          //   return title.includes(commonName) || life.includes(commonName);
-          // });
-        }
-
-        if (countryObject) {
-          // console.log("found country", countryObject);
-          country = countryObject.name.common;
-          const femaleDem = countryObject.demonyms?.eng?.f || "UNDEFINED";
-          const maleDem = countryObject.demonyms?.eng?.m || "UNDEFINED";
-
-          if (title.includes(femaleDem)) {
-            nationality = femaleDem;
-          }
-
-          if (title.includes(maleDem)) {
-            nationality = maleDem;
-          }
-        }
-
-        const yearsMatch = title.match(/(\d{4})-(\d{4})/);
-        if (yearsMatch) {
-          startYear = yearsMatch[1];
-          endYear = yearsMatch[2];
-        }
-
-        const roleMatch = title.match(
-          /(?<=\b(?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|and)\s+|,\s+)([A-Z][A-Za-z]*(?:[\s-](?:and|&|[A-Z][A-Za-z]*))*)\s+of\s+(?:the\s+)?(?:[A-Z]|Board)/g,
-        );
-
-        if (roleMatch) {
-          // Grab the last match found
-          const lastRole = roleMatch[roleMatch.length - 1];
-
-          // Clean up: Remove everything from " of " onwards
-          role = lastRole.replace(/\s+of\s+.*$/, "").trim();
-        }
-      }
-
-      // Version
-      const versionNode = ast.content.find(
-        (c) => c.type === "paragraph" && c.text.startsWith("Version"),
-      );
-
-      if (versionNode) {
-        version = versionNode.text;
-        extractedNodes.push(versionNode);
-      }
-
-      const citationNode = ast.content.find(
-        (c) =>
-          c.type === "paragraph" &&
-          c.text.includes(
-            "in IO BIO, Biographical Dictionary of Secretaries-General",
-          ),
-      );
-
-      if (citationNode) {
-        authors = citationNode.text.split(",")[0].trim();
-        extractedNodes.push(citationNode);
-      }
-
-      if (ast.attachments && ast.attachments.length > 0) {
-        let image = ast.attachments.at(0);
-
-        const base = basename(filePath)
-          .replaceAll(".", "-")
-          .replaceAll(" ", "-")
-          .toLowerCase();
-
-        const outputDir = path.resolve("./src/assets/bios");
-        const filename = `${base}-${image.name}`;
-        const outputPath = path.join(outputDir, filename);
-
-        if (!existsSync(outputDir)) {
-          await fs.mkdir(outputDir, { recursive: true });
-        }
-
-        const buffer = Buffer.from(image.data, "base64");
-        if (!(await fs.stat(outputPath).catch(() => false))) {
-          await fs.writeFile(outputPath, buffer);
-        }
-        // await fs.writeFile(outputPath, buffer);
-        imageFn = filename;
-      }
-
-      const extractSectionNodes = (label: string) => {
-        const startIndex = ast.content.findIndex(
-          (n) => n.type === "paragraph" && n.text?.startsWith(label),
-        );
-
-        // console.log("label ", label, "start index", startIndex);
-        const nodes: any[] = [];
-        if (startIndex >= 0) {
-          // const head = structuredClone(ast.content.at(startIndex));
-          const head = ast.content.at(startIndex);
-
-          head.children = head.children.filter((cn: any) => {
-            const t = typeof cn.text === "string" ? cn.text.trim() : cn.text;
-            return t !== label && t !== ":";
-          });
-
-          nodes.push(head);
-          let i = startIndex + 1;
-          let exit = false;
-          while (!exit) {
-            if (i > ast.content.length - 1) {
-              exit = true;
-              continue;
-            }
-            const node = ast.content.at(i);
-            if (
-              node &&
-              node.children &&
-              node.children.at(0) &&
-              node.children.at(0)?.formatting?.bold
-            ) {
-              exit = true;
-              continue;
-            }
-            nodes.push(node);
-            i++;
-          }
-
-          return nodes;
-        }
-        return "";
-      };
-
-      const archiveNodes = extractSectionNodes("ARCHIVES");
-      const publicationsNodes = extractSectionNodes("PUBLICATIONS");
-      const literatureNodes = extractSectionNodes("LITERATURE");
-
-      if (archiveNodes) {
-        const archiveHastTree = h(null, archiveNodes.map(transformNode));
-        archives = toHtml(archiveHastTree);
-      }
-
-      if (publicationsNodes) {
-        const publicationsHastTree = h(
-          null,
-          publicationsNodes.map(transformNode),
-        );
-        publications = toHtml(publicationsHastTree);
-      }
-
-      const literatureHastTree = h(null, literatureNodes.map(transformNode));
-      literature = toHtml(literatureHastTree);
-
-      extractedNodes = [
-        ...extractedNodes,
-        ...archiveNodes,
-        ...publicationsNodes,
-        ...literatureNodes,
-      ];
-
-      const howToCiteNode = ast.content.find(
-        (c) =>
-          c.type === "paragraph" &&
-          c.text.toLowerCase().includes("how to cite this io bio entry"),
-      );
-      if (howToCiteNode) {
-        extractedNodes.push(howToCiteNode);
-      }
-
-      const authorNode = ast.content.find(
-        (c) =>
-          c.type === "paragraph" &&
-          c.text.toLowerCase().includes(authors.toLowerCase()),
-      );
-      if (authorNode) {
-        extractedNodes.push(authorNode);
-      }
-
-      const remainingNodes = ast.content.filter(
-        (n) =>
-          !extractedNodes.some((e) => JSON.stringify(e) === JSON.stringify(n)),
-      );
-
-      // const remainingNodes = ast.content.filter(
-      //   (n) => !extractedNodes.includes(n),
-      // );
-      //
-
-      // TODO(Tibor): refactor
-      function isEmptyNode(node) {
-        if (!node) return true;
-        if (node.type === "text") return !node.value.trim(); // skip empty text
-        if (node.type === "element") {
-          // recursively check children
-          return !node.children || node.children.every(isEmptyNode);
-        }
-        return false;
-      }
-
-      const bodyHastTree = remainingNodes
-        .map(transformNode)
-        .filter((node) => !isEmptyNode(node));
-      body = toHtml(bodyHastTree);
-
-      const hastTree = h(null, ast.content.map(transformNode));
-      html = toHtml(hastTree);
+      const result = extractAll(ast);
+      extracted = result.value;
+      warnings = result.warnings;
     } catch (error) {
-      // Log the error but don't prevent processing
       console.error(`Error parsing DOCX file ${filePath}: ${error}`);
     }
 
+    // Image: write attachment to disk and remember filename.
+    let imageFn = "";
+    if (extracted?.imageAttachment) {
+      const attachment = extracted.imageAttachment;
+      const base = basename(filePath)
+        .replaceAll(".", "-")
+        .replaceAll(" ", "-")
+        .toLowerCase();
+
+      const outputDir = path.resolve("./src/assets/bios");
+      const filename = `${base}-${attachment.name}`;
+      const outputPath = path.join(outputDir, filename);
+
+      if (!existsSync(outputDir)) {
+        await fs.mkdir(outputDir, { recursive: true });
+      }
+
+      const buffer = Buffer.from(attachment.base64, "base64");
+      if (!(await fs.stat(outputPath).catch(() => false))) {
+        await fs.writeFile(outputPath, buffer);
+      }
+      imageFn = filename;
+    }
+
+    if (warnings.length > 0) {
+      const errors = warnings.filter((w) => w.severity === "error");
+      if (errors.length > 0) {
+        console.warn(
+          `[docx] ${basename(filePath)}: ${errors.length} parser error(s):`,
+        );
+        for (const e of errors) console.warn(`  - ${e.code}: ${e.message}`);
+      }
+    }
+
+    // Serialise to the legacy schema shape (Phase 1 keeps the same output as
+    // before — "Non-Standard" string defaults for missing role/nationality/
+    // years, empty strings elsewhere). Phase 2 will switch to nullable typed
+    // fields and add `roles[]`.
     const data = {
       title: path.basename(filePath, path.extname(filePath)),
-      firstName,
-      lastName,
-      knownAs,
-      summary: title,
-      image,
+      firstName: extracted?.firstName ?? "",
+      lastName: extracted?.lastName ?? "",
+      knownAs: extracted?.knownAs,
+      summary: extracted?.summary ?? "",
+      image: {},
       imageFn,
-      imageSource,
-      life,
-      archives,
-      publications,
-      literature,
-      version,
-      authors,
-      organisation,
-      role,
-      nationality,
-      country,
-      startYear,
-      endYear,
-      html,
+      imageSource: extracted?.imageSource ?? "",
+      life: extracted?.life ?? "",
+      archives: extracted?.archives ?? "",
+      publications: extracted?.publications ?? "",
+      literature: extracted?.literature ?? "",
+      version: extracted?.version ?? "",
+      authors: extracted?.authors ?? "",
+      organisation: extracted?.organisation ?? "",
+      role: extracted?.role ?? "Non-Standard",
+      nationality: extracted?.nationality ?? "Non-Standard",
+      country: extracted?.country ?? "",
+      startYear:
+        extracted?.startYear != null ? String(extracted.startYear) : "Non-Standard",
+      endYear:
+        extracted?.endYear != null ? String(extracted.endYear) : "Non-Standard",
+      html: extracted?.html ?? "",
     };
 
     return {
-      body,
-      data: data,
+      body: extracted?.body ?? "",
+      data,
     };
   },
   getRenderFunction: async (config) => {
