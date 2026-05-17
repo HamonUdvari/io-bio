@@ -52,11 +52,15 @@ const bios = defineCollection({
 });
 
 export const pages = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/pages" }),
+  loader: glob({
+    pattern: ["**/*.{md,mdx}", "!**/_*"],
+    base: "./src/content/pages",
+  }),
   schema: z.object({
     slug: z.string(),
     isHomepage: z.boolean().optional(),
     title: z.string().optional(),
+    navLabel: z.string().optional(),
     description: z.string().optional(),
     order: z.number().optional(),
     hideFooter: z.boolean().optional(),
