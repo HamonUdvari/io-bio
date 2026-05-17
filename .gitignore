@@ -1,5 +1,8 @@
 src/assets/bios
 
+# local-only client materials (docs, assets, etc.)
+_local/
+
 # build output
 dist/
 # generated types
