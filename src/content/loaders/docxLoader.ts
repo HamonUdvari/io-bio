@@ -174,10 +174,6 @@ const docxEntryType: ContentEntryType = {
       }
     }
 
-    // Serialise to the legacy schema shape (Phase 1 keeps the same output as
-    // before — "Non-Standard" string defaults for missing role/nationality/
-    // years, empty strings elsewhere). Phase 2 will switch to nullable typed
-    // fields and add `roles[]`.
     const data = {
       title: path.basename(filePath, path.extname(filePath)),
       firstName: extracted?.firstName ?? "",
@@ -188,19 +184,14 @@ const docxEntryType: ContentEntryType = {
       imageFn,
       imageSource: extracted?.imageSource ?? "",
       life: extracted?.life ?? "",
-      archives: extracted?.archives ?? "",
-      publications: extracted?.publications ?? "",
-      literature: extracted?.literature ?? "",
+      roles: extracted?.roles ?? [],
+      archives: extracted?.archives ?? { items: [] },
+      publications: extracted?.publications ?? { items: [] },
+      literature: extracted?.literature ?? { items: [] },
       version: extracted?.version ?? "",
       authors: extracted?.authors ?? "",
-      organisation: extracted?.organisation ?? "",
-      role: extracted?.role ?? "Non-Standard",
-      nationality: extracted?.nationality ?? "Non-Standard",
+      nationality: extracted?.nationality ?? undefined,
       country: extracted?.country ?? "",
-      startYear:
-        extracted?.startYear != null ? String(extracted.startYear) : "Non-Standard",
-      endYear:
-        extracted?.endYear != null ? String(extracted.endYear) : "Non-Standard",
       html: extracted?.html ?? "",
     };
 

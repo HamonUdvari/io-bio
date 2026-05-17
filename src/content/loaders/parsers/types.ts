@@ -42,6 +42,16 @@ export type APLSections = {
   literature: string;
 };
 
+export type Citation = {
+  raw: string;
+};
+
+export type APLSectionData = {
+  items: Citation[];
+  /** Optional "all websites accessed DD month YYYY" footer text. */
+  websitesAccessedOn?: string;
+};
+
 export type ExtractedBio = {
   firstName: string | null;
   lastName: string | null;
@@ -49,19 +59,15 @@ export type ExtractedBio = {
   summary: string | null;
   life: string | null;
   roles: Role[];
+  nationality: string | null;
+  country: string | null;
   imageSource: string | null;
   imageAttachment: ImageAttachment | null;
   version: string | null;
   authors: string | null;
-  organisation: string | null;
-  role: string | null;
-  nationality: string | null;
-  country: string | null;
-  startYear: number | null;
-  endYear: number | null;
-  archives: string;
-  publications: string;
-  literature: string;
+  archives: APLSectionData;
+  publications: APLSectionData;
+  literature: APLSectionData;
   body: string;
   html: string;
 };

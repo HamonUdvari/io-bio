@@ -103,36 +103,45 @@ export default function ListView({ data }: ListViewProps) {
         filterFn: "includesString",
       },
     ),
-    columnHelper.accessor((row) => row.role, {
-      id: "role",
-      header: "Title",
-      filterFn: "includesString",
-    }),
-    columnHelper.accessor((row) => row.organisation, {
-      id: "organisation",
-      header: "Organisation",
-      filterFn: "includesString",
-    }),
-    columnHelper.accessor((row) => row.nationality, {
+    columnHelper.accessor(
+      (row) => row.roles?.map((r) => r.title).join(" / ") ?? "",
+      {
+        id: "role",
+        header: "Title",
+        filterFn: "includesString",
+      },
+    ),
+    columnHelper.accessor(
+      (row) =>
+        row.roles
+          ?.map((r) => r.abbreviation ?? r.organisation ?? "")
+          .filter(Boolean)
+          .join(" / ") ?? "",
+      {
+        id: "organisation",
+        header: "Organisation",
+        filterFn: "includesString",
+      },
+    ),
+    columnHelper.accessor((row) => row.nationality ?? "", {
       id: "nationality",
       header: "Nationality",
       filterFn: "includesString",
     }),
-    // columnHelper.accessor((row) => row.startYear, {
-    //   id: "startYear",
-    //   header: "Start Year",
-    //   filterFn: "includesString",
-    // }),
-    // columnHelper.accessor((row) => row.endYear, {
-    //   id: "endYear",
-    //   header: "End Year",
-    //   filterFn: "includesString",
-    // }),
-    columnHelper.accessor((row) => `${row.startYear ?? ""}–${row.endYear}`, {
-      id: "year",
-      header: "Years",
-      filterFn: "includesString",
-    }),
+    columnHelper.accessor(
+      (row) => {
+        const roles = row.roles ?? [];
+        if (roles.length === 0) return "";
+        const start = roles[0].startYear ?? "";
+        const end = roles[roles.length - 1].endYear ?? "";
+        return `${start}–${end}`;
+      },
+      {
+        id: "year",
+        header: "Years",
+        filterFn: "includesString",
+      },
+    ),
     // columnHelper.accessor((row) => row.authors, {
     //   id: "authors",
     //   header: "Author(s)",
@@ -234,17 +243,19 @@ export default function ListView({ data }: ListViewProps) {
           {table.getRowModel().rows.map((row) => {
             const { original } = row;
             const {
-              image,
               webImage,
               firstName,
               lastName,
-              startYear,
-              endYear,
-              organisation,
-              role,
+              roles = [],
               nationality,
               slug,
             } = original;
+            const primary = roles[0];
+            const startYear = primary?.startYear ?? "";
+            const endYear = roles[roles.length - 1]?.endYear ?? "";
+            const organisation =
+              primary?.abbreviation ?? primary?.organisation ?? "";
+            const role = primary?.title ?? "";
             return (
               <a href={`/entries/${slug}`}>
                 <div
@@ -262,11 +273,11 @@ export default function ListView({ data }: ListViewProps) {
                     >
                       {lastName.toUpperCase()} {firstName}
                     </span>
-                    <span class="text-xs"
+                    <span
+                      class="text-xs"
                       style={{
                         textBoxTrim: "trim-both",
                       }}
-
                     >
                       <span class="entry__organisation">{organisation}/</span>
                       <span class="entry__role">{role} </span>

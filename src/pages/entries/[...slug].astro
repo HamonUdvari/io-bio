@@ -25,10 +25,7 @@ const {
   archives,
   publications,
   literature,
-  role,
-  organisation,
-  startYear,
-  endYear,
+  roles = [],
   imageSource,
   summary,
   authors,
@@ -77,26 +74,65 @@ const { Content } = await render(Astro.props);
     <Content />
   </section>
   {
-    archives && (
+    archives?.items?.length > 0 && (
       <section id="archives">
         <h2 class="section__title">Archives</h2>
-        <div set:html={archives} />
+        {archives.items.length === 1 ? (
+          <p>{archives.items[0].raw}</p>
+        ) : (
+          <ul>
+            {archives.items.map((c) => (
+              <li>{c.raw}</li>
+            ))}
+          </ul>
+        )}
+        {archives.websitesAccessedOn && (
+          <p class="text-sm opacity-70">
+            (all websites accessed {archives.websitesAccessedOn})
+          </p>
+        )}
       </section>
     )
   }
   {
-    publications && (
+    publications?.items?.length > 0 && (
       <section id="publications">
         <h2 class="section__title">Publications</h2>
-        <div set:html={publications} />
+        {publications.items.length === 1 ? (
+          <p>{publications.items[0].raw}</p>
+        ) : (
+          <ul>
+            {publications.items.map((c) => (
+              <li>{c.raw}</li>
+            ))}
+          </ul>
+        )}
+        {publications.websitesAccessedOn && (
+          <p class="text-sm opacity-70">
+            (all websites accessed {publications.websitesAccessedOn})
+          </p>
+        )}
       </section>
     )
   }
   {
-    literature && (
+    literature?.items?.length > 0 && (
       <section id="literature">
         <h2 class="section__title">Literature</h2>
-        <div set:html={literature} />
+        {literature.items.length === 1 ? (
+          <p>{literature.items[0].raw}</p>
+        ) : (
+          <ul>
+            {literature.items.map((c) => (
+              <li>{c.raw}</li>
+            ))}
+          </ul>
+        )}
+        {literature.websitesAccessedOn && (
+          <p class="text-sm opacity-70">
+            (all websites accessed {literature.websitesAccessedOn})
+          </p>
+        )}
       </section>
     )
   }

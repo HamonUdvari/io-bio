@@ -18,6 +18,30 @@ const imageSchema = z.object({
   extension: z.string(),
 });
 
+const roleSchema = z.object({
+  ordinalText: z.string().optional(),
+  title: z.string(),
+  organisation: z.string().optional(),
+  abbreviation: z.string().optional(),
+  startYear: z.number().optional(),
+  endYear: z.number().optional(),
+});
+
+export type Role = z.infer<typeof roleSchema>;
+
+const citationSchema = z.object({
+  raw: z.string(),
+});
+
+export type Citation = z.infer<typeof citationSchema>;
+
+const aplSchema = z.object({
+  items: z.array(citationSchema),
+  websitesAccessedOn: z.string().optional(),
+});
+
+export type APLSection = z.infer<typeof aplSchema>;
+
 export const bioDataSchema = z.object({
   title: z.string(),
   firstName: z.string(),
@@ -27,17 +51,14 @@ export const bioDataSchema = z.object({
   image: imageSchema.optional(),
   imageSource: z.string().optional(),
   life: z.string(),
-  archives: z.string().optional(),
-  publications: z.string().optional(),
-  literature: z.string().optional(),
+  roles: z.array(roleSchema).default([]),
+  archives: aplSchema.default({ items: [] }),
+  publications: aplSchema.default({ items: [] }),
+  literature: aplSchema.default({ items: [] }),
   version: z.string().optional(),
   authors: z.string().optional(),
-  organisation: z.string().optional(),
-  role: z.string().optional(),
   nationality: z.string().optional(),
   country: z.string().optional(),
-  startYear: z.number().optional(),
-  endYear: z.number().optional(),
   html: z.string().optional(),
 });
 
