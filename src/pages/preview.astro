@@ -1,0 +1,19 @@
+---
+import Layout from "@layouts/Layout.astro";
+import PreviewPanel from "@components/PreviewPanel";
+---
+
+<Layout
+  title="Preview"
+  description="Preview how a .docx will be parsed before adding it to the site."
+  hideFooter={true}
+>
+  <section class="section section--primary section--wide">
+    <h1 class="section__title">Preview a .docx</h1>
+    <p class="text-sm opacity-80 max-w-prose">
+      Drop a Word document below to see how the IO BIO parsers will extract
+      data from it. Everything runs in your browser — nothing is uploaded.
+    </p>
+    <PreviewPanel client:only="preact" />
+  </section>
+</Layout>
