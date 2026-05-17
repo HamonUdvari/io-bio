@@ -142,6 +142,43 @@ export default function ListView({ data }: ListViewProps) {
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [view, setView] = useState<"list" | "grid">("list");
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
+    const v = params.get("view");
+    const s = params.get("sort");
+
+    if (q) setGlobalFilter(q);
+    if (v === "grid") setView("grid");
+    if (s) {
+      const [id, dir] = s.split(":");
+      if (id) setSorting([{ id, desc: dir === "desc" }]);
+    }
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const params = new URLSearchParams();
+    if (globalFilter) params.set("q", globalFilter);
+    if (view !== "list") params.set("view", view);
+    if (sorting.length > 0) {
+      const s = sorting[0];
+      params.set("sort", `${s.id}:${s.desc ? "desc" : "asc"}`);
+    }
+    const qs = params.toString();
+    const next = qs
+      ? `${window.location.pathname}?${qs}`
+      : window.location.pathname;
+    const current = `${window.location.pathname}${window.location.search}`;
+    if (next !== current) {
+      window.history.replaceState(null, "", next);
+    }
+    document.documentElement.classList.remove("entries-restoring");
+  }, [hydrated, globalFilter, view, sorting]);
 
   const table = useReactTable({
     data,
@@ -163,8 +200,6 @@ export default function ListView({ data }: ListViewProps) {
     },
     globalFilterFn: "fuzzy",
   });
-
-  const [view, setView] = useState<"list" | "grid">("list");
 
   return (
     <div class="entries flex flex-col">

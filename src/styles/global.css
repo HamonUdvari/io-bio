@@ -229,8 +229,13 @@
     }
   }
 
+  html.entries-restoring .entries > table,
+  html.entries-restoring .entries > .grid {
+    display: none;
+  }
+
   .entries {
-    @apply text-left; 
+    @apply text-left;
     @apply max-w-[90%];
     
     table {

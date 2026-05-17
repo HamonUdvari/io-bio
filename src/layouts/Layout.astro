@@ -58,6 +58,15 @@ const locale = Astro.currentLocale;
     <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
     <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <script is:inline>
+      (function () {
+        if (location.pathname !== "/") return;
+        var p = new URLSearchParams(location.search);
+        if (p.has("q") || p.has("view") || p.has("sort")) {
+          document.documentElement.classList.add("entries-restoring");
+        }
+      })();
+    </script>
   </head>
   <body>
     <section class="section section--primary section--nav section--wide print:hidden">
