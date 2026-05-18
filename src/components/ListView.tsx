@@ -1,13 +1,9 @@
-import { h } from "preact";
-import { signal } from "@preact/signals";
-import type { BioData } from "../content.config";
+import type { BioData, Role } from "../content.config";
 
 import * as React from "react";
-import ReactDOM from "react-dom/client";
 import {
   type RankingInfo,
   rankItem,
-  compareItems,
 } from "@tanstack/match-sorter-utils";
 
 import {
@@ -20,7 +16,7 @@ import {
   type FilterFn,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import clsx from "clsx";
 
 declare module "@tanstack/react-table" {
@@ -33,7 +29,7 @@ declare module "@tanstack/react-table" {
 }
 
 type ListViewProps = {
-  data: BioData[];
+  data: (BioData & { slug: string })[];
 };
 
 function DebouncedInput({
@@ -69,27 +65,53 @@ function DebouncedInput({
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  console.log("fuzzy");
-  // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value);
-
-  // Store the itemRank info
-  addMeta({
-    itemRank,
-  });
-
-  // Return if the item should be filtered in/out
+  addMeta({ itemRank });
   return itemRank.passed;
 };
 
-type Slug = {
-  slug: string;
-};
+/**
+ * Format an organisation for display. When the parser captured both the full
+ * name and a parenthesised abbreviation, show "Full Name (ABBR)". Otherwise
+ * fall back to whichever one is available.
+ */
+function formatOrg(role?: Role): string {
+  if (!role) return "";
+  const { organisation, abbreviation } = role;
+  if (organisation && abbreviation) return `${organisation} (${abbreviation})`;
+  return organisation ?? abbreviation ?? "";
+}
 
 export default function ListView({ data }: ListViewProps) {
-  const columnHelper = createColumnHelper<BioData & Slug>();
+  // Flatten bios × roles into one row per role. People with no roles still get
+  // a single row so they show up in the list.
+  const roleRows = useMemo(() => {
+    const out: (BioData & {
+      slug: string;
+      role?: Role;
+      roleIndex: number;
+      personId: string;
+    })[] = [];
+    for (const bio of data) {
+      if (!bio.roles || bio.roles.length === 0) {
+        out.push({
+          ...bio,
+          role: undefined,
+          roleIndex: -1,
+          personId: bio.slug,
+        });
+      } else {
+        bio.roles.forEach((role, i) => {
+          out.push({ ...bio, role, roleIndex: i, personId: bio.slug });
+        });
+      }
+    }
+    return out;
+  }, [data]);
 
-  let columns = [
+  const columnHelper = createColumnHelper<(typeof roleRows)[number]>();
+
+  const columns = [
     columnHelper.accessor((row) => row.slug, {
       id: "slug",
       header: "Slug",
@@ -103,26 +125,16 @@ export default function ListView({ data }: ListViewProps) {
         filterFn: "includesString",
       },
     ),
-    columnHelper.accessor(
-      (row) => row.roles?.map((r) => r.title).join(" / ") ?? "",
-      {
-        id: "role",
-        header: "Title",
-        filterFn: "includesString",
-      },
-    ),
-    columnHelper.accessor(
-      (row) =>
-        row.roles
-          ?.map((r) => r.abbreviation ?? r.organisation ?? "")
-          .filter(Boolean)
-          .join(" / ") ?? "",
-      {
-        id: "organisation",
-        header: "Organisation",
-        filterFn: "includesString",
-      },
-    ),
+    columnHelper.accessor((row) => row.role?.title ?? "", {
+      id: "role",
+      header: "Title",
+      filterFn: "includesString",
+    }),
+    columnHelper.accessor((row) => formatOrg(row.role), {
+      id: "organisation",
+      header: "Organisation",
+      filterFn: "includesString",
+    }),
     columnHelper.accessor((row) => row.nationality ?? "", {
       id: "nationality",
       header: "Nationality",
@@ -130,11 +142,10 @@ export default function ListView({ data }: ListViewProps) {
     }),
     columnHelper.accessor(
       (row) => {
-        const roles = row.roles ?? [];
-        if (roles.length === 0) return "";
-        const start = roles[0].startYear ?? "";
-        const end = roles[roles.length - 1].endYear ?? "";
-        return `${start}–${end}`;
+        const s = row.role?.startYear;
+        const e = row.role?.endYear;
+        if (s == null && e == null) return "";
+        return `${s ?? ""}–${e ?? ""}`;
       },
       {
         id: "year",
@@ -142,11 +153,6 @@ export default function ListView({ data }: ListViewProps) {
         filterFn: "includesString",
       },
     ),
-    // columnHelper.accessor((row) => row.authors, {
-    //   id: "authors",
-    //   header: "Author(s)",
-    //   filterFn: "includesString",
-    // }),
   ];
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -190,7 +196,7 @@ export default function ListView({ data }: ListViewProps) {
   }, [hydrated, globalFilter, view, sorting]);
 
   const table = useReactTable({
-    data,
+    data: roleRows,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -210,6 +216,19 @@ export default function ListView({ data }: ListViewProps) {
     globalFilterFn: "fuzzy",
   });
 
+  const rows = table.getRowModel().rows;
+
+  // Grid view shows one tile per person — dedupe by slug, keep the first row
+  // (which still carries the full `roles` array via the underlying bio).
+  const gridRows = useMemo(() => {
+    const seen = new Set<string>();
+    return rows.filter((r) => {
+      if (seen.has(r.original.personId)) return false;
+      seen.add(r.original.personId);
+      return true;
+    });
+  }, [rows]);
+
   return (
     <div class="entries flex flex-col">
       <div class="flex flex-row">
@@ -221,17 +240,13 @@ export default function ListView({ data }: ListViewProps) {
         />
         <div class="flex flex-row gap-x-1">
           <button
-            onClick={() => {
-              setView("list");
-            }}
+            onClick={() => setView("list")}
             class={clsx("button border-0", view === "list" && "bg-io-brand")}
           >
             List
           </button>
           <button
-            onClick={() => {
-              setView("grid");
-            }}
+            onClick={() => setView("grid")}
             class={clsx("button border-0", view === "grid" && "bg-io-brand")}
           >
             Grid
@@ -240,7 +255,7 @@ export default function ListView({ data }: ListViewProps) {
       </div>
       {view === "grid" && (
         <div class="grid grid-cols-2 desktop:grid-cols-4 align-baseline items-baseline">
-          {table.getRowModel().rows.map((row) => {
+          {gridRows.map((row) => {
             const { original } = row;
             const {
               webImage,
@@ -249,46 +264,45 @@ export default function ListView({ data }: ListViewProps) {
               roles = [],
               nationality,
               slug,
-            } = original;
-            const primary = roles[0];
-            const startYear = primary?.startYear ?? "";
-            const endYear = roles[roles.length - 1]?.endYear ?? "";
-            const organisation =
-              primary?.abbreviation ?? primary?.organisation ?? "";
-            const role = primary?.title ?? "";
+            } = original as any;
             return (
-              <a href={`/entries/${slug}`}>
-                <div
-                  key={row.id}
-                  class="entry leading-none flex flex-col gap-y-2"
-                >
+              <a href={`/entries/${slug}`} key={row.id}>
+                <div class="entry leading-none flex flex-col gap-y-2">
                   {webImage && <img class="w-full" src={webImage.src} />}
-
                   <div class="grid grid-cols-1 _grid-rows-2 gap-x-0 gap-y-2">
                     <span
                       class="entry__name"
-                      style={{
-                        textBoxTrim: "trim-both",
-                      }}
+                      style={{ textBoxTrim: "trim-both" }}
                     >
                       {lastName.toUpperCase()} {firstName}
                     </span>
-                    <span
-                      class="text-xs"
-                      style={{
-                        textBoxTrim: "trim-both",
-                      }}
-                    >
-                      <span class="entry__organisation">{organisation}/</span>
-                      <span class="entry__role">{role} </span>
-                      <span class="entry__years text-right">
-                        {startYear}–{endYear}
-                      </span>
-                      <span> </span>
-                      <span class="entry__nationality text-right">
-                        {nationality}
-                      </span>
-                    </span>
+                    <ul class="text-xs flex flex-col gap-y-1">
+                      {roles.length === 0 ? (
+                        <li>
+                          <span class="entry__nationality">{nationality}</span>
+                        </li>
+                      ) : (
+                        roles.map((r: Role, i: number) => (
+                          <li key={i}>
+                            <span class="entry__organisation">
+                              {formatOrg(r)}/
+                            </span>
+                            <span class="entry__role">{r.title} </span>
+                            <span class="entry__years text-right">
+                              {r.startYear}–{r.endYear}
+                            </span>
+                            {i === roles.length - 1 && nationality && (
+                              <>
+                                {" "}
+                                <span class="entry__nationality text-right">
+                                  {nationality}
+                                </span>
+                              </>
+                            )}
+                          </li>
+                        ))
+                      )}
+                    </ul>
                   </div>
                 </div>
               </a>
@@ -297,57 +311,92 @@ export default function ListView({ data }: ListViewProps) {
         </div>
       )}
       {view === "list" && (
-        <table class="table-auto">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
+        <div class="entries-table" role="table">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <div
+              class="entries-table__row entries-table__row--header"
+              role="row"
+              key={headerGroup.id}
+            >
+              {headerGroup.headers.map((header) => (
+                <div
+                  class={clsx(
+                    "entries-table__cell entries-table__cell--header",
+                    `entries-table__cell--${header.column.id}`,
+                  )}
+                  role="columnheader"
+                  key={header.id}
+                  onClick={header.column.getToggleSortingHandler()}
+                >
+                  <span>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                  </span>
+                  <span class="entries-table__sort-indicator">
+                    {{
+                      asc: "▲",
+                      desc: "▼",
+                    }[header.column.getIsSorted() as string] ?? " "}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ))}
+          {(() => {
+            // Group consecutive rows of the same person so hovering any of them
+            // can light up the whole group. The wrapper uses `display: contents`
+            // so it doesn't interfere with the subgrid layout.
+            const groups: (typeof rows)[] = [];
+            let currentId: string | null = null;
+            for (const row of rows) {
+              if (row.original.personId !== currentId) {
+                groups.push([]);
+                currentId = row.original.personId;
+              }
+              groups[groups.length - 1].push(row);
+            }
+            return groups.map((group, gi) => (
+              <div
+                class="entries-table__group"
+                data-person-id={group[0].original.personId}
+                key={group[0].original.personId + ":" + gi}
+              >
+                {group.map((row, i) => (
+                  <a
+                    key={row.id}
+                    href={`/entries/${row.original.slug}`}
+                    role="row"
+                    data-person-id={row.original.personId}
+                    class={clsx(
+                      "entries-table__row",
+                      i > 0 && "entries-table__row--continuation",
+                    )}
                   >
-                    <div class="flex flex-row justify-between items-center">
-                      <span>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
+                    {row.getVisibleCells().map((cell) => (
+                      <div
+                        class={clsx(
+                          "entries-table__cell",
+                          `entries-table__cell--${cell.column.id}`,
                         )}
-                      </span>
-                      <span class="text-[0.8em] leading-none h-min ">
-                        {{
-                          asc: "▲",
-                          desc: "▼",
-                        }[header.column.getIsSorted() as string] ?? " "}
-                      </span>
-                    </div>
-                  </th>
+                        role="cell"
+                        key={cell.id}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </div>
+                    ))}
+                  </a>
                 ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} class="group" onClick={() => {}}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    <a
-                      href={`/entries/${row.original.slug}`}
-                      onClick={(e) => e.stopPropagation()} // Let the <a> handle itself
-                      class="group-hover:text-io-brand whitespace-nowrap"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </a>
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              </div>
+            ));
+          })()}
+        </div>
       )}
-      <div className="h-4" />
+      <div class="h-4" />
     </div>
   );
 }
