@@ -39,17 +39,20 @@ export function parseImage(ast: any): ParserResult<ImageFields> {
   }
 
   const attachments = ast?.attachments;
-  if (Array.isArray(attachments) && attachments.length > 0) {
-    const a = attachments[0];
-    if (a?.data && a?.name) {
-      value.attachment = {
-        base64: a.data,
-        name: a.name,
-        extension:
-          a.extension || (a.name.includes(".") ? a.name.split(".").pop() : ""),
-        mimeType: a.mimeType,
-      };
-    }
+  // Pick the first attachment with actual content. officeparser sometimes
+  // surfaces stub attachments (zero-length data, name "image") for empty or
+  // orphan <w:drawing> references; skip those.
+  const a = Array.isArray(attachments)
+    ? attachments.find((x) => x?.data && x?.name && x.name.includes("."))
+    : undefined;
+  if (a) {
+    value.attachment = {
+      base64: a.data,
+      name: a.name,
+      extension:
+        a.extension || (a.name.includes(".") ? a.name.split(".").pop() : ""),
+      mimeType: a.mimeType,
+    };
   } else {
     warnings.push({
       code: "image_attachment_missing",

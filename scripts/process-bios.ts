@@ -55,25 +55,42 @@ function paragraphText(p: any): string {
   return out;
 }
 
+/** True if the given <w:r> run contains a <w:drawing> child (embedded image). */
+function runContainsDrawing(r: any): boolean {
+  const drawings = r.getElementsByTagNameNS(W_NS, "drawing");
+  return drawings.length > 0;
+}
+
 /**
- * Replace `pText` (the paragraph's concatenated text) with `newText` by
- * collapsing all of the paragraph's existing runs into a single text run.
- * Preserves the paragraph's `<w:pPr>` (properties) child if it has one.
+ * Replace the paragraph's text content with `newText` while preserving:
+ *  - its `<w:pPr>` (properties)
+ *  - any `<w:r>` runs that contain an embedded drawing (the SG portrait)
+ *
+ * Text-only runs are removed and replaced by a single new text run appended
+ * to the paragraph. The drawing run's relative position in the paragraph is
+ * preserved.
  */
 function rewriteParagraph(doc: any, p: any, newText: string) {
-  // Remove every child that isn't <w:pPr>.
+  // Walk children, drop only text-bearing runs (not pPr, not drawing runs).
   const toRemove: any[] = [];
   for (let i = 0; i < p.childNodes.length; i++) {
     const c = p.childNodes[i];
-    if (c.nodeType === 1 /* Element */) {
-      if (!(c.namespaceURI === W_NS && c.localName === "pPr")) toRemove.push(c);
-    } else {
+    if (c.nodeType !== 1) {
       toRemove.push(c);
+      continue;
     }
+    if (c.namespaceURI === W_NS && c.localName === "pPr") continue; // keep
+    if (c.namespaceURI === W_NS && c.localName === "r") {
+      if (runContainsDrawing(c)) continue; // keep image runs
+      toRemove.push(c);
+      continue;
+    }
+    // Other element types (bookmarkStart, proofErr, etc.) get dropped.
+    toRemove.push(c);
   }
   for (const c of toRemove) p.removeChild(c);
 
-  // Append a single <w:r><w:t xml:space="preserve">...</w:t></w:r>.
+  // Append the single new text run.
   const r = doc.createElementNS(W_NS, "w:r");
   const t = doc.createElementNS(W_NS, "w:t");
   t.setAttribute("xml:space", "preserve");

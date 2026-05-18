@@ -10,24 +10,29 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/bios/**/*.{svg,jpeg,jpg,png,gif}",
 );
 
+// Build a lookup keyed on the basename in NFC normalization. Vite's glob keys
+// can arrive in NFD on macOS while the docxLoader emits NFC filenames; this
+// makes the lookup tolerant of both.
+const imagesByBasename = new Map<
+  string,
+  () => Promise<{ default: ImageMetadata }>
+>();
+for (const [k, loader] of Object.entries(images)) {
+  const base = k.split("/").pop()!.normalize("NFC");
+  imagesByBasename.set(base, loader);
+}
+
 for (let bioData of biosData) {
-  let imageFn = bioData.imageFn;
-  if (!imageFn) {
-    continue;
-  }
+  const imageFn = bioData.imageFn;
+  if (!imageFn) continue;
 
-  const prefix = "/src/assets/bios";
-  const imagePath = `${prefix}/${imageFn}`;
+  const loader = imagesByBasename.get(imageFn.normalize("NFC"));
+  if (!loader) continue;
 
-  const importedImg = images[imagePath] && (await images[imagePath]());
-  if (!importedImg) {
-    continue;
-  }
+  const importedImg = await loader();
+  if (!importedImg) continue;
 
-  const webImage = await getImage({
-    src: importedImg.default,
-  });
-
+  const webImage = await getImage({ src: importedImg.default });
   bioData.webImage = webImage;
 }
   

@@ -22,6 +22,47 @@ const ORDINALS = [
 const ORDINAL_RE = new RegExp(`\\b(${ORDINALS.join("|")})\\b`, "gi");
 
 /**
+ * Some IGO role titles double as the institution name (e.g. the role
+ * "United Nations High Commissioner for Refugees" is held inside the office
+ * UNHCR; the role's own abbreviation is the institution's). Many authors
+ * write the role title without repeating "of the (UNHCR)" / "of the (OHCHR)"
+ * at the end, so the abbreviation never reaches the parser. This table
+ * back-fills the organisation/abbreviation for those well-known cases.
+ *
+ * Add new entries as more "role-as-institution" pairs surface.
+ */
+const ROLE_TITLE_ALIASES: Array<{
+  pattern: RegExp;
+  organisation: string;
+  abbreviation: string;
+}> = [
+  {
+    pattern: /\bHigh\s+Commissioner\s+for\s+Refugees\b/i,
+    organisation:
+      "Office of the United Nations High Commissioner for Refugees",
+    abbreviation: "UNHCR",
+  },
+  {
+    pattern: /\bHigh\s+Commissioner\s+for\s+Human\s+Rights\b/i,
+    organisation:
+      "Office of the United Nations High Commissioner for Human Rights",
+    abbreviation: "OHCHR",
+  },
+];
+
+function applyTitleAliases(role: Role): Role {
+  if (role.organisation && role.abbreviation) return role;
+  for (const alias of ROLE_TITLE_ALIASES) {
+    if (alias.pattern.test(role.title)) {
+      if (!role.organisation) role.organisation = alias.organisation;
+      if (!role.abbreviation) role.abbreviation = alias.abbreviation;
+      break;
+    }
+  }
+  return role;
+}
+
+/**
  * Matches a year-end token that ends a role description. Captures:
  *   - "NNNN-NNNN"         -> groups 1 / 2
  *   - "in NNNN"           -> group 3 (used as both start and end)
@@ -119,6 +160,9 @@ function parseRoleChunk(chunk: string, _warnings: Warning[]): Role | null {
       /\s*\(?\s*(?:\d{4}\s*[-–]\s*\d{4}|in\s+\d{4}|[A-Z][a-z]+\s*[-–]\s*[A-Z][a-z]+\s+\d{4}|\d{4})\s*\)?\s*$/,
       "",
     )
+    // Tolerate a stray comma/semicolon between the org and the year
+    // ("...Organization (NATO), 1961-1964" — Stikker, Prebisch).
+    .replace(/[,;]+\s*$/, "")
     .trim();
   // Strip stray leading punctuation that arises when chunks straddle
   // parenthesised year ranges (Wyndham-White) or parenthetical asides
@@ -142,8 +186,8 @@ function parseRoleChunk(chunk: string, _warnings: Warning[]): Role | null {
   } else {
     // No ordinal — skip a "<nationality> <occupation> and " or
     // "<...>, " preamble by jumping past the last " and "/", " that occurs
-    // before " of " (or anywhere if there is no " of ").
-    const ofIdx = workingText.search(/\s+of\s+/);
+    // before " of "/" to " (or anywhere if there is no such separator).
+    const ofIdx = workingText.search(/\s+(?:of|to)\s+/);
     const head = ofIdx >= 0 ? workingText.substring(0, ofIdx) : workingText;
     const sepMatch = head.match(/^.*(?:\s+and\s+|,\s+)/);
     if (sepMatch) {
@@ -155,7 +199,10 @@ function parseRoleChunk(chunk: string, _warnings: Warning[]): Role | null {
   let organisation: string | undefined;
   let abbreviation: string | undefined;
 
-  const ofMatch = workingText.match(/\s+of\s+(?:the\s+)?/);
+  // Title/org separator: `of` (most common — "Director of the IMF") or `to`
+  // ("Delegate to the European Commission" — Stokes). "for" stays inside the
+  // title (e.g. "High Commissioner for Refugees").
+  const ofMatch = workingText.match(/\s+(?:of|to)\s+(?:the\s+)?/);
   if (ofMatch) {
     title = workingText.substring(0, ofMatch.index ?? 0).trim();
     let after = workingText
@@ -181,5 +228,5 @@ function parseRoleChunk(chunk: string, _warnings: Warning[]): Role | null {
 
   if (!title) return null;
 
-  return { title, ordinalText, organisation, abbreviation };
+  return applyTitleAliases({ title, ordinalText, organisation, abbreviation });
 }

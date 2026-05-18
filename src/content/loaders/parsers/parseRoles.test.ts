@@ -79,6 +79,71 @@ describe("parseRoles", () => {
     });
   });
 
+  it("back-fills UNHCR org/abbr when role title is 'High Commissioner for Refugees' without parenthesised abbr", () => {
+    const summary =
+      "Norwegian politician and seventh United Nations High Commissioner for Refugees 1990-1991";
+    const { value } = parseRoles(summary);
+    expect(value).toHaveLength(1);
+    expect(value[0]).toMatchObject({
+      ordinalText: "seventh",
+      title: "United Nations High Commissioner for Refugees",
+      organisation:
+        "Office of the United Nations High Commissioner for Refugees",
+      abbreviation: "UNHCR",
+    });
+  });
+
+  it("back-fills OHCHR org/abbr when role title is 'High Commissioner for Human Rights' (Robinson)", () => {
+    const summary =
+      "second United Nations High Commissioner for Human Rights 1997-2002";
+    const { value } = parseRoles(summary);
+    expect(value).toHaveLength(1);
+    expect(value[0]).toMatchObject({
+      title: "United Nations High Commissioner for Human Rights",
+      organisation:
+        "Office of the United Nations High Commissioner for Human Rights",
+      abbreviation: "OHCHR",
+    });
+  });
+
+  it("accepts 'to' as the title/org separator (Stokes)", () => {
+    const summary =
+      "military engineer and the first British Delegate to the European Commission of the Danube 1856-1871";
+    const { value } = parseRoles(summary);
+    expect(value).toHaveLength(1);
+    expect(value[0]).toMatchObject({
+      ordinalText: "first",
+      // The author wrote "British Delegate" as a qualified title (vs. delegates
+      // of other nationalities), so the demonym stays in the title.
+      title: "British Delegate",
+      organisation: "European Commission of the Danube",
+      startYear: 1856,
+      endYear: 1871,
+    });
+  });
+
+  it("tolerates a stray comma between (ABBR) and the year span (Stikker, Prebisch)", () => {
+    const summary =
+      "Dutch politician and third Secretary General of the North Atlantic Treaty Organization (NATO), 1961-1964";
+    const { value } = parseRoles(summary);
+    expect(value).toHaveLength(1);
+    expect(value[0]).toMatchObject({
+      ordinalText: "third",
+      title: "Secretary General",
+      organisation: "North Atlantic Treaty Organization",
+      abbreviation: "NATO",
+      startYear: 1961,
+      endYear: 1964,
+    });
+  });
+
+  it("does not override an abbreviation already present in the docx text", () => {
+    const summary =
+      "ninth United Nations High Commissioner for Refugees of the (UNHCR) 2001-2005";
+    const { value } = parseRoles(summary);
+    expect(value[0].abbreviation).toBe("UNHCR");
+  });
+
   it("warns when no year span found", () => {
     const { value, warnings } = parseRoles("some unrelated text");
     expect(value).toEqual([]);

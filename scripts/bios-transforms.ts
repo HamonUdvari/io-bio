@@ -55,11 +55,11 @@ export const transforms: FileTransform[] = [
     changes: [
       {
         type: "replace",
-        find: "Alden Winship (called Tom), Bank of America President",
+        find: "Alden Winship (called Tom), Bank of America President and sixth President of the International Bank for Reconstruction and Development (IBRD) and World Bank Group 1981-1986",
         replace:
-          "Alden Winship (known as Tom), Bank of America President",
+          "Alden Winship (known as Tom), American banker, President of Bank of America (BofA) 1970-1981 and sixth President of the International Bank for Reconstruction and Development (IBRD) 1981-1986",
         reason:
-          'The parser recognises "(known as X)" or "(née X)" as an aside; "(called Tom)" doesn\'t match either pattern, so the name regex fails.',
+          'Three things in one edit: (a) "(called Tom)" → "(known as Tom)" so the name aside matches the parser pattern; (b) insert "American banker," to give the nationality detector a demonym; (c) split the two presidencies into separate role chunks — Bank of America (BofA) 1970-1981 and IBRD 1981-1986 — and drop the "and World Bank Group" qualifier on the IGO role so the IBRD abbreviation gets captured. The BofA dates are from public record; flagging here for the author to confirm.',
       },
     ],
   },
@@ -160,6 +160,19 @@ export const transforms: FileTransform[] = [
           "1941-1946 (acting) and Director-General of the International Labour Organization (ILO) 1941-1948 (retroactive appointment in 1946)",
         reason:
           'Second role was written without "of <ORG>", so the parser captured its title but lost the organisation/abbreviation. Repeat "of the International Labour Organization (ILO)" before the year span for the second role.',
+      },
+    ],
+  },
+  {
+    source: "Robinson-MTW 2014.docx",
+    changes: [
+      {
+        type: "replace",
+        find: "(née Bourke), seventh President of Ireland",
+        replace:
+          "(née Bourke), Irish politician and seventh President of Ireland",
+        reason:
+          'No nationality demonym in the original intro. Insert "Irish politician and " so the detector matches Irish/Ireland. (The OHCHR institution abbreviation for the second role is now back-filled globally by the parser\'s role-title alias table, so no docx edit is needed for that.)',
       },
     ],
   },

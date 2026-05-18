@@ -13,8 +13,89 @@ import type { RenderedContent } from "../data-store.js";
 import type { Loader } from "./types.js";
 import { OfficeParser } from "officeparser";
 import path from "node:path";
+import { execSync } from "node:child_process";
 import { slug as githubSlug } from "github-slugger";
 import { extractAll } from "./parsers/extractAll";
+
+const WEB_IMAGE_EXTS = new Set(["png", "jpg", "jpeg", "gif", "svg"]);
+
+/**
+ * Write an image attachment to `outputDir` as a web-compatible file.
+ *
+ * If the attachment's extension is already a web format (png/jpg/jpeg/gif/svg),
+ * the buffer is written as-is.
+ *
+ * If the extension is something Astro's image pipeline can't handle (EMF, WMF,
+ * TIFF, etc.), we shell out to LibreOffice (`soffice --headless --convert-to
+ * png`) to produce a PNG. The PNG replaces the original on disk and the
+ * returned `filename` reflects the .png extension.
+ *
+ * Returns `null` if no writeable file resulted (conversion failed). Conversion
+ * is cached: if the target PNG already exists, no work is repeated.
+ */
+async function writeImageAttachment(
+  attachment: { base64: string; name: string; extension: string },
+  filenamePrefix: string,
+  outputDir: string,
+): Promise<string | null> {
+  const ext = (attachment.extension || "").toLowerCase();
+  const buffer = Buffer.from(attachment.base64, "base64");
+
+  if (!existsSync(outputDir)) {
+    await fs.mkdir(outputDir, { recursive: true });
+  }
+
+  if (WEB_IMAGE_EXTS.has(ext)) {
+    const filename = `${filenamePrefix}-${attachment.name}`;
+    const outputPath = path.join(outputDir, filename);
+    if (!existsSync(outputPath)) {
+      await fs.writeFile(outputPath, buffer);
+    }
+    return filename;
+  }
+
+  // Non-web format — try to convert via LibreOffice.
+  const baseName = attachment.name.replace(/\.[^.]+$/, "");
+  const filename = `${filenamePrefix}-${baseName}.png`;
+  const outputPath = path.join(outputDir, filename);
+  if (existsSync(outputPath)) {
+    console.warn(
+      `[docx] ${filenamePrefix}: image is "${ext}" (not web-compatible); using cached converted PNG`,
+    );
+    return filename;
+  }
+
+  const tmpDir = path.join(
+    "/tmp",
+    `docx-img-${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+  );
+  await fs.mkdir(tmpDir, { recursive: true });
+  const tmpInput = path.join(tmpDir, attachment.name);
+
+  try {
+    await fs.writeFile(tmpInput, buffer);
+    execSync(
+      `soffice --headless --convert-to png --outdir "${tmpDir}" "${tmpInput}"`,
+      { stdio: "pipe", timeout: 30_000 },
+    );
+    const convertedPath = path.join(tmpDir, `${baseName}.png`);
+    if (!existsSync(convertedPath)) {
+      throw new Error("LibreOffice did not produce a .png output");
+    }
+    await fs.copyFile(convertedPath, outputPath);
+    console.warn(
+      `[docx] ${filenamePrefix}: converted "${ext}" image to PNG via LibreOffice`,
+    );
+    return filename;
+  } catch (err) {
+    console.warn(
+      `[docx] ${filenamePrefix}: failed to convert "${ext}" image — image will not render. (${(err as Error).message})`,
+    );
+    return null;
+  } finally {
+    await fs.rm(tmpDir, { recursive: true, force: true });
+  }
+}
 
 // --- Utility functions copied from globLoader.ts ---
 /**
@@ -140,7 +221,8 @@ const docxEntryType: ContentEntryType = {
       console.error(`Error parsing DOCX file ${filePath}: ${error}`);
     }
 
-    // Image: write attachment to disk and remember filename.
+    // Image: write attachment to disk (converting via LibreOffice if needed)
+    // and remember the resulting filename.
     let imageFn = "";
     if (extracted?.imageAttachment) {
       const attachment = extracted.imageAttachment;
@@ -148,20 +230,9 @@ const docxEntryType: ContentEntryType = {
         .replaceAll(".", "-")
         .replaceAll(" ", "-")
         .toLowerCase();
-
       const outputDir = path.resolve("./src/assets/bios");
-      const filename = `${base}-${attachment.name}`;
-      const outputPath = path.join(outputDir, filename);
-
-      if (!existsSync(outputDir)) {
-        await fs.mkdir(outputDir, { recursive: true });
-      }
-
-      const buffer = Buffer.from(attachment.base64, "base64");
-      if (!(await fs.stat(outputPath).catch(() => false))) {
-        await fs.writeFile(outputPath, buffer);
-      }
-      imageFn = filename;
+      const written = await writeImageAttachment(attachment, base, outputDir);
+      if (written) imageFn = written;
     }
 
     if (warnings.length > 0) {

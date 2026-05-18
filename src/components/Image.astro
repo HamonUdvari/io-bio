@@ -9,19 +9,25 @@ interface Props {
 }
 
 const { imagePath: inputImagePath, alt = "Image alt", ...props } = Astro.props;
-const prefix = "/src/assets/bios";
-const imagePath = `${prefix}/${inputImagePath}`;
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/bios/**/*.{svg,jpeg,jpg,png,gif}",
 );
 
-let imgExists = !!images[imagePath];
+// Look up by NFC-normalised basename so Unicode characters (è, ö) match
+// regardless of whether Vite serves keys in NFC or NFD.
+const wantedBase = (inputImagePath ?? "").split("/").pop()?.normalize("NFC");
+const loader = wantedBase
+  ? Object.entries(images).find(
+      ([k]) => k.split("/").pop()?.normalize("NFC") === wantedBase,
+    )?.[1]
+  : undefined;
 
-if (!images[imagePath])
+if (!loader && wantedBase) {
   console.error(
-    `"${imagePath}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif}"`,
+    `Image "${wantedBase}" not found in glob "/src/assets/bios/**/*.{svg,jpeg,jpg,png,gif}"`,
   );
+}
 ---
 
-{imgExists && <AstroImage src={images[imagePath]()} alt={alt} {...props} />}
+{loader && <AstroImage src={loader()} alt={alt} {...props} />}

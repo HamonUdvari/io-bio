@@ -2,7 +2,7 @@
 
 Every cosmetic edit applied to `src/content/bios-source/` to produce `src/content/bios-processed/`. Generated automatically by `npm run bios:diff`.
 
-Files modified: **12**.
+Files modified: **13**.
 
 ## `Lubbers-R 2026.docx`
 
@@ -26,10 +26,10 @@ See [Holtrop-MW 2021.diff.md](./Holtrop-MW 2021.diff.md).
 
 See [Clausen-AW 2015.diff.md](./Clausen-AW 2015.diff.md).
 
-1. The parser recognises "(known as X)" or "(née X)" as an aside; "(called Tom)" doesn't match either pattern, so the name regex fails.
+1. Three things in one edit: (a) "(called Tom)" → "(known as Tom)" so the name aside matches the parser pattern; (b) insert "American banker," to give the nationality detector a demonym; (c) split the two presidencies into separate role chunks — Bank of America (BofA) 1970-1981 and IBRD 1981-1986 — and drop the "and World Bank Group" qualifier on the IGO role so the IBRD abbreviation gets captured. The BofA dates are from public record; flagging here for the author to confirm.
 
-   - Before: `Alden Winship (called Tom), Bank of America President`
-   - After:  `Alden Winship (known as Tom), Bank of America President`
+   - Before: `Alden Winship (called Tom), Bank of America President and sixth President of the International Bank for Reconstruction and Development (IBRD…`
+   - After:  `Alden Winship (known as Tom), American banker, President of Bank of America (BofA) 1970-1981 and sixth President of the International Bank f…`
 
 ## `Bonnet-H 2024.docx`
 
@@ -102,6 +102,15 @@ See [Phelan-EJ 2016.diff.md](./Phelan-EJ 2016.diff.md).
 
    - Before: `1941-1946 (acting) and Director-General 1941-1948 (retroactive appointment in 1946)`
    - After:  `1941-1946 (acting) and Director-General of the International Labour Organization (ILO) 1941-1948 (retroactive appointment in 1946)`
+
+## `Robinson-MTW 2014.docx`
+
+See [Robinson-MTW 2014.diff.md](./Robinson-MTW 2014.diff.md).
+
+1. No nationality demonym in the original intro. Insert "Irish politician and " so the detector matches Irish/Ireland. (The OHCHR institution abbreviation for the second role is now back-filled globally by the parser's role-title alias table, so no docx edit is needed for that.)
+
+   - Before: `(née Bourke), seventh President of Ireland`
+   - After:  `(née Bourke), Irish politician and seventh President of Ireland`
 
 ## `Rey-F 2025.docx`
 
