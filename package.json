@@ -8,7 +8,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "bios:process": "node scripts/process-bios.ts",
+    "bios:diff": "node scripts/generate-diffs.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",

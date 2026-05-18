@@ -65,7 +65,10 @@ export const bioDataSchema = z.object({
 export type BioData = z.infer<typeof bioDataSchema>;
 
 const bios = defineCollection({
-  loader: docxLoader({ pattern: "**/*.docx", base: "./src/content/bios" }),
+  loader: docxLoader({
+    pattern: "**/*.docx",
+    base: "./src/content/bios-processed",
+  }),
   schema: z.object({
     slug: z.string().optional(),
     data: bioDataSchema,
