@@ -206,6 +206,37 @@ function writeTrackChangesDocx(transform: FileTransform) {
   }
 }
 
+function writeChangelog() {
+  const md: string[] = [];
+  md.push("# bios-processed CHANGELOG");
+  md.push("");
+  md.push(
+    `Every cosmetic edit applied to ` +
+      `\`src/content/bios-source/\` to produce \`src/content/bios-processed/\`. ` +
+      `Generated automatically by \`npm run bios:diff\`.`,
+  );
+  md.push("");
+  md.push(`Files modified: **${transforms.length}**.`);
+  md.push("");
+  for (const t of transforms) {
+    md.push(`## \`${t.source}\``);
+    md.push("");
+    md.push(`See [${baseName(t.source)}.diff.md](./${baseName(t.source)}.diff.md).`);
+    md.push("");
+    for (let i = 0; i < t.changes.length; i++) {
+      const c = t.changes[i];
+      md.push(`${i + 1}. ${c.reason}`);
+      md.push("");
+      md.push(`   - Before: \`${c.find.slice(0, 140)}${c.find.length > 140 ? "…" : ""}\``);
+      md.push(`   - After:  \`${c.replace.slice(0, 140)}${c.replace.length > 140 ? "…" : ""}\``);
+      md.push("");
+    }
+  }
+  const out = join(DIFFS_DIR, `CHANGELOG.md`);
+  writeFileSync(out, md.join("\n"));
+  console.log(`  ✓ ${out.replace(ROOT + "/", "")}`);
+}
+
 function main() {
   ensureDirs();
   console.log("Generating diffs:");
@@ -213,6 +244,7 @@ function main() {
     writeMarkdownDiff(t);
     writeTrackChangesDocx(t);
   }
+  writeChangelog();
   console.log(`\nDone. ${transforms.length} file(s) processed.`);
 }
 
