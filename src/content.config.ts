@@ -50,6 +50,8 @@ export const bioDataSchema = z.object({
   summary: z.string(),
   image: imageSchema.optional(),
   imageSource: z.string().optional(),
+  imageFn: z.string().optional(),
+  imagePortraitFn: z.string().optional(),
   life: z.string(),
   roles: z.array(roleSchema).default([]),
   archives: aplSchema.default({ items: [] }),

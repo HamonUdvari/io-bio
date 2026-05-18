@@ -6,9 +6,10 @@ import { getImage } from "astro:assets";
 const bios = await getCollection("bios");
 const biosData = bios.map((bio) => ({ slug: bio.id, ...bio.data }));
 
-const images = import.meta.glob<{ default: ImageMetadata }>(
+const images = import.meta.glob<{ default: ImageMetadata }>([
   "/src/assets/bios/**/*.{svg,jpeg,jpg,png,gif}",
-);
+  "/src/assets/bios-overrides/**/*.{svg,jpeg,jpg,png,gif}",
+]);
 
 // Build a lookup keyed on the basename in NFC normalization. Vite's glob keys
 // can arrive in NFD on macOS while the docxLoader emits NFC filenames; this
@@ -23,7 +24,9 @@ for (const [k, loader] of Object.entries(images)) {
 }
 
 for (let bioData of biosData) {
-  const imageFn = bioData.imageFn;
+  // Prefer the face-cropped portrait for the listing/grid view; fall back to
+  // the original if no portrait was generated.
+  const imageFn = bioData.imagePortraitFn || bioData.imageFn;
   if (!imageFn) continue;
 
   const loader = imagesByBasename.get(imageFn.normalize("NFC"));

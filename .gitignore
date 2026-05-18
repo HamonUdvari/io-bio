@@ -1,4 +1,5 @@
 src/assets/bios
+src/assets/bios-overrides
 
 # local-only client materials (docs, assets, etc.)
 _local/

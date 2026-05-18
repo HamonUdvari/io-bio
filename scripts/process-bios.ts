@@ -43,6 +43,39 @@ function copyAllSourceToProcessed() {
   }
 }
 
+/**
+ * Convert any legacy `.doc` files in PROCESSED_DIR to `.docx` via LibreOffice,
+ * then remove the originals. officeparser doesn't read `.doc`, and the rest
+ * of the loader expects `.docx`.
+ */
+function convertLegacyDocs() {
+  for (const entry of readdirSync(PROCESSED_DIR)) {
+    if (!/\.doc$/i.test(entry)) continue;
+    const docPath = join(PROCESSED_DIR, entry);
+    const stem = entry.replace(/\.doc$/i, "");
+    const targetPath = join(PROCESSED_DIR, `${stem}.docx`);
+    if (existsSync(targetPath)) {
+      // Already converted; just remove the .doc so the loader doesn't see it.
+      rmSync(docPath, { force: true });
+      continue;
+    }
+    try {
+      execSync(
+        `soffice --headless --convert-to docx --outdir "${PROCESSED_DIR}" "${docPath}"`,
+        { stdio: "pipe", timeout: 60_000 },
+      );
+      if (existsSync(targetPath)) {
+        rmSync(docPath, { force: true });
+        console.log(`  ↳ converted ${entry} → ${stem}.docx`);
+      } else {
+        console.warn(`  ✗ LibreOffice did not produce ${stem}.docx`);
+      }
+    } catch (err: any) {
+      console.warn(`  ✗ failed to convert ${entry}: ${err.message}`);
+    }
+  }
+}
+
 function paragraphText(p: any): string {
   let out = "";
   const runs = p.getElementsByTagNameNS(W_NS, "r");
@@ -167,6 +200,8 @@ function main() {
   ensureDirs();
   console.log("Copying source → processed…");
   copyAllSourceToProcessed();
+  console.log("Converting legacy .doc files via LibreOffice…");
+  convertLegacyDocs();
   console.log(`Applying ${transforms.length} transform(s):`);
   let ok = 0;
   let failed = 0;

@@ -221,18 +221,83 @@ const docxEntryType: ContentEntryType = {
       console.error(`Error parsing DOCX file ${filePath}: ${error}`);
     }
 
-    // Image: write attachment to disk (converting via LibreOffice if needed)
-    // and remember the resulting filename.
+    // Image: a high-resolution override in `src/content/bios-images/<slug>.<ext>`
+    // takes precedence over the docx-embedded image. Otherwise write the
+    // docx attachment to disk (converting via LibreOffice if needed). Either
+    // way, generate a face-detected portrait crop next to the chosen source.
     let imageFn = "";
-    if (extracted?.imageAttachment) {
+    let imagePortraitFn = "";
+    // `base` is the filename stem used for asset files (keeps the old
+    // "<name>-docx" suffix for cache compatibility).
+    const base = basename(filePath)
+      .replaceAll(".", "-")
+      .replaceAll(" ", "-")
+      .toLowerCase();
+    // `slug` matches the entry's route slug — used to find an override.
+    const slug = basename(filePath, path.extname(filePath))
+      .replaceAll(" ", "-")
+      .toLowerCase();
+    const outputDir = path.resolve("./src/assets/bios");
+    const overrideOutputDir = path.resolve("./src/assets/bios-overrides");
+    const overridesDir = path.resolve("./src/content/bios-images");
+    const overrideExts = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
+    let overrideSrc: string | null = null;
+    for (const ext of overrideExts) {
+      const candidate = path.join(overridesDir, slug + ext);
+      if (existsSync(candidate)) {
+        overrideSrc = candidate;
+        break;
+      }
+    }
+
+    let sourcePath: string | null = null;
+    // When an override is in play, all derived assets go to the
+    // bios-overrides/ folder so it's easy to see which entries are upgraded.
+    const activeOutputDir = overrideSrc ? overrideOutputDir : outputDir;
+
+    if (overrideSrc) {
+      const overrideExt = path.extname(overrideSrc);
+      const overrideFn = `${base}-override${overrideExt}`;
+      const overrideTarget = path.join(overrideOutputDir, overrideFn);
+      if (!existsSync(overrideOutputDir)) {
+        await fs.mkdir(overrideOutputDir, { recursive: true });
+      }
+      await fs.copyFile(overrideSrc, overrideTarget);
+      imageFn = overrideFn;
+      sourcePath = overrideTarget;
+      console.warn(
+        `[docx] ${basename(filePath)}: using high-res override → ${basename(overrideSrc)}`,
+      );
+    } else if (extracted?.imageAttachment) {
       const attachment = extracted.imageAttachment;
-      const base = basename(filePath)
-        .replaceAll(".", "-")
-        .replaceAll(" ", "-")
-        .toLowerCase();
-      const outputDir = path.resolve("./src/assets/bios");
       const written = await writeImageAttachment(attachment, base, outputDir);
-      if (written) imageFn = written;
+      if (written) {
+        imageFn = written;
+        sourcePath = path.join(outputDir, written);
+      }
+    }
+
+    if (sourcePath) {
+      const portraitFn = imageFn.replace(/\.[^.]+$/, "-portrait.jpg");
+      const portraitPath = path.join(activeOutputDir, portraitFn);
+      if (existsSync(portraitPath)) {
+        imagePortraitFn = portraitFn;
+      } else {
+        try {
+          const { cropToPortrait } = await import(
+            "../../../scripts/crop-portrait.ts"
+          );
+          const { usedFace } = await cropToPortrait(sourcePath, portraitPath);
+          imagePortraitFn = portraitFn;
+          console.warn(
+            `[docx] ${basename(filePath)}: portrait${usedFace ? "" : " (saliency fallback)"} → ${portraitFn}`,
+          );
+        } catch (err) {
+          console.warn(
+            `[docx] ${basename(filePath)}: portrait crop failed — ${(err as Error).message}`,
+          );
+        }
+      }
     }
 
     if (warnings.length > 0) {
@@ -253,6 +318,7 @@ const docxEntryType: ContentEntryType = {
       summary: extracted?.summary ?? "",
       image: {},
       imageFn,
+      imagePortraitFn,
       imageSource: extracted?.imageSource ?? "",
       life: extracted?.life ?? "",
       roles: extracted?.roles ?? [],
