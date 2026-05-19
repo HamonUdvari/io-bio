@@ -20,22 +20,18 @@ import { extractAll } from "./parsers/extractAll";
 const WEB_IMAGE_EXTS = new Set(["png", "jpg", "jpeg", "gif", "svg"]);
 
 /**
- * Write an image attachment to `outputDir` as a web-compatible file.
+ * Write a docx image attachment to `outputDir` as `<stem>.<ext>`.
  *
- * If the attachment's extension is already a web format (png/jpg/jpeg/gif/svg),
- * the buffer is written as-is.
+ * If the attachment's extension is a web format (png/jpg/jpeg/gif/svg), the
+ * buffer is written as-is. For non-web formats (EMF/WMF/TIFF/etc.) we shell
+ * out to LibreOffice (`soffice --headless --convert-to png`) and write a PNG.
+ * The resulting filename is returned (extension may differ from the input).
  *
- * If the extension is something Astro's image pipeline can't handle (EMF, WMF,
- * TIFF, etc.), we shell out to LibreOffice (`soffice --headless --convert-to
- * png`) to produce a PNG. The PNG replaces the original on disk and the
- * returned `filename` reflects the .png extension.
- *
- * Returns `null` if no writeable file resulted (conversion failed). Conversion
- * is cached: if the target PNG already exists, no work is repeated.
+ * Returns null if no writable file results. Conversion is cached.
  */
 async function writeImageAttachment(
   attachment: { base64: string; name: string; extension: string },
-  filenamePrefix: string,
+  stem: string,
   outputDir: string,
 ): Promise<string | null> {
   const ext = (attachment.extension || "").toLowerCase();
@@ -46,7 +42,7 @@ async function writeImageAttachment(
   }
 
   if (WEB_IMAGE_EXTS.has(ext)) {
-    const filename = `${filenamePrefix}-${attachment.name}`;
+    const filename = `${stem}.${ext}`;
     const outputPath = path.join(outputDir, filename);
     if (!existsSync(outputPath)) {
       await fs.writeFile(outputPath, buffer);
@@ -54,13 +50,12 @@ async function writeImageAttachment(
     return filename;
   }
 
-  // Non-web format — try to convert via LibreOffice.
-  const baseName = attachment.name.replace(/\.[^.]+$/, "");
-  const filename = `${filenamePrefix}-${baseName}.png`;
+  // Non-web format — convert via LibreOffice to PNG.
+  const filename = `${stem}.png`;
   const outputPath = path.join(outputDir, filename);
   if (existsSync(outputPath)) {
     console.warn(
-      `[docx] ${filenamePrefix}: image is "${ext}" (not web-compatible); using cached converted PNG`,
+      `[docx] ${stem}: image is "${ext}" (not web-compatible); using cached converted PNG`,
     );
     return filename;
   }
@@ -78,18 +73,19 @@ async function writeImageAttachment(
       `soffice --headless --convert-to png --outdir "${tmpDir}" "${tmpInput}"`,
       { stdio: "pipe", timeout: 30_000 },
     );
+    const baseName = attachment.name.replace(/\.[^.]+$/, "");
     const convertedPath = path.join(tmpDir, `${baseName}.png`);
     if (!existsSync(convertedPath)) {
       throw new Error("LibreOffice did not produce a .png output");
     }
     await fs.copyFile(convertedPath, outputPath);
     console.warn(
-      `[docx] ${filenamePrefix}: converted "${ext}" image to PNG via LibreOffice`,
+      `[docx] ${stem}: converted "${ext}" image to PNG via LibreOffice`,
     );
     return filename;
   } catch (err) {
     console.warn(
-      `[docx] ${filenamePrefix}: failed to convert "${ext}" image — image will not render. (${(err as Error).message})`,
+      `[docx] ${stem}: failed to convert "${ext}" image — image will not render. (${(err as Error).message})`,
     );
     return null;
   } finally {
@@ -221,65 +217,69 @@ const docxEntryType: ContentEntryType = {
       console.error(`Error parsing DOCX file ${filePath}: ${error}`);
     }
 
-    // Image: a high-resolution override in `src/content/bios-images/<slug>.<ext>`
-    // takes precedence over the docx-embedded image. Otherwise write the
-    // docx attachment to disk (converting via LibreOffice if needed). Either
-    // way, generate a face-detected portrait crop next to the chosen source.
+    // Image pipeline:
+    //   src/assets/bios-extracted/<slug>.<ext>  — raw docx attachment, kept for
+    //       reference so we can compare what the author shipped vs. what renders.
+    //   src/content/bios-images/<slug>.<ext>    — optional high-res override
+    //       (AI-upscaled or manually-sourced). When present, this is what
+    //       gets rendered.
+    //   src/assets/bios/<slug>.<ext>            — the active image (override
+    //       if available, else the extracted original). Site reads from here.
+    //   src/assets/bios/<slug>-portrait.jpg     — face-detected portrait crop
+    //       of the active image, for the grid view.
     let imageFn = "";
     let imagePortraitFn = "";
-    // `base` is the filename stem used for asset files (keeps the old
-    // "<name>-docx" suffix for cache compatibility).
-    const base = basename(filePath)
-      .replaceAll(".", "-")
-      .replaceAll(" ", "-")
-      .toLowerCase();
-    // `slug` matches the entry's route slug — used to find an override.
     const slug = basename(filePath, path.extname(filePath))
       .replaceAll(" ", "-")
       .toLowerCase();
-    const outputDir = path.resolve("./src/assets/bios");
-    const overrideOutputDir = path.resolve("./src/assets/bios-overrides");
-    const overridesDir = path.resolve("./src/content/bios-images");
-    const overrideExts = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
-    let overrideSrc: string | null = null;
-    for (const ext of overrideExts) {
-      const candidate = path.join(overridesDir, slug + ext);
+    const activeDir = path.resolve("./src/assets/bios");
+    const extractedDir = path.resolve("./src/assets/bios-extracted");
+    const overrideDir = path.resolve("./src/content/bios-images");
+
+    // 1) Always extract the docx attachment to bios-extracted/ (regenerable
+    //    reference; gitignored). LibreOffice-converted PNGs land here too.
+    let extractedPath: string | null = null;
+    if (extracted?.imageAttachment) {
+      const written = await writeImageAttachment(
+        extracted.imageAttachment,
+        slug,
+        extractedDir,
+      );
+      if (written) extractedPath = path.join(extractedDir, written);
+    }
+
+    // 2) Pick the active source: override if it exists, else the extracted
+    //    original.
+    let activeSrc: string | null = null;
+    for (const ext of [".jpg", ".jpeg", ".png", ".webp", ".gif"]) {
+      const candidate = path.join(overrideDir, slug + ext);
       if (existsSync(candidate)) {
-        overrideSrc = candidate;
+        activeSrc = candidate;
+        console.warn(
+          `[docx] ${basename(filePath)}: using override → ${basename(candidate)}`,
+        );
         break;
       }
     }
+    if (!activeSrc && extractedPath) activeSrc = extractedPath;
 
-    let sourcePath: string | null = null;
-    // When an override is in play, all derived assets go to the
-    // bios-overrides/ folder so it's easy to see which entries are upgraded.
-    const activeOutputDir = overrideSrc ? overrideOutputDir : outputDir;
-
-    if (overrideSrc) {
-      const overrideExt = path.extname(overrideSrc);
-      const overrideFn = `${base}-override${overrideExt}`;
-      const overrideTarget = path.join(overrideOutputDir, overrideFn);
-      if (!existsSync(overrideOutputDir)) {
-        await fs.mkdir(overrideOutputDir, { recursive: true });
+    // 3) Copy active source to bios/<slug>.<ext> (the file the site reads).
+    let activePath: string | null = null;
+    if (activeSrc) {
+      if (!existsSync(activeDir)) {
+        await fs.mkdir(activeDir, { recursive: true });
       }
-      await fs.copyFile(overrideSrc, overrideTarget);
-      imageFn = overrideFn;
-      sourcePath = overrideTarget;
-      console.warn(
-        `[docx] ${basename(filePath)}: using high-res override → ${basename(overrideSrc)}`,
-      );
-    } else if (extracted?.imageAttachment) {
-      const attachment = extracted.imageAttachment;
-      const written = await writeImageAttachment(attachment, base, outputDir);
-      if (written) {
-        imageFn = written;
-        sourcePath = path.join(outputDir, written);
-      }
+      const ext = path.extname(activeSrc);
+      const fn = `${slug}${ext}`;
+      activePath = path.join(activeDir, fn);
+      await fs.copyFile(activeSrc, activePath);
+      imageFn = fn;
     }
 
-    if (sourcePath) {
-      const portraitFn = imageFn.replace(/\.[^.]+$/, "-portrait.jpg");
-      const portraitPath = path.join(activeOutputDir, portraitFn);
+    // 4) Generate the face-detected portrait crop next to the active image.
+    if (activePath) {
+      const portraitFn = `${slug}-portrait.jpg`;
+      const portraitPath = path.join(activeDir, portraitFn);
       if (existsSync(portraitPath)) {
         imagePortraitFn = portraitFn;
       } else {
@@ -287,7 +287,7 @@ const docxEntryType: ContentEntryType = {
           const { cropToPortrait } = await import(
             "../../../scripts/crop-portrait.ts"
           );
-          const { usedFace } = await cropToPortrait(sourcePath, portraitPath);
+          const { usedFace } = await cropToPortrait(activePath, portraitPath);
           imagePortraitFn = portraitFn;
           console.warn(
             `[docx] ${basename(filePath)}: portrait${usedFace ? "" : " (saliency fallback)"} → ${portraitFn}`,

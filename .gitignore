@@ -1,4 +1,7 @@
 src/assets/bios
+src/assets/bios-extracted
+src/assets/bios-originals
+src/assets/bios-originals.zip
 src/assets/bios-overrides
 
 # local-only client materials (docs, assets, etc.)

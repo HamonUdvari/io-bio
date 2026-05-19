@@ -10,10 +10,9 @@ interface Props {
 
 const { imagePath: inputImagePath, alt = "Image alt", ...props } = Astro.props;
 
-const images = import.meta.glob<{ default: ImageMetadata }>([
+const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/bios/**/*.{svg,jpeg,jpg,png,gif}",
-  "/src/assets/bios-overrides/**/*.{svg,jpeg,jpg,png,gif}",
-]);
+);
 
 // Look up by NFC-normalised basename so Unicode characters (è, ö) match
 // regardless of whether Vite serves keys in NFC or NFD.
