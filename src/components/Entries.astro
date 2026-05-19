@@ -34,7 +34,7 @@ for (let bioData of biosData) {
   const importedImg = await loader();
   if (!importedImg) continue;
 
-  const webImage = await getImage({ src: importedImg.default });
+  const webImage = await getImage({ src: importedImg.default, quality: 92 });
   bioData.webImage = webImage;
 }
   

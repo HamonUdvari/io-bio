@@ -127,12 +127,27 @@ export async function cropToPortrait(
   const trimmedBuf = trimmed.data;
   const { width: srcW, height: srcH } = trimmed.info;
 
-  // 2) Decode to a 3-channel raw buffer for face detection.
+  // 2) Decode to a 3-channel raw buffer for face detection. Downscale to a
+  //    bounded max side first — the WASM backend allocates a working buffer
+  //    proportional to the input tensor, and 4×-upscaled portraits (4000×5000+)
+  //    blow past 1.5 GB. TinyFaceDetector resizes to 416 internally anyway,
+  //    so detail beyond ~1200px is wasted.
   const fapi = await ensureFaceApi();
-  const rgbBuf = await sharp(trimmedBuf).removeAlpha().raw().toBuffer();
+  const FACE_DETECT_MAX_SIDE = 1200;
+  const scale = Math.min(1, FACE_DETECT_MAX_SIDE / Math.max(srcW, srcH));
+  const detectW = Math.round(srcW * scale);
+  const detectH = Math.round(srcH * scale);
+  const rgbBuf =
+    scale < 1
+      ? await sharp(trimmedBuf)
+          .resize(detectW, detectH, { fit: "fill" })
+          .removeAlpha()
+          .raw()
+          .toBuffer()
+      : await sharp(trimmedBuf).removeAlpha().raw().toBuffer();
   const tensor = (fapi as any).tf.tensor3d(
     new Uint8Array(rgbBuf),
-    [srcH, srcW, 3],
+    [detectH, detectW, 3],
     "int32",
   );
   const detections = await fapi.detectAllFaces(
@@ -143,25 +158,42 @@ export async function cropToPortrait(
 
   if (detections.length > 0) {
     // Largest detected face — most likely the subject.
-    const face = detections
+    const faceScaled = detections
       .map((d) => d.box)
       .reduce((biggest, b) =>
         b.width * b.height > biggest.width * biggest.height ? b : biggest,
       );
+    // Coordinates came from the downscaled tensor; scale back to source pixels.
+    const face = {
+      x: faceScaled.x / scale,
+      y: faceScaled.y / scale,
+      width: faceScaled.width / scale,
+      height: faceScaled.height / scale,
+    };
     const crop = computeCropForFace(face, srcW, srcH);
+    // Never enlarge: if the cropped head-region is smaller than TARGET_W×
+    // TARGET_H, emit at native size. Astro's responsive `<Image>` downscales
+    // per breakpoint, but resizing the cropped region UP here would force a
+    // second upscale on top of whatever the source override already did
+    // (visibly soft for entries whose docx source was <300px).
+    const outputW = Math.min(TARGET_W, crop.width);
+    const outputH = Math.round(outputW / TARGET_RATIO);
     await sharp(trimmedBuf)
       .extract(crop)
-      .resize(TARGET_W, TARGET_H, { fit: "cover" })
+      .resize(outputW, outputH, { fit: "cover", withoutEnlargement: true })
       .jpeg({ quality: 88 })
       .toFile(outputPath);
     return { usedFace: true };
   }
 
-  // Fallback: sharp's attention strategy.
+  // Fallback: sharp's attention strategy. Don't enlarge either.
+  const fbOutputW = Math.min(TARGET_W, srcW);
+  const fbOutputH = Math.round(fbOutputW / TARGET_RATIO);
   await sharp(trimmedBuf)
-    .resize(TARGET_W, TARGET_H, {
+    .resize(fbOutputW, fbOutputH, {
       fit: "cover",
       position: sharp.strategy.attention,
+      withoutEnlargement: true,
     })
     .jpeg({ quality: 88 })
     .toFile(outputPath);
