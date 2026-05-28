@@ -241,14 +241,16 @@
     }
   }
 
-  html.entries-restoring .entries > .entries-table,
-  html.entries-restoring .entries > .grid {
-    display: none;
-  }
-
   .entries {
     @apply text-left;
     @apply max-w-[90%];
+
+    /* While restoring saved list/grid + filter state, hide the views to
+       avoid a flash of unfiltered content before hydration. */
+    html.entries-restoring & > .entries-table,
+    html.entries-restoring & > .grid {
+      display: none;
+    }
   }
 
   .entries-table {
@@ -262,97 +264,101 @@
     column-gap: 1rem;
     row-gap: 0;
     align-items: baseline;
-  }
 
-  .entries-table__row {
-    display: grid;
-    grid-template-columns: subgrid;
-    grid-column: 1 / -1;
-    color: inherit;
-    text-decoration: none;
-    padding-block: 0.25rem;
-    @apply io-transition;
-  }
+    & .entries-table__row {
+      display: grid;
+      grid-template-columns: subgrid;
+      grid-column: 1 / -1;
+      color: inherit;
+      text-decoration: none;
+      padding-block: 0.25rem;
+      @apply io-transition;
 
-  .entries-table__row--header {
-    @apply border-b border-io-gray-100/30;
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;
-  }
+      /* Hover highlight on any non-header row. */
+      &:not(.entries-table__row--header):hover {
+        background-color: var(--color-io-brand);
+        color: var(--color-io-onbrand);
+      }
 
-  /* The wrapper around consecutive same-person rows is transparent to layout
-     (display: contents) but still receives :hover from anywhere inside it, so
-     hovering one role lights up the whole group. */
-  .entries-table__group {
-    display: contents;
-  }
+      &.entries-table__row--header {
+        @apply border-b border-io-gray-100/30;
+        font-weight: 600;
+        cursor: pointer;
+        user-select: none;
+      }
 
-  .entries-table__row:not(.entries-table__row--header):hover,
-  .entries-table__group:hover
-    .entries-table__row:not(.entries-table__row--header) {
-    background-color: var(--color-io-brand);
-    color: var(--color-io-onbrand);
-  }
+      /* Continuation: same person as the previous (adjacent) row. Dim it and
+         hide the repeated name + nationality cells so it reads as attached to
+         the row above. */
+      &.entries-table__row--continuation {
+        opacity: 0.85;
 
-  /* Continuation: this row is the same person as the previous (adjacent) row.
-     Hide the name + nationality cells; dim the row's hover so it visually
-     reads as attached to the row above. */
-  .entries-table__row--continuation .entries-table__cell--fullName,
-  .entries-table__row--continuation .entries-table__cell--nationality {
-    visibility: hidden;
-  }
+        & .entries-table__cell--fullName,
+        & .entries-table__cell--nationality {
+          visibility: hidden;
+        }
+      }
+    }
 
-  .entries-table__row--continuation {
-    opacity: 0.85;
-  }
+    /* The wrapper around consecutive same-person rows is transparent to layout
+       (display: contents) but still receives :hover from anywhere inside it, so
+       hovering one role lights up the whole group. */
+    & .entries-table__group {
+      display: contents;
 
-  /* When the group is hovered, all its rows get the full hover treatment
-     (background already set above); restore full opacity on continuations. */
-  .entries-table__group:hover .entries-table__row--continuation {
-    opacity: 1;
-  }
+      /* Hovering the group highlights all its rows; restore continuation
+         opacity so the group reads as one unit. */
+      &:hover .entries-table__row:not(.entries-table__row--header) {
+        background-color: var(--color-io-brand);
+        color: var(--color-io-onbrand);
+      }
 
-  /* Every group is bracketed top/bottom so single- and multi-role groups
-     look consistent. For single-role groups the same row gets both borders;
-     for multi-role groups the top sits on the first row and the bottom on
-     the last. */
-  .entries-table__group > .entries-table__row:first-of-type {
-    border-top: 1px solid color-mix(in srgb, var(--color-io-onsecondary) 25%, transparent);
-  }
+      &:hover .entries-table__row--continuation {
+        opacity: 1;
+      }
 
-  .entries-table__group > .entries-table__row:last-of-type {
-    border-bottom: 1px solid color-mix(in srgb, var(--color-io-onsecondary) 25%, transparent);
-  }
+      /* Every group is bracketed top/bottom so single- and multi-role groups
+         look consistent. For single-role groups the same row gets both
+         borders; for multi-role groups the top sits on the first row and the
+         bottom on the last. */
+      & > .entries-table__row:first-of-type {
+        border-top: 1px solid color-mix(in srgb, var(--color-io-onsecondary) 25%, transparent);
+      }
 
-  /* The bottom of the very last visible group has no "next group's top"
-     border stacked against it, so it would look thinner than all the
-     inter-group dividers. Double the width to match. */
-  .entries-table__group:last-child > .entries-table__row:last-of-type {
-    border-bottom-width: 2px;
-  }
+      & > .entries-table__row:last-of-type {
+        border-bottom: 1px solid color-mix(in srgb, var(--color-io-onsecondary) 25%, transparent);
+      }
 
-  .entries-table__cell {
-    padding-inline: 0.25rem;
-    overflow-wrap: anywhere;
-  }
+      /* The bottom of the very last visible group has no "next group's top"
+         border stacked against it, so it would look thinner than all the
+         inter-group dividers. Double the width to match. */
+      &:last-child > .entries-table__row:last-of-type {
+        border-bottom-width: 2px;
+      }
+    }
 
-  /* Years are short and shouldn't break — keep "1997–2002" on one line. */
-  .entries-table__cell--year {
-    white-space: nowrap;
-    overflow-wrap: normal;
-  }
+    & .entries-table__cell {
+      padding-inline: 0.25rem;
+      overflow-wrap: anywhere;
 
-  .entries-table__cell--header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.25rem;
-  }
+      /* Years are short and shouldn't break — keep "1997–2002" on one line. */
+      &.entries-table__cell--year {
+        white-space: nowrap;
+        overflow-wrap: normal;
+      }
 
-  .entries-table__sort-indicator {
-    @apply text-[0.8em] leading-none;
+      &.entries-table__cell--header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.25rem;
+      }
+    }
+
+    & .entries-table__sort-indicator {
+      @apply text-[0.8em] leading-none;
+    }
   }
 
   .button {
