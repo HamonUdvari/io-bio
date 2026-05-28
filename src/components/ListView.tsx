@@ -1,10 +1,7 @@
 import type { BioData, Role } from "../content.config";
 
 import * as React from "react";
-import {
-  type RankingInfo,
-  rankItem,
-} from "@tanstack/match-sorter-utils";
+import { type RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 
 import {
   createColumnHelper,
@@ -129,6 +126,10 @@ export default function ListView({ data }: ListViewProps) {
       id: "role",
       header: "Title",
       filterFn: "includesString",
+      // Display with non-breaking hyphens (U+2011) so compound titles like
+      // "Secretary-General" wrap as a unit (at spaces) instead of splitting at
+      // the hyphen. The accessor value keeps plain hyphens for search/sort.
+      cell: (info) => info.getValue().replace(/-/g, "‑"),
     }),
     columnHelper.accessor((row) => formatOrg(row.role), {
       id: "organisation",
@@ -311,89 +312,91 @@ export default function ListView({ data }: ListViewProps) {
         </div>
       )}
       {view === "list" && (
-        <div class="entries-table" role="table">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <div
-              class="entries-table__row entries-table__row--header"
-              role="row"
-              key={headerGroup.id}
-            >
-              {headerGroup.headers.map((header) => (
-                <div
-                  class={clsx(
-                    "entries-table__cell entries-table__cell--header",
-                    `entries-table__cell--${header.column.id}`,
-                  )}
-                  role="columnheader"
-                  key={header.id}
-                  onClick={header.column.getToggleSortingHandler()}
-                >
-                  <span>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                  </span>
-                  <span class="entries-table__sort-indicator">
-                    {{
-                      asc: "▲",
-                      desc: "▼",
-                    }[header.column.getIsSorted() as string] ?? " "}
-                  </span>
-                </div>
-              ))}
-            </div>
-          ))}
-          {(() => {
-            // Group consecutive rows of the same person so hovering any of them
-            // can light up the whole group. The wrapper uses `display: contents`
-            // so it doesn't interfere with the subgrid layout.
-            const groups: (typeof rows)[] = [];
-            let currentId: string | null = null;
-            for (const row of rows) {
-              if (row.original.personId !== currentId) {
-                groups.push([]);
-                currentId = row.original.personId;
-              }
-              groups[groups.length - 1].push(row);
-            }
-            return groups.map((group, gi) => (
+        <div class="entries__table-scroll">
+          <div class="entries-table" role="table">
+            {table.getHeaderGroups().map((headerGroup) => (
               <div
-                class="entries-table__group"
-                data-person-id={group[0].original.personId}
-                key={group[0].original.personId + ":" + gi}
+                class="entries-table__row entries-table__row--header"
+                role="row"
+                key={headerGroup.id}
               >
-                {group.map((row, i) => (
-                  <a
-                    key={row.id}
-                    href={`/entries/${row.original.slug}`}
-                    role="row"
-                    data-person-id={row.original.personId}
+                {headerGroup.headers.map((header) => (
+                  <div
                     class={clsx(
-                      "entries-table__row",
-                      i > 0 && "entries-table__row--continuation",
+                      "entries-table__cell entries-table__cell--header",
+                      `entries-table__cell--${header.column.id}`,
                     )}
+                    role="columnheader"
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
                   >
-                    {row.getVisibleCells().map((cell) => (
-                      <div
-                        class={clsx(
-                          "entries-table__cell",
-                          `entries-table__cell--${cell.column.id}`,
-                        )}
-                        role="cell"
-                        key={cell.id}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </div>
-                    ))}
-                  </a>
+                    <span>
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                    </span>
+                    <span class="entries-table__sort-indicator">
+                      {{
+                        asc: "▲",
+                        desc: "▼",
+                      }[header.column.getIsSorted() as string] ?? " "}
+                    </span>
+                  </div>
                 ))}
               </div>
-            ));
-          })()}
+            ))}
+            {(() => {
+              // Group consecutive rows of the same person so hovering any of them
+              // can light up the whole group. The wrapper uses `display: contents`
+              // so it doesn't interfere with the subgrid layout.
+              const groups: (typeof rows)[] = [];
+              let currentId: string | null = null;
+              for (const row of rows) {
+                if (row.original.personId !== currentId) {
+                  groups.push([]);
+                  currentId = row.original.personId;
+                }
+                groups[groups.length - 1].push(row);
+              }
+              return groups.map((group, gi) => (
+                <div
+                  class="entries-table__group"
+                  data-person-id={group[0].original.personId}
+                  key={group[0].original.personId + ":" + gi}
+                >
+                  {group.map((row, i) => (
+                    <a
+                      key={row.id}
+                      href={`/entries/${row.original.slug}`}
+                      role="row"
+                      data-person-id={row.original.personId}
+                      class={clsx(
+                        "entries-table__row",
+                        i > 0 && "entries-table__row--continuation",
+                      )}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <div
+                          class={clsx(
+                            "entries-table__cell",
+                            `entries-table__cell--${cell.column.id}`,
+                          )}
+                          role="cell"
+                          key={cell.id}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </div>
+                      ))}
+                    </a>
+                  ))}
+                </div>
+              ));
+            })()}
+          </div>
         </div>
       )}
       <div class="h-4" />

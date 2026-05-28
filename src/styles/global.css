@@ -1,28 +1,28 @@
-@import '@fontsource/roboto';
-@import '@fontsource/roboto-condensed';
+@import "@fontsource/roboto";
+@import "@fontsource/roboto-condensed";
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Roboto";
   --font-hero: "Roboto Condensed";
 
-  --breakpoint-tablet: 48rem; /* 768 px */ 
+  --breakpoint-tablet: 48rem; /* 768 px */
   --breakpoint-desktop: 80rem; /* 80rem (1280px), tailwind xl breakpoint */
 
-  --color-io-red: #FF5309;
-  --color-io-gray-100: #EDEDED;
-  --color-io-gray-600: #4A4A4A;
-  --color-io-gray-900: #1E1D1D;
+  --color-io-red: #ff5309;
+  --color-io-gray-100: #ededed;
+  --color-io-gray-600: #4a4a4a;
+  --color-io-gray-900: #1e1d1d;
   --color-io-black: #000000;
 
   --color-brand: var(--color-io-red);
 
   --color-io-neutral: var(--color-io-black);
   --color-io-onneutral: var(--color-io-gray-100);
-  
+
   --color-io-brand: var(--color-io-red);
   --color-io-onbrand: var(--color-io-black);
-  
+
   --color-io-primary: var(--color-io-black);
   --color-io-onprimary: var(--color-io-gray-100);
 
@@ -38,7 +38,7 @@
   --gap-x-base: calc(var(--spacing) * 4);
   --gap-x-tablet: calc(var(--spacing) * 5);
   --gap-x-desktop: calc(var(--spacing) * 6);
-  
+
   --gap-y-base: calc(var(--spacing) * 4);
   --gap-y-tablet: calc(var(--spacing) * 5);
   /* --gap-y-desktop: calc(var(--spacing) * 6); */
@@ -59,15 +59,32 @@
 }
 
 @utility text-h1 {
-  @apply text-base desktop:text-[4.375rem];
+  /* @apply text-base; */
   @apply leading-none;
-  @apply print:text-[4.375rem];
+  @apply text-[3.475rem];
+
+  @variant desktop {
+    @apply text-[4.375rem]; /* 70px */
+  }
+
+  @variant print {
+    @apply text-[4.375rem]; /* 70px */
+  }
 }
 
 @utility text-h2 {
-  @apply text-base desktop:text-[2.5rem];
+  /* @apply text-base; */
   @apply leading-tight;
-  @apply print:text-[2.5rem];
+
+  @apply text-[2rem]; 
+  
+  @variant desktop {
+    @apply text-[2.5rem]; 
+  }
+
+  @variant print {
+    @apply text-[2.5rem]; 
+  }
 }
 
 @utility text-h3 {
@@ -110,12 +127,12 @@
       --px: var(--px-desktop);
     }
   }
-  
+
   body {
     @apply bg-io-primary;
     @apply text-io-onprimary;
     overflow-y: scroll;
-  }   
+  }
 
   * {
     text-box-trim: trim;
@@ -142,7 +159,7 @@
 @layer components {
   .columns {
     &.columns--default {
-      @apply columns-1; 
+      @apply columns-1;
     }
 
     &.columns--compact {
@@ -162,19 +179,18 @@
   }
 
   section {
-
     @variant print {
       background-color: white !important;
       color: black !important;
     }
 
-    @apply desktop:pt-10 desktop:pb-7.5; 
+    @apply desktop:pt-10 desktop:pb-7.5;
     @apply text-body;
     @apply flex flex-col;
     @apply gap-y-(--gap-y);
     @apply border-t border-io-gray-100;
     @apply bg-io-secondary;
-    
+
     & .section__title {
       @apply px-(--px);
       @apply pb-(--gap-y);
@@ -190,25 +206,32 @@
       --text-hover: var(--color-io-gray-100);
       @apply bg-io-brand text-io-black;
       @apply border-t-0;
-      
+
       & .footer__text {
         @apply text-[40px] leading-[1.15];
       }
     }
 
+    & > *,
+    & > astro-island > * {
+      /* --max-content-width: var(--max-section-width); */
+      --content-width: min(
+        calc(100svw - var(--px) * 2),
+        var(--max-section-width)
+      );
+      @apply max-w-(--content-width) w-full mx-auto;
+    }
 
-    & > *, & > astro-island > * {
+    &.section--wide > *,
+    &.section--wide > astro-island > * {
       /* --max-content-width: var(--max-section-width); */
-      --content-width: min(calc(100svw - var(--px) * 2), var(--max-section-width));
+      --content-width: min(
+        calc(100svw - var(--px) * 2),
+        var(--max-content-width)
+      );
       @apply max-w-(--content-width) w-full mx-auto;
     }
-    
-    &.section--wide > *, &.section--wide > astro-island > * {
-      /* --max-content-width: var(--max-section-width); */
-      --content-width: min(calc(100svw - var(--px) * 2), var(--max-content-width));
-      @apply max-w-(--content-width) w-full mx-auto;
-    }
-   
+
     h2 {
       @apply text-h2;
     }
@@ -221,23 +244,42 @@
         @apply text-center w-[80%] pb-(--gap-y);
       }
     }
-    
+
     &.section--secondary {
       @apply bg-io-secondary text-io-onsecondary;
     }
 
-    &+.section--primary {
+    & + .section--primary {
       @apply border-t-0;
     }
   }
 
-  .flex, .grid {
+  .flex,
+  .grid {
     @apply gap-x-(--gap-x) gap-y-(--gap-y);
   }
 
   .hero {
-    & .hero__text-container__text {
-      font-family: var(--font-hero);
+    @apply text-h2;
+
+    @apply flex flex-col;
+    @apply items-center;
+    @apply justify-between;
+    @apply w-full;
+    /* @apply w-full h-[90svh]; */
+    @apply bg-io-primary;
+    /* @apply pb-14; */
+    @apply py-(--gap-y);
+
+    & .hero__text-container {
+      @apply text-center;
+      @apply flex-1;
+      @apply flex flex-col justify-center-safe;
+      @apply uppercase;
+
+      & .hero__text-container__text {
+        font-family: var(--font-hero);
+      }
     }
   }
 
@@ -245,9 +287,18 @@
     @apply text-left;
     @apply max-w-[90%];
 
+    /* Scroll viewport for the list-view table. Keeps the grid's min-width
+       contained here so narrow screens scroll the table horizontally instead
+       of widening the page (overflow stays on this element, not on .entries
+       or the body). */
+    & .entries__table-scroll {
+      overflow-x: auto;
+      max-width: 100%;
+    }
+
     /* While restoring saved list/grid + filter state, hide the views to
        avoid a flash of unfiltered content before hydration. */
-    html.entries-restoring & > .entries-table,
+    html.entries-restoring & > .entries__table-scroll,
     html.entries-restoring & > .grid {
       display: none;
     }
@@ -255,15 +306,29 @@
 
   .entries-table {
     display: grid;
+    /* Every track is floored at min-content (its longest word) so columns
+       wrap at spaces only — never mid-word — without overflowing into the
+       next column. */
     grid-template-columns:
-      minmax(0, 1.5fr)              /* fullName */
-      minmax(0, 1.5fr)              /* role / title */
-      minmax(0, 3fr)                /* organisation — wider; many orgs are long names + abbreviation */
-      minmax(0, 0.8fr)              /* nationality */
-      minmax(max-content, 0.6fr);   /* years — never narrower than its content */
+      minmax(min-content, 1.5fr) /* fullName */
+      minmax(min-content, 1.5fr) /* role / title */
+      minmax(
+        min-content,
+        3fr
+      ) /* organisation — wider, many long names + abbreviation */
+      minmax(min-content, 0.8fr) /* nationality */
+      minmax(
+        max-content,
+        0.6fr
+      ); /* years — nowrap, never narrower than its content */
     column-gap: 1rem;
     row-gap: 0;
     align-items: baseline;
+    /* Floor the table width so the 5 columns stay legible on mobile; below
+       this the .entries__table-scroll wrapper scrolls in x. On desktop the
+       container is wider than this, so the fr columns expand and the min has
+       no effect. */
+    min-width: 60rem;
 
     & .entries-table__row {
       display: grid;
@@ -322,11 +387,13 @@
          borders; for multi-role groups the top sits on the first row and the
          bottom on the last. */
       & > .entries-table__row:first-of-type {
-        border-top: 1px solid color-mix(in srgb, var(--color-io-onsecondary) 25%, transparent);
+        border-top: 1px solid
+          color-mix(in srgb, var(--color-io-onsecondary) 25%, transparent);
       }
 
       & > .entries-table__row:last-of-type {
-        border-bottom: 1px solid color-mix(in srgb, var(--color-io-onsecondary) 25%, transparent);
+        border-bottom: 1px solid
+          color-mix(in srgb, var(--color-io-onsecondary) 25%, transparent);
       }
 
       /* The bottom of the very last visible group has no "next group's top"
@@ -339,12 +406,17 @@
 
     & .entries-table__cell {
       padding-inline: 0.25rem;
-      overflow-wrap: anywhere;
+      /* Wrap at spaces only — never split a word mid-character. Every column is
+         floored at min-content in grid-template-columns, so content still
+         never overflows into the next column. Hyphenated title compounds like
+         "Secretary-General" stay whole via the U+2011 non-breaking hyphen
+         applied in ListView. */
+      overflow-wrap: normal;
 
-      /* Years are short and shouldn't break — keep "1997–2002" on one line. */
+      /* Single short tokens — never wrap at all. */
+      &.entries-table__cell--nationality,
       &.entries-table__cell--year {
         white-space: nowrap;
-        overflow-wrap: normal;
       }
 
       &.entries-table__cell--header {
@@ -363,9 +435,9 @@
 
   .button {
     @apply text-h3 leading-none;
-    @apply px-9 py-4; 
+    @apply px-9 py-4;
     @apply io-transition;
-    @apply inline-block; 
+    @apply inline-block;
     @apply cursor-pointer;
 
     @apply bg-(--btn-bg) text-(--btn-text);
@@ -405,6 +477,5 @@
       @apply bg-(--btn-bg-hover) text-(--btn-text-hover);
       @apply border-(--btn-border-hover);
     }
-    
   }
 }
