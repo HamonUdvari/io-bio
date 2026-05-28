@@ -286,6 +286,47 @@
   .entries {
     @apply text-left;
     @apply max-w-[90%];
+    @apply flex flex-col;
+
+    /* Search + view-toggle bar. */
+    & .entries__toolbar {
+      @apply flex flex-row;
+      @apply gap-x-(--gap-x) gap-y-(--gap-y);
+    }
+
+    & .entries__search {
+      @apply w-full;
+      @apply p-2 px-4;
+      @apply shadow ring ring-inset;
+    }
+
+    & .entries__view-toggle {
+      @apply flex flex-row gap-x-1;
+    }
+
+    /* View-toggle buttons. Visual styling comes from the .button system; these
+       are semantic hooks so the role is clear from the markup and each button
+       is individually targetable for future styling. */
+    & .entries__view-button {
+      &.entries__view-button--list {
+        /* hook: list-view toggle button */
+      }
+
+      &.entries__view-button--grid {
+        /* hook: grid-view toggle button */
+      }
+    }
+
+    /* Grid (card) view. */
+    & .entries__grid {
+      @apply grid grid-cols-2 desktop:grid-cols-4;
+      @apply items-baseline;
+      @apply gap-x-(--gap-x) gap-y-(--gap-y);
+    }
+
+    & .entries__spacer {
+      @apply h-4;
+    }
 
     /* Scroll viewport for the list-view table. Keeps the grid's min-width
        contained here so narrow screens scroll the table horizontally instead
@@ -299,8 +340,36 @@
     /* While restoring saved list/grid + filter state, hide the views to
        avoid a flash of unfiltered content before hydration. */
     html.entries-restoring & > .entries__table-scroll,
-    html.entries-restoring & > .grid {
+    html.entries-restoring & > .entries__grid {
       display: none;
+    }
+  }
+
+  /* Card shown per person in the grid view. The whole tile is the link. */
+  .entry {
+    @apply flex flex-col gap-y-2;
+    @apply leading-none;
+
+    & .entry__image {
+      @apply w-full;
+    }
+
+    & .entry__body {
+      @apply grid grid-cols-1;
+      @apply gap-x-0 gap-y-2;
+    }
+
+    & .entry__roles {
+      @apply text-xs;
+      @apply flex flex-col gap-y-1;
+      /* Override the global `ul` disc/indent — these are role lines, not bullets. */
+      list-style: none;
+      padding-left: 0;
+    }
+
+    & .entry__years,
+    & .entry__nationality {
+      @apply text-right;
     }
   }
 
@@ -454,6 +523,12 @@
 
     &.button--primary {
       @apply border-0;
+    }
+
+    /* Selected state (e.g. the active List/Grid view toggle). */
+    &.button--active {
+      --btn-bg: var(--color-io-brand);
+      --btn-text: var(--color-io-onbrand);
     }
 
     &.button--secondary {

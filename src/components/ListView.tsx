@@ -231,31 +231,39 @@ export default function ListView({ data }: ListViewProps) {
   }, [rows]);
 
   return (
-    <div class="entries flex flex-col">
-      <div class="flex flex-row">
+    <div class="entries">
+      <div class="entries__toolbar">
         <DebouncedInput
           value={globalFilter ?? ""}
           onChange={(value) => setGlobalFilter(String(value))}
-          class="w-full p-2 px-4 font-lg shadow ring ring-inset"
+          class="entries__search"
           placeholder="Search all columns..."
         />
-        <div class="flex flex-row gap-x-1">
+        <div class="entries__view-toggle">
           <button
             onClick={() => setView("list")}
-            class={clsx("button border-0", view === "list" && "bg-io-brand")}
+            class={clsx(
+              "button button--primary",
+              "entries__view-button entries__view-button--list",
+              view === "list" && "button--active",
+            )}
           >
             List
           </button>
           <button
             onClick={() => setView("grid")}
-            class={clsx("button border-0", view === "grid" && "bg-io-brand")}
+            class={clsx(
+              "button button--primary",
+              "entries__view-button entries__view-button--grid",
+              view === "grid" && "button--active",
+            )}
           >
             Grid
           </button>
         </div>
       </div>
       {view === "grid" && (
-        <div class="grid grid-cols-2 desktop:grid-cols-4 align-baseline items-baseline">
+        <div class="entries__grid">
           {gridRows.map((row) => {
             const { original } = row;
             const {
@@ -267,44 +275,39 @@ export default function ListView({ data }: ListViewProps) {
               slug,
             } = original as any;
             return (
-              <a href={`/entries/${slug}`} key={row.id}>
-                <div class="entry leading-none flex flex-col gap-y-2">
-                  {webImage && <img class="w-full" src={webImage.src} />}
-                  <div class="grid grid-cols-1 _grid-rows-2 gap-x-0 gap-y-2">
-                    <span
-                      class="entry__name"
-                      style={{ textBoxTrim: "trim-both" }}
-                    >
-                      {lastName.toUpperCase()} {firstName}
-                    </span>
-                    <ul class="text-xs flex flex-col gap-y-1">
-                      {roles.length === 0 ? (
-                        <li>
-                          <span class="entry__nationality">{nationality}</span>
+              <a href={`/entries/${slug}`} class="entry" key={row.id}>
+                {webImage && <img class="entry__image" src={webImage.src} />}
+                <div class="entry__body">
+                  <span class="entry__name" style={{ textBoxTrim: "trim-both" }}>
+                    {lastName.toUpperCase()} {firstName}
+                  </span>
+                  <ul class="entry__roles">
+                    {roles.length === 0 && (
+                      <li class="entry__role-item">
+                        <span class="entry__nationality">{nationality}</span>
+                      </li>
+                    )}
+                    {roles.length > 0 &&
+                      roles.map((r: Role, i: number) => (
+                        <li class="entry__role-item" key={i}>
+                          <span class="entry__organisation">
+                            {formatOrg(r)}/
+                          </span>
+                          <span class="entry__role">{r.title} </span>
+                          <span class="entry__years">
+                            {r.startYear}–{r.endYear}
+                          </span>
+                          {i === roles.length - 1 && nationality && (
+                            <>
+                              {" "}
+                              <span class="entry__nationality">
+                                {nationality}
+                              </span>
+                            </>
+                          )}
                         </li>
-                      ) : (
-                        roles.map((r: Role, i: number) => (
-                          <li key={i}>
-                            <span class="entry__organisation">
-                              {formatOrg(r)}/
-                            </span>
-                            <span class="entry__role">{r.title} </span>
-                            <span class="entry__years text-right">
-                              {r.startYear}–{r.endYear}
-                            </span>
-                            {i === roles.length - 1 && nationality && (
-                              <>
-                                {" "}
-                                <span class="entry__nationality text-right">
-                                  {nationality}
-                                </span>
-                              </>
-                            )}
-                          </li>
-                        ))
-                      )}
-                    </ul>
-                  </div>
+                      ))}
+                  </ul>
                 </div>
               </a>
             );
@@ -399,7 +402,7 @@ export default function ListView({ data }: ListViewProps) {
           </div>
         </div>
       )}
-      <div class="h-4" />
+      <div class="entries__spacer" />
     </div>
   );
 }
