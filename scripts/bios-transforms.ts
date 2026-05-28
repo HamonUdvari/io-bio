@@ -188,4 +188,18 @@ export const transforms: FileTransform[] = [
       },
     ],
   },
+  {
+    // Source is a legacy .doc; the transform runs against the LibreOffice-
+    // converted .docx in bios-processed/ (see applyTransform).
+    source: "Saouma-E 2013.docx",
+    changes: [
+      {
+        type: "replace",
+        find: "(FAO) 1976-1993. He was born",
+        replace: "(FAO) 1976-1993, was born",
+        reason:
+          'The parser expects "..., was born" immediately after the role/dates in the intro. This entry starts the life as a new sentence ("1976-1993. He was born"), so the summary/role went unparsed. Join it with a comma clause to match house style.',
+      },
+    ],
+  },
 ];

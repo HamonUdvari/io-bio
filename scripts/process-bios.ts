@@ -133,10 +133,14 @@ function rewriteParagraph(doc: any, p: any, newText: string) {
 }
 
 function applyTransform(transform: FileTransform): boolean {
-  const sourcePath = join(SOURCE_DIR, transform.source);
+  // Transforms run *after* copyAllSourceToProcessed() + convertLegacyDocs(),
+  // so PROCESSED_DIR holds a .docx for every entry (legacy .doc files have
+  // already been converted). Read and rewrite the processed copy in place —
+  // this lets transforms target entries whose original source was a .doc,
+  // which the unzip step below can't open directly.
   const processedPath = join(PROCESSED_DIR, transform.source);
-  if (!existsSync(sourcePath)) {
-    console.error(`  ✗ source missing: ${transform.source}`);
+  if (!existsSync(processedPath)) {
+    console.error(`  ✗ processed file missing: ${transform.source}`);
     return false;
   }
 
@@ -147,7 +151,7 @@ function applyTransform(transform: FileTransform): boolean {
   mkdirSync(tmpDir, { recursive: true });
 
   try {
-    execSync(`unzip -q "${sourcePath}" -d "${tmpDir}"`);
+    execSync(`unzip -q "${processedPath}" -d "${tmpDir}"`);
     const docXmlPath = join(tmpDir, "word", "document.xml");
     const xml = readFileSync(docXmlPath, "utf8");
 
