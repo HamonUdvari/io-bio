@@ -5,6 +5,11 @@ import Footer from "@components/Footer.astro";
 import { frontmatter as globals } from "@content/globals/global.md";
 
 const SITE = import.meta.env.SITE;
+// Normalise BASE_URL to exactly one trailing slash. Astro's BASE_URL mirrors
+// the configured `base`, so it may be "/io-bio" (no slash), "/io-bio/", or "/".
+// Forcing one trailing slash lets us join `${BASE}path` (path without a leading
+// slash) safely in every case.
+const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const { title: globalTitle, description: globalDescription } = globals;
 const {
   title = globalTitle,
@@ -12,7 +17,7 @@ const {
   hideFooter = false,
 } = Astro.props;
 
-const image = `${SITE}/og.jpg`;
+const image = new URL(`${BASE}og.jpg`, SITE).toString();
 const currentUrl = new URL(Astro.url.pathname, SITE).toString();
 const locale = Astro.currentLocale;
 ---
@@ -38,33 +43,70 @@ const locale = Astro.currentLocale;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
 
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="manifest" href={`${BASE}site.webmanifest`} />
 
     <link
       rel="icon"
-      href="/android-chrome-192x192.png"
+      href={`${BASE}android-chrome-192x192.png`}
       sizes="192x192"
       type="image/png"
     />
     <link
       rel="icon"
-      href="/android-chrome-512x512.png"
+      href={`${BASE}android-chrome-512x512.png`}
       sizes="512x512"
       type="image/png"
     />
 
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="icon" href="/fav.jpg" type="image/jpeg" />
-    <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
-    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <script is:inline>
+    <link rel="apple-touch-icon" href={`${BASE}apple-touch-icon.png`} />
+    <link rel="icon" href={`${BASE}fav.jpg`} type="image/jpeg" />
+    <link
+      rel="icon"
+      href={`${BASE}favicon-16x16.png`}
+      sizes="16x16"
+      type="image/png"
+    />
+    <link
+      rel="icon"
+      href={`${BASE}favicon-32x32.png`}
+      sizes="32x32"
+      type="image/png"
+    />
+    <link rel="shortcut icon" href={`${BASE}favicon.ico`} type="image/x-icon" />
+    <script is:inline define:vars={{ base: BASE }}>
       (function () {
-        if (location.pathname !== "/") return;
+        // `base` ends in "/" (e.g. "/io-bio/" or "/"). The homepage is served at
+        // exactly `base`, optionally with a trailing slash, so compare both forms.
+        var home = base;
+        var homeNoSlash = base.length > 1 ? base.replace(/\/$/, "") : base;
+        if (location.pathname !== home && location.pathname !== homeNoSlash)
+          return;
         var p = new URLSearchParams(location.search);
         if (p.has("q") || p.has("view") || p.has("sort")) {
           document.documentElement.classList.add("entries-restoring");
         }
+      })();
+    </script>
+    <script is:inline>
+      // Suppress transitions/animations while the window is actively resizing,
+      // so responsive layout shifts (breakpoint changes, fluid widths) don't
+      // visibly animate. Adds `.resizing` to <html> during resize and removes
+      // it ~150ms after it stops; the matching CSS rule (global.css) zeroes out
+      // transitions + animations while the class is present.
+      (function () {
+        var root = document.documentElement;
+        var timer;
+        window.addEventListener(
+          "resize",
+          function () {
+            root.classList.add("resizing");
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+              root.classList.remove("resizing");
+            }, 150);
+          },
+          { passive: true },
+        );
       })();
     </script>
   </head>

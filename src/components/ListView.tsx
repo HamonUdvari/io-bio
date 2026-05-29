@@ -80,6 +80,11 @@ function formatOrg(role?: Role): string {
 }
 
 export default function ListView({ data }: ListViewProps) {
+  // Vite inlines this at build time, so it's the same on server + client and
+  // tracks the configured base. Normalise to exactly one trailing slash (it may
+  // be "/io-bio", "/io-bio/", or "/") so `${base}entries/${slug}` joins cleanly.
+  const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+
   // Flatten bios × roles into one row per role. People with no roles still get
   // a single row so they show up in the list.
   const roleRows = useMemo(() => {
@@ -133,7 +138,7 @@ export default function ListView({ data }: ListViewProps) {
     }),
     columnHelper.accessor((row) => formatOrg(row.role), {
       id: "organisation",
-      header: "Organisation",
+      header: "Organization",
       filterFn: "includesString",
     }),
     columnHelper.accessor((row) => row.nationality ?? "", {
@@ -156,7 +161,11 @@ export default function ListView({ data }: ListViewProps) {
     ),
   ];
 
-  const [sorting, setSorting] = useState<SortingState>([]);
+  // Default sort: surname A→Z, so the page lands sorted (equivalent to
+  // ?sort=fullName:asc) and the Name column shows its sort triangle.
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "fullName", desc: false },
+  ]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [view, setView] = useState<"list" | "grid">("list");
   const [hydrated, setHydrated] = useState(false);
@@ -275,7 +284,7 @@ export default function ListView({ data }: ListViewProps) {
               slug,
             } = original as any;
             return (
-              <a href={`/entries/${slug}`} class="entry" key={row.id}>
+              <a href={`${base}entries/${slug}`} class="entry" key={row.id}>
                 {webImage && <img class="entry__image" src={webImage.src} />}
                 <div class="entry__body">
                   <span class="entry__name" style={{ textBoxTrim: "trim-both" }}>
@@ -339,11 +348,17 @@ export default function ListView({ data }: ListViewProps) {
                         header.getContext(),
                       )}
                     </span>
-                    <span class="entries-table__sort-indicator">
+                    <span
+                      class={clsx(
+                        "entries-table__sort-indicator",
+                        !header.column.getIsSorted() &&
+                          "entries-table__sort-indicator--inactive",
+                      )}
+                    >
                       {{
                         asc: "▲",
                         desc: "▼",
-                      }[header.column.getIsSorted() as string] ?? " "}
+                      }[header.column.getIsSorted() as string] ?? "↕"}
                     </span>
                   </div>
                 ))}
@@ -371,7 +386,7 @@ export default function ListView({ data }: ListViewProps) {
                   {group.map((row, i) => (
                     <a
                       key={row.id}
-                      href={`/entries/${row.original.slug}`}
+                      href={`${base}entries/${row.original.slug}`}
                       role="row"
                       data-person-id={row.original.personId}
                       class={clsx(

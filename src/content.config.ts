@@ -58,6 +58,9 @@ export const bioDataSchema = z.object({
   publications: aplSchema.default({ items: [] }),
   literature: aplSchema.default({ items: [] }),
   version: z.string().optional(),
+  versionDoi: z.string().optional(), // version-specific Zenodo DOI for this entry, when minted
+  conceptDoi: z.string().optional(), // entry concept DOI (always-latest), when minted
+  publishedYear: z.number().optional(), // citation year; else derive from `version` date
   authors: z.string().optional(),
   nationality: z.string().optional(),
   country: z.string().optional(),
@@ -90,6 +93,7 @@ export const pages = defineCollection({
     description: z.string().optional(),
     order: z.number().optional(),
     hideFooter: z.boolean().optional(),
+    hideFromNav: z.boolean().optional(),
   }),
 });
 
