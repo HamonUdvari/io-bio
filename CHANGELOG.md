@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/HamonUdvari/io-bio/compare/v1.1.0...v1.1.1) (2026-05-29)
+
+
+### Bug Fixes
+
+* footer→h2, linkify long image source, crisp download icon ([](https://github.com/HamonUdvari/io-bio/commit/ae1a741142f14fcdd3f068f6f666826e04358684))
+
 # [1.1.0](https://github.com/HamonUdvari/io-bio/compare/v1.0.0...v1.1.0) (2026-05-29)
 
 
