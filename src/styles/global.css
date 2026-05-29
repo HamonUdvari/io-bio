@@ -327,7 +327,7 @@
       @apply border-t-0;
 
       & .footer__text {
-        @apply text-h1;
+        @apply text-h2;
       }
     }
 
@@ -692,9 +692,20 @@
       @apply border-0;
     }
 
-    /* Download CTA — appends a downward arrow so it reads as a file download. */
+    /* Download CTA — a crisp download icon after the label (Roboto has no clean
+       download glyph; the bare ↓ looked thin). Masked to currentColor so it
+       matches the label colour in every button state. */
     &.button--download::after {
-      content: " ↓";
+      --icon-download: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M12%2016%207%2011h3V4h4v7h3z%20M5%2018h14v2H5z'/%3E%3C/svg%3E");
+      content: "";
+      display: inline-block;
+      width: 0.8em;
+      height: 0.8em;
+      margin-left: 0.45em;
+      vertical-align: -0.08em;
+      background-color: currentColor;
+      mask: var(--icon-download) center / contain no-repeat;
+      -webkit-mask: var(--icon-download) center / contain no-repeat;
     }
 
     /* Selected state (e.g. the active List/Grid view toggle). */
