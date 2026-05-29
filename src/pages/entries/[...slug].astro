@@ -41,17 +41,52 @@ if (!image) {
 const title = `${lastName.toUpperCase()}, ${firstName}`;
 const description = summary;
 const { Content } = await render(Astro.props);
+
+// --- How to cite ----------------------------------------------------------
+// IO BIO uses Zenodo for DOIs (Option 3a hybrid): a whole-dictionary concept
+// DOI plus an entry-level citation string carrying author/title/version/slug.
+// TODO: replace with the real IO BIO Zenodo concept DOI once minted.
+const IOBIO_CONCEPT_DOI = "10.5281/zenodo.0000000";
+
+const slug = Astro.params.slug ?? Astro.props.id;
+
+// "Version 4 November 2019" → "4 November 2019"
+const versionLabel = (version ?? "").replace(/^Version\s+/i, "").trim();
+
+// Citation year: explicit frontmatter, else the trailing 4-digit year parsed
+// from the version date, the title, or the slug.
+const parsedYear =
+  Number(
+    (versionLabel.match(/\b(\d{4})\b\s*$/) ??
+      title.match(/\b(\d{4})\b/) ??
+      slug.match(/\b(\d{4})\b/) ??
+      [])[1],
+  ) || undefined;
+const year = data.publishedYear ?? parsedYear;
+
+// Base-aware canonical URL, e.g. https://…/io-bio/entries/<slug>
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const SITE = import.meta.env.SITE;
+const entryUrl = new URL(`${base}entries/${slug}`, SITE).href;
+
+const citationDoi = data.versionDoi ?? data.conceptDoi ?? IOBIO_CONCEPT_DOI;
+const conceptDoi = data.conceptDoi;
+const doiIsExample = !(data.versionDoi || data.conceptDoi);
+
+const fallbackDate = versionLabel || "[date]";
 ---
 
 <Layout title={title} description={description}>
   <section
-    class="border-t-0 bg-io-gray-600 pt-[5rem] pb-[10rem] text-center gap-y-[30px]"
+    class="border-t-0 bg-io-gray-600 pt-[5rem] pb-[7.5rem] text-center gap-y-[30px]"
   >
-    <figure class="max-w-[345px] _max-h-[414px]">
+    <figure class="relative max-w-[345px] _max-h-[414px]">
       <picture>
         <Image class="w-full" imagePath={imageFn} alt={title} />
       </picture>
-      <figcaption class="text-[6px] pt-1 text-left">
+      <figcaption
+        class="text-credit absolute left-full bottom-0 ml-4 origin-bottom-left -rotate-90 whitespace-nowrap"
+      >
         Source: {imageSource}
       </figcaption>
     </figure>
@@ -65,7 +100,7 @@ const { Content } = await render(Astro.props);
     </div>
     <span class="mt-[30px] text-balance">{life}</span>
     <button
-      class="button button--primary w-fit print:hidden"
+      class="button button--primary button--download w-fit print:hidden"
       onclick="window.print()">Download Entry PDF</button
     >
   </section>
@@ -138,6 +173,96 @@ const { Content } = await render(Astro.props);
   }
   <section id="cite">
     <h2 class="section__title">How to cite</h2>
-    <p>todo</p>
+
+    <div class="cite__block">
+      <h3 class="cite__label">Cite this entry — DOI</h3>
+      <p class="cite__text" id="cite-doi">
+        {authors} ({year}). {lastName}, {firstName} (Version {versionLabel})
+        [Biographical entry]. <cite>IO BIO — Biographical Dictionary of
+        Secretaries-General of International Organizations</cite>. Zenodo.
+        https://doi.org/{citationDoi}
+      </p>
+      {
+        doiIsExample && (
+          <p class="cite__note">(example DOI — pending Zenodo deposit)</p>
+        )
+      }
+      <div class="button-group">
+        <button class="button button--secondary" data-copy-target="cite-doi"
+          >Copy citation</button
+        >
+        {
+          conceptDoi && (
+            <a
+              class="button button--secondary"
+              href={`https://doi.org/${conceptDoi}`}
+            >
+              Always-latest DOI
+            </a>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="cite__block">
+      <h3 class="cite__label">Cite this entry — web</h3>
+      <p class="cite__text" id="cite-web">
+        {authors}, '{lastName}, {firstName}' in <cite>IO BIO, Biographical
+        Dictionary of Secretaries-General of International Organizations</cite>,
+        edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg, {entryUrl},
+        accessed <span data-accessed>{fallbackDate}</span>.
+      </p>
+      <div class="button-group">
+        <button class="button button--secondary" data-copy-target="cite-web"
+          >Copy citation</button
+        >
+      </div>
+    </div>
   </section>
+
+  <script is:inline>
+    (function () {
+      const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December",
+      ];
+      function todayLabel() {
+        const d = new Date();
+        return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+      }
+
+      function stampAccessed(root) {
+        (root || document)
+          .querySelectorAll("[data-accessed]")
+          .forEach((el) => {
+            el.textContent = todayLabel();
+          });
+      }
+
+      // On load: replace the pre-JS fallback date with today's real date.
+      stampAccessed(document);
+
+      document.querySelectorAll("[data-copy-target]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const target = document.getElementById(
+            btn.getAttribute("data-copy-target"),
+          );
+          if (!target) return;
+          // Re-stamp so a copied citation always carries the true access date.
+          stampAccessed(target);
+          const text = target.textContent.replace(/\s+/g, " ").trim();
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch (e) {
+            return;
+          }
+          const original = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => {
+            btn.textContent = original;
+          }, 1500);
+        });
+      });
+    })();
+  </script>
 </Layout>

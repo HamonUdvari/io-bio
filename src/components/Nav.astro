@@ -2,19 +2,25 @@
 import { getCollection } from "astro:content";
 
 const pages = await getCollection("pages");
-let links = pages.map(({ data }) => ({
-  slug: data.slug,
-  title: data.navLabel ?? data.title,
-  order: data.order,
-}));
+let links = pages
+  .filter(({ data }) => !data.hideFromNav)
+  .map(({ data }) => ({
+    slug: data.slug,
+    title: data.navLabel ?? data.title,
+    order: data.order,
+  }));
 links = links.toSorted((a, b) => a.order - b.order);
+
+// Normalise BASE_URL to exactly one trailing slash (it may be "/io-bio",
+// "/io-bio/", or "/") so `${BASE}${slug}` always joins with a single slash.
+const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 
 <nav class="nav flex flex-row">
   {
     links &&
       links.map(({ slug, title }) => (
-        <a href={`/${slug}`} class="last:ml-auto">
+        <a href={`${BASE}${slug}`} class="last:ml-auto">
           {title}
         </a>
       ))

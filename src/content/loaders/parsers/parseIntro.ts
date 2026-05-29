@@ -27,7 +27,11 @@ export function parseIntro(introText: string): ParserResult<IntroFields> {
 
   const nameMatch = introText.match(NAME_RE);
   if (nameMatch) {
-    value.lastName = nameCase(nameMatch[1].trim());
+    // Strip square brackets some source docs put around a name part
+    // (e.g. "[van Heuven] Goedhart") so they don't show in the rendered name.
+    value.lastName = nameCase(
+      nameMatch[1].replace(/[[\]]/g, " ").replace(/\s+/g, " ").trim(),
+    );
     value.firstName = nameMatch[2].trim();
     if (nameMatch[3]) value.knownAs = nameMatch[3].trim();
   } else {

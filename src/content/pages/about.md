@@ -1,7 +1,7 @@
 ---
 slug: about
 title: About
-description: Test description
+description: About the IO BIO project, its contributors and connected publications
 order: 400
 ---
 
@@ -17,7 +17,21 @@ Entries have been published at the IO BIO website at Radboud University since No
 
 Editors
 
-# Bob Reinalda, Radboud University, Nijmegen, Netherlands Kent J. Kille, The College of Wooster, USA Jaci L. Eisenberg, Graduate Institute, Geneva, Switzerland
+# Bob Reinalda, Radboud University, Nijmegen, Netherlands Kent J. Kille, The College of Wooster, USA Jaci L. Eisenberg, Graduate Institute, Geneva, Switzerland
+</div>
+
+::::
+
+::::section{stretch="wide"}
+
+<!-- AUTHORED — REVIEW NEEDED: teaser lead line, hook heading and CTA button below link to the dedicated /introduction page (the full essay was moved there to keep this page balanced). -->
+
+Background
+
+# Why a biographical dictionary of executive heads? What makes the short biography a genre of its own, and how do IO BIO's two databases compare with others?
+
+<div>
+<a class="button button--secondary" href="/introduction">Read the introduction</a>
 </div>
 
 ::::

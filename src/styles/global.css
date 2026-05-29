@@ -1,4 +1,5 @@
 @import "@fontsource/roboto";
+@import "@fontsource/roboto/500.css";
 @import "@fontsource/roboto-condensed";
 @import "tailwindcss";
 
@@ -13,6 +14,7 @@
   --color-io-gray-100: #ededed;
   --color-io-gray-600: #4a4a4a;
   --color-io-gray-900: #1e1d1d;
+  --color-io-gray-300: #c4c3c3;
   --color-io-black: #000000;
 
   --color-brand: var(--color-io-red);
@@ -31,22 +33,40 @@
 
   --color-io-secondary: var(--color-io-gray-900);
   --color-io-onsecondary: var(--color-io-gray-100);
+  --color-io-onsecondary-muted: var(--color-io-gray-300);
 
   --color-io-tertiary: var(--color-io-gray-600);
   --color-io-ontertiary: var(--color-io-gray-100);
 
+  /* Responsive scale — every step is explicitly suffixed (-base / -tablet /
+     -desktop) so token names never collide with the same-named @utility/
+     Tailwind-generated utilities. :root resolves the unsuffixed runtime var
+     (--gap-x, …) per breakpoint via @variant. */
   --gap-x-base: calc(var(--spacing) * 4);
   --gap-x-tablet: calc(var(--spacing) * 5);
   --gap-x-desktop: calc(var(--spacing) * 6);
 
   --gap-y-base: calc(var(--spacing) * 4);
   --gap-y-tablet: calc(var(--spacing) * 5);
-  /* --gap-y-desktop: calc(var(--spacing) * 6); */
   --gap-y-desktop: 1.875rem;
 
-  --px-base: calc(0.75rem);
-  --px-tablet: calc(0.75rem);
-  --px-desktop: calc(2rem);
+  --px-base: 1rem;
+  --px-tablet: 1.5rem;
+  --px-desktop: 2rem;
+
+  /* Control vertical/horizontal padding — shared by .button and the search
+     input so their heights match (mirrors Figma button-py / search-py). */
+  --btn-px-base: 1.5rem;
+  --btn-px-tablet: 1.75rem;
+  --btn-px-desktop: 2.25rem;
+  --btn-py-base: 0.75rem;
+  --btn-py-tablet: 0.875rem;
+  --btn-py-desktop: 1rem;
+
+  /* Tight, uniform gap between toolbar controls — used for both the
+     search ↔ view-toggle gap and the List/Grid button gap, so the toolbar
+     reads as one coherent cluster (one token instead of two values). */
+  --gap-controls: calc(var(--spacing) * 1);
 
   /* --max-content-width: 85rem; */
   /* --max-content-width: 80ch; */
@@ -56,49 +76,101 @@
   --content-width: min(calc(100svw - var(--px) * 2), var(--max-content-width));
 
   --text-hover: var(--color-io-red);
+
+  /* Font-size scale — single source shared with the Figma "Text/*" tokens.
+     Base/mobile is suffixed -base (not unsuffixed) so it never collides with
+     the same-named @utility text-* / Tailwind-generated text-* utilities. */
+  --text-h1-base: 3.475rem;
+  --text-h1-tablet: 3.475rem;
+  --text-h1-desktop: 4.375rem; /* 70px */
+  --text-h2-base: 1.5rem; /* 24px → 32 (tablet) → 40 (desktop) */
+  --text-h2-tablet: 2rem;
+  --text-h2-desktop: 2.5rem;
+  --text-h3-base: 1.25rem;
+  --text-body-base: 1rem;
+  --text-body-tablet: 1rem;
+  --text-body-desktop: 1.25rem;
+  --text-caption-base: 1rem;
+  --text-small-base: 0.875rem; /* 14px */
+  --text-micro-base: 0.75rem; /* 12px */
+  --text-credit-base: 0.625rem; /* 10px */
+  --text-label-base: 1rem; /* 16 → 20 desktop, Roboto Medium */
+  --text-label-desktop: 1.25rem;
+  --text-hero-base: 2rem; /* 32 → 32 → 40, Roboto Condensed */
+  --text-hero-tablet: 2rem;
+  --text-hero-desktop: 2.5rem;
+
+  /* Leadings — one per text family so line-heights are controllable like the
+     sizes (base/tablet/desktop ladder for the responsive families). Mirrors
+     the Figma text-style line-heights. Base is suffixed -base too. */
+  --leading-h1-base: 1.17;
+  --leading-h1-tablet: 1.17;
+  --leading-h1-desktop: 1.17;
+  --leading-h2-base: 1.25;
+  --leading-h2-tablet: 1.25;
+  --leading-h2-desktop: 1.25;
+  --leading-h3-base: 1.75rem;
+  --leading-body-base: 1.2;
+  --leading-body-tablet: 1.2;
+  --leading-body-desktop: 1.2;
+  --leading-caption-base: 1.5rem;
+  --leading-small-base: 1.3;
+  --leading-micro-base: 1.33;
+  --leading-credit-base: 1.3;
+  --leading-hero-base: 1.1;
+  --leading-hero-tablet: 1.1;
+  --leading-hero-desktop: 1.1;
 }
 
 @utility text-h1 {
-  /* @apply text-base; */
-  @apply leading-none;
-  @apply text-[3.475rem];
-
-  @variant desktop {
-    @apply text-[4.375rem]; /* 70px */
-  }
-
-  @variant print {
-    @apply text-[4.375rem]; /* 70px */
-  }
+  @apply text-h1-base tablet:text-h1-tablet desktop:text-h1-desktop print:text-h1-desktop;
+  @apply leading-h1-base tablet:leading-h1-tablet desktop:leading-h1-desktop;
 }
 
 @utility text-h2 {
-  /* @apply text-base; */
-  @apply leading-tight;
-
-  @apply text-[2rem]; 
-  
-  @variant desktop {
-    @apply text-[2.5rem]; 
-  }
-
-  @variant print {
-    @apply text-[2.5rem]; 
-  }
+  @apply text-h2-base tablet:text-h2-tablet desktop:text-h2-desktop print:text-h2-desktop;
+  @apply leading-h2-base tablet:leading-h2-tablet desktop:leading-h2-desktop;
 }
 
 @utility text-h3 {
-  @apply text-xl;
+  @apply text-h3-base;
+  @apply leading-h3-base;
 }
 
 @utility text-body {
-  @apply text-base desktop:text-[1.25rem];
-  @apply leading-[1.2];
-  @apply print:text-[1.25rem];
+  @apply text-body-base tablet:text-body-tablet desktop:text-body-desktop print:text-body-desktop;
+  @apply leading-body-base tablet:leading-body-tablet desktop:leading-body-desktop;
 }
 
 @utility text-caption {
-  @apply text-base;
+  @apply text-caption-base;
+  @apply leading-caption-base;
+}
+
+@utility text-small {
+  @apply text-small-base;
+  @apply leading-small-base;
+}
+
+@utility text-micro {
+  @apply text-micro-base;
+  @apply leading-micro-base;
+}
+
+@utility text-credit {
+  @apply text-credit-base;
+  @apply leading-credit-base;
+}
+
+@utility text-label {
+  @apply text-label-base desktop:text-label-desktop print:text-label-desktop;
+  @apply leading-body-base desktop:leading-body-desktop;
+  @apply font-medium;
+}
+
+@utility text-hero {
+  @apply text-hero-base tablet:text-hero-tablet desktop:text-hero-desktop print:text-hero-desktop;
+  @apply leading-hero-base tablet:leading-hero-tablet desktop:leading-hero-desktop;
 }
 
 @utility io-transition {
@@ -107,24 +179,42 @@
 
 @layer base {
   :root {
+    /* Resolve the unsuffixed runtime vars (consumed by components) from the
+       -base source, then step up per breakpoint. */
     --gap-x: var(--gap-x-base);
     --gap-y: var(--gap-y-base);
     --px: var(--px-base);
+    --btn-px: var(--btn-px-base);
+    --btn-py: var(--btn-py-base);
 
     @variant tablet {
       --gap-x: var(--gap-x-tablet);
       --gap-y: var(--gap-y-tablet);
       --px: var(--px-tablet);
+      --btn-px: var(--btn-px-tablet);
+      --btn-py: var(--btn-py-tablet);
     }
 
     @variant desktop {
       --gap-x: var(--gap-x-desktop);
       --gap-y: var(--gap-y-desktop);
       --px: var(--px-desktop);
+      --btn-px: var(--btn-px-desktop);
+      --btn-py: var(--btn-py-desktop);
     }
 
     @variant print {
       --px: var(--px-desktop);
+    }
+  }
+
+  html {
+    scroll-padding-top: 2rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
     }
   }
 
@@ -140,9 +230,30 @@
     text-wrap: pretty;
   }
 
+  /* While the window is actively resizing, kill transitions/animations so
+     responsive layout shifts don't visibly animate. Toggled by the inline
+     resize script in Layout.astro (adds/removes `.resizing` on <html>). */
+  html.resizing,
+  html.resizing *,
+  html.resizing *::before,
+  html.resizing *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
   a {
     @apply io-transition;
     @apply hover:text-(--text-hover);
+  }
+
+  /* Regular inline links inside page content get a persistent underline, so the
+     plain .button style stays the exceptional treatment for CTAs/downloads.
+     Excludes the nav and footer sections, the button system, and the clickable
+     entry row/card links in the list view. */
+  section:not(.section--nav):not(.section--footer)
+    a:not(.button):not(.entries-table__row):not(.entry) {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
   }
 
   ul {
@@ -164,6 +275,7 @@
 
     &.columns--compact {
       @apply columns-xs;
+      @apply text-small;
     }
 
     ul {
@@ -184,12 +296,17 @@
       color: black !important;
     }
 
+    /* Component-local tokens — surfaced here; variants override them below. */
+    --section-bg: var(--color-io-secondary);
+    --section-text: var(--color-io-onsecondary);
+    --section-border: var(--color-io-gray-100);
+
     @apply desktop:pt-10 desktop:pb-7.5;
     @apply text-body;
     @apply flex flex-col;
     @apply gap-y-(--gap-y);
-    @apply border-t border-io-gray-100;
-    @apply bg-io-secondary;
+    @apply border-t border-(--section-border);
+    @apply bg-(--section-bg) text-(--section-text);
 
     & .section__title {
       @apply px-(--px);
@@ -198,17 +315,19 @@
     }
 
     &.section--nav {
+      --nav-py: var(--gap-y);
       @apply border-b;
-      @apply pb-4 pt-[2.5rem];
+      @apply py-(--nav-py);
     }
 
     &.section--footer {
+      --section-bg: var(--color-io-brand);
+      --section-text: var(--color-io-black);
       --text-hover: var(--color-io-gray-100);
-      @apply bg-io-brand text-io-black;
       @apply border-t-0;
 
       & .footer__text {
-        @apply text-[40px] leading-[1.15];
+        @apply text-h1;
       }
     }
 
@@ -237,7 +356,8 @@
     }
 
     &.section--primary {
-      @apply bg-io-primary text-io-onprimary;
+      --section-bg: var(--color-io-primary);
+      --section-text: var(--color-io-onprimary);
       @apply border-t-0;
 
       & .section__title {
@@ -246,7 +366,8 @@
     }
 
     &.section--secondary {
-      @apply bg-io-secondary text-io-onsecondary;
+      --section-bg: var(--color-io-secondary);
+      --section-text: var(--color-io-onsecondary);
     }
 
     & + .section--primary {
@@ -260,15 +381,16 @@
   }
 
   .hero {
-    @apply text-h2;
+    --hero-bg: var(--color-io-primary);
+    --hero-text: var(--color-io-onprimary);
+
+    @apply text-hero;
 
     @apply flex flex-col;
     @apply items-center;
     @apply justify-between;
     @apply w-full;
-    /* @apply w-full h-[90svh]; */
-    @apply bg-io-primary;
-    /* @apply pb-14; */
+    @apply bg-(--hero-bg) text-(--hero-text);
     @apply py-(--gap-y);
 
     & .hero__text-container {
@@ -278,7 +400,7 @@
       @apply uppercase;
 
       & .hero__text-container__text {
-        font-family: var(--font-hero);
+        @apply font-hero;
       }
     }
   }
@@ -290,24 +412,35 @@
 
     /* Search + view-toggle bar. */
     & .entries__toolbar {
-      @apply flex flex-row;
-      @apply gap-x-(--gap-x) gap-y-(--gap-y);
+      /* Wrap on mobile so the toggle drops to its own row; inline on desktop. */
+      @apply flex flex-row flex-wrap desktop:flex-nowrap;
+      /* Roomier gap between the search and the toggle group; the List/Grid
+         buttons stay tight via .entries__view-toggle's own --gap-controls. */
+      @apply gap-x-(--gap-x) gap-y-(--gap-controls);
     }
 
     & .entries__search {
       @apply w-full;
-      @apply p-2 px-4;
+      @apply px-4 py-(--btn-py);
       @apply shadow ring ring-inset;
     }
 
     & .entries__view-toggle {
-      @apply flex flex-row gap-x-1;
+      @apply flex flex-row gap-x-(--gap-controls);
+      /* Full width on mobile (its own row) so the buttons split 50/50; auto on desktop. */
+      @apply w-full desktop:w-auto;
     }
 
     /* View-toggle buttons. Visual styling comes from the .button system; these
        are semantic hooks so the role is clear from the markup and each button
        is individually targetable for future styling. */
     & .entries__view-button {
+      /* Inherits the .button system (text-body + --btn-py padding), so the
+         pills are the same height as the search input at every breakpoint. On
+         mobile each button grows to fill 50% of the toggle row; natural width
+         on desktop. */
+      @apply flex-1 desktop:flex-none;
+
       &.entries__view-button--list {
         /* hook: list-view toggle button */
       }
@@ -347,8 +480,16 @@
 
   /* Card shown per person in the grid view. The whole tile is the link. */
   .entry {
+    --card-text: var(--color-io-onprimary);
+
     @apply flex flex-col gap-y-2;
     @apply leading-none;
+    @apply text-(--card-text);
+
+    /* Whole tile highlights red on hover (matches the list-view row hover). */
+    &:hover {
+      @apply bg-io-brand text-io-onbrand;
+    }
 
     & .entry__image {
       @apply w-full;
@@ -360,32 +501,55 @@
     }
 
     & .entry__roles {
-      @apply text-xs;
+      @apply text-micro;
       @apply flex flex-col gap-y-1;
       /* Override the global `ul` disc/indent — these are role lines, not bullets. */
       list-style: none;
       padding-left: 0;
     }
 
-    & .entry__years,
-    & .entry__nationality {
+    & .entry__years {
       @apply text-right;
+    }
+
+    /* Grid cards omit nationality — it's a list-view column only. */
+    & .entry__nationality {
+      display: none;
     }
   }
 
   .entries-table {
+    /* Component-local tokens. */
+    --table-hover-bg: var(--color-io-brand);
+    --table-hover-text: var(--color-io-onbrand);
+    --table-divider: var(--color-io-onsecondary);
+    --table-text-muted: #8d8c8c; /* Figma table/text-muted — direct value (darker than io-onsecondary-muted #c4c3c3) */
+
+    /* Person-row vertical padding + the gap between a person's role lines
+       (mirrors Figma table/row-py + table/role-gap). */
+    --table-row-py: 0.5rem;
+    --table-role-gap: 0.25rem;
+    @variant tablet {
+      --table-row-py: 0.75rem;
+      --table-role-gap: 0.375rem;
+    }
+    @variant desktop {
+      --table-row-py: 0.75rem;
+      --table-role-gap: 0.375rem;
+    }
+
     display: grid;
     /* Every track is floored at min-content (its longest word) so columns
        wrap at spaces only — never mid-word — without overflowing into the
        next column. */
     grid-template-columns:
-      minmax(min-content, 1.5fr) /* fullName */
+      minmax(min-content, 2fr) /* fullName — wider so long names wrap less */
       minmax(min-content, 1.5fr) /* role / title */
       minmax(
         min-content,
-        3fr
-      ) /* organisation — wider, many long names + abbreviation */
-      minmax(min-content, 0.8fr) /* nationality */
+        2.2fr
+      ) /* organisation — trimmed back so it's less dominant */
+      minmax(min-content, 0.7fr) /* nationality */
       minmax(
         max-content,
         0.6fr
@@ -405,18 +569,17 @@
       grid-column: 1 / -1;
       color: inherit;
       text-decoration: none;
-      padding-block: 0.25rem;
       @apply io-transition;
 
       /* Hover highlight on any non-header row. */
       &:not(.entries-table__row--header):hover {
-        background-color: var(--color-io-brand);
-        color: var(--color-io-onbrand);
+        @apply bg-(--table-hover-bg) text-(--table-hover-text);
       }
 
       &.entries-table__row--header {
         @apply border-b border-io-gray-100/30;
-        font-weight: 600;
+        @apply text-label;
+        padding-block: var(--table-row-py);
         cursor: pointer;
         user-select: none;
       }
@@ -425,7 +588,8 @@
          hide the repeated name + nationality cells so it reads as attached to
          the row above. */
       &.entries-table__row--continuation {
-        opacity: 0.85;
+        color: var(--table-text-muted);
+        padding-top: var(--table-role-gap);
 
         & .entries-table__cell--fullName,
         & .entries-table__cell--nationality {
@@ -443,26 +607,24 @@
       /* Hovering the group highlights all its rows; restore continuation
          opacity so the group reads as one unit. */
       &:hover .entries-table__row:not(.entries-table__row--header) {
-        background-color: var(--color-io-brand);
-        color: var(--color-io-onbrand);
-      }
-
-      &:hover .entries-table__row--continuation {
-        opacity: 1;
+        @apply bg-(--table-hover-bg) text-(--table-hover-text);
       }
 
       /* Every group is bracketed top/bottom so single- and multi-role groups
          look consistent. For single-role groups the same row gets both
          borders; for multi-role groups the top sits on the first row and the
-         bottom on the last. */
+         bottom on the last. Row-py pads the whole person block; role-gap
+         (above each continuation row) spaces a person's roles. */
       & > .entries-table__row:first-of-type {
+        padding-top: var(--table-row-py);
         border-top: 1px solid
-          color-mix(in srgb, var(--color-io-onsecondary) 25%, transparent);
+          color-mix(in srgb, var(--table-divider) 25%, transparent);
       }
 
       & > .entries-table__row:last-of-type {
+        padding-bottom: var(--table-row-py);
         border-bottom: 1px solid
-          color-mix(in srgb, var(--color-io-onsecondary) 25%, transparent);
+          color-mix(in srgb, var(--table-divider) 25%, transparent);
       }
 
       /* The bottom of the very last visible group has no "next group's top"
@@ -499,12 +661,17 @@
 
     & .entries-table__sort-indicator {
       @apply text-[0.8em] leading-none;
+
+      /* Dim, but visible, on unsorted columns so it reads as clickable. */
+      &.entries-table__sort-indicator--inactive {
+        @apply opacity-40;
+      }
     }
   }
 
   .button {
-    @apply text-h3 leading-none;
-    @apply px-9 py-4;
+    @apply text-body;
+    @apply px-(--btn-px) py-(--btn-py);
     @apply io-transition;
     @apply inline-block;
     @apply cursor-pointer;
@@ -523,6 +690,11 @@
 
     &.button--primary {
       @apply border-0;
+    }
+
+    /* Download CTA — appends a downward arrow so it reads as a file download. */
+    &.button--download::after {
+      content: " ↓";
     }
 
     /* Selected state (e.g. the active List/Grid view toggle). */
@@ -551,6 +723,39 @@
     &:focus-visible:not(:disabled):not([aria-disabled="true"]) {
       @apply bg-(--btn-bg-hover) text-(--btn-text-hover);
       @apply border-(--btn-border-hover);
+    }
+  }
+
+  /* Vertical stack of CTA buttons (e.g. the downloads list). Buttons keep
+     their natural width and align to the start. */
+  .button-group {
+    @apply flex flex-col items-start;
+    gap: 0.75rem;
+  }
+
+  /* "How to cite" — the two labelled citation blocks (DOI + web). */
+  #cite {
+    & .cite__block {
+      @apply flex flex-col;
+      @apply gap-y-4;
+      @apply mb-(--gap-y);
+    }
+
+    & .cite__label {
+      @apply text-h3 leading-none;
+    }
+
+    & .cite__text {
+      @apply text-body;
+      @apply max-w-[80ch];
+
+      & cite {
+        @apply italic;
+      }
+    }
+
+    & .cite__note {
+      @apply text-sm opacity-70;
     }
   }
 }
