@@ -285,7 +285,14 @@ export default function ListView({ data }: ListViewProps) {
             } = original as any;
             return (
               <a href={`${base}entries/${slug}`} class="entry" key={row.id}>
-                {webImage && <img class="entry__image" src={webImage.src} />}
+                {webImage && (
+                  <img
+                    class="entry__image"
+                    src={webImage.src}
+                    width={webImage.width}
+                    height={webImage.height}
+                  />
+                )}
                 <div class="entry__body">
                   <span class="entry__name" style={{ textBoxTrim: "trim-both" }}>
                     {lastName.toUpperCase()} {firstName}
@@ -355,10 +362,12 @@ export default function ListView({ data }: ListViewProps) {
                           "entries-table__sort-indicator--inactive",
                       )}
                     >
-                      {{
-                        asc: "▲",
-                        desc: "▼",
-                      }[header.column.getIsSorted() as string] ?? "↕"}
+                      <span class="material-symbols-outlined" aria-hidden="true">
+                        {{
+                          asc: "arrow_upward",
+                          desc: "arrow_downward",
+                        }[header.column.getIsSorted() as string] ?? "unfold_more"}
+                      </span>
                     </span>
                   </div>
                 ))}

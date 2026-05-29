@@ -1,8 +1,6 @@
 ---
 ---
 
-IO BIO | Biographical Dictionary 
-
-of Secretaries-General 
-
+IO BIO | Biographical Dictionary  
+of Secretaries-General   
 of International Organizations

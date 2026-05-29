@@ -40,44 +40,21 @@ export const remarkPrefixRawLinks: Plugin<
     return href;
   }
 
-  const DOWNLOAD_RE = /\.(pdf|docx?|xlsx?|pptx?|zip|csv|epub)(?:[?#]|$)/i;
-
   return (tree) => {
     visit(tree, "html", (node: Html) => {
-      let value = node.value;
-
       // Prefix internal root-absolute hrefs with the base (only when set).
-      if (base) {
-        value = value.replace(
-          /(\shref=)(["'])(\/[^"']*)\2/gi,
-          (match, pre: string, quote: string, hrefVal: string) => {
-            const next = prefixHref(hrefVal);
-            return next === hrefVal ? match : `${pre}${quote}${next}${quote}`;
-          },
-        );
-      }
-
-      // Tag file-download anchors (.pdf etc.) with `button--download` so they
-      // get the trailing "↓" — mirrors rehypeAddLinkClasses, which never sees
-      // these raw-HTML links. Runs regardless of base.
-      value = value.replace(
-        /<a\b[^>]*\bhref=(["'])([^"']*)\1[^>]*>/gi,
-        (tag: string, _quote: string, href: string) => {
-          if (!DOWNLOAD_RE.test(href) || /\bbutton--download\b/.test(tag)) {
-            return tag;
-          }
-          if (/\sclass=(["']).*?\1/i.test(tag)) {
-            return tag.replace(
-              /(\sclass=)(["'])(.*?)\2/i,
-              (_m, pre: string, q: string, cls: string) =>
-                `${pre}${q}${cls} button--download${q}`,
-            );
-          }
-          return tag.replace(/^<a\b/i, '<a class="button--download"');
+      // (We deliberately do NOT add download-button classes here — raw-HTML
+      // file links render as plain links, e.g. the author-instructions
+      // Downloads list. Markdown links that should look like download buttons
+      // are still handled by rehypeAddLinkClasses.)
+      if (!base) return;
+      node.value = node.value.replace(
+        /(\shref=)(["'])(\/[^"']*)\2/gi,
+        (match, pre: string, quote: string, hrefVal: string) => {
+          const next = prefixHref(hrefVal);
+          return next === hrefVal ? match : `${pre}${quote}${next}${quote}`;
         },
       );
-
-      node.value = value;
     });
   };
 };

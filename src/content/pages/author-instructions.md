@@ -20,12 +20,12 @@ Full guidance on what to include and how to format an entry is in the Author Ins
 
 ::::section{title="Downloads"}
 
-<div class="button-group">
-<a class="button button--secondary" href="/io-bio-author-instructions-2025.pdf">Author Instructions (PDF, version April 2025)</a>
-<a class="button button--secondary" href="/io-bio-database-executive-heads.pdf">Database 1 — Secretaries-General and their organizations (PDF)</a>
-<a class="button button--secondary" href="/io-bio-database-organizations.pdf">Database 2 — Organizations and their Secretaries-General (PDF)</a>
-<a class="button button--secondary" href="/io-bio-organizations-covered.pdf">Organizations covered by IO BIO (PDF)</a>
-<a class="button button--secondary" href="/io-bio-abbreviations.pdf">Abbreviations (PDF)</a>
-</div>
+<ul class="download-links">
+<li><a href="/io-bio-author-instructions-2025.pdf">Author Instructions (PDF, version April 2025)</a></li>
+<li><a href="/io-bio-database-executive-heads.pdf">Database 1 — Secretaries-General and their organizations (PDF)</a></li>
+<li><a href="/io-bio-database-organizations.pdf">Database 2 — Organizations and their Secretaries-General (PDF)</a></li>
+<li><a href="/io-bio-organizations-covered.pdf">Organizations covered by IO BIO (PDF)</a></li>
+<li><a href="/io-bio-abbreviations.pdf">Abbreviations (PDF)</a></li>
+</ul>
 
 ::::
