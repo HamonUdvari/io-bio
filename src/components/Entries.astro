@@ -35,7 +35,15 @@ for (let bioData of biosData) {
   if (!importedImg) continue;
 
   const webImage = await getImage({ src: importedImg.default, quality: 92 });
-  bioData.webImage = webImage;
+  // Carry the intrinsic dimensions through to the grid <img> so the browser can
+  // reserve the correct height from the aspect ratio before the image loads
+  // (avoids cumulative layout shift). getImage keeps the source dimensions here
+  // since we don't pass a width/height to resize.
+  bioData.webImage = {
+    src: webImage.src,
+    width: importedImg.default.width,
+    height: importedImg.default.height,
+  };
 }
   
 ---

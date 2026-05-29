@@ -35,39 +35,57 @@ export function rehypeAddLinkClasses(options: RehypeAddLinkClassesOptions = {}) 
   const base = rawBase === "/" ? "" : rawBase.replace(/\/$/, "");
 
   return function (tree: Root) {
-    visit(tree, "element", function (node: Element) {
-      if (node.tagName !== "a") return;
+    visit(
+      tree,
+      "element",
+      function (node: Element, _index: number | undefined, parent: any) {
+        if (node.tagName !== "a") return;
 
-      if (!node.properties) node.properties = {};
+        if (!node.properties) node.properties = {};
 
-      const href =
-        typeof node.properties.href === "string" ? node.properties.href : "";
+        const href =
+          typeof node.properties.href === "string" ? node.properties.href : "";
 
-      // In-page anchor links (TOC / jump links) stay plain — not boxed buttons.
-      if (href.startsWith("#")) return;
+        // --- prefix internal root-absolute hrefs with the base (all links) ---
+        if (base && href && !href.startsWith("#")) {
+          const isProtocolRelative = href.startsWith("//");
+          const hasScheme = /^[a-z][a-z0-9+.-]*:/i.test(href);
+          const isRootAbsolute = href.startsWith("/") && !isProtocolRelative;
+          const alreadyPrefixed =
+            href === base || href.startsWith(base + "/");
+          if (isRootAbsolute && !hasScheme && !alreadyPrefixed) {
+            node.properties.href = base + href;
+          }
+        }
 
-      // --- add classes (+ a download arrow for file-download links) ---
-      const existing = node.properties.className ?? [];
-      const current = Array.isArray(existing)
-        ? existing.map(String)
-        : [String(existing)];
-      const classes = [...classesToAdd];
-      if (/\.(pdf|docx?|xlsx?|pptx?|zip|csv|epub)(?:[?#]|$)/i.test(href)) {
-        classes.push("button--download");
-      }
-      node.properties.className = [...current, ...classes];
+        // In-page anchor links (TOC / jump links) stay plain.
+        if (href.startsWith("#")) return;
 
-      // --- prefix internal root-absolute hrefs with the base ---
-      if (!base || !href) return;
+        // Only "standalone" links — the sole significant child of a block
+        // element (a deliberate CTA, e.g. a download or "read the…") — become
+        // buttons. Inline prose links stay plain (normal underlined links).
+        const blockParent =
+          parent &&
+          parent.type === "element" &&
+          ["p", "li", "div"].includes(parent.tagName);
+        const significant = blockParent
+          ? parent.children.filter(
+              (c: any) => !(c.type === "text" && /^\s*$/.test(c.value)),
+            )
+          : [];
+        if (!(significant.length === 1 && significant[0] === node)) return;
 
-      const isProtocolRelative = href.startsWith("//");
-      const hasScheme = /^[a-z][a-z0-9+.-]*:/i.test(href);
-      const isRootAbsolute = href.startsWith("/") && !isProtocolRelative;
-      const alreadyPrefixed = href === base || href.startsWith(base + "/");
-
-      if (isRootAbsolute && !hasScheme && !alreadyPrefixed) {
-        node.properties.href = base + href;
-      }
-    });
+        // --- add classes (+ a download arrow for file-download links) ---
+        const existing = node.properties.className ?? [];
+        const current = Array.isArray(existing)
+          ? existing.map(String)
+          : [String(existing)];
+        const classes = [...classesToAdd];
+        if (/\.(pdf|docx?|xlsx?|pptx?|zip|csv|epub)(?:[?#]|$)/i.test(href)) {
+          classes.push("button--download");
+        }
+        node.properties.className = [...current, ...classes];
+      },
+    );
   };
 }

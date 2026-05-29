@@ -3,6 +3,43 @@
 @import "@fontsource/roboto-condensed";
 @import "tailwindcss";
 
+/* Material Symbols icon font — self-declared @font-face (instead of importing
+   @fontsource/…/400.css) so we control font-display. The icons are LIGATURES,
+   so the fontsource default `swap` briefly flashes the raw ligature text
+   ("arrow_upward", "download", …) before the glyph loads — the visible "pop".
+   `block` keeps the glyph slot blank during the (brief, self-hosted) load
+   instead, then renders the icon — no text pop. Single 400 weight (~311 KB);
+   the bare package import would pull in all 7 weights (~2.3 MB). */
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../../node_modules/@fontsource/material-symbols-outlined/files/material-symbols-outlined-latin-400-normal.woff2")
+    format("woff2");
+}
+
+/* Base style for the Material Symbols icon spans (ligature glyphs). */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
 @theme {
   --font-sans: "Roboto";
   --font-hero: "Roboto Condensed";
@@ -106,9 +143,11 @@
   --leading-h1-base: 1.17;
   --leading-h1-tablet: 1.17;
   --leading-h1-desktop: 1.17;
-  --leading-h2-base: 1.25;
-  --leading-h2-tablet: 1.25;
-  --leading-h2-desktop: 1.25;
+
+  --leading-h2-base: 1.2;
+  --leading-h2-tablet: 1.2;
+  --leading-h2-desktop: 1.2;
+
   --leading-h3-base: 1.75rem;
   --leading-body-base: 1.2;
   --leading-body-tablet: 1.2;
@@ -222,6 +261,13 @@
     @apply bg-io-primary;
     @apply text-io-onprimary;
     overflow-y: scroll;
+
+    /* Words longer than their container wrap instead of widening it (long
+       URLs, unbroken names, etc.). `anywhere` (not `break-word`) also shrinks
+       the element's min-content size, so flex/grid/table cells stop expanding
+       to fit a long token and force horizontal overflow. Inherited by all
+       descendants; the icon font opts back out via `word-wrap: normal`. */
+    overflow-wrap: anywhere;
   }
 
   * {
@@ -251,7 +297,7 @@
      Excludes the nav and footer sections, the button system, and the clickable
      entry row/card links in the list view. */
   section:not(.section--nav):not(.section--footer)
-    a:not(.button):not(.entries-table__row):not(.entry) {
+    a:not(.button):not(.entries-table__row):not(.entry):not(.source-link) {
     text-decoration: underline;
     text-underline-offset: 0.15em;
   }
@@ -275,7 +321,7 @@
 
     &.columns--compact {
       @apply columns-xs;
-      @apply text-small;
+      @apply text-body;
     }
 
     ul {
@@ -301,7 +347,10 @@
     --section-text: var(--color-io-onsecondary);
     --section-border: var(--color-io-gray-100);
 
-    @apply desktop:pt-10 desktop:pb-7.5;
+    /* Responsive vertical padding on every breakpoint (was desktop-only, so
+       mobile/tablet sections had no space between them). 16/20/30 = gap-y,
+       matching Figma section padding. */
+    @apply py-(--gap-y);
     @apply text-body;
     @apply flex flex-col;
     @apply gap-y-(--gap-y);
@@ -409,14 +458,17 @@
     @apply text-left;
     @apply max-w-[90%];
     @apply flex flex-col;
+    /* Space after the toolbar before the table/grid (matches Figma
+       entries-content itemSpacing = gap-y). */
+    @apply gap-y-(--gap-y);
 
     /* Search + view-toggle bar. */
     & .entries__toolbar {
       /* Wrap on mobile so the toggle drops to its own row; inline on desktop. */
       @apply flex flex-row flex-wrap desktop:flex-nowrap;
-      /* Roomier gap between the search and the toggle group; the List/Grid
-         buttons stay tight via .entries__view-toggle's own --gap-controls. */
-      @apply gap-x-(--gap-x) gap-y-(--gap-controls);
+      /* Search ↔ toggle gap matches Figma toolbar/gap (4px); the breathing room
+         is the gap-y after the whole toolbar (on .entries). */
+      @apply gap-(--gap-controls);
     }
 
     & .entries__search {
@@ -435,10 +487,28 @@
        are semantic hooks so the role is clear from the markup and each button
        is individually targetable for future styling. */
     & .entries__view-button {
-      /* Inherits the .button system (text-body + --btn-py padding), so the
-         pills are the same height as the search input at every breakpoint. On
-         mobile each button grows to fill 50% of the toggle row; natural width
-         on desktop. */
+      /* The base .button now hard-sets the desktop padding + 20px text so CTAs
+         read at desktop scale everywhere. The toolbar pills, however, must stay
+         on the responsive scale to match the search input's height (which uses
+         the breakpoint-resolved --btn-py) and to avoid an oversized toggle on
+         mobile. Restore the responsive runtime vars + responsive body text here
+         (this is the documented toggle-overrides-back trade-off). */
+      --btn-px: var(--btn-px-base);
+      --btn-py: var(--btn-py-base);
+      @apply text-body-base;
+      @apply leading-body-base;
+      @variant tablet {
+        --btn-px: var(--btn-px-tablet);
+        --btn-py: var(--btn-py-tablet);
+      }
+      @variant desktop {
+        --btn-px: var(--btn-px-desktop);
+        --btn-py: var(--btn-py-desktop);
+        @apply text-body-desktop;
+        @apply leading-body-desktop;
+      }
+      /* On mobile each button grows to fill 50% of the toggle row; natural
+         width on desktop. */
       @apply flex-1 desktop:flex-none;
 
       &.entries__view-button--list {
@@ -486,13 +556,17 @@
     @apply leading-none;
     @apply text-(--card-text);
 
-    /* Whole tile highlights red on hover (matches the list-view row hover). */
+    /* Card text animates to red on hover (no background fill). The colour
+       transition comes from the base `a { io-transition }`. */
     &:hover {
-      @apply bg-io-brand text-io-onbrand;
+      @apply text-io-brand;
     }
 
     & .entry__image {
-      @apply w-full;
+      /* width/height attrs are set on the <img> (see ListView) so the aspect
+         ratio is known up front; h-auto lets the height follow the column
+         width while still reserving space pre-load — no layout shift. */
+      @apply w-full h-auto;
     }
 
     & .entry__body {
@@ -661,6 +735,13 @@
 
     & .entries-table__sort-indicator {
       @apply text-[0.8em] leading-none;
+      @apply inline-flex items-center;
+
+      /* The icon is a Material Symbols ligature span — render it at ~1em of the
+         indicator's font-size and let it inherit currentColor. */
+      & .material-symbols-outlined {
+        @apply text-[1em];
+      }
 
       /* Dim, but visible, on unsorted columns so it reads as clickable. */
       &.entries-table__sort-indicator--inactive {
@@ -670,7 +751,17 @@
   }
 
   .button {
-    @apply text-body;
+    /* Always render at the desktop scale (padding + 20px body text) on every
+       breakpoint — the button should never shrink to the base/tablet "mobile"
+       look. We override the breakpoint-resolved runtime --btn-px/--btn-py with
+       the -desktop source tokens locally, and apply text-body-desktop directly
+       instead of the responsive `text-body` utility (which steps 16→20 only at
+       the desktop breakpoint). The toolbar's view-toggle + search override
+       these back to the responsive scale below so their heights still match. */
+    --btn-px: var(--btn-px-desktop);
+    --btn-py: var(--btn-py-desktop);
+    @apply text-body-desktop;
+    @apply leading-body-desktop;
     @apply px-(--btn-px) py-(--btn-py);
     @apply io-transition;
     @apply inline-block;
@@ -692,20 +783,28 @@
       @apply border-0;
     }
 
-    /* Download CTA — a crisp download icon after the label (Roboto has no clean
-       download glyph; the bare ↓ looked thin). Masked to currentColor so it
-       matches the label colour in every button state. */
+    /* Download CTA — the Material Symbols `download` glyph after the label
+       (Roboto has no clean download glyph; the bare ↓ looked thin). Inherits
+       currentColor so it matches the label colour in every button state.
+       Ligatures don't resolve in `::after content`, so we emit the codepoint
+       (U+F090 = "download") directly. */
     &.button--download::after {
-      --icon-download: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M12%2016%207%2011h3V4h4v7h3z%20M5%2018h14v2H5z'/%3E%3C/svg%3E");
-      content: "";
-      display: inline-block;
-      width: 0.8em;
-      height: 0.8em;
+      content: "\f090";
+      font-family: "Material Symbols Outlined";
+      font-weight: normal;
+      font-style: normal;
+      line-height: 1;
+      font-size: 0.9em;
       margin-left: 0.45em;
-      vertical-align: -0.08em;
-      background-color: currentColor;
-      mask: var(--icon-download) center / contain no-repeat;
-      -webkit-mask: var(--icon-download) center / contain no-repeat;
+      vertical-align: -0.12em;
+      -webkit-font-feature-settings: "liga";
+      font-feature-settings: "liga";
+      -webkit-font-smoothing: antialiased;
+      font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
     }
 
     /* Selected state (e.g. the active List/Grid view toggle). */
@@ -737,11 +836,44 @@
     }
   }
 
-  /* Vertical stack of CTA buttons (e.g. the downloads list). Buttons keep
-     their natural width and align to the start. */
+  /* Vertical stack of CTA buttons (e.g. the "How to cite" copy buttons).
+     Buttons keep their natural width and align to the start. */
   .button-group {
     @apply flex flex-col items-start;
     gap: 0.75rem;
+  }
+
+  /* Downloads list (author-instructions) — underlined links stacked in a
+     column, not download buttons. The inline-link underline comes from the base
+     `a` rule; here we just drop the list bullets/indent and set the row gap. */
+  .download-links {
+    list-style: none;
+    padding-left: 0;
+    @apply flex flex-col;
+    @apply gap-y-2;
+
+    /* Small Material Symbols "download" glyph after each link as a download
+       affordance (U+F090; ligatures don't resolve in ::after, so emit the
+       codepoint). `inline-block` keeps the glyph out of the link's underline. */
+    & a::after {
+      content: "\f090";
+      font-family: "Material Symbols Outlined";
+      font-weight: normal;
+      font-style: normal;
+      line-height: 1;
+      font-size: 0.9em;
+      margin-left: 0.35em;
+      vertical-align: -0.12em;
+      display: inline-block;
+      -webkit-font-feature-settings: "liga";
+      font-feature-settings: "liga";
+      -webkit-font-smoothing: antialiased;
+      font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+    }
   }
 
   /* "How to cite" — the two labelled citation blocks (DOI + web). */
