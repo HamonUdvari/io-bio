@@ -1,3 +1,34 @@
+# [1.1.0](https://github.com/HamonUdvari/io-bio/compare/v1.0.0...v1.1.0) (2026-05-29)
+
+
+### Bug Fixes
+
+* **bios:** extract Saouma's role via cosmetic transform, not regex ([](https://github.com/HamonUdvari/io-bio/commit/4da37fad5fa2ce6ac9ffe7b861cf69a811293f02))
+* conditionally rendering sections in entry pages ([](https://github.com/HamonUdvari/io-bio/commit/3107032b9d722752f852dcd4988ae04406318688))
+* hero layout used in main entries ([](https://github.com/HamonUdvari/io-bio/commit/bc20f1ebd04ec3969e6e51bb9063726e9ca2690f))
+* **images:** preserve portrait sharpness — never upscale crops, raise webp quality ([](https://github.com/HamonUdvari/io-bio/commit/48ce7a9c5d1d596c0b3936cdacec137b9dd61014))
+* style changes ([](https://github.com/HamonUdvari/io-bio/commit/94f5750a2e7e21a7237a5961223f2c88b345db14))
+
+
+### Website Features
+
+* **bios:** cosmetic fixes for 8 more entries; add CHANGELOG.md ([](https://github.com/HamonUdvari/io-bio/commit/114720e0f9281314cc7078cd5ad714963f193da5))
+* **bios:** source/processed/diffs pipeline with applied fixes ([](https://github.com/HamonUdvari/io-bio/commit/6ef91ac4608ad2974da7d736903ae124d8ec4e7a))
+* bump astro ([](https://github.com/HamonUdvari/io-bio/commit/dd5aa6588723cfedd6c5114d3b21ffc7fe4d039c))
+* bump astro to v 6.2 ([](https://github.com/HamonUdvari/io-bio/commit/a77ceb29ea8892911bbe92e91e46acb8d92e13e8))
+* extracting base64 images ([](https://github.com/HamonUdvari/io-bio/commit/5ce7ff48b6705cbee96a5bd740a958b19784a856))
+* HCR-as-institution alias, separator tolerance, image-format conversion ([](https://github.com/HamonUdvari/io-bio/commit/20f843b3609d93164e340883a9e51fc1b006ce93))
+* image override pipeline + 30 same-image high-res overrides ([](https://github.com/HamonUdvari/io-bio/commit/5bf3b743e1f71edf17b984fb6e5b169209d5c2bf)), closes [hi#res](https://github.com/hi/issues/res)
+* **images:** 7 more same-image overrides + manual-fetch CSV + journal ([](https://github.com/HamonUdvari/io-bio/commit/772a0b9ac8cd60dc236fb287e30aeba2df71a191))
+* **images:** final 3 overrides + complete TODO classification ([](https://github.com/HamonUdvari/io-bio/commit/70d67d1c216a6d1d70a742732ce4d77522cfd65e))
+* **images:** integrate 52 AI-upscaled overrides + working folders ([](https://github.com/HamonUdvari/io-bio/commit/fca032cb721c28e176c7227c179546ccf42e17ea))
+* mirror Figma design to code + review fixes ([](https://github.com/HamonUdvari/io-bio/commit/1f330c633c99c2d76110cd50937084893fa982c6))
+* **parser:** multi-role schema, APL as Citation arrays, list rendering ([](https://github.com/HamonUdvari/io-bio/commit/7240356712c5db052d5e284b42dcf76e741308b7))
+* POC website ([](https://github.com/HamonUdvari/io-bio/commit/23a79df0083bb98a84ddd05f99b5527ac7ef6a30))
+* **preview:** add /preview page for client-side docx parsing ([](https://github.com/HamonUdvari/io-bio/commit/ecf0cdf2364522dd9d025d1166ed86d7c4404bf9))
+* promote entries page to landing page ([](https://github.com/HamonUdvari/io-bio/commit/770baff6807ec99670bd0c21b20f84ae3d075e43))
+* sync entries list state to URL and prevent flash on restore ([](https://github.com/HamonUdvari/io-bio/commit/a1d1748499b98afffb89f2270ae5797185e4399a))
+
 # 1.0.0 (2026-02-15)
 
 
