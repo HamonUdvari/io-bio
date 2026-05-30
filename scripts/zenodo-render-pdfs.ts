@@ -37,14 +37,32 @@ async function waitForServer(url: string, timeoutMs = 40_000): Promise<void> {
 // project reference bottom-left, page number bottom-right. Chrome's print
 // header/footer templates inherit no page CSS and default to a tiny font, so
 // styling is inlined here; `.pageNumber` is Chrome's built-in class.
-const FOOTER_TEMPLATE = `<div style="width:100%;font-size:8px;color:#555;padding:0 14mm;box-sizing:border-box;font-family:Roboto,Arial,sans-serif;">
+export const FOOTER_TEMPLATE = `<div style="width:100%;font-size:8px;color:#555;padding:0 14mm;box-sizing:border-box;font-family:Roboto,Arial,sans-serif;">
   <span style="float:left;">IO BIO — Biographical Dictionary of Secretaries-General of International Organizations</span>
   <span style="float:right;"><span class="pageNumber"></span></span>
 </div>`;
-const EMPTY_HEADER = "<span></span>";
+export const EMPTY_HEADER = "<span></span>";
+
+// Chrome Page.printToPDF options shared by the production render and the dev
+// preview (scripts/render-dev-pdf.ts) — edit the footer/margins here and both
+// stay in sync. Margins are in inches. This is the PDF "styling" knob that
+// can't live in CSS (Blink ignores @page margin boxes for header/footer).
+export const PRINT_TO_PDF_OPTS = {
+  printBackground: true,
+  displayHeaderFooter: true,
+  headerTemplate: EMPTY_HEADER,
+  footerTemplate: FOOTER_TEMPLATE,
+  marginTop: 0.63, // ≈ 16mm
+  marginBottom: 0.71, // ≈ 18mm — reserves the footer band
+  marginLeft: 0.55, // ≈ 14mm
+  marginRight: 0.55,
+};
 
 // Resolve the page target's DevTools WebSocket URL once Chrome is listening.
-async function chromeWsUrl(port: number, timeoutMs = 20_000): Promise<string> {
+export async function chromeWsUrl(
+  port: number,
+  timeoutMs = 20_000,
+): Promise<string> {
   const deadline = Date.now() + timeoutMs;
   for (;;) {
     try {
@@ -62,7 +80,7 @@ async function chromeWsUrl(port: number, timeoutMs = 20_000): Promise<string> {
 }
 
 // Minimal CDP client over a single page target (send command / await event).
-function connectCdp(wsUrl: string): Promise<{
+export function connectCdp(wsUrl: string): Promise<{
   send: (method: string, params?: unknown) => Promise<any>;
   waitEvent: (method: string, timeoutMs?: number) => Promise<any>;
   close: () => void;
@@ -109,6 +127,37 @@ function connectCdp(wsUrl: string): Promise<{
       }),
     );
   });
+}
+
+type Cdp = Awaited<ReturnType<typeof connectCdp>>;
+
+// Render one already-served entry page (at `url`) to `outPath` via CDP
+// Page.printToPDF, streaming the result (entry PDFs embed a portrait and run a
+// few MB). Shared by the production render and the dev preview so the footer +
+// margins are identical.
+export async function printPageToPdf(
+  cdp: Cdp,
+  url: string,
+  outPath: string,
+): Promise<void> {
+  const loaded = cdp.waitEvent("Page.loadEventFired");
+  await cdp.send("Page.navigate", { url });
+  await loaded;
+  await sleep(1200); // settle fonts + images before printing
+  const { stream } = await cdp.send("Page.printToPDF", {
+    ...PRINT_TO_PDF_OPTS,
+    transferMode: "ReturnAsStream",
+  });
+  const chunks: Buffer[] = [];
+  for (;;) {
+    const r = await cdp.send("IO.read", { handle: stream, size: 1 << 20 });
+    if (r.data)
+      chunks.push(Buffer.from(r.data, r.base64Encoded ? "base64" : "utf8"));
+    if (r.eof) break;
+  }
+  await cdp.send("IO.close", { handle: stream });
+  writeFileSync(outPath, Buffer.concat(chunks));
+  if (!existsSync(outPath)) throw new Error(`Chrome did not produce ${outPath}`);
 }
 
 /**
@@ -177,33 +226,7 @@ export async function renderPdfs(
       for (const slug of slugs) {
         const url = `http://localhost:${PORT}${BASE}/entries/${slug}`;
         const out = path.join(outDir, `${slug}.pdf`);
-        const loaded = cdp.waitEvent("Page.loadEventFired");
-        await cdp.send("Page.navigate", { url });
-        await loaded;
-        await sleep(1200); // settle fonts + images before printing
-        // Stream the PDF (ReturnAsStream) rather than base64 inline — entry
-        // PDFs embed a full-res portrait and can be tens of MB.
-        const { stream } = await cdp.send("Page.printToPDF", {
-          printBackground: true,
-          displayHeaderFooter: true,
-          headerTemplate: EMPTY_HEADER,
-          footerTemplate: FOOTER_TEMPLATE,
-          transferMode: "ReturnAsStream",
-          marginTop: 0.63, // in ≈ 16mm
-          marginBottom: 0.71, // in ≈ 18mm — reserves the footer band
-          marginLeft: 0.55, // in ≈ 14mm
-          marginRight: 0.55,
-        });
-        const chunks: Buffer[] = [];
-        for (;;) {
-          const r = await cdp.send("IO.read", { handle: stream, size: 1 << 20 });
-          if (r.data)
-            chunks.push(Buffer.from(r.data, r.base64Encoded ? "base64" : "utf8"));
-          if (r.eof) break;
-        }
-        await cdp.send("IO.close", { handle: stream });
-        writeFileSync(out, Buffer.concat(chunks));
-        if (!existsSync(out)) throw new Error(`Chrome did not produce ${out}`);
+        await printPageToPdf(cdp, url, out);
         result.set(slug, out);
         console.log(`  rendered ${slug} → ${path.relative(process.cwd(), out)}`);
       }

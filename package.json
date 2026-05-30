@@ -7,6 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "pdfs:site": "node scripts/render-site-pdfs.ts",
+    "pdf:dev": "node scripts/render-dev-pdf.ts",
     "astro": "astro",
     "test": "vitest run",
     "test:watch": "vitest",
