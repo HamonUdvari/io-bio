@@ -246,6 +246,8 @@
 
     @variant print {
       --px: var(--px-desktop);
+      /* Tighten the inter-section rhythm for paper (screen --gap-y is 30px). */
+      --gap-y: 1rem;
     }
   }
 
@@ -313,6 +315,33 @@
     list-style: decimal;
     padding-left: 1.5rem;
   }
+}
+
+/* ---- Print ------------------------------------------------------------- */
+/* Paper gutter for the ad-hoc browser print / "Download Entry PDF" path. */
+@page {
+  margin: 16mm 14mm 18mm 14mm;
+}
+
+@media print {
+  /* Cleaner pagination: don't split a reference/role item or the portrait
+     across pages, and keep section headings with the content that follows. */
+  li,
+  figure {
+    break-inside: avoid;
+  }
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  /* NOTE (issue #8): a per-page running footer (project reference bottom-left)
+     and page number (bottom-right) are deliberately NOT attempted in CSS. A
+     position:fixed footer does repeat per page but overlaps body text on
+     content-heavy pages, and Blink ignores @page margin boxes / counter(page)
+     for HTML printing. Reliable per-page header/footer needs the server PDF
+     path — headless-Chrome CDP Page.printToPDF header/footerTemplate, reusing
+     the Zenodo render pipeline. See the executive report / issue #8. */
 }
 
 @layer components {
