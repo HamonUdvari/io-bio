@@ -436,6 +436,18 @@
     @variant print {
       background-color: white !important;
       color: black !important;
+
+      /* Paged.js clones a section into a fresh box on every page it spills onto
+         (it doesn't slice the border), so a section's top border would otherwise
+         repeat at the top of each continuation page. Paged.js tags continuation
+         fragments with data-split-from — drop the border there so it marks only
+         where the section actually begins. (section[data-split-from] outranks
+         the bare `section` border rule on specificity, so no !important needed;
+         the attribute never exists off the print route, so this is inert on the
+         live site.) */
+      &[data-split-from] {
+        @apply border-t-0;
+      }
     }
 
     /* Component-local tokens — surfaced here; variants override them below. */
