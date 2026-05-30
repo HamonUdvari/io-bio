@@ -144,6 +144,64 @@ describe("parseRoles", () => {
     expect(value[0].abbreviation).toBe("UNHCR");
   });
 
+  // issue #10: acronyms with an internal space were dropped (the old matcher
+  // only captured a single all-caps word).
+  it("extracts an acronym with an internal space, e.g. (UN ECA) (Gardiner)", () => {
+    const { value } = parseRoles(
+      "Ghanaian civil servant and Executive Secretary of the United Nations Economic Commission for Africa (UN ECA) 1962-1975",
+    );
+    expect(value).toHaveLength(1);
+    expect(value[0]).toMatchObject({
+      title: "Executive Secretary",
+      organisation: "United Nations Economic Commission for Africa",
+      abbreviation: "UN ECA",
+    });
+  });
+
+  // issue #10: a mid-name acronym (not the trailing token) was left embedded in
+  // the org name with an empty abbreviation field.
+  it("extracts a mid-name acronym and strips it from the org (de Boer: UNFCCC)", () => {
+    const { value } = parseRoles(
+      "Dutch civil servant and Executive Secretary of the United Nations Framework Convention on Climate Change (UNFCCC) Secretariat 2006-2010",
+    );
+    expect(value).toHaveLength(1);
+    expect(value[0]).toMatchObject({
+      title: "Executive Secretary",
+      organisation:
+        "United Nations Framework Convention on Climate Change Secretariat",
+      abbreviation: "UNFCCC",
+    });
+  });
+
+  // issue #10: a mixed-case acronym must still be captured (>=2 uppercase rule),
+  // while ordinary parentheticals like "(acting)" are not.
+  it("captures a mixed-case acronym like (BofA) (Clausen)", () => {
+    const { value } = parseRoles(
+      "American banker, President of Bank of America (BofA) 1970-1981",
+    );
+    expect(value).toHaveLength(1);
+    expect(value[0]).toMatchObject({
+      title: "President",
+      organisation: "Bank of America",
+      abbreviation: "BofA",
+    });
+  });
+
+  // issue #10: the UNHCR/OHCHR "role-as-institution" back-fill must NOT override
+  // a role whose organisation is explicitly named (the League of Nations' High
+  // Commissioner for Refugees is not UNHCR).
+  it("does not graft UNHCR onto a role with an explicit organisation (McDonald: League of Nations)", () => {
+    const { value } = parseRoles(
+      "American foreign policy expert and High Commissioner for Refugees Coming from Germany of the League of Nations 1933-1935",
+    );
+    expect(value).toHaveLength(1);
+    expect(value[0]).toMatchObject({
+      title: "High Commissioner for Refugees Coming from Germany",
+      organisation: "League of Nations",
+    });
+    expect(value[0].abbreviation).toBeUndefined();
+  });
+
   it("warns when no year span found", () => {
     const { value, warnings } = parseRoles("some unrelated text");
     expect(value).toEqual([]);

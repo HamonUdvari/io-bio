@@ -51,10 +51,16 @@ const ROLE_TITLE_ALIASES: Array<{
 ];
 
 function applyTitleAliases(role: Role): Role {
-  if (role.organisation && role.abbreviation) return role;
+  // A "role-as-institution" alias (e.g. "High Commissioner for Refugees" ⇒
+  // UNHCR) applies ONLY when the role names no organisation of its own — i.e.
+  // the title stands alone as the institution. If an organisation IS given
+  // ("High Commissioner for Refugees Coming from Germany … of the League of
+  // Nations"), trust it and do NOT graft the UN body's name/abbreviation onto
+  // it (issue #10: the League of Nations' High Commissioner is not UNHCR).
+  if (role.organisation) return role;
   for (const alias of ROLE_TITLE_ALIASES) {
     if (alias.pattern.test(role.title)) {
-      if (!role.organisation) role.organisation = alias.organisation;
+      role.organisation = alias.organisation;
       if (!role.abbreviation) role.abbreviation = alias.abbreviation;
       break;
     }
@@ -199,31 +205,48 @@ function parseRoleChunk(chunk: string, _warnings: Warning[]): Role | null {
   let organisation: string | undefined;
   let abbreviation: string | undefined;
 
+  // Pull a parenthesised acronym out of `s` and strip it. Unlike the old
+  // trailing-anchored match, this finds an ALL-CAPS token — possibly multi-word
+  // ("UN ECA") and NOT necessarily the last token ("…Climate Change (UNFCCC)
+  // Secretariat", "…(IBRD) and World Bank Group") — anywhere in the string
+  // (issue #10: spaced + mid-name acronyms were left embedded with an empty
+  // abbreviation). Restricting to all-caps avoids capturing ordinary
+  // parenthetical words like "(acting)".
+  const pullAbbr = (s: string): { text: string; abbr?: string } => {
+    // Scan parenthesised letter-tokens; treat one as an abbreviation when it has
+    // >=2 uppercase letters ("IBRD", "BofA", "UN ECA") — which excludes ordinary
+    // parentheticals like "(acting)" / "(Interim)". Take the first such match.
+    const re = /\s*\(([A-Za-z]+(?:\s+[A-Za-z]+)*)\)/g;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(s)) !== null) {
+      const cand = m[1];
+      if ((cand.match(/[A-Z]/g) || []).length < 2) continue;
+      const text = (s.slice(0, m.index) + s.slice(m.index + m[0].length))
+        .replace(/\s{2,}/g, " ")
+        .replace(/\s+([,;.])/g, "$1")
+        .trim();
+      return { text, abbr: cand };
+    }
+    return { text: s };
+  };
+
   // Title/org separator: `of` (most common — "Director of the IMF") or `to`
   // ("Delegate to the European Commission" — Stokes). "for" stays inside the
   // title (e.g. "High Commissioner for Refugees").
   const ofMatch = workingText.match(/\s+(?:of|to)\s+(?:the\s+)?/);
   if (ofMatch) {
     title = workingText.substring(0, ofMatch.index ?? 0).trim();
-    let after = workingText
+    const after = workingText
       .substring((ofMatch.index ?? 0) + ofMatch[0].length)
       .trim();
-
-    const abbrMatch = after.match(/\s*\(([A-Z][A-Za-z]*)\)\s*$/);
-    if (abbrMatch) {
-      abbreviation = abbrMatch[1];
-      after = after.substring(0, abbrMatch.index ?? 0).trim();
-    }
-    organisation = after || undefined;
+    const org = pullAbbr(after);
+    abbreviation = org.abbr;
+    organisation = org.text || undefined;
   } else {
     // No " of " separator — pattern is "<title> (ABBR)?".
-    const abbrMatch = workingText.match(/\s*\(([A-Z][A-Za-z]*)\)\s*$/);
-    if (abbrMatch) {
-      abbreviation = abbrMatch[1];
-      title = workingText.substring(0, abbrMatch.index ?? 0).trim();
-    } else {
-      title = workingText.trim();
-    }
+    const t = pullAbbr(workingText);
+    abbreviation = t.abbr;
+    title = t.text.trim();
   }
 
   if (!title) return null;

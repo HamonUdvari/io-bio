@@ -24,4 +24,25 @@ describe("parseNationality", () => {
     expect(value.nationality).toBeNull();
     expect(warnings.find((w) => w.code === "nationality_unknown")).toBeTruthy();
   });
+
+  // issue #10: pick the demonym appearing EARLIEST in the text, so a demonym
+  // that is only a substring of a LATER word ("German" inside "…Germany") no
+  // longer beats the actual leading demonym.
+  it("picks the leading demonym, not a substring of a later word (McDonald: American, not German⊂Germany)", () => {
+    const { value } = parseNationality(
+      "American foreign policy expert and League of Nations High Commissioner for Refugees Coming from Germany",
+    );
+    expect(value.country).toBe("United States");
+    expect(value.nationality).toBe("American");
+  });
+
+  // issue #10: the leading demonym wins even when a later word contains another
+  // country's demonym (here "South American" ⊃ "American").
+  it("prefers the leading demonym over one inside a later org name (Kirchner: Argentine)", () => {
+    const { value } = parseNationality(
+      "Argentinean politician and first Secretary-General of the Union of South American Nations",
+    );
+    expect(value.country).toBe("Argentina");
+    expect(value.nationality).toBe("Argentine");
+  });
 });

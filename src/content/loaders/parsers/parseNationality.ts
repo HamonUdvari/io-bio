@@ -27,14 +27,34 @@ export function parseNationality(text: string): ParserResult<NationalityFields> 
     return { value, warnings };
   }
 
-  const countryObject = countries.find((c: any) => {
-    if (!c.unMember) return false;
-    const f = c.demonyms?.eng?.f || "UNDEFINED";
-    const m = c.demonyms?.eng?.m || "UNDEFINED";
-    return text.includes(f) || text.includes(m);
-  });
+  // Pick the UN-member demonym that appears EARLIEST in the text (the leading
+  // demonym is the stated nationality), preferring the longest match on a tie.
+  // Selecting by earliest position — rather than first-in-data-order, the old
+  // bug — fixes substring collisions where a demonym is contained in a LATER
+  // word: e.g. "German" inside "…Refugees Coming from Germany" no longer beats
+  // the leading "American", because "American" occurs earlier (issue #10). On an
+  // equal-position tie the longer demonym wins, so a demonym that is a prefix of
+  // a longer one at the same offset resolves to the more specific match
+  // (defensive — no such prefix collision exists among world-countries' current
+  // UN-member demonyms).
+  let best: { country: any; demonym: string; index: number } | null = null;
+  for (const c of countries as any[]) {
+    if (!c.unMember) continue;
+    for (const dem of [c.demonyms?.eng?.f, c.demonyms?.eng?.m]) {
+      if (!dem) continue;
+      const index = text.indexOf(dem);
+      if (index < 0) continue;
+      if (
+        !best ||
+        index < best.index ||
+        (index === best.index && dem.length > best.demonym.length)
+      ) {
+        best = { country: c, demonym: dem, index };
+      }
+    }
+  }
 
-  if (!countryObject) {
+  if (!best) {
     warnings.push({
       code: "nationality_unknown",
       field: "nationality",
@@ -44,11 +64,8 @@ export function parseNationality(text: string): ParserResult<NationalityFields> 
     return { value, warnings };
   }
 
-  value.country = (countryObject as any).name.common;
-  const f = (countryObject as any).demonyms?.eng?.f || "UNDEFINED";
-  const m = (countryObject as any).demonyms?.eng?.m || "UNDEFINED";
-  if (text.includes(f)) value.nationality = f;
-  if (text.includes(m)) value.nationality = m;
+  value.country = best.country.name.common;
+  value.nationality = best.demonym;
 
   return { value, warnings };
 }
