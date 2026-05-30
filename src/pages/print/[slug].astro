@@ -51,6 +51,23 @@ const title = `${lastName.toUpperCase()}, ${firstName}`;
           } catch {}
         }
         const flow = await new Previewer().preview();
+
+        // Separate each A4 page into a distinct, centred sheet (gap + drop
+        // shadow) so the page breaks are clearly visible in the live preview.
+        // Injected AFTER preview() because Paged.js's polisher consumes the
+        // author stylesheets and drops @media screen blocks (it keeps @media
+        // print, which is how the preview mirrors the PDF) — a style added now
+        // is left untouched. Wrapped in @media screen so it never reaches the
+        // PDF: Page.printToPDF renders in print media, where each .pagedjs_page
+        // is already a real page.
+        const sep = document.createElement("style");
+        sep.textContent = `@media screen {
+          .pagedjs_pages { padding-block: 12mm; }
+          .pagedjs_page { margin: 0 auto 12mm; }
+          .pagedjs_pagebox { box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08), 0 2px 8px rgb(0 0 0 / 0.28); }
+        }`;
+        document.head.appendChild(sep);
+
         // Marker the headless-Chrome renderer polls before Page.printToPDF.
         document.documentElement.dataset.pagedjsReady = "true";
         document.documentElement.dataset.pagedjsPages = String(flow?.total ?? "");
