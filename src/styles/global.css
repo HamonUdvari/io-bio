@@ -90,6 +90,7 @@
   --px-base: 1rem;
   --px-tablet: 1.5rem;
   --px-desktop: 2rem;
+  --px-print: 0rem;
 
   /* Control vertical/horizontal padding — shared by .button and the search
      input so their heights match (mirrors Figma button-py / search-py). */
@@ -127,7 +128,7 @@
 
   --text-h2-base: 1.5rem; /* 24px */
   --leading-h2-base: 1.2;
-  --text-h2-tablet: 2rem; /* 32px */
+  --text-h2-tablet: 1.5rem; /* 32px */
   --leading-h2-tablet: 1.2;
   --text-h2-desktop: 2.5rem; /* 40px */
   --leading-h2-desktop: 1.2;
@@ -265,9 +266,12 @@
     @variant tablet, print {
       --gap-x: var(--gap-x-tablet);
       --gap-y: var(--gap-y-tablet);
-      --px: var(--px-tablet);
       --btn-px: var(--btn-px-tablet);
       --btn-py: var(--btn-py-tablet);
+    }
+
+    @variant tablet {
+      --px: var(--px-tablet);
     }
 
     @variant desktop {
@@ -354,7 +358,7 @@
    boxes, but the print route runs Paged.js, which honours them.) A4. */
 @page {
   size: A4;
-  margin: 16mm 14mm 18mm 14mm;
+  margin: 10mm 10mm 16mm 10mm;
 
   @bottom-left {
     content: "IO BIO — Biographical Dictionary of Secretaries-General of International Organizations";
@@ -400,6 +404,14 @@
 
 @layer components {
   .figure {
+
+    @apply relative;
+    @apply max-w-[320px];
+
+    @variant print {
+      @apply max-w-[240px];
+    }
+
     & .figure__credit {
       @apply text-credit text-left;
       @apply absolute bottom-0 origin-bottom-left -rotate-90;
@@ -432,14 +444,24 @@
     }
   }
 
+  .bio-header {
+    @apply border-t-0 bg-io-gray-600 pt-[5rem] pb-[7.5rem] text-center gap-y-[30px];
+    
+    @variant print {
+      @apply pt-[20px];
+      @apply pb-[30px];
+    }
+  }
+
   section {
     @variant print {
       background-color: white !important;
       color: black !important;
+      @apply border-t-2 border-t-black;
 
       /* Paged.js clones a section into a fresh box on every page it spills onto
-         (it doesn't slice the border), so a section's top border would otherwise
-         repeat at the top of each continuation page. Paged.js tags continuation
+         (it doesn't slice the border), so this top border would otherwise repeat
+         at the top of each continuation page. Paged.js tags continuation
          fragments with data-split-from — drop the border there so it marks only
          where the section actually begins. (section[data-split-from] outranks
          the bare `section` border rule on specificity, so no !important needed;
@@ -448,6 +470,11 @@
       &[data-split-from] {
         @apply border-t-0;
       }
+
+      & .section__title {
+        @apply px-0;
+        @apply pb-0;
+      }
     }
 
     /* Component-local tokens — surfaced here; variants override them below. */
@@ -455,6 +482,7 @@
     --section-text: var(--color-io-onsecondary);
     --section-border: var(--color-io-gray-100);
 
+    /* @apply px-(--px); */
     @apply py-(--gap-y);
     @apply text-body;
     @apply flex flex-col;
@@ -990,7 +1018,7 @@
     & .cite-list {
       /* Keep the section's mobile gutter (--content-width), cap line length on
          wide screens for readability. */
-      max-width: min(80ch, var(--content-width, 100%));
+      /* max-width: min(80ch, var(--content-width, 100%)); */
 
       & li + li {
         @apply mt-4;
