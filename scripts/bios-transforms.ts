@@ -185,4 +185,42 @@ export const transforms: FileTransform[] = [
       },
     ],
   },
+  {
+    source: "McDonald-JG 2016.docx",
+    changes: [
+      {
+        type: "replace",
+        find: "League of Nations High Commissioner for Refugees Coming from Germany",
+        replace:
+          "High Commissioner for Refugees Coming from Germany of the League of Nations",
+        reason:
+          'Issue #10: the intro put the organisation BEFORE the title ("League of Nations High Commissioner …"), so the parser split on the organisation\'s own " of " and produced title "League" / organisation "Nations High Commissioner for Refugees Coming from Germany". Reorder to the house "Title … of the Organisation" shape so it extracts title "High Commissioner for Refugees Coming from Germany" + organisation "League of Nations". (The wrong nationality "German" — a substring of "Germany" — is fixed in the parser, not here.)',
+      },
+    ],
+  },
+  {
+    source: "Diallo-BT 2022.docx",
+    changes: [
+      {
+        type: "replace",
+        find: "Organization of African Unity OAU",
+        replace: "Organization of African Unity (OAU)",
+        reason:
+          'Issue #10: the abbreviation OAU followed the organisation name without parentheses, so the parser left it glued to the org ("Organization of African Unity OAU") and captured no abbreviation. Parenthesise it to house style so org="Organization of African Unity", abbreviation="OAU".',
+      },
+    ],
+  },
+  {
+    source: "Thant-U 2019.docx",
+    changes: [
+      {
+        type: "replace",
+        find: "and third Secretary-General 1962-1971",
+        replace:
+          "and third Secretary-General of the United Nations (UN) 1962-1971",
+        reason:
+          'Issue #10: the second role was written without "of <ORG>" ("…and third Secretary-General 1962-1971"), relying on the first role\'s organisation, so the parser captured the title but left the organisation/abbreviation empty. Repeat "of the United Nations (UN)" before the year span (same fix as Phelan-EJ) so the role resolves to org="United Nations", abbreviation="UN".',
+      },
+    ],
+  },
 ];

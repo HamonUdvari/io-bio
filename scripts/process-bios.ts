@@ -201,15 +201,35 @@ function applyTransform(transform: FileTransform): boolean {
 }
 
 function main() {
+  // `--only <substr>` applies just the transforms whose source filename matches
+  // <substr>, IN PLACE on the existing processed docx — skipping the
+  // copy-all + LibreOffice-convert steps. Useful for applying a single new
+  // transform without re-deriving the whole corpus (which also avoids
+  // re-converting legacy .doc files). The full run remains the source of truth.
+  const onlyIdx = process.argv.indexOf("--only");
+  const only = onlyIdx >= 0 ? process.argv[onlyIdx + 1] : null;
+
   ensureDirs();
-  console.log("Copying source → processed…");
-  copyAllSourceToProcessed();
-  console.log("Converting legacy .doc files via LibreOffice…");
-  convertLegacyDocs();
-  console.log(`Applying ${transforms.length} transform(s):`);
+  if (only) {
+    console.log(`--only "${only}": applying matching transforms in place (skipping copy/convert).`);
+  } else {
+    console.log("Copying source → processed…");
+    copyAllSourceToProcessed();
+    console.log("Converting legacy .doc files via LibreOffice…");
+    convertLegacyDocs();
+  }
+
+  const list = only
+    ? transforms.filter((t) => t.source.includes(only))
+    : transforms;
+  if (only && list.length === 0) {
+    console.error(`No transform whose source matches "${only}".`);
+    process.exit(1);
+  }
+  console.log(`Applying ${list.length} transform(s):`);
   let ok = 0;
   let failed = 0;
-  for (const t of transforms) {
+  for (const t of list) {
     if (applyTransform(t)) ok++;
     else failed++;
   }
