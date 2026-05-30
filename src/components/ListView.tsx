@@ -124,7 +124,7 @@ export default function ListView({ data }: ListViewProps) {
       (row) =>
         `${row.lastName.toUpperCase()} ${row.firstName}${aliasSuffix(
           row.knownAs,
-          row.nee,
+          `${row.firstName} ${row.lastName}`,
         )}`,
       {
         id: "fullName",
@@ -303,7 +303,7 @@ export default function ListView({ data }: ListViewProps) {
                 <div class="entry__body">
                   <span class="entry__name" style={{ textBoxTrim: "trim-both" }}>
                     {lastName.toUpperCase()} {firstName}
-                    {aliasSuffix(knownAs, nee)}
+                    {aliasSuffix(knownAs, `${firstName} ${lastName}`)}
                   </span>
                   <ul class="entry__roles">
                     {roles.length === 0 && (
