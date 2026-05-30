@@ -13,6 +13,8 @@ import { remarkPrefixRawLinks } from "./src/remarkPlugins/remarkPrefixRawLinks";
 
 import mdx from "@astrojs/mdx";
 
+import { devPdfRenderer } from "./scripts/dev-pdf-renderer.ts";
+
 // Force `font-display: block` on every @font-face. Fontsource bakes in
 // `font-display: swap`, which briefly paints Roboto / Roboto Condensed text in a
 // fallback font (the visible flash) before the webfont loads. This is a
@@ -102,7 +104,7 @@ export default defineConfig({
   server: {
     allowedHosts: true,
   },
-  integrations: [preact({ compat: true }), mdx()],
+  integrations: [preact({ compat: true }), mdx(), devPdfRenderer(BASE)],
   vite: {
     plugins: [tailwindcss(), fontDisplayBlock(), mediaRangeToLegacy()],
     resolve: {

@@ -142,11 +142,11 @@ async function waitForPagedJs(cdp: Cdp, timeoutMs = 60_000): Promise<void> {
 // few MB). `url` is the Paged.js print route: wait for it to finish paginating,
 // then print with no header/footer (Paged.js + @page own the footer, page
 // numbers and A4 margins).
-export async function printPageToPdf(
-  cdp: Cdp,
-  url: string,
-  outPath: string,
-): Promise<void> {
+// Navigate the page target to `url`, wait for Paged.js to finish, and return
+// the rendered PDF as a Buffer. Shared by the file-writing printPageToPdf (the
+// build/Zenodo pipeline) and the on-demand dev PDF middleware (scripts/
+// dev-pdf-renderer.ts), which serves the bytes straight over HTTP.
+export async function renderPdfBytes(cdp: Cdp, url: string): Promise<Buffer> {
   const loaded = cdp.waitEvent("Page.loadEventFired");
   await cdp.send("Page.navigate", { url });
   await loaded;
@@ -164,7 +164,15 @@ export async function printPageToPdf(
     if (r.eof) break;
   }
   await cdp.send("IO.close", { handle: stream });
-  writeFileSync(outPath, Buffer.concat(chunks));
+  return Buffer.concat(chunks);
+}
+
+export async function printPageToPdf(
+  cdp: Cdp,
+  url: string,
+  outPath: string,
+): Promise<void> {
+  writeFileSync(outPath, await renderPdfBytes(cdp, url));
   if (!existsSync(outPath)) throw new Error(`Chrome did not produce ${outPath}`);
 }
 
