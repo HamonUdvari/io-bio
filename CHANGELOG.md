@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/HamonUdvari/io-bio/compare/v1.3.1...v1.3.2) (2026-05-30)
+
+
+### Bug Fixes
+
+* **entries:** keep rotated figure source credit within the image ([](https://github.com/HamonUdvari/io-bio/commit/a4eb3eca962af40d53fcbb2d66005ab98ea20517))
+
 ## [1.3.1](https://github.com/HamonUdvari/io-bio/compare/v1.3.0...v1.3.1) (2026-05-30)
 
 
