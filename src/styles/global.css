@@ -836,13 +836,6 @@
     }
   }
 
-  /* Vertical stack of CTA buttons (e.g. the "How to cite" copy buttons).
-     Buttons keep their natural width and align to the start. */
-  .button-group {
-    @apply flex flex-col items-start;
-    gap: 0.75rem;
-  }
-
   /* Downloads list (author-instructions) — underlined links stacked in a
      column, not download buttons. The inline-link underline comes from the base
      `a` rule; here we just drop the list bullets/indent and set the row gap. */
@@ -876,29 +869,21 @@
     }
   }
 
-  /* "How to cite" — the two labelled citation blocks (DOI + web). */
+  /* "How to cite" — the entry citation as a bullet list of either form
+     (website + access date, or the Zenodo DOI). */
   #cite {
-    & .cite__block {
-      @apply flex flex-col;
-      @apply gap-y-4;
-      @apply mb-(--gap-y);
-    }
+    & .cite-list {
+      /* Keep the section's mobile gutter (--content-width), cap line length on
+         wide screens for readability. */
+      max-width: min(80ch, var(--content-width, 100%));
 
-    & .cite__label {
-      @apply text-h3 leading-none;
-    }
-
-    & .cite__text {
-      @apply text-body;
-      @apply max-w-[80ch];
+      & li + li {
+        @apply mt-4;
+      }
 
       & cite {
         @apply italic;
       }
-    }
-
-    & .cite__note {
-      @apply text-sm opacity-70;
     }
   }
 }
