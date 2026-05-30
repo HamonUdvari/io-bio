@@ -28,6 +28,17 @@ if (!loader && wantedBase) {
     `Image "${wantedBase}" not found in glob "/src/assets/bios/**/*.{svg,jpeg,jpg,png,gif}"`,
   );
 }
+
+// Serve a downsized webp instead of the full-resolution scan. The portrait
+// displays at ~320px, so capping at ~1200px (≈3.5×) stays crisp on screen and
+// in the generated entry PDF (which embeds whatever the page renders). Capped
+// at the source's intrinsic width, so small crops are never upscaled. Without
+// this a 4296px source shipped a ~2.7MB image and produced ~28MB PDFs.
+const MAX_WIDTH = 1200;
+const meta = loader ? (await loader()).default : undefined;
+const renderWidth = meta ? Math.min(MAX_WIDTH, meta.width) : undefined;
 ---
 
-{loader && <AstroImage src={loader()} alt={alt} quality={92} {...props} />}
+{meta && (
+  <AstroImage src={meta} alt={alt} quality={92} width={renderWidth} {...props} />
+)}
