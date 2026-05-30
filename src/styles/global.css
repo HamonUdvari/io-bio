@@ -163,55 +163,87 @@
   --leading-hero-desktop: 1.1;
 }
 
+/* Responsive type utilities: apply the base step first, then override per
+   breakpoint with @variant BLOCKS — never inline `tablet:`/`desktop:`/`print:`
+   variants on a single @apply line. Group the related utilities (size +
+   leading) together inside each block; combine variants that share a step with
+   a comma (`@variant desktop, print`).
+   https://tailwindcss.com/docs/adding-custom-styles#using-variants */
+
 @utility text-h1 {
-  @apply text-h1-base tablet:text-h1-tablet desktop:text-h1-desktop print:text-h1-desktop;
-  @apply leading-h1-base tablet:leading-h1-tablet desktop:leading-h1-desktop;
+  @apply text-h1-base leading-h1-base;
+
+  @variant tablet {
+    @apply text-h1-tablet leading-h1-tablet;
+  }
+
+  @variant desktop, print {
+    @apply text-h1-desktop leading-h1-desktop;
+  }
 }
 
 @utility text-h2 {
-  @apply text-h2-base tablet:text-h2-tablet desktop:text-h2-desktop print:text-h2-desktop;
-  @apply leading-h2-base tablet:leading-h2-tablet desktop:leading-h2-desktop;
+  @apply text-h2-base leading-h2-base;
+
+  @variant tablet {
+    @apply text-h2-tablet leading-h2-tablet;
+  }
+
+  @variant desktop, print {
+    @apply text-h2-desktop leading-h2-desktop;
+  }
 }
 
 @utility text-h3 {
-  @apply text-h3-base;
-  @apply leading-h3-base;
+  @apply text-h3-base leading-h3-base;
 }
 
 @utility text-body {
-  @apply text-body-base tablet:text-body-tablet desktop:text-body-desktop print:text-body-desktop;
-  @apply leading-body-base tablet:leading-body-tablet desktop:leading-body-desktop;
+  @apply text-body-base leading-body-base;
+
+  @variant tablet {
+    @apply text-body-tablet leading-body-tablet;
+  }
+
+  @variant desktop, print {
+    @apply text-body-desktop leading-body-desktop;
+  }
 }
 
 @utility text-caption {
-  @apply text-caption-base;
-  @apply leading-caption-base;
+  @apply text-caption-base leading-caption-base;
 }
 
 @utility text-small {
-  @apply text-small-base;
-  @apply leading-small-base;
+  @apply text-small-base leading-small-base;
 }
 
 @utility text-micro {
-  @apply text-micro-base;
-  @apply leading-micro-base;
+  @apply text-micro-base leading-micro-base;
 }
 
 @utility text-credit {
-  @apply text-credit-base;
-  @apply leading-credit-base;
+  @apply text-credit-base leading-credit-base;
 }
 
 @utility text-label {
-  @apply text-label-base desktop:text-label-desktop print:text-label-desktop;
-  @apply leading-body-base desktop:leading-body-desktop;
-  @apply font-medium;
+  @apply text-label-base leading-body-base font-medium;
+
+  @variant desktop, print {
+    @apply text-label-desktop leading-body-desktop;
+  }
 }
 
 @utility text-hero {
-  @apply text-hero-base tablet:text-hero-tablet desktop:text-hero-desktop print:text-hero-desktop;
-  @apply leading-hero-base tablet:leading-hero-tablet desktop:leading-hero-desktop;
+  @apply text-hero-base leading-hero-base;
+
+  @variant tablet {
+    @apply text-hero-tablet leading-hero-tablet;
+  }
+
+  @variant desktop, print {
+    @apply text-hero-desktop leading-hero-desktop;
+  }
 }
 
 @utility io-transition {
@@ -678,10 +710,8 @@
     grid-template-columns:
       minmax(min-content, 2fr) /* fullName — wider so long names wrap less */
       minmax(min-content, 1.5fr) /* role / title */
-      minmax(
-        min-content,
-        2.2fr
-      ) /* organisation — trimmed back so it's less dominant */
+      minmax(min-content, 2.2fr)
+      /* organisation — trimmed back so it's less dominant */
       minmax(min-content, 0.7fr) /* nationality */
       minmax(
         max-content,
