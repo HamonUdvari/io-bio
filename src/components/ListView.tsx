@@ -146,7 +146,7 @@ export default function ListView({ data }: ListViewProps) {
       header: "Organization",
       filterFn: "includesString",
     }),
-    columnHelper.accessor((row) => row.nationality ?? "", {
+    columnHelper.accessor((row) => row.nationality || "Unspecified", {
       id: "nationality",
       header: "Nationality",
       filterFn: "includesString",
@@ -290,6 +290,12 @@ export default function ListView({ data }: ListViewProps) {
               nee,
               slug,
             } = original as any;
+            // Issue #9: when an entry has no nationality (none stated in the
+            // source and not safe to assume — e.g. special-status territories or
+            // pre-nation-state historical figures), show "Unspecified" rather
+            // than a fabricated demonym. (Renders plain; to de-emphasise it,
+            // style "Unspecified" in the Nationality column / .entry__nationality.)
+            const natLabel = nationality || "Unspecified";
             return (
               <a href={`${base}entries/${slug}`} class="entry" key={row.id}>
                 {webImage && (
@@ -308,7 +314,7 @@ export default function ListView({ data }: ListViewProps) {
                   <ul class="entry__roles">
                     {roles.length === 0 && (
                       <li class="entry__role-item">
-                        <span class="entry__nationality">{nationality}</span>
+                        <span class="entry__nationality">{natLabel}</span>
                       </li>
                     )}
                     {roles.length > 0 &&
@@ -321,12 +327,10 @@ export default function ListView({ data }: ListViewProps) {
                           <span class="entry__years">
                             {r.startYear}–{r.endYear}
                           </span>
-                          {i === roles.length - 1 && nationality && (
+                          {i === roles.length - 1 && (
                             <>
                               {" "}
-                              <span class="entry__nationality">
-                                {nationality}
-                              </span>
+                              <span class="entry__nationality">{natLabel}</span>
                             </>
                           )}
                         </li>

@@ -2,7 +2,12 @@
 
 Every cosmetic edit applied to `src/content/bios-source/` to produce `src/content/bios-processed/`. Generated automatically by `npm run bios:diff`.
 
-Files modified: **13**.
+Files modified: **12**.
+
+> Note: `Saouma-E 2013` is transformed but has no auto-generated diff below — its
+> source is a legacy `.doc`, which the `bios:diff` track-changes generator cannot
+> unzip (pre-existing tooling limitation, tracked separately), so 11 sections
+> are listed for the 12 transforms.
 
 ## `Lubbers-R 2026.docx`
 
@@ -48,24 +53,6 @@ See [Black-ER 2014.diff.md](./Black-ER 2014.diff.md).
 
    - Before: `BLACK, Eugene Robert, third President`
    - After:  `BLACK, Eugene Robert, American banker and third President`
-
-## `Chan-M 2021.docx`
-
-See [Chan-M 2021.diff.md](./Chan-M 2021.diff.md).
-
-1. "Hong Kong" is not a UN-member demonym in world-countries, so the nationality detector skipped this entry. Adding "Chinese" preserves the Hong Kong identifier while giving the parser a matchable demonym.
-
-   - Before: `Hong Kong medical officer`
-   - After:  `Hong Kong Chinese medical officer`
-
-## `Eichhoff-JJ 2024.docx`
-
-See [Eichhoff-JJ 2024.diff.md](./Eichhoff-JJ 2024.diff.md).
-
-1. No nationality in the original intro (born in Bonn, Electorate of Cologne — now Germany). Insert "German civil servant and " before the role so the demonym is detected.
-
-   - Before: `EICHHOFF, Johann Joseph, Director-General`
-   - After:  `EICHHOFF, Johann Joseph, German civil servant and Director-General`
 
 ## `Orr-JB 2021.docx`
 
