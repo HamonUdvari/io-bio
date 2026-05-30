@@ -1,3 +1,11 @@
+## [1.3.5](https://github.com/HamonUdvari/io-bio/compare/v1.3.4...v1.3.5) (2026-05-30)
+
+
+### Bug Fixes
+
+* **cite:** don't show the whole-dictionary DOI as the entry's citation ([](https://github.com/HamonUdvari/io-bio/commit/325142beb06c56c30419ed8632f5c5d254ef4329)), closes [#2](https://github.com/HamonUdvari/io-bio/issues/2) [#2](https://github.com/HamonUdvari/io-bio/issues/2)
+* **zenodo-pdf:** per-page footer (project ref + page number) via CDP printToPDF ([](https://github.com/HamonUdvari/io-bio/commit/c602188b1432cd374319347e071704d2cec8a804)), closes [#8](https://github.com/HamonUdvari/io-bio/issues/8) [#8](https://github.com/HamonUdvari/io-bio/issues/8)
+
 ## [1.3.4](https://github.com/HamonUdvari/io-bio/compare/v1.3.3...v1.3.4) (2026-05-30)
 
 
