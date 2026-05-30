@@ -61,6 +61,16 @@ export const bioDataSchema = z.object({
   version: z.string().optional(),
   versionDoi: z.string().optional(), // version-specific Zenodo DOI for this entry, when minted
   conceptDoi: z.string().optional(), // entry concept DOI (always-latest), when minted
+  // Per-entry Zenodo citation shown in "How to cite" (issue #2). docxLoader
+  // builds it: a production DOI (resolves via doi.org) once minted, else the
+  // sandbox deposit's concept record (sandbox.zenodo.org) so the client can
+  // preview the per-entry citation before production minting.
+  zenodoCite: z
+    .object({
+      url: z.string(),
+      sandbox: z.boolean().default(false),
+    })
+    .optional(),
   publishedYear: z.number().optional(), // citation year; else derive from `version` date
   authors: z.string().optional(),
   nationality: z.string().optional(),
