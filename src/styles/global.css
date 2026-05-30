@@ -468,8 +468,14 @@
   }
 
   .entries {
+    /* Footer-jump guard (issue #3): floor the listing to ~one viewport so an
+       empty or short result set can't pull the footer up into view. svh tracks
+       the real (mobile-chrome-aware) viewport height, and the floor is a
+       component-local variable so it stays tunable per breakpoint later. */
+    --entries-min-h: 100svh;
     @apply text-left;
     @apply max-w-[90%];
+    @apply min-h-(--entries-min-h);
     @apply flex flex-col;
     /* Space after the toolbar before the table/grid (matches Figma
        entries-content itemSpacing = gap-y). */
