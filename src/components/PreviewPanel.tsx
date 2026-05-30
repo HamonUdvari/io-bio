@@ -216,7 +216,7 @@ function ResultPanel({
             "LASTNAME, First" + aliasSuffix the entry page composes, so the
             née / known-as parenthetical shows exactly as it will render. */}
         <Field label="Display name">
-          {`${(bio.lastName ?? "").toUpperCase()}, ${bio.firstName ?? ""}${aliasSuffix(bio.knownAs, bio.nee)}`}
+          {`${(bio.lastName ?? "").toUpperCase()}, ${bio.firstName ?? ""}${aliasSuffix(bio.knownAs, `${bio.firstName ?? ""} ${bio.lastName ?? ""}`)}`}
         </Field>
         <Field label="Last name">{bio.lastName}</Field>
         <Field label="First name">{bio.firstName}</Field>
@@ -232,18 +232,20 @@ function ResultPanel({
         <Field label="Version">{bio.version}</Field>
         <Field label="Author(s)">{bio.authors}</Field>
 
-        {/* Biography prose — the largest entry-page field, previously absent
-            from the preview. Render the parsed HTML so the author sees the
-            transformed body exactly as the site builds it (field parity). */}
+        {/* Biography prose. Render bio.body — the nodes left AFTER the intro,
+            version, citation and APL parsers claim theirs — NOT bio.html (the
+            whole document). bio.body is exactly what the entry page's <Content />
+            renders (docxLoader feeds extracted.body to the render fn), so the
+            preview matches the site's separated result, not the raw Word text. */}
         <section>
           <h3 class="text-xl font-bold mb-2">Biography</h3>
-          {bio.html && (
+          {bio.body && (
             <div
               class="text-sm border border-io-gray-100/30 p-3 max-h-96 overflow-auto flex flex-col gap-y-2"
-              dangerouslySetInnerHTML={{ __html: bio.html }}
+              dangerouslySetInnerHTML={{ __html: bio.body }}
             />
           )}
-          {!bio.html && <p class="opacity-60">No biography body extracted.</p>}
+          {!bio.body && <p class="opacity-60">No biography body extracted.</p>}
         </section>
 
         <section>
