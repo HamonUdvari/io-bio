@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/HamonUdvari/io-bio/compare/v1.6.0...v1.6.1) (2026-05-30)
+
+
+### Bug Fixes
+
+* **bios:** omit unfounded nationalities, show "Unspecified" fallback (issue #9) ([](https://github.com/HamonUdvari/io-bio/commit/c2c5cee510bcb0dc23c3e92931aaa1134e0d28be)), closes [#9](https://github.com/HamonUdvari/io-bio/issues/9) [#9](https://github.com/HamonUdvari/io-bio/issues/9)
+
 # [1.6.0](https://github.com/HamonUdvari/io-bio/compare/v1.5.0...v1.6.0) (2026-05-30)
 
 
