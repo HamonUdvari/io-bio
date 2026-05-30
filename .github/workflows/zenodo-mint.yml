@@ -1,0 +1,64 @@
+# Manual, gated Zenodo minting. NEVER runs on push/release — minting permanent
+# DOIs must be an explicit human action. Requires repo secrets:
+#   ZENODO_SANDBOX_TOKEN  (sandbox.zenodo.org token)
+#   ZENODO_TOKEN          (production zenodo.org token — only for env=production)
+# Production also requires Zenodo bulk-mint permission + a locked license first.
+name: Zenodo mint (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Target Zenodo environment"
+        type: choice
+        options: [sandbox, production]
+        default: sandbox
+      limit:
+        description: "Max entries to process (blank = all)"
+        required: false
+      only:
+        description: "Comma-separated slugs (blank = all eligible)"
+        required: false
+
+permissions:
+  contents: write # to commit the updated DOI map
+
+jobs:
+  mint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+        with:
+          chrome-version: stable
+      - name: Build (emits dist/zenodo-meta.json + entry pages)
+        run: npm run build
+      - name: Mint
+        # Inputs are passed via env (NOT interpolated into the script body) so
+        # free-text workflow_dispatch inputs can't inject shell commands.
+        env:
+          ZENODO_ENV: ${{ inputs.env }}
+          MINT_LIMIT: ${{ inputs.limit }}
+          MINT_ONLY: ${{ inputs.only }}
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+          ZENODO_TOKEN: ${{ inputs.env == 'production' && secrets.ZENODO_TOKEN || secrets.ZENODO_SANDBOX_TOKEN }}
+        run: |
+          ARGS="--env $ZENODO_ENV"
+          [ "$ZENODO_ENV" = "production" ] && ARGS="$ARGS --yes-production"
+          [ -n "$MINT_LIMIT" ] && ARGS="$ARGS --limit $MINT_LIMIT"
+          [ -n "$MINT_ONLY" ] && ARGS="$ARGS --only $MINT_ONLY"
+          node scripts/zenodo-mint.ts $ARGS
+      - name: Commit DOI map
+        # Only the production map is tracked; the sandbox map is gitignored.
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/zenodo-dois.json
+          git commit -m "chore(zenodo): update DOI map [skip ci]" || echo "no changes to commit"
+          git push
