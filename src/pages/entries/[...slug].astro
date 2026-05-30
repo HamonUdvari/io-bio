@@ -76,6 +76,14 @@ const doiUrl = `https://doi.org/${citationDoi}`;
 const allVersionsDoiUrl =
   versionDoi && conceptDoi ? `https://doi.org/${conceptDoi}` : null;
 
+// Only offer the DOI-based citation when the entry has its OWN minted DOI
+// (issue #2). Until per-entry DOIs are minted, the sole available DOI is the
+// whole-dictionary concept DOI — showing that as the entry's citation is what
+// confuses casual readers — so we fall back to the URL "accessed on" form
+// alone. The DOI form reappears automatically once docxLoader injects a
+// per-entry version/concept DOI from the production map.
+const hasEntryDoi = Boolean(versionDoi ?? conceptDoi);
+
 const fallbackDate = versionLabel || "[date]";
 
 // Image credit: if the source contains a URL, show just the host (a short,
@@ -225,7 +233,7 @@ const imgAr = figureImgMeta
   <section id="cite">
     <h2 class="section__title">How to cite</h2>
 
-    <p>Cite this entry in either form:</p>
+    <p>Cite this entry {hasEntryDoi ? "in either form" : "as follows"}:</p>
     <ul class="cite-list">
       <li>
         {authors}, '{lastName}, {firstName}' in <cite>IO BIO, Biographical
@@ -234,19 +242,25 @@ const imgAr = figureImgMeta
           href={entryUrl}>{entryUrl}</a
         >, accessed on <span data-accessed>{fallbackDate}</span>.
       </li>
-      <li>
-        {authors}, '{lastName}, {firstName}' in <cite>IO BIO, Biographical
-        Dictionary of Secretaries-General of International Organizations</cite>,
-        edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg. <a
-          href={doiUrl}>{doiUrl}</a
-        >{
-          allVersionsDoiUrl && (
-            <>
-              {" "}(all versions: <a href={allVersionsDoiUrl}>{allVersionsDoiUrl}</a>)
-            </>
-          )
-        }
-      </li>
+      {
+        hasEntryDoi && (
+          <li>
+            {authors}, '{lastName}, {firstName}' in{" "}
+            <cite>
+              IO BIO, Biographical Dictionary of Secretaries-General of
+              International Organizations
+            </cite>
+            , edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg.{" "}
+            <a href={doiUrl}>{doiUrl}</a>
+            {allVersionsDoiUrl && (
+              <>
+                {" "}
+                (all versions: <a href={allVersionsDoiUrl}>{allVersionsDoiUrl}</a>)
+              </>
+            )}
+          </li>
+        )
+      }
     </ul>
   </section>
 
