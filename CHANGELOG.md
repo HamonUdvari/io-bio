@@ -1,3 +1,18 @@
+# [1.5.0](https://github.com/HamonUdvari/io-bio/compare/v1.4.0...v1.5.0) (2026-05-30)
+
+
+### Bug Fixes
+
+* **pdf:** don't repeat a section's top border on Paged.js continuation pages ([](https://github.com/HamonUdvari/io-bio/commit/6208d3e05d4ade89519741f3bcea36f93292dd53))
+* **pdf:** harden CDP client + dev renderer against a dead/crashed Chrome ([](https://github.com/HamonUdvari/io-bio/commit/f65d5bcde34358cfe1ab5ec74bd12a25f965273f))
+
+
+### Website Features
+
+* **pdf:** live in-dev PDF — on-demand Download + auto-reloading viewer ([](https://github.com/HamonUdvari/io-bio/commit/cd33528f6c8de18a80cd08c20f33627f3ffd18fc))
+* **pdf:** Paged.js print pipeline — live in-browser preview is the deployed PDF ([](https://github.com/HamonUdvari/io-bio/commit/32c725e0c0e794a6a9b9455ad511aaf8790c0ffc))
+* **pdf:** print layout mirrors the tablet view + visible page breaks in preview ([](https://github.com/HamonUdvari/io-bio/commit/c3b9b9a9bdea9b89210d542e763173d86272c836))
+
 # [1.4.0](https://github.com/HamonUdvari/io-bio/compare/v1.3.5...v1.4.0) (2026-05-30)
 
 
