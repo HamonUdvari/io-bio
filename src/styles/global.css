@@ -114,61 +114,58 @@
 
   --text-hover: var(--color-io-red);
 
-  /* Font-size scale — single source shared with the Figma "Text/*" tokens.
-     Base/mobile is suffixed -base (not unsuffixed) so it never collides with
-     the same-named @utility text-* / Tailwind-generated text-* utilities. */
-  --text-h1-base: 3.475rem;
-  --text-h1-tablet: 3.475rem;
+  /* Type scale — one source shared with the Figma "Text/*" tokens. Each family
+     pairs its font-size with its matching leading, stepped base → tablet →
+     desktop. The -base suffix (not unsuffixed) keeps names from colliding with
+     the generated text-* / leading-* utilities. */
+  --text-h1-base: 3.475rem; /* 55.6px */
+  --leading-h1-base: 1.17;
+  --text-h1-tablet: 3.475rem; /* 55.6px */
+  --leading-h1-tablet: 1.17;
   --text-h1-desktop: 4.375rem; /* 70px */
-  --text-h2-base: 1.5rem; /* 24px → 32 (tablet) → 40 (desktop) */
-  --text-h2-tablet: 2rem;
-  --text-h2-desktop: 2.5rem;
-  --text-h3-base: 1.25rem;
-  --text-body-base: 1rem;
-  --text-body-tablet: 1rem;
-  --text-body-desktop: 1.25rem;
-  --text-caption-base: 1rem;
+  --leading-h1-desktop: 1.17;
+
+  --text-h2-base: 1.5rem; /* 24px */
+  --leading-h2-base: 1.2;
+  --text-h2-tablet: 2rem; /* 32px */
+  --leading-h2-tablet: 1.2;
+  --text-h2-desktop: 2.5rem; /* 40px */
+  --leading-h2-desktop: 1.2;
+
+  --text-h3-base: 1.25rem; /* 20px */
+  --leading-h3-base: 1.75rem; /* 28px */
+
+  --text-body-base: 1rem; /* 16px */
+  --leading-body-base: 1.2;
+  --text-body-tablet: 1rem; /* 16px */
+  --leading-body-tablet: 1.2;
+  --text-body-desktop: 1.25rem; /* 20px */
+  --leading-body-desktop: 1.2;
+
+  --text-caption-base: 1rem; /* 16px */
+  --leading-caption-base: 1.5rem; /* 24px */
+
   --text-small-base: 0.875rem; /* 14px */
+  --leading-small-base: 1.3;
+
   --text-micro-base: 0.75rem; /* 12px */
+  --leading-micro-base: 1.33;
 
   --text-credit-base: 0.5rem; /* 8px */
   --leading-credit-base: 1;
 
-  --text-label-base: 1rem; /* 16 → 20 desktop, Roboto Medium */
-  --text-label-desktop: 1.25rem;
-  --text-hero-base: 2rem; /* 32 → 32 → 40, Roboto Condensed */
-  --text-hero-tablet: 2rem;
-  --text-hero-desktop: 2.5rem;
+  --text-label-base: 1rem; /* 16px · Roboto Medium */
+  --leading-label-base: 1.2;
+  --text-label-desktop: 1.25rem; /* 20px */
+  --leading-label-desktop: 1.2;
 
-  /* Leadings — one per text family so line-heights are controllable like the
-     sizes (base/tablet/desktop ladder for the responsive families). Mirrors
-     the Figma text-style line-heights. Base is suffixed -base too. */
-  --leading-h1-base: 1.17;
-  --leading-h1-tablet: 1.17;
-  --leading-h1-desktop: 1.17;
-
-  --leading-h2-base: 1.2;
-  --leading-h2-tablet: 1.2;
-  --leading-h2-desktop: 1.2;
-
-  --leading-h3-base: 1.75rem;
-  --leading-body-base: 1.2;
-  --leading-body-tablet: 1.2;
-  --leading-body-desktop: 1.2;
-  --leading-caption-base: 1.5rem;
-  --leading-small-base: 1.3;
-  --leading-micro-base: 1.33;
+  --text-hero-base: 2rem; /* 32px · Roboto Condensed */
   --leading-hero-base: 1.1;
+  --text-hero-tablet: 2rem; /* 32px */
   --leading-hero-tablet: 1.1;
+  --text-hero-desktop: 2.5rem; /* 40px */
   --leading-hero-desktop: 1.1;
 }
-
-/* Responsive type utilities: apply the base step first, then override per
-   breakpoint with @variant BLOCKS — never inline `tablet:`/`desktop:`/`print:`
-   variants on a single @apply line. Group the related utilities (size +
-   leading) together inside each block; combine variants that share a step with
-   a comma (`@variant desktop, print`).
-   https://tailwindcss.com/docs/adding-custom-styles#using-variants */
 
 @utility text-h1 {
   @apply text-h1-base leading-h1-base;
@@ -227,10 +224,10 @@
 }
 
 @utility text-label {
-  @apply text-label-base leading-body-base font-medium;
+  @apply text-label-base leading-label-base font-medium;
 
   @variant desktop, print {
-    @apply text-label-desktop leading-body-desktop;
+    @apply text-label-desktop leading-label-desktop;
   }
 }
 
