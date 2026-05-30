@@ -5,6 +5,7 @@ import type {
   ExtractedBio,
   Warning,
 } from "@content/loaders/parsers/types";
+import { aliasSuffix } from "@utils/displayName";
 
 // Pinned CDN copy of officeparser's classic-script bundle. We can't bundle
 // it through Vite because the IIFE relies on `var officeParser` binding to
@@ -211,9 +212,18 @@ function ResultPanel({
         )}
       </aside>
       <main class="flex flex-col gap-y-6">
+        {/* How the name will appear on the published entry page — the same
+            "LASTNAME, First" + aliasSuffix the entry page composes, so the
+            née / known-as parenthetical shows exactly as it will render. */}
+        <Field label="Display name">
+          {`${(bio.lastName ?? "").toUpperCase()}, ${bio.firstName ?? ""}${aliasSuffix(bio.knownAs, bio.nee)}`}
+        </Field>
         <Field label="Last name">{bio.lastName}</Field>
         <Field label="First name">{bio.firstName}</Field>
-        {bio.knownAs && <Field label="Known as">{bio.knownAs}</Field>}
+        {/* knownAs + nee always render (em-dash when empty) so an author can
+            confirm the parser looked for them — not only when they are set. */}
+        <Field label="Known as">{bio.knownAs}</Field>
+        <Field label="Née">{bio.nee}</Field>
         <Field label="Summary">{bio.summary}</Field>
         <Field label="Life">{bio.life}</Field>
         <Field label="Nationality / country">
@@ -221,6 +231,20 @@ function ResultPanel({
         </Field>
         <Field label="Version">{bio.version}</Field>
         <Field label="Author(s)">{bio.authors}</Field>
+
+        {/* Biography prose — the largest entry-page field, previously absent
+            from the preview. Render the parsed HTML so the author sees the
+            transformed body exactly as the site builds it (field parity). */}
+        <section>
+          <h3 class="text-xl font-bold mb-2">Biography</h3>
+          {bio.html && (
+            <div
+              class="text-sm border border-io-gray-100/30 p-3 max-h-96 overflow-auto flex flex-col gap-y-2"
+              dangerouslySetInnerHTML={{ __html: bio.html }}
+            />
+          )}
+          {!bio.html && <p class="opacity-60">No biography body extracted.</p>}
+        </section>
 
         <section>
           <h3 class="text-xl font-bold mb-2">
