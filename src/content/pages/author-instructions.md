@@ -16,6 +16,8 @@ IO BIO entries consist of three sections, providing biographical data and a pict
 <!-- AUTHORED — REVIEW NEEDED: connecting sentence below pointing to the downloads -->
 Full guidance on what to include and how to format an entry is in the Author Instructions document below, along with the reference materials used across the project.
 
+Before you submit, you can [preview your entry](/preview): drop your Word document onto the page and it runs the same parser the website uses to build each entry — entirely in your browser, with nothing uploaded. This lets you check that the formatting is valid and see how your biography will appear once published.
+
 ::::
 
 ::::section{title="Downloads"}
