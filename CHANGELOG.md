@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/HamonUdvari/io-bio/compare/v1.2.1...v1.3.0) (2026-05-30)
+
+
+### Website Features
+
+* **entries:** show "known as" / née alias after the name ([](https://github.com/HamonUdvari/io-bio/commit/a55393cb7091c122c74f2b05eed5e9c0ba6dd23a))
+
 ## [1.2.1](https://github.com/HamonUdvari/io-bio/compare/v1.2.0...v1.2.1) (2026-05-30)
 
 
