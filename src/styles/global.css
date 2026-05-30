@@ -245,9 +245,15 @@
     }
 
     @variant print {
+      /* Print uses the DESKTOP sizing scale for every layout token — only
+         colours differ on paper (handled per-section). Without forcing these,
+         print would resolve to the tablet step, since paper width (~816px)
+         sits below the desktop breakpoint. */
+      --gap-x: var(--gap-x-desktop);
+      --gap-y: var(--gap-y-desktop);
       --px: var(--px-desktop);
-      /* Tighten the inter-section rhythm for paper (screen --gap-y is 30px). */
-      --gap-y: 1rem;
+      --btn-px: var(--btn-px-desktop);
+      --btn-py: var(--btn-py-desktop);
     }
   }
 
@@ -570,7 +576,7 @@
 
     /* Grid (card) view. */
     & .entries__grid {
-      @apply grid grid-cols-2 desktop:grid-cols-4;
+      @apply grid grid-cols-2 tablet:grid-cols-4;
       /* Top-align cards. NOT items-baseline: on WebKit/Safari iOS, baseline-
          aligning a grid whose items contain an image reserves excess space in
          the first row track, pushing every card far down — a big empty gap
@@ -836,13 +842,13 @@
       @apply border-0;
     }
 
-    /* Download CTA — the Material Symbols `download` glyph after the label
-       (Roboto has no clean download glyph; the bare ↓ looked thin). Inherits
-       currentColor so it matches the label colour in every button state.
-       Ligatures don't resolve in `::after content`, so we emit the codepoint
-       (U+F090 = "download") directly. */
+    /* Download CTA — the Material Symbols `arrow_downward` down-arrow glyph
+       after the label (matches the author-instructions downloads list).
+       Inherits currentColor so it matches the label colour in every button
+       state. Ligatures don't resolve in `::after content`, so we emit the
+       codepoint (U+E5DB = "arrow_downward") directly. */
     &.button--download::after {
-      content: "\f090";
+      content: "\e5db";
       font-family: "Material Symbols Outlined";
       font-weight: normal;
       font-style: normal;
