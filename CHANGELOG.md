@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/HamonUdvari/io-bio/compare/v1.1.2...v1.2.0) (2026-05-30)
+
+
+### Website Features
+
+* **entries:** "How to cite" as a bullet list + real Zenodo concept DOI ([](https://github.com/HamonUdvari/io-bio/commit/a261bcf7bc062594c1f4019f4a134e5425399399))
+* **zenodo:** per-entry DOI minting pipeline (sandbox-validated) ([](https://github.com/HamonUdvari/io-bio/commit/6b179bdc51e013ebe38edd7ebd30dc75df099020))
+
 ## [1.1.2](https://github.com/HamonUdvari/io-bio/compare/v1.1.1...v1.1.2) (2026-05-29)
 
 
