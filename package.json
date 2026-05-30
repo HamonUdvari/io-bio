@@ -6,6 +6,7 @@
     "dev": "astro dev --host",
     "build": "astro build",
     "preview": "astro preview",
+    "pdfs:site": "node scripts/render-site-pdfs.ts",
     "astro": "astro",
     "test": "vitest run",
     "test:watch": "vitest",
