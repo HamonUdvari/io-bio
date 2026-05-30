@@ -12,6 +12,11 @@ dist/
 # generated types
 .astro/
 
+# Zenodo pipeline: rendered entry PDFs (build artifact) + throwaway sandbox DOI
+# state (regenerable; Zenodo purges sandbox). The production map is committed.
+dist-pdf/
+src/data/zenodo-dois.sandbox.json
+
 # dependencies
 node_modules/
 

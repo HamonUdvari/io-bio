@@ -1,4 +1,4 @@
-import { existsSync, promises as fs } from "node:fs";
+import { existsSync, promises as fs, readFileSync } from "node:fs";
 import { relative, basename } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import pLimit from "p-limit";
@@ -18,6 +18,30 @@ import { slug as githubSlug } from "github-slugger";
 import { extractAll } from "./parsers/extractAll";
 
 const WEB_IMAGE_EXTS = new Set(["png", "jpg", "jpeg", "gif", "svg"]);
+
+// --- Per-entry Zenodo DOIs (injected into entry data at build time) ---------
+// Defaults to the PRODUCTION map; the sandbox map is read ONLY when a developer
+// explicitly sets ZENODO_ENV=sandbox. CI sets no such var, so sandbox test DOIs
+// (prefix 10.5072) can render in local dev but can never ship to the live site.
+const DOI_ENV = process.env.ZENODO_ENV === "sandbox" ? "sandbox" : "production";
+interface DoiEntry {
+  versionDoi?: string;
+  conceptDoi?: string;
+  env?: string;
+}
+function loadDoiMap(): Record<string, DoiEntry> {
+  const file =
+    DOI_ENV === "sandbox" ? "zenodo-dois.sandbox.json" : "zenodo-dois.json";
+  const p = path.resolve("./src/data", file);
+  if (!existsSync(p)) return {};
+  try {
+    return (JSON.parse(readFileSync(p, "utf8")) as Record<string, DoiEntry>) ?? {};
+  } catch {
+    return {};
+  }
+}
+const DOI_MAP = loadDoiMap();
+const isSandboxDoi = (s?: string) => !!s && s.startsWith("10.5072/");
 
 /**
  * Write a docx image attachment to `outputDir` as `<stem>.<ext>`.
@@ -331,6 +355,24 @@ const docxEntryType: ContentEntryType = {
       country: extracted?.country ?? "",
       html: extracted?.html ?? "",
     };
+
+    // Inject the per-entry Zenodo DOIs (if minted), keyed by the canonical route
+    // slug. NOTE: this equals page.id only because all bios are flat files; if a
+    // bio is ever nested in a subdir, page.id becomes "subdir/slug" while this
+    // key stays the bare slug — re-key here if that ever changes.
+    const doiKey = githubSlug(basename(filePath, path.extname(filePath)));
+    const doi = DOI_MAP[doiKey];
+    if (doi && (!doi.env || doi.env === DOI_ENV)) {
+      if (
+        DOI_ENV === "production" &&
+        (isSandboxDoi(doi.versionDoi) || isSandboxDoi(doi.conceptDoi))
+      ) {
+        console.warn(`[docx] ${doiKey}: ignoring sandbox DOI under production env`);
+      } else {
+        if (doi.versionDoi) (data as Record<string, unknown>).versionDoi = doi.versionDoi;
+        if (doi.conceptDoi) (data as Record<string, unknown>).conceptDoi = doi.conceptDoi;
+      }
+    }
 
     return {
       body: extracted?.body ?? "",
