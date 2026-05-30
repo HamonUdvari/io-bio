@@ -115,13 +115,16 @@ function connectCdp(wsUrl: string): Promise<{
  * Render the given slugs to dist-pdf/<slug>.pdf. Returns a map slug → pdf path.
  * Throws if dist/ is missing.
  */
-export async function renderPdfs(slugs: string[]): Promise<Map<string, string>> {
+export async function renderPdfs(
+  slugs: string[],
+  outDir: string = OUT_DIR,
+): Promise<Map<string, string>> {
   const result = new Map<string, string>();
   if (slugs.length === 0) return result;
 
   if (!existsSync(path.resolve("dist")))
     throw new Error("dist/ not found — run `npm run build` first.");
-  if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
+  if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
 
   const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
   const preview = spawn(
@@ -173,7 +176,7 @@ export async function renderPdfs(slugs: string[]): Promise<Map<string, string>> 
       await cdp.send("Page.enable");
       for (const slug of slugs) {
         const url = `http://localhost:${PORT}${BASE}/entries/${slug}`;
-        const out = path.join(OUT_DIR, `${slug}.pdf`);
+        const out = path.join(outDir, `${slug}.pdf`);
         const loaded = cdp.waitEvent("Page.loadEventFired");
         await cdp.send("Page.navigate", { url });
         await loaded;
