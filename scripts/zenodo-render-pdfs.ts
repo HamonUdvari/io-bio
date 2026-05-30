@@ -69,21 +69,52 @@ export async function chromeWsUrl(
 }
 
 // Minimal CDP client over a single page target (send command / await event).
-export function connectCdp(wsUrl: string): Promise<{
-  send: (method: string, params?: unknown) => Promise<any>;
+// `send` has a timeout and — like `waitEvent` — every in-flight call is settled
+// when the socket dies; otherwise a crashed Chrome hangs the caller forever (and
+// in the dev PDF middleware, where renders are chained on one queue, wedges
+// every later request). `dead` makes subsequent sends fail fast. Optional
+// onClose fires once on error/close so an owner can drop a dead connection.
+export function connectCdp(
+  wsUrl: string,
+  onClose?: () => void,
+): Promise<{
+  send: (method: string, params?: unknown, timeoutMs?: number) => Promise<any>;
   waitEvent: (method: string, timeoutMs?: number) => Promise<any>;
   close: () => void;
 }> {
   return new Promise((resolve, reject) => {
     const ws = new WebSocket(wsUrl);
     let id = 0;
-    const pending = new Map<number, (v: any) => void>();
+    let dead: Error | null = null;
+    const pending = new Map<
+      number,
+      {
+        resolve: (v: any) => void;
+        reject: (e: Error) => void;
+        timer: ReturnType<typeof setTimeout>;
+      }
+    >();
     const waiters: Array<{ method: string; resolve: (v: any) => void }> = [];
+
+    const failAll = (err: Error) => {
+      if (dead) return; // settle once
+      dead = err;
+      for (const p of pending.values()) {
+        clearTimeout(p.timer);
+        p.reject(err);
+      }
+      pending.clear();
+      for (const w of waiters.splice(0)) w.resolve(null);
+      onClose?.();
+    };
+
     ws.addEventListener("message", (e: MessageEvent) => {
       const msg = JSON.parse(e.data as string);
       if (msg.id && pending.has(msg.id)) {
-        pending.get(msg.id)!(msg.result);
+        const p = pending.get(msg.id)!;
+        clearTimeout(p.timer);
         pending.delete(msg.id);
+        p.resolve(msg.result);
       } else if (msg.method) {
         for (let i = waiters.length - 1; i >= 0; i--) {
           if (waiters[i].method === msg.method) {
@@ -93,17 +124,27 @@ export function connectCdp(wsUrl: string): Promise<{
         }
       }
     });
-    ws.addEventListener("error", reject);
+    ws.addEventListener("error", () => {
+      reject(new Error("CDP socket error")); // no-op once connected
+      failAll(new Error("CDP socket error"));
+    });
+    ws.addEventListener("close", () => failAll(new Error("CDP socket closed")));
     ws.addEventListener("open", () =>
       resolve({
-        send: (method, params = {}) =>
-          new Promise((res) => {
+        send: (method, params = {}, timeoutMs = 60_000) =>
+          new Promise((res, rej) => {
+            if (dead) return rej(dead);
             const i = ++id;
-            pending.set(i, res);
+            const timer = setTimeout(() => {
+              pending.delete(i);
+              rej(new Error(`CDP ${method} timed out after ${timeoutMs}ms`));
+            }, timeoutMs);
+            pending.set(i, { resolve: res, reject: rej, timer });
             ws.send(JSON.stringify({ id: i, method, params }));
           }),
         waitEvent: (method, timeoutMs = 15_000) =>
           new Promise((res) => {
+            if (dead) return res(null);
             const w = { method, resolve: res };
             waiters.push(w);
             setTimeout(() => {
