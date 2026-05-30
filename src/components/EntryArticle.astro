@@ -1,0 +1,271 @@
+---
+// The printable entry "article" — shared by the on-site entry page
+// (src/pages/entries/[...slug].astro) and the Paged.js print route
+// (src/pages/print/[slug].astro), so the two never drift. Page-specific
+// chrome (Layout, download/debug controls) stays out: the entry page injects
+// its controls via the `controls` named slot; the print route injects nothing.
+import Image from "@components/Image.astro";
+import { aliasSuffix } from "@utils/displayName";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  data: Record<string, any>;
+  Content: any;
+  /** Canonical entry URL, used in the "How to cite" block. */
+  entryUrl: string;
+}
+const { data, Content, entryUrl } = Astro.props;
+
+const {
+  image,
+  lastName,
+  firstName,
+  knownAs,
+  archives,
+  publications,
+  literature,
+  imageSource,
+  summary,
+  authors,
+  version,
+  imageFn,
+  life,
+} = data;
+
+if (!image) {
+  throw new Error("Image was missing");
+}
+
+const title = `${lastName.toUpperCase()}, ${firstName}`;
+// Visible heading appends a "(nickname)" alias when the person has a distinct
+// "known as" (suppressed when it just repeats the name); the meta title + image
+// alt keep the formal name (`title`). The née maiden name is kept on the entry
+// (data.nee) but is no longer shown after the name.
+const displayName = `${title}${aliasSuffix(knownAs, `${firstName} ${lastName}`)}`;
+
+// --- How to cite ----------------------------------------------------------
+// Whole-dictionary Zenodo concept DOI — the version-independent FALLBACK used
+// when an entry has no per-entry DOI. When the per-entry pipeline has minted
+// DOIs, docxLoader injects data.versionDoi/conceptDoi and they take precedence
+// below (cite the version DOI; concept DOI = "all versions").
+const IOBIO_CONCEPT_DOI = "10.5281/zenodo.18652171";
+
+// "Version 4 November 2019" → "4 November 2019"
+const versionLabel = (version ?? "").replace(/^Version\s+/i, "").trim();
+
+// Prefer the entry's own version DOI (cite the specific version); fall back to
+// its concept DOI, then the whole-dictionary concept DOI. When both per-entry
+// DOIs exist, offer the concept DOI as "all versions" (Zenodo best practice).
+const versionDoi = data.versionDoi;
+const conceptDoi = data.conceptDoi;
+const citationDoi = versionDoi ?? conceptDoi ?? IOBIO_CONCEPT_DOI;
+const doiUrl = `https://doi.org/${citationDoi}`;
+const allVersionsDoiUrl =
+  versionDoi && conceptDoi ? `https://doi.org/${conceptDoi}` : null;
+
+// Only offer the DOI-based citation when the entry has its OWN minted DOI
+// (issue #2). Until per-entry DOIs are minted, the sole available DOI is the
+// whole-dictionary concept DOI — showing that as the entry's citation is what
+// confuses casual readers — so we fall back to the URL "accessed on" form
+// alone. The DOI form reappears automatically once docxLoader injects a
+// per-entry version/concept DOI from the production map.
+const hasEntryDoi = Boolean(versionDoi ?? conceptDoi);
+
+const fallbackDate = versionLabel || "[date]";
+
+// Image credit: if the source contains a URL, show just the host (a short,
+// clickable label) with the full URL on click — long source URLs otherwise
+// overflow the rotated caption. Non-URL sources render verbatim.
+function parseImageSource(src) {
+  if (!src) return { text: "", href: null, label: null };
+  const m = src.match(/(https?:\/\/[^\s]+|www\.[^\s]+)/i);
+  if (!m) return { text: src, href: null, label: null };
+  const raw = m[0].replace(/[).,;]+$/, "");
+  const href = raw.startsWith("http") ? raw : `https://${raw}`;
+  let label = raw;
+  try {
+    label = new URL(href).hostname.replace(/^www\./, "");
+  } catch {}
+  const text = src.slice(0, m.index).replace(/[\s/–—-]+$/, "").trim();
+  return { text, href, label };
+}
+const source = parseImageSource(imageSource);
+
+// Hero image intrinsic aspect ratio (height / width), resolved at build from the
+// same glob Image.astro uses, and fed to the rotated source credit's max-width
+// so the (bottom-to-top) caption can never run past the top of the image.
+// NFC-normalised basename lookup matches the docxLoader output; on a miss the
+// CSS falls back to var(--img-ar, 1) (square).
+const figureImages = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/bios/**/*.{svg,jpeg,jpg,png,gif}",
+);
+const figureImgLoader = Object.entries(figureImages).find(
+  ([k]) =>
+    k.split("/").pop()?.normalize("NFC") === (imageFn ?? "").normalize("NFC"),
+)?.[1];
+const figureImgMeta = figureImgLoader
+  ? (await figureImgLoader()).default
+  : undefined;
+const imgAr = figureImgMeta
+  ? (figureImgMeta.height / figureImgMeta.width).toFixed(4)
+  : undefined;
+---
+
+<section
+  class="border-t-0 bg-io-gray-600 pt-[5rem] pb-[7.5rem] text-center gap-y-[30px]"
+  >
+  <figure
+    class="figure relative max-w-[320px] _max-h-[414px]"
+    style={imgAr ? `--img-ar:${imgAr}` : undefined}
+  >
+    <picture>
+      <Image class="w-full" imagePath={imageFn} alt={title} />
+    </picture>
+    <figcaption
+      class="figure__credit"
+    >
+      Source:{" "}
+      {!source.href && imageSource}
+      {source.href && (
+        <>
+          {source.text && <>{source.text} </>}
+          <a
+            href={source.href}
+            class="source-link"
+            target="_blank"
+            rel="noopener noreferrer">{source.label}</a>
+        </>
+      )}
+    </figcaption>
+  </figure>
+  <div class="flex flex-col gap-y-2 leading-none">
+    <h1 class="text-h2 leading-none">{displayName}</h1>
+    <h2 class="text-h2 max-w-[45ch] mx-auto leading-none">{summary}</h2>
+  </div>
+  <p class="text-io-onsecondary-muted">By {authors} · {version}</p>
+  <p class="text-balance">{life}</p>
+  <slot name="controls" />
+</section>
+<section id="biography">
+  <h2 class="section__title">Biography</h2>
+  <Content />
+</section>
+{
+  archives?.items?.length > 0 && (
+    <section id="archives">
+      <h2 class="section__title">Archives</h2>
+      {archives.items.length === 1 ? (
+        <p>{archives.items[0].raw}</p>
+      ) : (
+        <ul>
+          {archives.items.map((c) => (
+            <li>{c.raw}</li>
+          ))}
+        </ul>
+      )}
+      {archives.websitesAccessedOn && (
+        <p class="text-sm opacity-70">
+          (all websites accessed {archives.websitesAccessedOn})
+        </p>
+      )}
+    </section>
+  )
+}
+{
+  publications?.items?.length > 0 && (
+    <section id="publications">
+      <h2 class="section__title">Publications</h2>
+      {publications.items.length === 1 ? (
+        <p>{publications.items[0].raw}</p>
+      ) : (
+        <ul>
+          {publications.items.map((c) => (
+            <li>{c.raw}</li>
+          ))}
+        </ul>
+      )}
+      {publications.websitesAccessedOn && (
+        <p class="text-sm opacity-70">
+          (all websites accessed {publications.websitesAccessedOn})
+        </p>
+      )}
+    </section>
+  )
+}
+{
+  literature?.items?.length > 0 && (
+    <section id="literature">
+      <h2 class="section__title">Literature</h2>
+      {literature.items.length === 1 ? (
+        <p>{literature.items[0].raw}</p>
+      ) : (
+        <ul>
+          {literature.items.map((c) => (
+            <li>{c.raw}</li>
+          ))}
+        </ul>
+      )}
+      {literature.websitesAccessedOn && (
+        <p class="text-sm opacity-70">
+          (all websites accessed {literature.websitesAccessedOn})
+        </p>
+      )}
+    </section>
+  )
+}
+<section id="cite">
+  <h2 class="section__title">How to cite</h2>
+
+  <ul class="cite-list">
+    <li>
+      {authors}, '{lastName}, {firstName}' in <cite>IO BIO, Biographical
+      Dictionary of Secretaries-General of International Organizations</cite>,
+      edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg, <a
+        href={entryUrl}>{entryUrl}</a
+      >, accessed on <span data-accessed>{fallbackDate}</span>.
+    </li>
+    {
+      hasEntryDoi && (
+        <li>
+          {authors}, '{lastName}, {firstName}' in{" "}
+          <cite>
+            IO BIO, Biographical Dictionary of Secretaries-General of
+            International Organizations
+          </cite>
+          , edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg.{" "}
+          <a href={doiUrl}>{doiUrl}</a>
+          {allVersionsDoiUrl && (
+            <>
+              {" "}
+              (all versions: <a href={allVersionsDoiUrl}>{allVersionsDoiUrl}</a>)
+            </>
+          )}
+        </li>
+      )
+    }
+  </ul>
+</section>
+
+<script is:inline>
+  (function () {
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December",
+    ];
+    function todayLabel() {
+      const d = new Date();
+      return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
+    function stampAccessed(root) {
+      (root || document)
+        .querySelectorAll("[data-accessed]")
+        .forEach((el) => {
+          el.textContent = todayLabel();
+        });
+    }
+
+    // On load: replace the pre-JS fallback date with today's real date.
+    stampAccessed(document);
+  })();
+</script>

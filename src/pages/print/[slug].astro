@@ -1,0 +1,67 @@
+---
+// Paged.js print-preview route — the design surface for the entry PDF and the
+// source the headless-Chrome render prints. It renders ONLY the printable
+// <EntryArticle> (no Layout/nav/footer/screen controls) and runs Paged.js in
+// the browser, so the paginated A4 layout + @page footer are visible and
+// inspectable live. The deployed PDF (scripts/zenodo-render-pdfs.ts) prints
+// THIS route, so the preview is identical to the download.
+import "@styles/global.css";
+import EntryArticle from "@components/EntryArticle.astro";
+import { render, getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const bios = await getCollection("bios");
+  return bios.map((page) => ({
+    params: { slug: page.id },
+    props: { ...page },
+  }));
+}
+
+const { data } = Astro.props;
+const { lastName, firstName } = data;
+const { Content } = await render(Astro.props);
+
+const slug = Astro.params.slug ?? Astro.props.id;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const SITE = import.meta.env.SITE;
+const entryUrl = new URL(`${base}entries/${slug}`, SITE).href;
+const title = `${lastName.toUpperCase()}, ${firstName}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{`Print · ${title}`}</title>
+  </head>
+  <body class="pagedjs-print-root">
+    <EntryArticle data={data} Content={Content} entryUrl={entryUrl} />
+
+    <script>
+      import { Previewer } from "pagedjs";
+
+      async function paginate() {
+        // font-display:block → glyphs are invisible until loaded; paginate only
+        // after fonts settle so Paged.js measures with final metrics (it lays
+        // out once and won't reflow afterwards).
+        if (document.fonts?.ready) {
+          try {
+            await document.fonts.ready;
+          } catch {}
+        }
+        const flow = await new Previewer().preview();
+        // Marker the headless-Chrome renderer polls before Page.printToPDF.
+        document.documentElement.dataset.pagedjsReady = "true";
+        document.documentElement.dataset.pagedjsPages = String(flow?.total ?? "");
+      }
+      paginate();
+
+      // Dev only: Astro CSS HMR injects styles without a reload, but Paged.js
+      // paginates once — so force a full reload on any HMR update to re-run it.
+      if (import.meta.hot) {
+        import.meta.hot.on("vite:afterUpdate", () => location.reload());
+      }
+    </script>
+  </body>
+</html>

@@ -353,9 +353,28 @@
 }
 
 /* ---- Print ------------------------------------------------------------- */
-/* Paper gutter for the ad-hoc browser print / "Download Entry PDF" path. */
+/* The entry PDF is produced by printing the Paged.js route /print/<slug>
+   (scripts/zenodo-render-pdfs.ts), and the same route is the live in-browser
+   preview. Paged.js polyfills CSS Paged Media, so the running footer + page
+   numbers live here as @page margin boxes — project reference bottom-left,
+   "page / total" bottom-right. (Plain window.print() / Blink ignores margin
+   boxes, but the print route runs Paged.js, which honours them.) A4. */
 @page {
+  size: A4;
   margin: 16mm 14mm 18mm 14mm;
+
+  @bottom-left {
+    content: "IO BIO — Biographical Dictionary of Secretaries-General of International Organizations";
+    font-size: 8pt;
+    color: #555;
+    font-family: "Roboto", Arial, sans-serif;
+  }
+  @bottom-right {
+    content: counter(page) " / " counter(pages);
+    font-size: 8pt;
+    color: #555;
+    font-family: "Roboto", Arial, sans-serif;
+  }
 }
 
 @media print {
@@ -369,14 +388,17 @@
   h3 {
     break-after: avoid;
   }
+}
 
-  /* NOTE (issue #8): a per-page running footer (project reference bottom-left)
-     and page number (bottom-right) are deliberately NOT attempted in CSS. A
-     position:fixed footer does repeat per page but overlaps body text on
-     content-heavy pages, and Blink ignores @page margin boxes / counter(page)
-     for HTML printing. Reliable per-page header/footer needs the server PDF
-     path — headless-Chrome CDP Page.printToPDF header/footerTemplate, reusing
-     the Zenodo render pipeline. See the executive report / issue #8. */
+/* Paged.js (the /print route + the rendered PDF): paint each A4 sheet white so
+   the page margins + running footer print on white, not the site's dark body
+   background; give the on-screen preview a neutral backdrop so the pages stand
+   out (the PDF prints each page white regardless). */
+.pagedjs_pagebox {
+  background: #fff;
+}
+.pagedjs-print-root {
+  background: #6b7280;
 }
 
 @layer components {

@@ -24,23 +24,27 @@ import {
 import path from "node:path";
 import { renderPdfs } from "./zenodo-render-pdfs.ts";
 
-const distEntries = path.resolve("dist/entries");
+const distEntries = path.resolve("dist/entries"); // where the .pdf files are written
+const distPrint = path.resolve("dist/print"); // the Paged.js routes we render + hash
 const cacheDir = path.resolve(".pdf-cache");
 const manifestPath = path.join(cacheDir, "manifest.json");
 
-if (!existsSync(distEntries)) {
-  console.error("dist/entries not found — run the build first.");
+if (!existsSync(distPrint)) {
+  console.error("dist/print not found — run the build first.");
   process.exit(1);
 }
 if (!existsSync(cacheDir)) mkdirSync(cacheDir, { recursive: true });
 
-// Each built entry is a dist/entries/<slug>/ directory (with index.html).
-const slugs = readdirSync(distEntries, { withFileTypes: true })
+// Each built entry has a dist/print/<slug>/ directory (the Paged.js route we
+// render to PDF); the PDF is written to dist/entries/<slug>.pdf (the download
+// path). Derive the slug list + cache hash from the print route, since that's
+// what actually gets rendered.
+const slugs = readdirSync(distPrint, { withFileTypes: true })
   .filter((d) => d.isDirectory())
   .map((d) => d.name)
   .sort();
 if (slugs.length === 0) {
-  console.error("No entry directories found under dist/entries.");
+  console.error("No print routes found under dist/print.");
   process.exit(1);
 }
 
@@ -55,7 +59,7 @@ const prev: Record<string, string> = existsSync(manifestPath)
 
 const hashOf = (slug: string) =>
   createHash("sha256")
-    .update(readFileSync(path.join(distEntries, slug, "index.html")))
+    .update(readFileSync(path.join(distPrint, slug, "index.html")))
     .digest("hex");
 
 const next: Record<string, string> = {};

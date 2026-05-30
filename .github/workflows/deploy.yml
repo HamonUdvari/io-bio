@@ -56,9 +56,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .pdf-cache
-          key: pdf-cache-v1-${{ github.sha }}
+          key: pdf-cache-v2-${{ github.sha }}
           restore-keys: |
-            pdf-cache-v1-
+            pdf-cache-v2-
 
       - name: Render entry PDFs into dist/entries
         env:
