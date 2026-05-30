@@ -3,12 +3,8 @@
 // Assumes `astro build` has produced `dist/`. Spawns `astro preview`, prints
 // each requested entry's page to `dist-pdf/<slug>.pdf`, then stops preview.
 import { spawn } from "node:child_process";
-import { execFile } from "node:child_process";
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { promisify } from "node:util";
-
-const execFileAsync = promisify(execFile);
 
 const BASE = (process.env.SITE_BASE ?? "/io-bio").replace(/\/$/, "");
 const PORT = Number(process.env.ZENODO_PREVIEW_PORT ?? 4399);
@@ -37,6 +33,84 @@ async function waitForServer(url: string, timeoutMs = 40_000): Promise<void> {
   }
 }
 
+// Footer drawn on every PDF page (matches the print reference, issue #8):
+// project reference bottom-left, page number bottom-right. Chrome's print
+// header/footer templates inherit no page CSS and default to a tiny font, so
+// styling is inlined here; `.pageNumber` is Chrome's built-in class.
+const FOOTER_TEMPLATE = `<div style="width:100%;font-size:8px;color:#555;padding:0 14mm;box-sizing:border-box;font-family:Roboto,Arial,sans-serif;">
+  <span style="float:left;">IO BIO — Biographical Dictionary of Secretaries-General of International Organizations</span>
+  <span style="float:right;"><span class="pageNumber"></span></span>
+</div>`;
+const EMPTY_HEADER = "<span></span>";
+
+// Resolve the page target's DevTools WebSocket URL once Chrome is listening.
+async function chromeWsUrl(port: number, timeoutMs = 20_000): Promise<string> {
+  const deadline = Date.now() + timeoutMs;
+  for (;;) {
+    try {
+      const tabs = (await (
+        await fetch(`http://localhost:${port}/json`)
+      ).json()) as Array<{ type: string; webSocketDebuggerUrl?: string }>;
+      const page = tabs.find((t) => t.type === "page" && t.webSocketDebuggerUrl);
+      if (page?.webSocketDebuggerUrl) return page.webSocketDebuggerUrl;
+    } catch {
+      /* devtools not ready yet */
+    }
+    if (Date.now() > deadline) throw new Error("Chrome DevTools not ready");
+    await sleep(250);
+  }
+}
+
+// Minimal CDP client over a single page target (send command / await event).
+function connectCdp(wsUrl: string): Promise<{
+  send: (method: string, params?: unknown) => Promise<any>;
+  waitEvent: (method: string, timeoutMs?: number) => Promise<any>;
+  close: () => void;
+}> {
+  return new Promise((resolve, reject) => {
+    const ws = new WebSocket(wsUrl);
+    let id = 0;
+    const pending = new Map<number, (v: any) => void>();
+    const waiters: Array<{ method: string; resolve: (v: any) => void }> = [];
+    ws.addEventListener("message", (e: MessageEvent) => {
+      const msg = JSON.parse(e.data as string);
+      if (msg.id && pending.has(msg.id)) {
+        pending.get(msg.id)!(msg.result);
+        pending.delete(msg.id);
+      } else if (msg.method) {
+        for (let i = waiters.length - 1; i >= 0; i--) {
+          if (waiters[i].method === msg.method) {
+            waiters[i].resolve(msg.params);
+            waiters.splice(i, 1);
+          }
+        }
+      }
+    });
+    ws.addEventListener("error", reject);
+    ws.addEventListener("open", () =>
+      resolve({
+        send: (method, params = {}) =>
+          new Promise((res) => {
+            const i = ++id;
+            pending.set(i, res);
+            ws.send(JSON.stringify({ id: i, method, params }));
+          }),
+        waitEvent: (method, timeoutMs = 15_000) =>
+          new Promise((res) => {
+            const w = { method, resolve: res };
+            waiters.push(w);
+            setTimeout(() => {
+              const k = waiters.indexOf(w);
+              if (k >= 0) waiters.splice(k, 1);
+              res(null);
+            }, timeoutMs);
+          }),
+        close: () => ws.close(),
+      }),
+    );
+  });
+}
+
 /**
  * Render the given slugs to dist-pdf/<slug>.pdf. Returns a map slug → pdf path.
  * Throws if dist/ is missing.
@@ -55,11 +129,35 @@ export async function renderPdfs(slugs: string[]): Promise<Map<string, string>> 
     ["run", "preview", "--", "--port", String(PORT)],
     { cwd: process.cwd(), stdio: "ignore" },
   );
-  // Ensure the preview server is killed even on Ctrl-C / SIGTERM (finally alone
-  // doesn't run when the process is signalled), so it can't squat PORT.
+
+  // Headless Chrome with remote debugging, driven over CDP so we can attach a
+  // per-page footer (project reference + page number) via Page.printToPDF —
+  // the CLI --print-to-pdf flag can't, and Blink ignores @page margin boxes.
+  const bin = chromeBin();
+  const CHROME_PORT = Number(process.env.ZENODO_CHROME_PORT ?? 9222);
+  const chrome = spawn(
+    bin,
+    [
+      "--headless=new",
+      "--disable-gpu",
+      "--no-sandbox",
+      "--hide-scrollbars",
+      `--remote-debugging-port=${CHROME_PORT}`,
+      "about:blank",
+    ],
+    { stdio: "ignore" },
+  );
+
+  // Kill both children even on Ctrl-C / SIGTERM (finally alone doesn't run when
+  // the process is signalled), so neither squats its port.
   const onSignal = () => {
     try {
       preview.kill("SIGTERM");
+    } catch {
+      /* already gone */
+    }
+    try {
+      chrome.kill("SIGTERM");
     } catch {
       /* already gone */
     }
@@ -70,27 +168,52 @@ export async function renderPdfs(slugs: string[]): Promise<Map<string, string>> 
 
   try {
     await waitForServer(`http://localhost:${PORT}${BASE}/`);
-    const bin = chromeBin();
-    for (const slug of slugs) {
-      const url = `http://localhost:${PORT}${BASE}/entries/${slug}`;
-      const out = path.join(OUT_DIR, `${slug}.pdf`);
-      await execFileAsync(bin, [
-        "--headless=new",
-        "--disable-gpu",
-        "--no-sandbox",
-        "--hide-scrollbars",
-        "--no-pdf-header-footer",
-        "--run-all-compositor-stages-before-draw",
-        "--virtual-time-budget=8000",
-        `--print-to-pdf=${out}`,
-        url,
-      ]);
-      if (!existsSync(out)) throw new Error(`Chrome did not produce ${out}`);
-      result.set(slug, out);
-      console.log(`  rendered ${slug} → ${path.relative(process.cwd(), out)}`);
+    const cdp = await connectCdp(await chromeWsUrl(CHROME_PORT));
+    try {
+      await cdp.send("Page.enable");
+      for (const slug of slugs) {
+        const url = `http://localhost:${PORT}${BASE}/entries/${slug}`;
+        const out = path.join(OUT_DIR, `${slug}.pdf`);
+        const loaded = cdp.waitEvent("Page.loadEventFired");
+        await cdp.send("Page.navigate", { url });
+        await loaded;
+        await sleep(1200); // settle fonts + images before printing
+        // Stream the PDF (ReturnAsStream) rather than base64 inline — entry
+        // PDFs embed a full-res portrait and can be tens of MB.
+        const { stream } = await cdp.send("Page.printToPDF", {
+          printBackground: true,
+          displayHeaderFooter: true,
+          headerTemplate: EMPTY_HEADER,
+          footerTemplate: FOOTER_TEMPLATE,
+          transferMode: "ReturnAsStream",
+          marginTop: 0.63, // in ≈ 16mm
+          marginBottom: 0.71, // in ≈ 18mm — reserves the footer band
+          marginLeft: 0.55, // in ≈ 14mm
+          marginRight: 0.55,
+        });
+        const chunks: Buffer[] = [];
+        for (;;) {
+          const r = await cdp.send("IO.read", { handle: stream, size: 1 << 20 });
+          if (r.data)
+            chunks.push(Buffer.from(r.data, r.base64Encoded ? "base64" : "utf8"));
+          if (r.eof) break;
+        }
+        await cdp.send("IO.close", { handle: stream });
+        writeFileSync(out, Buffer.concat(chunks));
+        if (!existsSync(out)) throw new Error(`Chrome did not produce ${out}`);
+        result.set(slug, out);
+        console.log(`  rendered ${slug} → ${path.relative(process.cwd(), out)}`);
+      }
+    } finally {
+      cdp.close();
     }
   } finally {
     preview.kill("SIGTERM");
+    try {
+      chrome.kill("SIGTERM");
+    } catch {
+      /* already gone */
+    }
     process.off("SIGINT", onSignal);
     process.off("SIGTERM", onSignal);
   }
