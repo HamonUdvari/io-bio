@@ -523,7 +523,12 @@
     /* Grid (card) view. */
     & .entries__grid {
       @apply grid grid-cols-2 desktop:grid-cols-4;
-      @apply items-baseline;
+      /* Top-align cards. NOT items-baseline: on WebKit/Safari iOS, baseline-
+         aligning a grid whose items contain an image reserves excess space in
+         the first row track, pushing every card far down — a big empty gap
+         above the grid. Blink doesn't, so the bug only appears in Safari. The
+         crops are uniform, so start-alignment is visually identical anyway. */
+      @apply items-start;
       @apply gap-x-(--gap-x) gap-y-(--gap-y);
     }
 
