@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/HamonUdvari/io-bio/compare/v1.3.2...v1.3.3) (2026-05-30)
+
+
+### Bug Fixes
+
+* **fonts:** force font-display:block on all webfonts (not swap) ([](https://github.com/HamonUdvari/io-bio/commit/6a5df3baf886e13281d62593d53a4b06d91b3577))
+
 ## [1.3.2](https://github.com/HamonUdvari/io-bio/compare/v1.3.1...v1.3.2) (2026-05-30)
 
 
