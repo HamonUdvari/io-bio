@@ -43,6 +43,27 @@ function loadDoiMap(): Record<string, DoiEntry> {
 const DOI_MAP = loadDoiMap();
 const isSandboxDoi = (s?: string) => !!s && s.startsWith("10.5072/");
 
+// The sandbox DOI map (committed temporarily for the client demo, issue #2) —
+// read REGARDLESS of env so "How to cite" can PREVIEW the per-entry citation
+// pointing at the sandbox deposit before production DOIs are minted. The
+// production versionDoi/conceptDoi above always take precedence once they exist.
+interface SandboxEntry {
+  recordId?: number | string;
+  conceptRecId?: number | string;
+  versionDoi?: string;
+  conceptDoi?: string;
+}
+function loadSandboxMap(): Record<string, SandboxEntry> {
+  const p = path.resolve("./src/data", "zenodo-dois.sandbox.json");
+  if (!existsSync(p)) return {};
+  try {
+    return (JSON.parse(readFileSync(p, "utf8")) as Record<string, SandboxEntry>) ?? {};
+  } catch {
+    return {};
+  }
+}
+const SANDBOX_MAP = loadSandboxMap();
+
 /**
  * Write a docx image attachment to `outputDir` as `<stem>.<ext>`.
  *
@@ -373,6 +394,29 @@ const docxEntryType: ContentEntryType = {
         if (doi.versionDoi) (data as Record<string, unknown>).versionDoi = doi.versionDoi;
         if (doi.conceptDoi) (data as Record<string, unknown>).conceptDoi = doi.conceptDoi;
       }
+    }
+
+    // Build the per-entry citation for "How to cite" (issue #2). Prefer a real
+    // production DOI (resolves via doi.org); otherwise fall back to the sandbox
+    // deposit's CONCEPT record (always-latest version) so the client can preview
+    // the per-entry citation now. concept > version. Sandbox DOIs (10.5072) are
+    // NOT used as doi.org links — they don't resolve — so they route to the
+    // sandbox.zenodo.org record URL instead.
+    const dataConcept = (data as Record<string, unknown>).conceptDoi as string | undefined;
+    const dataVersion = (data as Record<string, unknown>).versionDoi as string | undefined;
+    const prodDoi = [dataConcept, dataVersion].find((d) => d && !isSandboxDoi(d));
+    const sb = SANDBOX_MAP[doiKey];
+    if (prodDoi) {
+      (data as Record<string, unknown>).zenodoCite = {
+        url: `https://doi.org/${prodDoi}`,
+        sandbox: false,
+      };
+    } else if (sb && (sb.conceptRecId || sb.recordId)) {
+      const recId = sb.conceptRecId ?? sb.recordId;
+      (data as Record<string, unknown>).zenodoCite = {
+        url: `https://sandbox.zenodo.org/records/${recId}`,
+        sandbox: true,
+      };
     }
 
     return {

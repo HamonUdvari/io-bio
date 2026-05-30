@@ -38,16 +38,22 @@ const pdfHref = `${base}entries/${slug}.pdf`;
 const printHref = `${base}print/${slug}`;
 
 // Per-entry Zenodo SANDBOX record link — a build-time debug aid (next to the
-// print-preview debug control) to eyeball the sandbox deposit. Read the
-// gitignored sandbox DOI map via glob so the build won't fail when it's absent
-// (e.g. in CI); independent of ZENODO_ENV.
+// print-preview debug control) to eyeball the sandbox deposit. Points at the
+// CONCEPT record (conceptRecId, always-latest), matching the "How to cite"
+// citation built in docxLoader, so both Zenodo surfaces on the page resolve to
+// the same deposit. Read the sandbox DOI map via glob so the build won't fail
+// when it's absent; independent of ZENODO_ENV.
 const sandboxDoiMap = (Object.values(
   import.meta.glob("/src/data/zenodo-dois.sandbox.json", {
     eager: true,
     import: "default",
   }),
-)[0] ?? {}) as Record<string, { recordId?: number | string }>;
-const sandboxRecordId = sandboxDoiMap[slug ?? ""]?.recordId;
+)[0] ?? {}) as Record<
+  string,
+  { recordId?: number | string; conceptRecId?: number | string }
+>;
+const sandboxRec = sandboxDoiMap[slug ?? ""];
+const sandboxRecordId = sandboxRec?.conceptRecId ?? sandboxRec?.recordId;
 const sandboxUrl = sandboxRecordId
   ? `https://sandbox.zenodo.org/records/${sandboxRecordId}`
   : null;

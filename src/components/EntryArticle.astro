@@ -44,32 +44,17 @@ const title = `${lastName.toUpperCase()}, ${firstName}`;
 const displayName = `${title}${aliasSuffix(knownAs, `${firstName} ${lastName}`)}`;
 
 // --- How to cite ----------------------------------------------------------
-// Whole-dictionary Zenodo concept DOI — the version-independent FALLBACK used
-// when an entry has no per-entry DOI. When the per-entry pipeline has minted
-// DOIs, docxLoader injects data.versionDoi/conceptDoi and they take precedence
-// below (cite the version DOI; concept DOI = "all versions").
-const IOBIO_CONCEPT_DOI = "10.5281/zenodo.18652171";
-
 // "Version 4 November 2019" → "4 November 2019"
 const versionLabel = (version ?? "").replace(/^Version\s+/i, "").trim();
 
-// Prefer the entry's own version DOI (cite the specific version); fall back to
-// its concept DOI, then the whole-dictionary concept DOI. When both per-entry
-// DOIs exist, offer the concept DOI as "all versions" (Zenodo best practice).
-const versionDoi = data.versionDoi;
-const conceptDoi = data.conceptDoi;
-const citationDoi = versionDoi ?? conceptDoi ?? IOBIO_CONCEPT_DOI;
-const doiUrl = `https://doi.org/${citationDoi}`;
-const allVersionsDoiUrl =
-  versionDoi && conceptDoi ? `https://doi.org/${conceptDoi}` : null;
-
-// Only offer the DOI-based citation when the entry has its OWN minted DOI
-// (issue #2). Until per-entry DOIs are minted, the sole available DOI is the
-// whole-dictionary concept DOI — showing that as the entry's citation is what
-// confuses casual readers — so we fall back to the URL "accessed on" form
-// alone. The DOI form reappears automatically once docxLoader injects a
-// per-entry version/concept DOI from the production map.
-const hasEntryDoi = Boolean(versionDoi ?? conceptDoi);
+// Per-entry Zenodo citation (issue #2), built in docxLoader. It points to the
+// entry's OWN up-to-date Zenodo record: a production DOI via doi.org once
+// minted, else — for the current client preview — the sandbox deposit's concept
+// record (always-latest version) on sandbox.zenodo.org. Null when the entry has
+// no per-entry deposit, in which case only the URL "accessed on" citation shows
+// (the whole-dictionary DOI is intentionally never shown as an entry citation —
+// it confuses casual readers).
+const zenodoCite = data.zenodoCite ?? null;
 
 const fallbackDate = versionLabel || "[date]";
 
@@ -225,7 +210,7 @@ const imgAr = figureImgMeta
       >, accessed on <span data-accessed>{fallbackDate}</span>.
     </li>
     {
-      hasEntryDoi && (
+      zenodoCite && (
         <li>
           {authors}, '{lastName}, {firstName}' in{" "}
           <cite>
@@ -233,12 +218,9 @@ const imgAr = figureImgMeta
             International Organizations
           </cite>
           , edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg.{" "}
-          <a href={doiUrl}>{doiUrl}</a>
-          {allVersionsDoiUrl && (
-            <>
-              {" "}
-              (all versions: <a href={allVersionsDoiUrl}>{allVersionsDoiUrl}</a>)
-            </>
+          <a href={zenodoCite.url}>{zenodoCite.url}</a>
+          {zenodoCite.sandbox && (
+            <span class="text-small opacity-70"> (sandbox preview)</span>
           )}
         </li>
       )
