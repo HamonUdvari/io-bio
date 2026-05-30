@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/HamonUdvari/io-bio/compare/v1.2.0...v1.2.1) (2026-05-30)
+
+
+### Bug Fixes
+
+* **entries:** grid empty-space gap on Safari iOS (drop align-items: baseline) ([](https://github.com/HamonUdvari/io-bio/commit/98dc3c58e1fca9bce9691854e3a22a92c6799984))
+
 # [1.2.0](https://github.com/HamonUdvari/io-bio/compare/v1.1.2...v1.2.0) (2026-05-30)
 
 
