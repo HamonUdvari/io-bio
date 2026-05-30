@@ -3,6 +3,7 @@ import Layout from "@layouts/Layout.astro";
 import Image from "@components/Image.astro";
 import { render } from "astro:content";
 import { getCollection } from "astro:content";
+import { aliasSuffix } from "@utils/displayName";
 
 export async function getStaticPaths() {
   const bios = await getCollection("bios");
@@ -22,6 +23,8 @@ const {
   image,
   lastName,
   firstName,
+  knownAs,
+  nee,
   archives,
   publications,
   literature,
@@ -39,6 +42,9 @@ if (!image) {
 }
 
 const title = `${lastName.toUpperCase()}, ${firstName}`;
+// Visible heading appends the alias in parentheses — "(nickname)" or
+// "(née maiden)"; the meta title + image alt keep the formal name (`title`).
+const displayName = `${title}${aliasSuffix(knownAs, nee)}`;
 const description = summary;
 const { Content } = await render(Astro.props);
 
@@ -94,12 +100,12 @@ const source = parseImageSource(imageSource);
   <section
     class="border-t-0 bg-io-gray-600 pt-[5rem] pb-[7.5rem] text-center gap-y-[30px]"
   >
-    <figure class="relative max-w-[320px] _max-h-[414px]">
+    <figure class="figure relative max-w-[320px] _max-h-[414px]">
       <picture>
         <Image class="w-full" imagePath={imageFn} alt={title} />
       </picture>
       <figcaption
-        class="text-credit absolute left-full bottom-0 ml-2 origin-bottom-left -rotate-90 whitespace-nowrap"
+        class="figure__credit"
       >
         Source:{" "}
         {!source.href && imageSource}
@@ -116,7 +122,7 @@ const source = parseImageSource(imageSource);
       </figcaption>
     </figure>
     <div class="flex flex-col gap-y-2 leading-none">
-      <h1 class="text-h2 leading-none">{title}</h1>
+      <h1 class="text-h2 leading-none">{displayName}</h1>
       <h2 class="text-h2 max-w-[45ch] mx-auto leading-none">{summary}</h2>
     </div>
     <p class="text-io-onsecondary-muted">By {authors} · {version}</p>

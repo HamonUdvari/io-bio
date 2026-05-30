@@ -339,6 +339,7 @@ const docxEntryType: ContentEntryType = {
       firstName: extracted?.firstName ?? "",
       lastName: extracted?.lastName ?? "",
       knownAs: extracted?.knownAs,
+      nee: extracted?.nee,
       summary: extracted?.summary ?? "",
       image: {},
       imageFn,

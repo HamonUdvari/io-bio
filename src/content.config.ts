@@ -47,6 +47,7 @@ export const bioDataSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   knownAs: z.string().optional(),
+  nee: z.string().optional(),
   summary: z.string(),
   image: imageSchema.optional(),
   imageSource: z.string().optional(),

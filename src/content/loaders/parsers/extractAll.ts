@@ -66,6 +66,7 @@ export function extractAll(ast: any): ParserResult<ExtractedBio> {
     firstName: intro.value.firstName,
     lastName: intro.value.lastName,
     knownAs: intro.value.knownAs,
+    nee: intro.value.nee,
     summary: intro.value.summary,
     life: intro.value.life,
     roles: roles.value,

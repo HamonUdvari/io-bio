@@ -24,7 +24,8 @@ export type Role = {
 export type IntroFields = {
   firstName: string | null;
   lastName: string | null;
-  knownAs?: string;
+  knownAs?: string; // "known as" nickname (shown bare)
+  nee?: string; // "née" maiden name (shown as "née …")
   summary: string | null;
   life: string | null;
 };
@@ -55,7 +56,8 @@ export type APLSectionData = {
 export type ExtractedBio = {
   firstName: string | null;
   lastName: string | null;
-  knownAs?: string;
+  knownAs?: string; // "known as" nickname (shown bare)
+  nee?: string; // "née" maiden name (shown as "née …")
   summary: string | null;
   life: string | null;
   roles: Role[];
