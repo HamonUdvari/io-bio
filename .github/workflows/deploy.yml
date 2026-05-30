@@ -47,6 +47,19 @@ jobs:
         with:
           chrome-version: stable
 
+      # Persist rendered PDFs across deploys. The render script (pnpm pdfs:site)
+      # re-renders only entries whose built index.html hash changed and copies
+      # the rest from this cache, so a content edit re-renders one PDF and an
+      # unrelated change re-renders none. restore-keys pulls the most recent
+      # cache; a new one is saved per commit SHA.
+      - name: Cache rendered entry PDFs
+        uses: actions/cache@v4
+        with:
+          path: .pdf-cache
+          key: pdf-cache-v1-${{ github.sha }}
+          restore-keys: |
+            pdf-cache-v1-
+
       - name: Render entry PDFs into dist/entries
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
