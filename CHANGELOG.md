@@ -1,3 +1,18 @@
+## [1.3.4](https://github.com/HamonUdvari/io-bio/compare/v1.3.3...v1.3.4) (2026-05-30)
+
+
+### Biography Updates
+
+* **author-instructions:** add a paragraph linking to the preview tool ([](https://github.com/HamonUdvari/io-bio/commit/c803a29458ce5564b2cbcd973da313985671b7b8)), closes [#6](https://github.com/HamonUdvari/io-bio/issues/6)
+
+
+### Bug Fixes
+
+* **author-instructions:** use a down-arrow glyph for the downloads list ([](https://github.com/HamonUdvari/io-bio/commit/1e1c4d2132c7e42825441a941d0761df11ef9b91)), closes [#7](https://github.com/HamonUdvari/io-bio/issues/7)
+* **entries:** floor listing to 100svh so the footer can't jump on empty results ([](https://github.com/HamonUdvari/io-bio/commit/5001a6b5574773289da9fb2586372918e28b1711)), closes [#3](https://github.com/HamonUdvari/io-bio/issues/3)
+* **preview:** show née + biography body, always-render known-as (field parity) ([](https://github.com/HamonUdvari/io-bio/commit/8211ec9caf6b62b610b0b9940d715f1a32678dbd)), closes [#5](https://github.com/HamonUdvari/io-bio/issues/5)
+* **print:** adapt gutter, spacing and page breaks for print ([](https://github.com/HamonUdvari/io-bio/commit/ffbc65b38f0d18330a9ad9369df1dcb9b3647c6b)), closes [#8](https://github.com/HamonUdvari/io-bio/issues/8)
+
 ## [1.3.3](https://github.com/HamonUdvari/io-bio/compare/v1.3.2...v1.3.3) (2026-05-30)
 
 
