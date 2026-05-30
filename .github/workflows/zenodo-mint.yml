@@ -28,17 +28,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
-      - run: npm ci
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - uses: browser-actions/setup-chrome@v1
         id: chrome
         with:
           chrome-version: stable
       - name: Build (emits dist/zenodo-meta.json + entry pages)
-        run: npm run build
+        run: pnpm run build
       - name: Mint
         # Inputs are passed via env (NOT interpolated into the script body) so
         # free-text workflow_dispatch inputs can't inject shell commands.

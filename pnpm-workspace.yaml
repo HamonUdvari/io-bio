@@ -1,0 +1,16 @@
+# pnpm settings (pnpm 11 reads these from pnpm-workspace.yaml).
+#
+# nodeLinker: hoisted → a flat, npm-compatible node_modules. The codebase imports
+# a few transitive deps directly (github-slugger, picomatch, tinyglobby,
+# piccolore, p-limit in src/content/loaders/docxLoader.ts) and references
+# ../../node_modules/@fontsource/* from global.css — both rely on a flat layout.
+nodeLinker: hoisted
+
+# Allow build/postinstall scripts only for these trusted deps: sharp + esbuild
+# are required for the Astro build; core-js (funding notice) and tesseract.js
+# are harmless.
+allowBuilds:
+  core-js: true
+  esbuild: true
+  sharp: true
+  tesseract.js: true
