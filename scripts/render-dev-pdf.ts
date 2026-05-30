@@ -1,20 +1,19 @@
-// Fast, faithful PDF styling loop. Render ONE entry straight from the running
-// `astro dev` server (default :4322 — hot CSS reload, no build) to a temp PDF,
-// using the SAME CDP printToPDF options + footer as production, then open it.
+// Spot-check ONE entry's rendered PDF straight from the running `astro dev`
+// server (default :4322 — hot CSS reload, no build) and open it. It prints the
+// Paged.js /print/<slug> route through the same CDP path as production, so the
+// output matches the deployed PDF (footer + page numbers come from the @page
+// margin boxes in global.css).
 //
 //   pnpm pdf:dev <slug> [devOrigin] [--watch]
 //
-// --watch keeps one headless Chrome alive and re-renders whenever the print
-// styles change (src/styles/global.css, the entry template, Layout, Image —
-// all hot-reloaded by astro dev, so a fresh navigation reflects them). macOS
-// Preview reloads the file in place, so the open PDF refreshes on each render.
+// --watch keeps one headless Chrome alive and re-renders whenever a print input
+// changes (src/styles/global.css, EntryArticle.astro, the print route, Image —
+// hot-reloaded by astro dev, so a fresh navigation re-paginates). macOS Preview
+// reloads the file in place, so the open PDF refreshes on each render.
 //
-// Footer + margins live in PRINT_TO_PDF_OPTS / FOOTER_TEMPLATE in
-// zenodo-render-pdfs.ts; editing those needs a watch restart (they're imported
-// into this process), which --watch flags with a hint.
-//
-// Unlike the on-page "Print preview (debug)" button (window.print()), this is
-// faithful: same footer, page numbers and margins as the deployed PDF.
+// For the fast in-browser DESIGN loop, open /io-bio/print/<slug> directly in a
+// browser — that's the live, inspectable Paged.js preview that auto-reloads on
+// CSS save. This script is for eyeballing the actual rendered PDF.
 // Set PDF_NO_OPEN=1 to skip launching the viewer.
 import { spawn } from "node:child_process";
 import { watch } from "node:fs";
@@ -34,7 +33,7 @@ const origin = (positional[1] ?? "http://localhost:4322/io-bio").replace(
   /\/$/,
   "",
 );
-const url = `${origin}/entries/${slug}`;
+const url = `${origin}/print/${slug}`;
 const out = path.join(os.tmpdir(), `io-bio-pdf-${slug}.pdf`);
 
 const CHROME =
@@ -112,7 +111,7 @@ if (!watchMode) {
 
   // Re-render when a hot-reloadable input changes (the dev server re-serves the
   // updated page on the next navigation).
-  const HINTS = ["global.css", "[...slug].astro", "Layout.astro", "Image.astro"];
+  const HINTS = ["global.css", "EntryArticle.astro", "[slug].astro", "Image.astro"];
   watch(path.resolve("src"), { recursive: true }, (_e, f) => {
     if (f && HINTS.some((h) => String(f).endsWith(h))) debounced();
   });

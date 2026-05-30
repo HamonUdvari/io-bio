@@ -7,10 +7,11 @@
 nodeLinker: hoisted
 
 # Allow build/postinstall scripts only for these trusted deps: sharp + esbuild
-# are required for the Astro build; core-js (funding notice) and tesseract.js
-# are harmless.
+# are required for the Astro build; core-js + es5-ext (a pagedjs transitive dep)
+# are funding-notice postinstalls and tesseract.js is harmless.
 allowBuilds:
   core-js: true
+  es5-ext: true
   esbuild: true
   sharp: true
   tesseract.js: true

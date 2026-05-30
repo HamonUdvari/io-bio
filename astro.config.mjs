@@ -52,6 +52,28 @@ function fontDisplayBlock() {
   };
 }
 
+// Paged.js (the /print route + the rendered PDF) bundles an older css-tree that
+// can't parse Tailwind v4's range media syntax (`@media (width >= 48rem)`) — it
+// throws mid-pagination (getMediaName → undefined). Down-level range queries to
+// the equivalent legacy min-/max-width form, which css-tree parses. The
+// production build's Lightning CSS already emits min-width; this transform
+// covers `astro dev`, where Paged.js runs for the live preview.
+function mediaRangeToLegacy() {
+  const down = (css) =>
+    css
+      .replace(/\(\s*width\s*>=\s*([^)]+?)\s*\)/g, "(min-width: $1)")
+      .replace(/\(\s*width\s*<=\s*([^)]+?)\s*\)/g, "(max-width: $1)");
+  return {
+    name: "media-range-to-legacy",
+    enforce: "post",
+    transform(code, id) {
+      if (!/\.css(\?|$)/.test(id) || !code.includes("width")) return null;
+      const out = down(code);
+      return out === code ? null : { code: out, map: null };
+    },
+  };
+}
+
 // --- Deployment target — SINGLE SOURCE OF TRUTH for the base path ---
 // TESTING (current): GitHub Pages project page → https://hamonudvari.github.io/io-bio
 //   BASE = "/io-bio", site = "https://HamonUdvari.github.io".
@@ -82,7 +104,7 @@ export default defineConfig({
   },
   integrations: [preact({ compat: true }), mdx()],
   vite: {
-    plugins: [tailwindcss(), fontDisplayBlock()],
+    plugins: [tailwindcss(), fontDisplayBlock(), mediaRangeToLegacy()],
     resolve: {
       alias: {
         "@components": "/src/components",

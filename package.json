@@ -29,6 +29,7 @@
     "@tanstack/react-table": "^8.21.3",
     "astro": "^6.3.3",
     "clsx": "^2.1.1",
+    "pagedjs": "^0.4.3",
     "preact": "^10.28.4",
     "react": "npm:@preact/compat",
     "react-dom": "npm:@preact/compat",

@@ -37,25 +37,14 @@ async function waitForServer(url: string, timeoutMs = 40_000): Promise<void> {
 // project reference bottom-left, page number bottom-right. Chrome's print
 // header/footer templates inherit no page CSS and default to a tiny font, so
 // styling is inlined here; `.pageNumber` is Chrome's built-in class.
-export const FOOTER_TEMPLATE = `<div style="width:100%;font-size:8px;color:#555;padding:0 14mm;box-sizing:border-box;font-family:Roboto,Arial,sans-serif;">
-  <span style="float:left;">IO BIO — Biographical Dictionary of Secretaries-General of International Organizations</span>
-  <span style="float:right;"><span class="pageNumber"></span></span>
-</div>`;
-export const EMPTY_HEADER = "<span></span>";
-
-// Chrome Page.printToPDF options shared by the production render and the dev
-// preview (scripts/render-dev-pdf.ts) — edit the footer/margins here and both
-// stay in sync. Margins are in inches. This is the PDF "styling" knob that
-// can't live in CSS (Blink ignores @page margin boxes for header/footer).
+// Chrome Page.printToPDF options. The print route (/print/<slug>) runs Paged.js,
+// which paginates to A4 and draws the running footer + page numbers from the
+// @page margin boxes in global.css — so Chrome must NOT add its own header/
+// footer or margins. preferCSSPageSize lets the CSS @page size + margins win.
 export const PRINT_TO_PDF_OPTS = {
   printBackground: true,
-  displayHeaderFooter: true,
-  headerTemplate: EMPTY_HEADER,
-  footerTemplate: FOOTER_TEMPLATE,
-  marginTop: 0.63, // ≈ 16mm
-  marginBottom: 0.71, // ≈ 18mm — reserves the footer band
-  marginLeft: 0.55, // ≈ 14mm
-  marginRight: 0.55,
+  displayHeaderFooter: false,
+  preferCSSPageSize: true,
 };
 
 // Resolve the page target's DevTools WebSocket URL once Chrome is listening.
@@ -131,10 +120,28 @@ export function connectCdp(wsUrl: string): Promise<{
 
 type Cdp = Awaited<ReturnType<typeof connectCdp>>;
 
+// The print route sets <html data-pagedjs-ready="true"> once Paged.js has
+// finished paginating (after document.fonts.ready). Poll for it so we print the
+// fully-laid-out pages, not a mid-pagination snapshot.
+async function waitForPagedJs(cdp: Cdp, timeoutMs = 60_000): Promise<void> {
+  const deadline = Date.now() + timeoutMs;
+  for (;;) {
+    const r = await cdp.send("Runtime.evaluate", {
+      expression: `document.documentElement.dataset.pagedjsReady === "true"`,
+      returnByValue: true,
+    });
+    if (r?.result?.value === true) return;
+    if (Date.now() > deadline)
+      throw new Error(`Paged.js did not finish within ${timeoutMs}ms`);
+    await sleep(150);
+  }
+}
+
 // Render one already-served entry page (at `url`) to `outPath` via CDP
 // Page.printToPDF, streaming the result (entry PDFs embed a portrait and run a
-// few MB). Shared by the production render and the dev preview so the footer +
-// margins are identical.
+// few MB). `url` is the Paged.js print route: wait for it to finish paginating,
+// then print with no header/footer (Paged.js + @page own the footer, page
+// numbers and A4 margins).
 export async function printPageToPdf(
   cdp: Cdp,
   url: string,
@@ -143,7 +150,8 @@ export async function printPageToPdf(
   const loaded = cdp.waitEvent("Page.loadEventFired");
   await cdp.send("Page.navigate", { url });
   await loaded;
-  await sleep(1200); // settle fonts + images before printing
+  await cdp.send("Runtime.enable");
+  await waitForPagedJs(cdp);
   const { stream } = await cdp.send("Page.printToPDF", {
     ...PRINT_TO_PDF_OPTS,
     transferMode: "ReturnAsStream",
@@ -224,7 +232,7 @@ export async function renderPdfs(
     try {
       await cdp.send("Page.enable");
       for (const slug of slugs) {
-        const url = `http://localhost:${PORT}${BASE}/entries/${slug}`;
+        const url = `http://localhost:${PORT}${BASE}/print/${slug}`;
         const out = path.join(outDir, `${slug}.pdf`);
         await printPageToPdf(cdp, url, out);
         result.set(slug, out);
