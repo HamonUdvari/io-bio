@@ -1,7 +1,8 @@
 import { nameCase } from "@foundernest/namecase";
 import type { IntroFields, ParserResult, Warning } from "./types";
 
-const NAME_RE = /^([^,]+),\s*([^(,]+)(?:\s*\((?:known as|née)\s+(.+?)\))?,/i;
+// Group 3 captures the qualifier ("known as" | "née"); group 4 the alias name.
+const NAME_RE = /^([^,]+),\s*([^(,]+)(?:\s*\((known as|née)\s+(.+?)\))?,/i;
 const SUMMARY_RE = /^[^,]+,\s*[^,]+,\s*(.+?)\s*,\s*was born/i;
 const LIFE_RE = /(was.+)$/i;
 
@@ -33,7 +34,13 @@ export function parseIntro(introText: string): ParserResult<IntroFields> {
       nameMatch[1].replace(/[[\]]/g, " ").replace(/\s+/g, " ").trim(),
     );
     value.firstName = nameMatch[2].trim();
-    if (nameMatch[3]) value.knownAs = nameMatch[3].trim();
+    if (nameMatch[4]) {
+      const alias = nameMatch[4].trim();
+      // Two distinct fields, chosen by the source qualifier (group 3):
+      // "known as" → a nickname (knownAs); "née" → a maiden name (nee).
+      if (/née/i.test(nameMatch[3])) value.nee = alias;
+      else value.knownAs = alias;
+    }
   } else {
     warnings.push({
       code: "name_unparsed",

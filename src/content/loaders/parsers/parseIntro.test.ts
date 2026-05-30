@@ -26,6 +26,16 @@ describe("parseIntro", () => {
     expect(value.knownAs).toBe("Ruud");
   });
 
+  it("captures a 'née' maiden name in its own field (not knownAs)", () => {
+    const intro =
+      "BRUNDTLAND, Gro (née Harlem), Norwegian physician and director-general of the World Health Organization (WHO) 1998-2003, was born 20 April 1939 in Bærum, Norway.";
+    const { value } = parseIntro(intro);
+    expect(value.lastName).toBe("Brundtland");
+    expect(value.firstName).toBe("Gro");
+    expect(value.nee).toBe("Harlem");
+    expect(value.knownAs).toBeUndefined();
+  });
+
   it("handles entry with multiple roles in summary", () => {
     const intro =
       "BOUTROS-GHALI, Boutros Youssef, Egyptian politician, sixth Secretary-General of the United Nations (UN) 1992-1996 and first Secretary-General of the International Organization of La Francophonie 1997-2002, was born 14 November 1922 in Cairo, Egypt.";
