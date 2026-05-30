@@ -170,11 +170,11 @@
 @utility text-h1 {
   @apply text-h1-base leading-h1-base;
 
-  @variant tablet {
+  @variant tablet, print {
     @apply text-h1-tablet leading-h1-tablet;
   }
 
-  @variant desktop, print {
+  @variant desktop {
     @apply text-h1-desktop leading-h1-desktop;
   }
 }
@@ -182,11 +182,11 @@
 @utility text-h2 {
   @apply text-h2-base leading-h2-base;
 
-  @variant tablet {
+  @variant tablet, print {
     @apply text-h2-tablet leading-h2-tablet;
   }
 
-  @variant desktop, print {
+  @variant desktop {
     @apply text-h2-desktop leading-h2-desktop;
   }
 }
@@ -198,11 +198,11 @@
 @utility text-body {
   @apply text-body-base leading-body-base;
 
-  @variant tablet {
+  @variant tablet, print {
     @apply text-body-tablet leading-body-tablet;
   }
 
-  @variant desktop, print {
+  @variant desktop {
     @apply text-body-desktop leading-body-desktop;
   }
 }
@@ -226,7 +226,7 @@
 @utility text-label {
   @apply text-label-base leading-label-base font-medium;
 
-  @variant desktop, print {
+  @variant desktop {
     @apply text-label-desktop leading-label-desktop;
   }
 }
@@ -234,11 +234,11 @@
 @utility text-hero {
   @apply text-hero-base leading-hero-base;
 
-  @variant tablet {
+  @variant tablet, print {
     @apply text-hero-tablet leading-hero-tablet;
   }
 
-  @variant desktop, print {
+  @variant desktop {
     @apply text-hero-desktop leading-hero-desktop;
   }
 }
@@ -257,7 +257,12 @@
     --btn-px: var(--btn-px-base);
     --btn-py: var(--btn-py-base);
 
-    @variant tablet {
+    /* Paged.js print/PDF mirrors the TABLET view: Paged.js drops width media
+       queries (@media (min-width: …)) when it paginates, so `print` carries the
+       tablet step explicitly — without it these tokens fall back to the mobile
+       -base step. (`@media print` is the only query Paged.js honours, and it
+       applies identically in the live preview and the rendered PDF.) */
+    @variant tablet, print {
       --gap-x: var(--gap-x-tablet);
       --gap-y: var(--gap-y-tablet);
       --px: var(--px-tablet);
@@ -266,18 +271,6 @@
     }
 
     @variant desktop {
-      --gap-x: var(--gap-x-desktop);
-      --gap-y: var(--gap-y-desktop);
-      --px: var(--px-desktop);
-      --btn-px: var(--btn-px-desktop);
-      --btn-py: var(--btn-py-desktop);
-    }
-
-    @variant print {
-      /* Print uses the DESKTOP sizing scale for every layout token — only
-         colours differ on paper (handled per-section). Without forcing these,
-         print would resolve to the tablet step, since paper width (~816px)
-         sits below the desktop breakpoint. */
       --gap-x: var(--gap-x-desktop);
       --gap-y: var(--gap-y-desktop);
       --px: var(--px-desktop);
@@ -400,6 +393,10 @@
 .pagedjs-print-root {
   background: #6b7280;
 }
+/* NB: the on-screen page-gap + drop-shadow that separate each A4 sheet in the
+   preview are injected by the print route (src/pages/print/[slug].astro) AFTER
+   Paged.js paginates — Paged.js's polisher consumes the author stylesheets and
+   drops @media screen blocks, so a screen rule here would never apply. */
 
 @layer components {
   .figure {
@@ -446,9 +443,6 @@
     --section-text: var(--color-io-onsecondary);
     --section-border: var(--color-io-gray-100);
 
-    /* Responsive vertical padding on every breakpoint (was desktop-only, so
-       mobile/tablet sections had no space between them). 16/20/30 = gap-y,
-       matching Figma section padding. */
     @apply py-(--gap-y);
     @apply text-body;
     @apply flex flex-col;
