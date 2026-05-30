@@ -88,31 +88,14 @@ export const transforms: FileTransform[] = [
       },
     ],
   },
-  {
-    source: "Chan-M 2021.docx",
-    changes: [
-      {
-        type: "replace",
-        find: "Hong Kong medical officer",
-        replace: "Hong Kong Chinese medical officer",
-        reason:
-          '"Hong Kong" is not a UN-member demonym in world-countries, so the nationality detector skipped this entry. Adding "Chinese" preserves the Hong Kong identifier while giving the parser a matchable demonym.',
-      },
-    ],
-  },
-  {
-    source: "Eichhoff-JJ 2024.docx",
-    changes: [
-      {
-        type: "replace",
-        find: "EICHHOFF, Johann Joseph, Director-General",
-        replace:
-          "EICHHOFF, Johann Joseph, German civil servant and Director-General",
-        reason:
-          'No nationality in the original intro (born in Bonn, Electorate of Cologne — now Germany). Insert "German civil servant and " before the role so the demonym is detected.',
-      },
-    ],
-  },
+  // NOTE: issue #9 — Chan-M 2021 and Eichhoff-JJ 2024 previously had a
+  // nationality demonym INJECTED here purely so the parser's detector would
+  // fire ("Hong Kong Chinese …", "German civil servant and …"). Both were
+  // reverted: the source never stated a nationality and it cannot be comfortably
+  // assumed — Hong Kong had a special administrative status in that period, and
+  // Eichhoff lived under the Holy Roman Empire / Electorate of Cologne, before a
+  // German nation-state existed. With no demonym they now fall back to
+  // "Unspecified" (rendered by ListView). Do not re-add a fabricated demonym.
   {
     source: "Orr-JB 2021.docx",
     changes: [
