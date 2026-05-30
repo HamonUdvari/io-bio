@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/HamonUdvari/io-bio/compare/v1.3.5...v1.4.0) (2026-05-30)
+
+
+### Bug Fixes
+
+* **name+preview:** hide née & redundant known-as; preview shows separated body ([](https://github.com/HamonUdvari/io-bio/commit/cd234d5f8f642787855522aeadcfd034c0c7a4e1))
+
+
+### Website Features
+
+* **entries:** Download (PDF) links to rendered PDF; print=desktop sizing; grid 4-col tablet ([](https://github.com/HamonUdvari/io-bio/commit/0c404b6a9cfebd53b24bd7fbdcb429a91cdd4f76))
+
 ## [1.3.5](https://github.com/HamonUdvari/io-bio/compare/v1.3.4...v1.3.5) (2026-05-30)
 
 
