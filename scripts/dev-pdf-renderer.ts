@@ -31,6 +31,14 @@ export function devPdfRenderer(base = "/io-bio"): AstroIntegration {
   // Serialise renders: one Chrome page target can print one PDF at a time.
   let queue: Promise<unknown> = Promise.resolve();
 
+  // Drop the cached connection (and its Chrome) so the next request respawns
+  // fresh — used both when a connect attempt fails and when a live socket dies.
+  const resetCdp = () => {
+    cdpPromise = undefined;
+    chrome?.kill("SIGTERM");
+    chrome = undefined;
+  };
+
   const getCdp = (): Promise<Cdp> => {
     if (!cdpPromise) {
       const port = Number(process.env.DEV_PDF_CHROME_PORT ?? 9444);
@@ -47,10 +55,18 @@ export function devPdfRenderer(base = "/io-bio"): AstroIntegration {
         { stdio: "ignore" },
       );
       cdpPromise = chromeWsUrl(port)
-        .then(connectCdp)
+        // If the socket later dies (Chrome crash/restart), drop the singleton so
+        // the next request reconnects instead of reusing a dead connection.
+        .then((wsUrl) => connectCdp(wsUrl, resetCdp))
         .then(async (cdp) => {
           await cdp.send("Page.enable");
           return cdp;
+        })
+        .catch((e) => {
+          // Don't poison the singleton on a failed connect — reset so the next
+          // request retries a fresh spawn instead of re-awaiting a rejection.
+          resetCdp();
+          throw e;
         });
     }
     return cdpPromise;
