@@ -17,6 +17,9 @@ dist/
 dist-pdf/
 src/data/zenodo-dois.sandbox.json
 
+# Incremental entry-PDF render cache (rebuilt in CI via actions/cache).
+.pdf-cache/
+
 # dependencies
 node_modules/
 
