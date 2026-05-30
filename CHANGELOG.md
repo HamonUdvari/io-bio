@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/HamonUdvari/io-bio/compare/v1.3.0...v1.3.1) (2026-05-30)
+
+
+### Bug Fixes
+
+* **ci:** drop packageManager field; pin pnpm 11 in workflows ([](https://github.com/HamonUdvari/io-bio/commit/11a3e56dd05cc78b57c5f84a3d54934270266873))
+
 # [1.3.0](https://github.com/HamonUdvari/io-bio/compare/v1.2.1...v1.3.0) (2026-05-30)
 
 
