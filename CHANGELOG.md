@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/HamonUdvari/io-bio/compare/v1.5.0...v1.6.0) (2026-05-30)
+
+
+### Website Features
+
+* **cite:** per-entry Zenodo citation in "How to cite" (issue #2) ([](https://github.com/HamonUdvari/io-bio/commit/ae3fde1f0d8580d8227e2a5eb8350379c0289553)), closes [#2](https://github.com/HamonUdvari/io-bio/issues/2)
+
 # [1.5.0](https://github.com/HamonUdvari/io-bio/compare/v1.4.0...v1.5.0) (2026-05-30)
 
 
