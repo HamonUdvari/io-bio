@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/HamonUdvari/io-bio/compare/v1.6.1...v1.6.2) (2026-05-30)
+
+
+### Bug Fixes
+
+* **extraction:** correct nationality + role/org/abbreviation (issue #10) ([](https://github.com/HamonUdvari/io-bio/commit/50bdb246393e4cfa7d6f5c3d5f0e3b46635ee50e)), closes [#10](https://github.com/HamonUdvari/io-bio/issues/10) [#9](https://github.com/HamonUdvari/io-bio/issues/9)
+
 ## [1.6.1](https://github.com/HamonUdvari/io-bio/compare/v1.6.0...v1.6.1) (2026-05-30)
 
 
