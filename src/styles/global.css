@@ -869,11 +869,12 @@
     @apply flex flex-col;
     @apply gap-y-2;
 
-    /* Small Material Symbols "download" glyph after each link as a download
-       affordance (U+F090; ligatures don't resolve in ::after, so emit the
-       codepoint). `inline-block` keeps the glyph out of the link's underline. */
+    /* Small Material Symbols "arrow_downward" down-arrow glyph after each link
+       as a download affordance (issue #7; U+E5DB — ligatures don't resolve in
+       ::after, so emit the codepoint). `inline-block` keeps the glyph out of
+       the link's underline. */
     & a::after {
-      content: "\f090";
+      content: "\e5db";
       font-family: "Material Symbols Outlined";
       font-weight: normal;
       font-style: normal;
