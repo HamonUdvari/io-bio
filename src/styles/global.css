@@ -355,7 +355,10 @@
    preview. Paged.js polyfills CSS Paged Media, so the running footer + page
    numbers live here as @page margin boxes — project reference bottom-left,
    "page / total" bottom-right. (Plain window.print() / Blink ignores margin
-   boxes, but the print route runs Paged.js, which honours them.) A4. */
+   boxes, but the print route runs Paged.js, which honours them.) A4.
+   NOTE: edits to these print styles bump the sandbox renderVersion
+   (scripts/zenodo-mint.ts → zenodo-sandbox-refresh.yml), so the sandbox Zenodo
+   deposits re-render and the demo PDFs keep tracking the design. */
 @page {
   size: A4;
   margin: 10mm 10mm 16mm 10mm;
