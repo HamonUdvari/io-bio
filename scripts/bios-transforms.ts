@@ -183,6 +183,13 @@ export const transforms: FileTransform[] = [
         reason:
           'The parser expects "..., was born" immediately after the role/dates in the intro. This entry starts the life as a new sentence ("1976-1993. He was born"), so the summary/role went unparsed. Join it with a comma clause to match house style.',
       },
+      {
+        type: "replace",
+        find: "Edouard Victor, agronomist",
+        replace: "Edouard Victor, Lebanese agronomist",
+        reason:
+          'Issue #10 follow-up: no nationality demonym in the source intro, so the detector found nothing. Edouard Saouma is Lebanese (born in Lebanon) — a clear, uncontested nationality — so prepend "Lebanese" to the existing "agronomist" occupation.',
+      },
     ],
   },
   {
@@ -220,6 +227,18 @@ export const transforms: FileTransform[] = [
           "and third Secretary-General of the United Nations (UN) 1962-1971",
         reason:
           'Issue #10: the second role was written without "of <ORG>" ("…and third Secretary-General 1962-1971"), relying on the first role\'s organisation, so the parser captured the title but left the organisation/abbreviation empty. Repeat "of the United Nations (UN)" before the year span (same fix as Phelan-EJ) so the role resolves to org="United Nations", abbreviation="UN".',
+      },
+    ],
+  },
+  {
+    source: "Van Heuven Goedhart-GJ 2012.docx",
+    changes: [
+      {
+        type: "replace",
+        find: "Gerrit Jan, first United Nations",
+        replace: "Gerrit Jan, Dutch journalist and first United Nations",
+        reason:
+          'Issue #10 follow-up: no nationality demonym (and no occupation) in the source intro. Gerrit Jan van Heuven Goedhart was a Dutch journalist (editor-in-chief of Het Parool) and politician — a clear nationality — so insert "Dutch journalist and" before the role so the detector matches "Dutch".',
       },
     ],
   },

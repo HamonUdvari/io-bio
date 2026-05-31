@@ -65,7 +65,18 @@ export function parseNationality(text: string): ParserResult<NationalityFields> 
   }
 
   value.country = best.country.name.common;
-  value.nationality = best.demonym;
+  // Render the demonym AS WRITTEN in the source: the matched world-countries
+  // demonym can be a prefix of the author's spelling (DB "Argentine" vs written
+  // "Argentinean"). When the match sits at a word boundary, extend over trailing
+  // letters so the rendered nationality matches the source — Kirchner/Prebisch
+  // get "Argentinean", while Orfila (who wrote "Argentine") is unchanged.
+  const atWordStart =
+    best.index === 0 || !/[A-Za-z]/.test(text[best.index - 1]);
+  let end = best.index + best.demonym.length;
+  if (atWordStart) {
+    while (end < text.length && /[A-Za-z]/.test(text[end])) end++;
+  }
+  value.nationality = text.slice(best.index, end);
 
   return { value, warnings };
 }
