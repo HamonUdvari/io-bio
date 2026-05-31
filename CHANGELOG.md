@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/HamonUdvari/io-bio/compare/v1.6.3...v1.7.0) (2026-05-31)
+
+
+### Website Features
+
+* **zenodo:** auto-refresh sandbox deposits on style/content changes ([](https://github.com/HamonUdvari/io-bio/commit/dbb7520b4b1ff36c841b79a05dab1123e90a63e5))
+
 ## [1.6.3](https://github.com/HamonUdvari/io-bio/compare/v1.6.2...v1.6.3) (2026-05-31)
 
 
