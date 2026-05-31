@@ -37,10 +37,22 @@ describe("parseNationality", () => {
   });
 
   // issue #10: the leading demonym wins even when a later word contains another
-  // country's demonym (here "South American" ⊃ "American").
-  it("prefers the leading demonym over one inside a later org name (Kirchner: Argentine)", () => {
+  // country's demonym (here "South American" ⊃ "American"), AND the demonym is
+  // rendered AS WRITTEN in the source — the world-countries DB stores
+  // "Argentine" but Kirchner's author wrote "Argentinean".
+  it("prefers the leading demonym and renders the source spelling (Kirchner: Argentinean)", () => {
     const { value } = parseNationality(
       "Argentinean politician and first Secretary-General of the Union of South American Nations",
+    );
+    expect(value.country).toBe("Argentina");
+    expect(value.nationality).toBe("Argentinean");
+  });
+
+  // ...but when the source uses the DB spelling verbatim, it is left as-is
+  // (Orfila wrote "Argentine"), so the rendered form always matches the source.
+  it("keeps the DB demonym when the source uses it verbatim (Orfila: Argentine)", () => {
+    const { value } = parseNationality(
+      "Argentine diplomat and fifth Secretary General of the Organization of American States",
     );
     expect(value.country).toBe("Argentina");
     expect(value.nationality).toBe("Argentine");

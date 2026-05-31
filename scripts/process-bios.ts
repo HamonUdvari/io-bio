@@ -176,6 +176,23 @@ function applyTransform(transform: FileTransform): boolean {
         }
       }
       if (!matched) {
+        // Idempotent: if the replacement is already present, this change was
+        // applied on an earlier run — skip instead of failing. Lets --only
+        // re-run a multi-change transform whose other changes are already in the
+        // committed processed docx, and avoids a hard crash when re-deriving.
+        let already = false;
+        for (let i = 0; i < paragraphs.length; i++) {
+          if (paragraphText(paragraphs[i]).includes(change.replace)) {
+            already = true;
+            break;
+          }
+        }
+        if (already) {
+          console.log(
+            `  ↳ ${transform.source}: "${change.find.slice(0, 40)}…" already applied, skipping`,
+          );
+          continue;
+        }
         throw new Error(
           `Find text not present in any paragraph:\n  ${change.find.slice(0, 120)}${change.find.length > 120 ? "…" : ""}`,
         );
