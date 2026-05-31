@@ -1,7 +1,14 @@
 @import "@fontsource/roboto";
 @import "@fontsource/roboto/500.css";
 @import "@fontsource/roboto-condensed";
-@import "tailwindcss";
+/* Scope Tailwind's content detection to src/ only. Without this, v4 auto-scans
+   the whole repo (scripts/, .github/, root configs) and harvests utility
+   "candidates" from non-template files — so editing a script rewrites the
+   compiled CSS, churns its content-hash, and needlessly re-renders every entry
+   PDF in CI (the per-entry render cache keys on the built print HTML, which
+   embeds the CSS bundle link). src/ holds every template/component/content
+   file that actually emits classes. */
+@import "tailwindcss" source("../");
 
 /* Material Symbols icon font — self-declared @font-face (instead of importing
    @fontsource/…/400.css) so we control font-display. The icons are LIGATURES,
