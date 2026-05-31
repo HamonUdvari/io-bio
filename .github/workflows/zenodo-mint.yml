@@ -23,6 +23,13 @@ on:
 permissions:
   contents: write # to commit the updated DOI map
 
+# Share a concurrency group with the auto sandbox-refresh (zenodo-sandbox-refresh.yml)
+# so a manual sandbox mint and the auto-refresh never run at once against the same
+# sandbox state + map; production gets its own group.
+concurrency:
+  group: ${{ inputs.env == 'production' && 'zenodo-prod' || 'zenodo-sandbox' }}
+  cancel-in-progress: false
+
 jobs:
   mint:
     runs-on: ubuntu-latest
@@ -58,10 +65,12 @@ jobs:
           [ -n "$MINT_ONLY" ] && ARGS="$ARGS --only $MINT_ONLY"
           node scripts/zenodo-mint.ts $ARGS
       - name: Commit DOI map
-        # Only the production map is tracked; the sandbox map is gitignored.
+        # The production map is always tracked; the sandbox map is currently also
+        # committed (temporarily, for the client demo — issue #2). Stage both;
+        # only the map that changed for this env actually gets committed.
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/data/zenodo-dois.json
+          git add src/data/zenodo-dois.json src/data/zenodo-dois.sandbox.json
           git commit -m "chore(zenodo): update DOI map [skip ci]" || echo "no changes to commit"
           git push

@@ -1,0 +1,89 @@
+# Auto-refresh the SANDBOX Zenodo deposits when the print template / CSS or entry
+# content changes on main, so the demo's per-entry "How to cite" deposits track
+# the design as it evolves. SANDBOX ONLY — production minting stays in the gated,
+# manual zenodo-mint.yml (this workflow never touches production).
+#
+# OPT-IN — dormant until you set BOTH (Settings → Secrets and variables → Actions):
+#   • repo VARIABLE  ZENODO_SANDBOX_AUTOMINT = true
+#   • repo SECRET    ZENODO_SANDBOX_TOKEN     (a sandbox.zenodo.org API token)
+# Until the variable is "true" the job is skipped, so it never runs, fails, or mints.
+#
+# Why it's cheap: the mint folds a print-template fingerprint (renderVersion) into
+# the SANDBOX idempotency hash, so it re-versions only entries whose CONTENT or
+# LAYOUT actually changed and skips the rest — a no-op when nothing relevant moved.
+name: Zenodo sandbox refresh (auto)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      # Print template / styling → bumps renderVersion (re-renders all PDFs).
+      # Keep in sync with PRINT_TEMPLATE_FILES/DIRS in scripts/zenodo-mint.ts.
+      - "src/styles/global.css"
+      - "src/pages/print/**"
+      - "src/components/EntryArticle.astro"
+      - "src/components/Image.astro"
+      - "src/utils/displayName.ts"
+      - "src/remarkPlugins/**"
+      - "src/rehypePlugins/**"
+      - "astro.config.mjs"
+      # Entry content / extraction → bumps the per-entry content hash:
+      - "src/content/bios-processed/**"
+      - "src/content/loaders/**"
+      - "src/content.config.ts"
+      - "src/pages/zenodo-meta.json.ts"
+      # The mint pipeline itself:
+      - "scripts/zenodo-*.ts"
+      - "scripts/lib/zenodo-*.ts"
+      - "scripts/bios-transforms.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: write # to commit the refreshed sandbox DOI map
+
+concurrency:
+  group: zenodo-sandbox
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    # Opt-in: only runs once the maintainer enables it (see header).
+    if: ${{ vars.ZENODO_SANDBOX_AUTOMINT == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history so the post-mint push isn't rejected by a shallow clone
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+        with:
+          chrome-version: stable
+      - name: Build (emits dist/zenodo-meta.json + the /print routes)
+        run: pnpm run build
+      - name: Refresh sandbox deposits (re-versions changed content/layout only)
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_SANDBOX_TOKEN }}
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: pnpm run zenodo:mint:sandbox
+      - name: Commit refreshed sandbox DOI map
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/zenodo-dois.sandbox.json
+          if git diff --cached --quiet; then
+            echo "no sandbox map changes to commit"
+          else
+            git commit -m "chore(zenodo): refresh sandbox deposits [skip ci]"
+            # main may have advanced (release/deploy commits) during the mint —
+            # rebase our single map commit on top before pushing.
+            git pull --rebase origin main
+            git push
+          fi

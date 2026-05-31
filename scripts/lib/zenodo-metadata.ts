@@ -52,6 +52,13 @@ export interface MetadataConfig {
   entryUrl: (slug: string) => string;
   /** publication_type — "other" (default) or "section". */
   publicationType?: string;
+  /**
+   * Optional print-template fingerprint folded into the idempotency hash so a
+   * LAYOUT/CSS change re-versions the deposit even when the entry's content is
+   * unchanged. Set for SANDBOX only — production stays content-only so a
+   * cosmetic change never churns permanent DOIs. (See zenodo-mint.ts.)
+   */
+  renderVersion?: string;
 }
 
 const MONTHS: Record<string, string> = {
@@ -183,6 +190,9 @@ export function computeStateHash(e: MetaEntry, cfg: MetadataConfig): string {
           content: e.contentHash,
           license: cfg.license,
           publication_type: cfg.publicationType ?? "other",
+          // Only present for sandbox — a layout/template change re-versions the
+          // demo deposits; absent for production (content-only permanence).
+          ...(cfg.renderVersion ? { render: cfg.renderVersion } : {}),
         }),
       )
       .digest("hex")

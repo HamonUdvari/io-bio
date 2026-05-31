@@ -9,7 +9,8 @@
 // and records the result in src/data/zenodo-dois[.sandbox].json.
 //
 // Token: ZENODO_TOKEN (scopes deposit:write + deposit:actions). dry-run needs none.
-import { existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { createZenodoClient } from "./lib/zenodo-client.ts";
 import type { Deposition } from "./lib/zenodo-client.ts";
@@ -28,6 +29,43 @@ const SITE = (process.env.SITE_URL ?? "https://HamonUdvari.github.io").replace(/
 const BASE = (process.env.SITE_BASE ?? "/io-bio").replace(/\/$/, "");
 const LICENSE = process.env.ZENODO_LICENSE ?? "cc-by-4.0"; // PLACEHOLDER — confirm before prod
 const PUBLICATION_TYPE = process.env.ZENODO_PUBLICATION_TYPE ?? "other";
+
+// Files + dirs that determine the rendered PDF's VISUAL output: the Paged.js
+// print route, the article template + its helpers (Image, displayName), the
+// stylesheet, the Astro/Vite config, and the remark/rehype plugins that
+// transform the biography-body markdown into the rendered HTML. Hashing them all
+// gives a "render version" that, folded into the SANDBOX idempotency hash, makes
+// a layout/template change re-version the demo deposits — no manual --force, and
+// kept in sync with the paths filter in .github/workflows/zenodo-sandbox-refresh.yml.
+// NOTE: webfont glyph files live in node_modules and are intentionally NOT
+// hashed (a font-version bump won't re-version); and global.css is the whole
+// stylesheet, so a screen-only edit harmlessly over-triggers a sandbox re-version.
+const PRINT_TEMPLATE_FILES = [
+  "src/styles/global.css",
+  "src/pages/print/[slug].astro",
+  "src/components/EntryArticle.astro",
+  "src/components/Image.astro",
+  "src/utils/displayName.ts",
+  "astro.config.mjs",
+];
+const PRINT_TEMPLATE_DIRS = ["src/remarkPlugins", "src/rehypePlugins"];
+
+function printTemplateVersion(): string {
+  const files = [...PRINT_TEMPLATE_FILES];
+  for (const d of PRINT_TEMPLATE_DIRS) {
+    const dp = path.resolve(d);
+    if (existsSync(dp))
+      for (const name of readdirSync(dp)) files.push(path.posix.join(d, name));
+  }
+  const h = createHash("sha256");
+  for (const f of files.sort()) {
+    const p = path.resolve(f);
+    const content =
+      existsSync(p) && statSync(p).isFile() ? readFileSync(p, "utf8") : "";
+    h.update(`${f}\0${content}\0`);
+  }
+  return h.digest("hex").slice(0, 16);
+}
 
 type Action = "create" | "newversion" | "skip";
 
@@ -111,6 +149,10 @@ async function main() {
     dictionaryConceptDoi: DICTIONARY_CONCEPT_DOI,
     entryUrl: (slug) => `${SITE}${BASE}/entries/${slug}`,
     publicationType: PUBLICATION_TYPE,
+    // SANDBOX only: fold the print-template fingerprint into the idempotency
+    // hash so a layout/CSS change re-versions the demo deposits. Production stays
+    // content-only — a cosmetic change must never churn permanent DOIs.
+    renderVersion: args.env === "sandbox" ? printTemplateVersion() : undefined,
   };
 
   let meta = readMeta();
