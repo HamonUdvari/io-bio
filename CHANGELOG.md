@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/HamonUdvari/io-bio/compare/v1.7.0...v1.7.1) (2026-05-31)
+
+
+### Bug Fixes
+
+* **css:** scope Tailwind content detection to src/ ([](https://github.com/HamonUdvari/io-bio/commit/a1aa4d9233130ca79fda6f144eec195173f830cd))
+
 # [1.7.0](https://github.com/HamonUdvari/io-bio/compare/v1.6.3...v1.7.0) (2026-05-31)
 
 
