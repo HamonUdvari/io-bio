@@ -37,10 +37,11 @@ interface Args {
   only?: string[];
   dryRun: boolean;
   yesProduction: boolean;
+  force: boolean;
 }
 
 function parseArgs(argv: string[]): Args {
-  const a: Args = { env: "sandbox", dryRun: false, yesProduction: false };
+  const a: Args = { env: "sandbox", dryRun: false, yesProduction: false, force: false };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === "--env") a.env = argv[++i] === "production" ? "production" : "sandbox";
@@ -51,6 +52,11 @@ function parseArgs(argv: string[]): Args {
     }
     else if (arg === "--dry-run") a.dryRun = true;
     else if (arg === "--yes-production") a.yesProduction = true;
+    // Force a new version for every (already-minted) entry regardless of the
+    // content hash — used to re-render all artifacts after a layout/template
+    // change (the content hash is content-only, so a pure-layout change like the
+    // Paged.js redesign would otherwise be skipped).
+    else if (arg === "--force") a.force = true;
   }
   if (process.env.ZENODO_ENV === "sandbox") a.env = "sandbox";
   return a;
@@ -72,10 +78,15 @@ function idFromUrl(url: string): number {
   return Number(m[1]);
 }
 
-function decide(entry: MetaEntry, cfg: MetadataConfig, state?: DoiRecord): Action {
+function decide(
+  entry: MetaEntry,
+  cfg: MetadataConfig,
+  state?: DoiRecord,
+  force = false,
+): Action {
   const hash = computeStateHash(entry, cfg);
   if (!state) return "create";
-  if (state.contentHash !== hash) return "newversion";
+  if (force || state.contentHash !== hash) return "newversion";
   return "skip";
 }
 
@@ -120,7 +131,10 @@ async function main() {
   const state = loadState(args.env);
 
   // Plan
-  const plan = meta.map((e) => ({ e, action: decide(e, cfg, state[e.slug]) }));
+  const plan = meta.map((e) => ({
+    e,
+    action: decide(e, cfg, state[e.slug], args.force),
+  }));
   const counts = { create: 0, newversion: 0, skip: 0 };
   for (const p of plan) counts[p.action]++;
 
