@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/HamonUdvari/io-bio/compare/v1.6.2...v1.6.3) (2026-05-31)
+
+
+### Bug Fixes
+
+* **extraction:** render source-spelled demonym + fill clear nationalities (issue #10) ([](https://github.com/HamonUdvari/io-bio/commit/4684020e2b20dded9188a0b4f56f41598a669db4)), closes [#10](https://github.com/HamonUdvari/io-bio/issues/10) [#10](https://github.com/HamonUdvari/io-bio/issues/10) [#9](https://github.com/HamonUdvari/io-bio/issues/9) [pre-#10](https://github.com/pre-/issues/10)
+
 ## [1.6.2](https://github.com/HamonUdvari/io-bio/compare/v1.6.1...v1.6.2) (2026-05-30)
 
 
