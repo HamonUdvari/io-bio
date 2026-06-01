@@ -4,6 +4,9 @@ src/assets/bios-originals
 src/assets/bios-originals.zip
 src/assets/bios-overrides
 
+# generated bios hand-off artifacts (originals/changed zips + changes doc + html)
+bios-deliverables/
+
 # local-only client materials (docs, assets, etc.)
 _local/
 
