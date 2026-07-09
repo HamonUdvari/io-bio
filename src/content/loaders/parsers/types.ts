@@ -60,6 +60,10 @@ export type ExtractedBio = {
   nee?: string; // "née" maiden name (shown as "née …")
   summary: string | null;
   life: string | null;
+  /** Extra intro paragraph(s) after the vitals, before the biography narrative
+   * (name-spelling notes, name changes, ennoblements, pseudonyms). Rendered in
+   * the grey header with the vitals, not as the biography's first paragraph. */
+  introNotes: string[];
   roles: Role[];
   nationality: string | null;
   country: string | null;

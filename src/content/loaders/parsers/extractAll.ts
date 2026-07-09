@@ -30,6 +30,24 @@ export function extractAll(ast: any): ParserResult<ExtractedBio> {
   if (introNode) extractedIndices.add(0);
   const introText: string = introNode?.text ?? "";
 
+  // The intro block can extend past para 0: authors follow the vitals paragraph
+  // with an optional short identity/title note (name spelling, a name change, an
+  // ennoblement, a pseudonym…), then a blank line before the biography narrative.
+  // Claim that whole leading run of non-empty paragraphs for the header so the
+  // note renders with the vitals instead of leaking in as the biography's first
+  // paragraph. The blank line (first empty paragraph) is the intended boundary
+  // — present in every source doc; any non-paragraph node also ends the run.
+  const introNotes: string[] = [];
+  if (introNode) {
+    for (let i = 1; i < content.length; i++) {
+      const node = content[i];
+      const text = (node?.text ?? "").trim();
+      if (node?.type !== "paragraph" || text === "") break;
+      introNotes.push(text);
+      extractedIndices.add(i);
+    }
+  }
+
   const intro = parseIntro(introText);
   warnings.push(...intro.warnings);
 
@@ -69,6 +87,7 @@ export function extractAll(ast: any): ParserResult<ExtractedBio> {
     nee: intro.value.nee,
     summary: intro.value.summary,
     life: intro.value.life,
+    introNotes,
     roles: roles.value,
     nationality: nationality.value.nationality,
     country: nationality.value.country,

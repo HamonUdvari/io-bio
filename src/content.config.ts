@@ -54,6 +54,9 @@ export const bioDataSchema = z.object({
   imageFn: z.string().optional(),
   imagePortraitFn: z.string().optional(),
   life: z.string(),
+  // Extra intro paragraph(s) shown in the grey header after the vitals (name
+  // notes, ennoblements, pseudonyms) — see docxLoader / extractAll.
+  introNotes: z.array(z.string()).default([]),
   roles: z.array(roleSchema).default([]),
   archives: aplSchema.default({ items: [] }),
   publications: aplSchema.default({ items: [] }),

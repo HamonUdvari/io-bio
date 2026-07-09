@@ -388,6 +388,7 @@ const docxEntryType: ContentEntryType = {
       imagePortraitFn,
       imageSource: extracted?.imageSource ?? "",
       life: extracted?.life ?? "",
+      introNotes: extracted?.introNotes ?? [],
       roles: extracted?.roles ?? [],
       archives: extracted?.archives ?? { items: [] },
       publications: extracted?.publications ?? { items: [] },
