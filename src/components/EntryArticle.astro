@@ -12,10 +12,8 @@ import type { ImageMetadata } from "astro";
 interface Props {
   data: Record<string, any>;
   Content: any;
-  /** Canonical entry URL, used in the "How to cite" block. */
-  entryUrl: string;
 }
-const { data, Content, entryUrl } = Astro.props;
+const { data, Content } = Astro.props;
 
 const {
   image,
@@ -46,9 +44,6 @@ const title = `${lastName.toUpperCase()}, ${firstName}`;
 const displayName = `${title}${aliasSuffix(knownAs, `${firstName} ${lastName}`, nee)}`;
 
 // --- How to cite ----------------------------------------------------------
-// "Version 4 November 2019" → "4 November 2019"
-const versionLabel = (version ?? "").replace(/^Version\s+/i, "").trim();
-
 // Per-entry Zenodo citation (issue #2), built in docxLoader. It points to the
 // entry's OWN up-to-date Zenodo record: a production DOI via doi.org once
 // minted, else — for the current client preview — the sandbox deposit's concept
@@ -57,8 +52,6 @@ const versionLabel = (version ?? "").replace(/^Version\s+/i, "").trim();
 // (the whole-dictionary DOI is intentionally never shown as an entry citation —
 // it confuses casual readers).
 const zenodoCite = data.zenodoCite ?? null;
-
-const fallbackDate = versionLabel || "[date]";
 
 // Image credit: parsed into a short clickable host label + full URL (see
 // @utils/imageSource). The same parser is used by the image-source CSV export.
@@ -191,19 +184,6 @@ const imgAr = figureImgMeta
   <h2 class="section__title">How to cite</h2>
 
   {
-    /* First citation form (URL + "accessed on" date) — commented out per
-       client; the DOI form below is kept as the single citation.
-    <li>
-      {authors}, '{lastName}, {firstName}' in <cite>IO BIO, Biographical
-      Dictionary of Secretaries-General of International Organizations</cite>,
-      edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg, <a
-        href={entryUrl}>{entryUrl}</a
-      >, accessed on <span data-accessed>{fallbackDate}</span>.
-    </li>
-    */
-  }
-
-  {
     zenodoCite && (
       <p>
         {authors}, '{lastName}, {firstName}' in{" "}
@@ -220,27 +200,3 @@ const imgAr = figureImgMeta
     )
   }
 </section>
-
-<script is:inline>
-  (function () {
-    const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December",
-    ];
-    function todayLabel() {
-      const d = new Date();
-      return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
-    }
-
-    function stampAccessed(root) {
-      (root || document)
-        .querySelectorAll("[data-accessed]")
-        .forEach((el) => {
-          el.textContent = todayLabel();
-        });
-    }
-
-    // On load: replace the pre-JS fallback date with today's real date.
-    stampAccessed(document);
-  })();
-</script>

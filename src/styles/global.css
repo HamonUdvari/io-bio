@@ -61,11 +61,6 @@
   --color-io-gray-300: #c4c3c3;
   --color-io-black: #000000;
 
-  --color-brand: var(--color-io-red);
-
-  --color-io-neutral: var(--color-io-black);
-  --color-io-onneutral: var(--color-io-gray-100);
-
   --color-io-brand: var(--color-io-red);
   --color-io-onbrand: var(--color-io-black);
 
@@ -74,13 +69,6 @@
 
   --color-io-secondary: var(--color-io-gray-900);
   --color-io-onsecondary: var(--color-io-gray-100);
-
-  --color-io-secondary: var(--color-io-gray-900);
-  --color-io-onsecondary: var(--color-io-gray-100);
-  --color-io-onsecondary-muted: var(--color-io-gray-300);
-
-  --color-io-tertiary: var(--color-io-gray-600);
-  --color-io-ontertiary: var(--color-io-gray-100);
 
   /* Responsive scale — every step is explicitly suffixed (-base / -tablet /
      -desktop) so token names never collide with the same-named @utility/
@@ -97,7 +85,6 @@
   --px-base: 1rem;
   --px-tablet: 1.5rem;
   --px-desktop: 2rem;
-  --px-print: 0rem;
 
   /* Control vertical/horizontal padding — shared by .button and the search
      input so their heights match (mirrors Figma button-py / search-py). */
@@ -140,11 +127,8 @@
   --text-h2-desktop: 2.5rem; /* 40px */
   --leading-h2-desktop: 1.2;
 
-  --text-h3-base: 1.25rem; /* 20px */
-  --leading-h3-base: 1.75rem; /* 28px */
-  
-  --text-h3-base: var(--text-h2-base); /* 20px */
-  --leading-h3-base: var(--leadig-h2-base); /* 28px */
+  --text-h3-base: var(--text-h2-base); /* = text-h2 (24px) */
+  --leading-h3-base: var(--leading-h2-base);
 
   --text-body-base: 1rem; /* 16px */
   --leading-body-base: 1.2;
@@ -1031,24 +1015,6 @@
         "wght" 400,
         "GRAD" 0,
         "opsz" 24;
-    }
-  }
-
-  /* "How to cite" — the entry citation as a bullet list of either form
-     (website + access date, or the Zenodo DOI). */
-  #cite {
-    & .cite-list {
-      /* Keep the section's mobile gutter (--content-width), cap line length on
-         wide screens for readability. */
-      /* max-width: min(80ch, var(--content-width, 100%)); */
-
-      & li + li {
-        @apply mt-4;
-      }
-
-      & cite {
-        @apply italic;
-      }
     }
   }
 }

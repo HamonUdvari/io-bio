@@ -22,9 +22,6 @@ const { lastName, firstName } = data;
 const { Content } = await render(Astro.props);
 
 const slug = Astro.params.slug ?? Astro.props.id;
-const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-const SITE = import.meta.env.SITE;
-const entryUrl = new URL(`${base}entries/${slug}`, SITE).href;
 const title = `${lastName.toUpperCase()}, ${firstName}`;
 ---
 
@@ -36,7 +33,7 @@ const title = `${lastName.toUpperCase()}, ${firstName}`;
     <title>{`Print · ${title}`}</title>
   </head>
   <body class="pagedjs-print-root">
-    <EntryArticle data={data} Content={Content} entryUrl={entryUrl} />
+    <EntryArticle data={data} Content={Content} />
 
     <script>
       import { Previewer } from "pagedjs";
