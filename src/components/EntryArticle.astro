@@ -190,7 +190,9 @@ const imgAr = figureImgMeta
 <section id="cite">
   <h2 class="section__title">How to cite</h2>
 
-  <ul class="cite-list">
+  {
+    /* First citation form (URL + "accessed on" date) — commented out per
+       client; the DOI form below is kept as the single citation.
     <li>
       {authors}, '{lastName}, {firstName}' in <cite>IO BIO, Biographical
       Dictionary of Secretaries-General of International Organizations</cite>,
@@ -198,23 +200,25 @@ const imgAr = figureImgMeta
         href={entryUrl}>{entryUrl}</a
       >, accessed on <span data-accessed>{fallbackDate}</span>.
     </li>
-    {
-      zenodoCite && (
-        <li>
-          {authors}, '{lastName}, {firstName}' in{" "}
-          <cite>
-            IO BIO, Biographical Dictionary of Secretaries-General of
-            International Organizations
-          </cite>
-          , edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg.{" "}
-          <a href={zenodoCite.url}>{zenodoCite.url}</a>
-          {zenodoCite.sandbox && (
-            <span class="text-small opacity-70"> (sandbox preview)</span>
-          )}
-        </li>
-      )
-    }
-  </ul>
+    */
+  }
+
+  {
+    zenodoCite && (
+      <p>
+        {authors}, '{lastName}, {firstName}' in{" "}
+        <cite>
+          IO BIO, Biographical Dictionary of Secretaries-General of
+          International Organizations
+        </cite>
+        , edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg.{" "}
+        <a href={zenodoCite.url}>{zenodoCite.url}</a>
+        {zenodoCite.sandbox && (
+          <span class="text-small opacity-70"> (sandbox preview)</span>
+        )}
+      </p>
+    )
+  }
 </section>
 
 <script is:inline>
