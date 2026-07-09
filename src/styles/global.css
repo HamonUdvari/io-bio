@@ -142,6 +142,9 @@
 
   --text-h3-base: 1.25rem; /* 20px */
   --leading-h3-base: 1.75rem; /* 28px */
+  
+  --text-h3-base: var(--text-h2-base); /* 20px */
+  --leading-h3-base: var(--leadig-h2-base); /* 28px */
 
   --text-body-base: 1rem; /* 16px */
   --leading-body-base: 1.2;
@@ -545,6 +548,10 @@
 
     h2 {
       @apply text-h2;
+    }
+
+    h3 {
+      @apply text-h3;
     }
 
     &.section--primary {

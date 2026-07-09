@@ -27,7 +27,11 @@ export interface RehypeAddLinkClassesOptions {
  *  - hrefs already starting with the base (idempotent / pre-prefixed)
  */
 export function rehypeAddLinkClasses(options: RehypeAddLinkClassesOptions = {}) {
-  const classesToAdd = ["button", "button--secondary"];
+  // Auto "standalone link → button" styling is disabled for now (client): the
+  // design doesn't use the button-format link, so this list and the block that
+  // applies it (below) are commented out. Links stay plain; download lists keep
+  // their CSS down-arrow. Re-enable both to restore CTA buttons.
+  // const classesToAdd = ["button", "button--secondary"];
 
   // Normalise the base: strip a trailing slash so joins are predictable.
   // "/io-bio/" → "/io-bio"; "/" or "" → "" (no-op).
@@ -61,6 +65,9 @@ export function rehypeAddLinkClasses(options: RehypeAddLinkClassesOptions = {}) 
         // In-page anchor links (TOC / jump links) stay plain.
         if (href.startsWith("#")) return;
 
+        /* DISABLED for now (client) — no button-format links; see note above.
+           Re-enable this block (and classesToAdd) to make standalone links
+           (download CTAs) render as buttons.
         // Only "standalone" links — the sole significant child of a block
         // element (a deliberate CTA, e.g. a download or "read the…") — become
         // buttons. Inline prose links stay plain (normal underlined links).
@@ -85,6 +92,7 @@ export function rehypeAddLinkClasses(options: RehypeAddLinkClassesOptions = {}) 
           classes.push("button--download");
         }
         node.properties.className = [...current, ...classes];
+        */
       },
     );
   };
