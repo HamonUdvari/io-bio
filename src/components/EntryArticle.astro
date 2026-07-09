@@ -6,6 +6,7 @@
 // its controls via the `controls` named slot; the print route injects nothing.
 import Image from "@components/Image.astro";
 import { aliasSuffix } from "@utils/displayName";
+import { parseImageSource } from "@utils/imageSource";
 import type { ImageMetadata } from "astro";
 
 interface Props {
@@ -58,22 +59,8 @@ const zenodoCite = data.zenodoCite ?? null;
 
 const fallbackDate = versionLabel || "[date]";
 
-// Image credit: if the source contains a URL, show just the host (a short,
-// clickable label) with the full URL on click — long source URLs otherwise
-// overflow the rotated caption. Non-URL sources render verbatim.
-function parseImageSource(src) {
-  if (!src) return { text: "", href: null, label: null };
-  const m = src.match(/(https?:\/\/[^\s]+|www\.[^\s]+)/i);
-  if (!m) return { text: src, href: null, label: null };
-  const raw = m[0].replace(/[).,;]+$/, "");
-  const href = raw.startsWith("http") ? raw : `https://${raw}`;
-  let label = raw;
-  try {
-    label = new URL(href).hostname.replace(/^www\./, "");
-  } catch {}
-  const text = src.slice(0, m.index).replace(/[\s/–—-]+$/, "").trim();
-  return { text, href, label };
-}
+// Image credit: parsed into a short clickable host label + full URL (see
+// @utils/imageSource). The same parser is used by the image-source CSV export.
 const source = parseImageSource(imageSource);
 
 // Hero image intrinsic aspect ratio (height / width), resolved at build from the
