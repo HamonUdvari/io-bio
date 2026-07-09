@@ -216,7 +216,7 @@ function ResultPanel({
             "LASTNAME, First" + aliasSuffix the entry page composes, so the
             née / known-as parenthetical shows exactly as it will render. */}
         <Field label="Display name">
-          {`${(bio.lastName ?? "").toUpperCase()}, ${bio.firstName ?? ""}${aliasSuffix(bio.knownAs, `${bio.firstName ?? ""} ${bio.lastName ?? ""}`)}`}
+          {`${(bio.lastName ?? "").toUpperCase()}, ${bio.firstName ?? ""}${aliasSuffix(bio.knownAs, `${bio.firstName ?? ""} ${bio.lastName ?? ""}`, bio.nee)}`}
         </Field>
         <Field label="Last name">{bio.lastName}</Field>
         <Field label="First name">{bio.firstName}</Field>

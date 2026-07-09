@@ -22,6 +22,7 @@ const {
   lastName,
   firstName,
   knownAs,
+  nee,
   archives,
   publications,
   literature,
@@ -38,11 +39,10 @@ if (!image) {
 }
 
 const title = `${lastName.toUpperCase()}, ${firstName}`;
-// Visible heading appends a "(nickname)" alias when the person has a distinct
-// "known as" (suppressed when it just repeats the name); the meta title + image
-// alt keep the formal name (`title`). The née maiden name is kept on the entry
-// (data.nee) but is no longer shown after the name.
-const displayName = `${title}${aliasSuffix(knownAs, `${firstName} ${lastName}`)}`;
+// Visible heading appends a parenthetical alias: the "(known as)" nickname when
+// present, otherwise the "(née maiden-name)" — suppressed when it just repeats
+// the name. The meta title + image alt keep the formal name (`title`).
+const displayName = `${title}${aliasSuffix(knownAs, `${firstName} ${lastName}`, nee)}`;
 
 // --- How to cite ----------------------------------------------------------
 // "Version 4 November 2019" → "4 November 2019"
