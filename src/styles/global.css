@@ -615,6 +615,7 @@
     & .entries__toolbar {
       /* Wrap on mobile so the toggle drops to its own row; inline on desktop. */
       @apply flex flex-row flex-wrap desktop:flex-nowrap;
+
       /* Search ↔ toggle gap matches Figma toolbar/gap (4px); the breathing room
          is the gap-y after the whole toolbar (on .entries). */
       @apply gap-(--gap-controls);
@@ -624,6 +625,10 @@
       @apply w-full;
       @apply px-4 py-(--btn-py);
       @apply shadow ring ring-inset;
+      
+      @variant desktop {
+        @apply flex-1;
+      }
     }
 
     & .entries__view-toggle {

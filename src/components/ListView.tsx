@@ -272,7 +272,7 @@ export default function ListView({ data }: ListViewProps) {
               view === "grid" && "button--active",
             )}
           >
-            Grid
+            Portraits
           </button>
         </div>
       </div>
