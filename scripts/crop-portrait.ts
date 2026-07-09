@@ -103,14 +103,47 @@ function computeCropForFace(
 }
 
 /**
+ * Choose the subject's face among the detected boxes.
+ *
+ * Default: the largest box — in almost every photo the subject dominates the
+ * frame, so this is the most reliable single signal.
+ *
+ * Override: `subjectIndex` (1-based, counting the detected faces left-to-right
+ * by their centre) forces a specific face for the rare multi-person photo where
+ * the subject isn't the largest — e.g. a two-person shot where a companion's
+ * face reads bigger. Set per entry in src/data/portrait-subjects.json. An
+ * absent or out-of-range index falls back to the largest box, so entries
+ * without an override are unaffected.
+ */
+function selectSubjectFace<T extends { x: number; y: number; width: number; height: number }>(
+  boxes: T[],
+  subjectIndex?: number,
+): T {
+  if (subjectIndex && Number.isInteger(subjectIndex) && subjectIndex >= 1) {
+    const leftToRight = [...boxes].sort(
+      (a, b) => a.x + a.width / 2 - (b.x + b.width / 2),
+    );
+    const chosen = leftToRight[subjectIndex - 1];
+    if (chosen) return chosen; // out-of-range → fall through to largest
+  }
+  const area = (b: T) => b.width * b.height;
+  return boxes.reduce((big, b) => (area(b) > area(big) ? b : big));
+}
+
+/**
  * Crop `inputPath` to a face-centred portrait and write to `outputPath`.
  *
  * Always produces TARGET_W × TARGET_H JPEG. Returns `true` if a face was
  * detected and used; `false` if the fallback saliency crop was used.
+ *
+ * `subjectIndex` (1-based, counting detected faces left-to-right) overrides
+ * which face is used for multi-person photos where the largest isn't the
+ * subject; see selectSubjectFace and src/data/portrait-subjects.json.
  */
 export async function cropToPortrait(
   inputPath: string,
   outputPath: string,
+  subjectIndex?: number,
 ): Promise<{ usedFace: boolean }> {
   if (!existsSync(inputPath)) {
     throw new Error(`Input image does not exist: ${inputPath}`);
@@ -157,12 +190,14 @@ export async function cropToPortrait(
   tensor.dispose();
 
   if (detections.length > 0) {
-    // Largest detected face — most likely the subject.
-    const faceScaled = detections
-      .map((d) => d.box)
-      .reduce((biggest, b) =>
-        b.width * b.height > biggest.width * biggest.height ? b : biggest,
-      );
+    // Pick the subject's face — the largest box, unless a per-entry
+    // subjectIndex overrides it (see selectSubjectFace). Boxes are in the
+    // downscaled detection-tensor space; the uniform downscale preserves their
+    // left-to-right order, so we select here then scale back to source.
+    const faceScaled = selectSubjectFace(
+      detections.map((d) => d.box),
+      subjectIndex,
+    );
     // Coordinates came from the downscaled tensor; scale back to source pixels.
     const face = {
       x: faceScaled.x / scale,

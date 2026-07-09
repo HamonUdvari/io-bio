@@ -64,6 +64,23 @@ function loadSandboxMap(): Record<string, SandboxEntry> {
 }
 const SANDBOX_MAP = loadSandboxMap();
 
+// --- Per-entry portrait face override (src/data/portrait-subjects.json) ------
+// Maps an entry slug to the subject's 1-based position (faces counted
+// left-to-right) so the portrait cropper picks the right person in multi-person
+// photos where the largest detected face isn't the subject. Absent slugs use
+// the default "largest face" pick. Keys starting with "_" (e.g. "_comment")
+// are never slugs, so they're ignored by lookup.
+function loadPortraitSubjectMap(): Record<string, number> {
+  const p = path.resolve("./src/data", "portrait-subjects.json");
+  if (!existsSync(p)) return {};
+  try {
+    return (JSON.parse(readFileSync(p, "utf8")) as Record<string, number>) ?? {};
+  } catch {
+    return {};
+  }
+}
+const PORTRAIT_SUBJECT_MAP = loadPortraitSubjectMap();
+
 /**
  * Write a docx image attachment to `outputDir` as `<stem>.<ext>`.
  *
@@ -332,7 +349,11 @@ const docxEntryType: ContentEntryType = {
           const { cropToPortrait } = await import(
             "../../../scripts/crop-portrait.ts"
           );
-          const { usedFace } = await cropToPortrait(activePath, portraitPath);
+          const { usedFace } = await cropToPortrait(
+            activePath,
+            portraitPath,
+            PORTRAIT_SUBJECT_MAP[slug],
+          );
           imagePortraitFn = portraitFn;
           console.warn(
             `[docx] ${basename(filePath)}: portrait${usedFace ? "" : " (saliency fallback)"} → ${portraitFn}`,
