@@ -68,6 +68,22 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed;
 };
 
+// Locale-aware surname sort. The raw code-point default mis-files punctuated /
+// accented names: e.g. "M'Bow" uses a curly apostrophe (U+2019) that sorts
+// after every letter, dumping it at the end of "M". `ignorePunctuation` drops
+// the apostrophe (and spaces) so it reads as "Mbow" (mid-M), and
+// `sensitivity: "base"` folds diacritics so "Larosière"/"Hammarskjöld" sort by
+// their base letters. One reused instance (the constructor is expensive).
+// NOTE: compound surnames (e.g. the Iberian "Da Costa Holanda Cavalcanti")
+// still sort by their full string under "D" — indexing those by a non-leading
+// element is a per-culture editorial call and is intentionally left alone.
+const nameCollator = new Intl.Collator("en", {
+  sensitivity: "base",
+  ignorePunctuation: true,
+});
+const sortByName = (a: any, b: any, columnId: string): number =>
+  nameCollator.compare(String(a.getValue(columnId)), String(b.getValue(columnId)));
+
 /**
  * Format an organisation for display. When the parser captured both the full
  * name and a parenthesised abbreviation, show "Full Name (ABBR)". Otherwise
@@ -131,6 +147,7 @@ export default function ListView({ data }: ListViewProps) {
         id: "fullName",
         header: "Name",
         filterFn: "includesString",
+        sortingFn: sortByName,
       },
     ),
     columnHelper.accessor((row) => row.role?.title ?? "", {
