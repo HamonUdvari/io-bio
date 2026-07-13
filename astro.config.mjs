@@ -11,6 +11,13 @@ import { remarkDirectiveSections } from "./src/remarkPlugins/remarkDirectiveSect
 import { remarkDirectiveColumns } from "./src/remarkPlugins/remarkDirectiveColumns";
 import { remarkPrefixRawLinks } from "./src/remarkPlugins/remarkPrefixRawLinks";
 
+// Astro 6.4 deprecated markdown.remarkPlugins/rehypePlugins in favour of a
+// configured unified() processor (the old keys are removed in Astro 8). `unified`
+// is exported by @astrojs/markdown-remark — declared as a direct dep so this bare
+// import resolves to a version that exports it (7.2.0+); @astrojs/mdx still pulls
+// an older 7.1.x copy that doesn't, which would otherwise win the hoist.
+import { unified } from "@astrojs/markdown-remark";
+
 import mdx from "@astrojs/mdx";
 
 import { devPdfRenderer } from "./scripts/dev-pdf-renderer.ts";
@@ -86,25 +93,39 @@ function mediaRangeToLegacy() {
 // Everything else (links, assets, the rehype prefixer) derives from BASE.
 const BASE = "/io-bio";
 
+// One source of truth for the markdown/MDX plugin pipeline. Applied to `.md` via
+// the unified() processor (markdown.processor) AND to `.mdx` via the mdx()
+// integration — @astrojs/mdx doesn't inherit plugins from markdown.processor
+// (only from the deprecated markdown.remarkPlugins/rehypePlugins), so without the
+// explicit hand-off the `:::section{…}` directive in entries.mdx fails to parse.
+const remarkPlugins = [
+  remarkDemoteHeadings,
+  remarkDirective,
+  remarkDirectiveColumns,
+  remarkDirectiveSections,
+  [remarkPrefixRawLinks, { base: BASE }],
+];
+const rehypePlugins = [[rehypeAddLinkClasses, { base: BASE }]];
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://HamonUdvari.github.io",
   // site: "https://io-bio.graduateinstitute.ch",
   base: BASE,
   markdown: {
-    remarkPlugins: [
-      remarkDemoteHeadings,
-      remarkDirective,
-      remarkDirectiveColumns,
-      remarkDirectiveSections,
-      [remarkPrefixRawLinks, { base: BASE }],
-    ],
-    rehypePlugins: [[rehypeAddLinkClasses, { base: BASE }]],
+    // gfm + smartypants stay at unified()'s defaults (both true — Astro's
+    // defaults), so `.md` rendering is unchanged from the old plugin-key form.
+    processor: unified({ remarkPlugins, rehypePlugins }),
   },
   server: {
     allowedHosts: true,
   },
-  integrations: [preact({ compat: true }), mdx(), devPdfRenderer(BASE)],
+  integrations: [
+    preact({ compat: true }),
+    // Feed the same plugins to MDX explicitly (it can't read markdown.processor).
+    mdx({ remarkPlugins, rehypePlugins }),
+    devPdfRenderer(BASE),
+  ],
   vite: {
     plugins: [tailwindcss(), fontDisplayBlock(), mediaRangeToLegacy()],
     resolve: {

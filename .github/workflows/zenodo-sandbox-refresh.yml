@@ -51,18 +51,18 @@ jobs:
     if: ${{ vars.ZENODO_SANDBOX_AUTOMINT == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # full history so the post-mint push isn't rejected by a shallow clone
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 11
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "22"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - uses: browser-actions/setup-chrome@v1
+      - uses: browser-actions/setup-chrome@v2
         id: chrome
         with:
           chrome-version: stable
