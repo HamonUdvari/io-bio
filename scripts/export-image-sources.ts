@@ -23,10 +23,10 @@ import path from "node:path";
 import { basename } from "node:path";
 import pLimit from "p-limit";
 import { OfficeParser } from "officeparser";
-import { parseImage } from "../src/content/loaders/parsers/parseImage.ts";
+import { parseImage } from "../src/loaders/parsers/parseImage.ts";
 import { parseImageSource } from "../src/utils/imageSource.ts";
 
-const BIOS_DIR = path.resolve("./src/content/bios-processed");
+const BIOS_DIR = path.resolve("./src/content/bios");
 const OUT_DIR = path.resolve("./bios-deliverables");
 const OUT_FILE = path.join(OUT_DIR, "image-sources.csv");
 

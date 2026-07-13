@@ -347,7 +347,7 @@ const docxEntryType: ContentEntryType = {
       } else {
         try {
           const { cropToPortrait } = await import(
-            "../../../scripts/crop-portrait.ts"
+            "../../scripts/crop-portrait.ts"
           );
           const { usedFace } = await cropToPortrait(
             activePath,

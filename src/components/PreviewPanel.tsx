@@ -1,10 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
 import clsx from "clsx";
-import { extractAll } from "@content/loaders/parsers/extractAll";
-import type {
-  ExtractedBio,
-  Warning,
-} from "@content/loaders/parsers/types";
+import { extractAll } from "../loaders/parsers/extractAll";
+import type { ExtractedBio, Warning } from "../loaders/parsers/types";
 import { aliasSuffix } from "@utils/displayName";
 
 // Pinned CDN copy of officeparser's classic-script bundle. We can't bundle

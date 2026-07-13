@@ -28,14 +28,13 @@ on:
       - "src/rehypePlugins/**"
       - "astro.config.mjs"
       # Entry content / extraction → bumps the per-entry content hash:
-      - "src/content/bios-processed/**"
-      - "src/content/loaders/**"
+      - "src/content/bios/**"
+      - "src/loaders/**"
       - "src/content.config.ts"
       - "src/pages/zenodo-meta.json.ts"
       # The mint pipeline itself:
       - "scripts/zenodo-*.ts"
       - "scripts/lib/zenodo-*.ts"
-      - "scripts/bios-transforms.ts"
   workflow_dispatch:
 
 permissions:

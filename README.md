@@ -17,16 +17,12 @@ Each biography is a Word (`.docx`) file whose **name is the entry**: `Surname-In
 biography text, Archives/Publications/Literature, portrait and citation are all read from the file
 automatically.
 
-Upload the `.docx` (GitHub → open the folder → **"Add file → Upload files"**) to **both** folders — same
-file, same name:
+- **Add a new entry:** GitHub → open **`src/content/bios/`** → **"Add file → Upload files"** → drop the
+  `.docx` in → **Commit**.
+- **Update an entry:** upload the corrected file under the **same name** to replace it (Word files can't
+  be edited in the browser — edit in Word, then re-upload).
 
-- **`src/content/bios-processed/`** — the copy the site actually publishes.
-- **`src/content/bios-source/`** — the untouched original. (A maintainer's cleanup step rebuilds
-  `bios-processed` from here, so a file added only to `bios-processed` can be overwritten later.)
-
-To **update** an entry, upload the corrected file under the **same name** to replace it (Word files
-can't be edited in the browser — edit in Word, then re-upload). Follow the layout in the **Author
-Instructions** so the site reads it correctly.
+Follow the layout in the **Author Instructions** so the site reads it correctly.
 
 ### 2. Change website text
 
@@ -104,10 +100,8 @@ If the auto-crop picks the wrong person in a group photo:
 ## Image pipeline
 
 ```
-src/content/bios-source/         author docx (source of truth)
-   ↓ scripts/process-bios.ts (cosmetic fixes)
-src/content/bios-processed/      docx Astro reads via docxLoader.ts
-   ↓ docxLoader extracts attachments
+src/content/bios/<Surname-Initial Year>.docx   author docx — the loader reads these
+   ↓ src/loaders/docxLoader.ts extracts attachments
 src/assets/bios-extracted/<slug>.<ext>     ← raw docx images (gitignored, reference)
    │
    ├─ if override exists ─────→ src/content/bios-images/<slug>.<ext>   ← curated/AI-upscaled (tracked)
@@ -121,8 +115,7 @@ src/assets/bios-extracted/<slug>.<ext>     ← raw docx images (gitignored, refe
 
 **Adding a higher-quality replacement image:** drop a file at
 `src/content/bios-images/<slug>.<ext>` (matching the entry slug) and run
-`npm run bios:process && npm run build`. The override is picked up
-automatically.
+`npm run build`. The override is picked up automatically.
 
 **Authors are responsible for copyright clearance** of any image they
 submit, whether in the docx or as a separate override.

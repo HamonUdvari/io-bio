@@ -1,7 +1,7 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
-import { docxLoader } from "./content/loaders/docxLoader.ts";
+import { docxLoader } from "./loaders/docxLoader.ts";
 
 const linkSchema = z.object({
   label: z.string(),
@@ -86,7 +86,7 @@ export type BioData = z.infer<typeof bioDataSchema>;
 const bios = defineCollection({
   loader: docxLoader({
     pattern: "**/*.docx",
-    base: "./src/content/bios-processed",
+    base: "./src/content/bios",
   }),
   schema: z.object({
     slug: z.string().optional(),
