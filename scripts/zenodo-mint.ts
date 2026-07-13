@@ -24,11 +24,43 @@ import { loadState, saveState } from "./lib/zenodo-state.ts";
 import type { DoiRecord } from "./lib/zenodo-state.ts";
 import { renderPdfs } from "./zenodo-render-pdfs.ts";
 
-const DICTIONARY_CONCEPT_DOI = "10.5281/zenodo.18652171";
 const SITE = (process.env.SITE_URL ?? "https://HamonUdvari.github.io").replace(/\/$/, "");
 const BASE = (process.env.SITE_BASE ?? "/io-bio").replace(/\/$/, "");
-const LICENSE = process.env.ZENODO_LICENSE ?? "cc-by-4.0"; // PLACEHOLDER — confirm before prod
-const PUBLICATION_TYPE = process.env.ZENODO_PUBLICATION_TYPE ?? "other";
+// Closest STANDARD license to the current IO BIO terms (all-rights-reserved,
+// NC-educational by permission). Editors sign off before the production mint.
+const LICENSE = process.env.ZENODO_LICENSE ?? "cc-by-nc-nd-4.0";
+const LICENSE_LABEL = process.env.ZENODO_LICENSE_LABEL ?? "CC BY-NC-ND 4.0";
+const PUBLICATION_TYPE = process.env.ZENODO_PUBLICATION_TYPE ?? "section";
+
+// The dictionary each entry belongs to. Expressed as bibliographic "Book section"
+// metadata (partof_title + imprint + editors) rather than a whole-work/software
+// DOI, plus an isPartOf link to the dictionary's home URL. io-bio.ch is the
+// intended permanent home (env-overridable until the domain is live).
+const DICTIONARY_HOME_URL = (
+  process.env.DICTIONARY_HOME_URL ?? "https://io-bio.ch"
+).replace(/\/$/, "");
+const PARTOF_TITLE =
+  process.env.ZENODO_PARTOF_TITLE ??
+  "IO BIO, Biographical Dictionary of Secretaries-General of International Organizations";
+const IMPRINT_PUBLISHER =
+  process.env.ZENODO_IMPRINT_PUBLISHER ?? "IO BIO Project, Radboud University Nijmegen";
+const IMPRINT_PLACE = process.env.ZENODO_IMPRINT_PLACE ?? "Nijmegen, Netherlands";
+
+// Dictionary editors → Zenodo `contributors` (type "Editor"); matches the on-site
+// "How to cite" ("edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg").
+const EDITORS = [
+  { name: "Reinalda, Bob", type: "Editor", affiliation: "Radboud University, Nijmegen, Netherlands" },
+  { name: "Kille, Kent J.", type: "Editor", affiliation: "The College of Wooster, United States" },
+  { name: "Eisenberg, Jaci L.", type: "Editor", affiliation: "Geneva, Switzerland" },
+];
+
+// Rights/colophon note mirrored onto each record's `notes` (and shown in-document
+// on the entry/PDF): the license covers the TEXT; the embedded portrait stays
+// under its credited source. Keep in sync with the footnote in EntryArticle.astro.
+const RIGHTS_NOTE =
+  process.env.ZENODO_RIGHTS_NOTE ??
+  `Text © the author(s), licensed under ${LICENSE_LABEL}. The portrait is excluded ` +
+    `and remains under the rights of its credited source.`;
 
 // Files + dirs that determine the rendered PDF's VISUAL output: the Paged.js
 // print route, the article template + its helpers (Image, displayName), the
@@ -134,7 +166,8 @@ async function main() {
   if (args.env === "production" && !args.yesProduction) {
     console.error(
       "Refusing to mint PRODUCTION DOIs without --yes-production. Production DOIs are permanent.\n" +
-        "Before producing real DOIs: get Zenodo bulk-mint permission, lock the license + slugs, and re-run with --yes-production.",
+        `Before producing real DOIs: confirm the editors have signed off on the license (${LICENSE}), ` +
+        "lock the entry slugs, point SITE_URL at the live domain, and re-run with --yes-production.",
     );
     process.exit(1);
   }
@@ -146,8 +179,13 @@ async function main() {
 
   const cfg: MetadataConfig = {
     license: LICENSE,
-    dictionaryConceptDoi: DICTIONARY_CONCEPT_DOI,
+    dictionaryHomeUrl: DICTIONARY_HOME_URL,
+    partofTitle: PARTOF_TITLE,
+    imprintPublisher: IMPRINT_PUBLISHER,
+    imprintPlace: IMPRINT_PLACE,
+    editors: EDITORS,
     entryUrl: (slug) => `${SITE}${BASE}/entries/${slug}`,
+    rightsNote: RIGHTS_NOTE,
     publicationType: PUBLICATION_TYPE,
     // SANDBOX only: fold the print-template fingerprint into the idempotency
     // hash so a layout/CSS change re-versions the demo deposits. Production stays
@@ -192,7 +230,13 @@ async function main() {
       if (action !== "skip") {
         console.log(`    title:   ${metadata.title}`);
         console.log(`    authors: ${metadata.creators.map((c) => c.name).join("; ")}`);
+        console.log(`    editors: ${(metadata.contributors ?? []).map((c) => c.name).join("; ") || "—"}`);
+        console.log(`    type:    ${metadata.publication_type}  license: ${metadata.license}`);
+        console.log(`    partOf:  ${metadata.partof_title ?? "—"}`);
         console.log(`    date:    ${metadata.publication_date}  version: ${metadata.version ?? "—"}`);
+        console.log(
+          `    rels:    ${metadata.related_identifiers.map((r) => `${r.relation}→${r.identifier}`).join("  ")}`,
+        );
         for (const w of warnings) console.log(`    ! ${w}`);
       }
     }

@@ -27,16 +27,30 @@ export interface ZenodoRelatedId {
   scheme: string;
 }
 
+export interface ZenodoContributor {
+  name: string; // "Family name, Given names"
+  type: string; // Zenodo contributor type, e.g. "Editor"
+  affiliation?: string;
+  orcid?: string;
+}
+
 export interface ZenodoMetadata {
   upload_type: "publication";
   publication_type: string;
   title: string;
   creators: ZenodoCreator[];
+  contributors?: ZenodoContributor[];
   description: string;
   publication_date: string; // YYYY-MM-DD
   version?: string;
   access_right: "open";
   license: string;
+  // "Book section" host-work fields — how each entry declares it belongs to the
+  // dictionary WITHOUT a whole-work DOI. partof_title is the load-bearing signal
+  // (renders as "Part of …" on the record + in BibTeX/DataCite exports).
+  partof_title?: string;
+  imprint_publisher?: string;
+  imprint_place?: string;
   related_identifiers: ZenodoRelatedId[];
   keywords?: string[];
   notes?: string;
@@ -44,13 +58,27 @@ export interface ZenodoMetadata {
 }
 
 export interface MetadataConfig {
-  /** SPDX-ish license id, e.g. "cc-by-4.0". PLACEHOLDER until editors confirm. */
+  /** SPDX-ish license id, e.g. "cc-by-nc-nd-4.0" (editors sign off on wording). */
   license: string;
-  /** Whole-dictionary concept DOI; each entry links to it via isPartOf. */
-  dictionaryConceptDoi: string;
-  /** Builds the canonical public URL for an entry slug (for the `notes` field). */
+  /**
+   * Canonical home of the dictionary (e.g. https://io-bio.ch). Each entry links
+   * to it via `isPartOf` (url scheme) — the "belongs to the dictionary" relation,
+   * in place of a whole-work/software DOI.
+   */
+  dictionaryHomeUrl: string;
+  /** Host-work title for `partof_title` (the work each entry is a section of). */
+  partofTitle: string;
+  /** `imprint_publisher` — the dictionary's publisher. */
+  imprintPublisher: string;
+  /** `imprint_place` — place of publication, "city, country". */
+  imprintPlace: string;
+  /** The dictionary editors, emitted as `contributors` with type "Editor". */
+  editors: ZenodoContributor[];
+  /** Builds the canonical public URL for an entry slug (notes + isVariantFormOf). */
   entryUrl: (slug: string) => string;
-  /** publication_type — "other" (default) or "section". */
+  /** Rights/colophon note appended to `notes` (mirrors the in-document footnote). */
+  rightsNote?: string;
+  /** publication_type — defaults to "section" (Zenodo "Book section"). */
   publicationType?: string;
   /**
    * Optional print-template fingerprint folded into the idempotency hash so a
@@ -150,25 +178,44 @@ export function buildMetadata(
     ),
   );
 
+  const canonicalUrl = cfg.entryUrl(e.slug);
+  // Canonical link + the rights/colophon note (mirrors the in-document footnote,
+  // so the record's license claim is correct given the third-party portrait).
+  const notes = [`Canonical entry: ${canonicalUrl}`, cfg.rightsNote]
+    .map((s) => (s ?? "").trim())
+    .filter(Boolean)
+    .join("\n\n");
+
   const metadata: ZenodoMetadata = {
     upload_type: "publication",
-    publication_type: cfg.publicationType ?? "other",
+    publication_type: cfg.publicationType ?? "section",
     title,
     creators: splitAuthors(e.authors),
+    contributors: cfg.editors?.length ? cfg.editors : undefined,
     description,
     publication_date,
     version: versionLabel(e.version) || undefined,
     access_right: "open",
     license: cfg.license,
+    partof_title: cfg.partofTitle || undefined,
+    imprint_publisher: cfg.imprintPublisher || undefined,
+    imprint_place: cfg.imprintPlace || undefined,
+    // Each entry belongs to the dictionary (isPartOf its home URL) and is the PDF
+    // form of its online entry (isVariantFormOf). No software/whole-work DOI.
     related_identifiers: [
       {
-        identifier: cfg.dictionaryConceptDoi,
+        identifier: cfg.dictionaryHomeUrl,
         relation: "isPartOf",
-        scheme: "doi",
+        scheme: "url",
+      },
+      {
+        identifier: canonicalUrl,
+        relation: "isVariantFormOf",
+        scheme: "url",
       },
     ],
     keywords: keywords.length ? keywords : undefined,
-    notes: `Canonical entry: ${cfg.entryUrl(e.slug)}`,
+    notes: notes || undefined,
     language: "eng",
   };
 
@@ -189,7 +236,7 @@ export function computeStateHash(e: MetaEntry, cfg: MetadataConfig): string {
         JSON.stringify({
           content: e.contentHash,
           license: cfg.license,
-          publication_type: cfg.publicationType ?? "other",
+          publication_type: cfg.publicationType ?? "section",
           // Only present for sandbox — a layout/template change re-versions the
           // demo deposits; absent for production (content-only permanence).
           ...(cfg.renderVersion ? { render: cfg.renderVersion } : {}),
