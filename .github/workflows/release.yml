@@ -8,6 +8,13 @@ permissions:
   issues: write
   pull-requests: write
 
+# Serialize releases: if two commits land close together, run them one at a time
+# (the second finds nothing new and no-ops). Do NOT cancel-in-progress — a release
+# mid-run is tagging/pushing a changelog + GitHub release and must never be halted.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
