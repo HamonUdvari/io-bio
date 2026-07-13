@@ -1,0 +1,65 @@
+---
+// Renders a page authored as CMS "section blocks" (see the `sections` field on
+// the pages collection). Each block becomes one <section> with the same markup
+// the `::::section` markdown directive produced, so output is identical to the
+// old Markdown-body pages — only the *authoring* format changed (structured
+// blocks the CMS can edit, instead of raw `::::section{…}` syntax).
+//
+// Each block's `content` is still Markdown, rendered with the SAME remark/rehype
+// pipeline as astro.config.mjs, so links get the base prefix, headings demote,
+// and a nested `:::columns` directive still works.
+import { createMarkdownProcessor } from "@astrojs/markdown-remark";
+import GithubSlugger from "github-slugger";
+import remarkDirective from "remark-directive";
+import { remarkDemoteHeadings } from "../remarkPlugins/remarkDemoteHeadings";
+import { remarkDirectiveColumns } from "../remarkPlugins/remarkDirectiveColumns";
+import { remarkDirectiveSections } from "../remarkPlugins/remarkDirectiveSections";
+import { remarkPrefixRawLinks } from "../remarkPlugins/remarkPrefixRawLinks";
+import { rehypeAddLinkClasses } from "../rehypePlugins/rehypeAddLinkClasses";
+
+interface Section {
+  title?: string;
+  variant?: string;
+  stretch?: string;
+  content?: string;
+}
+
+const { sections = [] } = Astro.props as { sections: Section[] };
+
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const processor = await createMarkdownProcessor({
+  remarkPlugins: [
+    remarkDemoteHeadings,
+    remarkDirective,
+    remarkDirectiveColumns,
+    remarkDirectiveSections,
+    [remarkPrefixRawLinks, { base: BASE }],
+  ],
+  rehypePlugins: [[rehypeAddLinkClasses, { base: BASE }]],
+});
+
+const rendered = await Promise.all(
+  sections.map((s) => processor.render(s.content ?? "")),
+);
+
+// Same heading-id scheme Astro's rehype plugin applies, so section titles keep
+// their anchor ids (e.g. #downloads) exactly as the old Markdown pages did.
+const slugger = new GithubSlugger();
+const titleIds = sections.map((s) => (s.title ? slugger.slug(s.title) : undefined));
+---
+
+{
+  sections.map((s, i) => (
+    <section
+      class={`section section--${s.variant ?? "secondary"} section--${s.stretch ?? "base"}`}
+    >
+      {s.title && (
+        <h2 class="section__title" id={titleIds[i]}>
+          {s.title}
+        </h2>
+      )}
+      <Fragment set:html={rendered[i].code} />
+    </section>
+  ))
+}

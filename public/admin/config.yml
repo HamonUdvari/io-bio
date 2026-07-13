@@ -1,0 +1,98 @@
+# Sveltia CMS configuration for IO BIO.
+# Docs: https://sveltiacms.app/en/docs/intro
+#
+# LOCAL editing (no login needed): run `pnpm dev`, open
+#   http://localhost:4321/io-bio/admin/index.html
+# in Chrome/Edge/Brave, click "Work with Local Repository", pick the repo root.
+#
+# LIVE login (no extra hosting): editors click "Sign in with Token" on the login
+# screen and paste a GitHub fine-grained personal access token scoped to this
+# repo (GitHub provides a pre-filled link). No Cloudflare / OAuth backend needed.
+# (When GitHub ships client-side PKCE, this becomes one-click with still no
+# backend — no config change required.)
+
+backend:
+  name: github
+  repo: HamonUdvari/io-bio
+  branch: main
+
+site_url: https://hamonudvari.github.io/io-bio
+
+# Uploaded files (e.g. PDFs, images) land in public/ and are referenced from the
+# site root (the /io-bio base is added automatically when the page renders).
+media_folder: public
+public_folder: /
+
+collections:
+  # ---------- Site text ----------
+  - name: site
+    label: Site text
+    delete: false
+    files:
+      - name: hero
+        label: Home page (hero)
+        file: src/content/globals/hero.md
+        fields:
+          - label: Buttons
+            name: links
+            widget: list
+            required: false
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Link, name: href, widget: string }
+          - { label: Hero text, name: body, widget: text }
+      - name: footer
+        label: Footer
+        file: src/content/globals/footer.md
+        fields:
+          - { label: Footer text, name: body, widget: text }
+      - name: meta
+        label: Browser tab & search text
+        file: src/content/globals/global.md
+        fields:
+          - { label: Site title, name: title, widget: string }
+          - { label: Search description, name: description, widget: text }
+
+  # ---------- Pages (section block editor) ----------
+  # Each page is a list of "section" blocks: add / reorder / delete blocks, each
+  # with a heading, a style, a width, and rich-text content. No ::: syntax.
+  - name: pages
+    label: Pages
+    delete: false
+    files:
+      - name: about
+        label: About
+        file: src/content/pages/about.md
+        fields:
+          - { label: Page title, name: title, widget: string }
+          - { label: Search description, name: description, widget: text, required: false }
+          - { label: Menu order, name: order, widget: number, required: false, value_type: int }
+          - { label: URL name, name: slug, widget: hidden, default: about }
+          - label: Sections
+            name: sections
+            label_singular: Section
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Heading, name: title, widget: string, required: false }
+              - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary }
+              - { label: Width, name: stretch, widget: select, options: [base, wide], default: base }
+              - { label: Content, name: content, widget: markdown }
+      - name: author-instructions
+        label: Author Instructions
+        file: src/content/pages/author-instructions.md
+        fields:
+          - { label: Page title, name: title, widget: string }
+          - { label: Search description, name: description, widget: text, required: false }
+          - { label: Menu order, name: order, widget: number, required: false, value_type: int }
+          - { label: URL name, name: slug, widget: hidden, default: author-instructions }
+          - label: Sections
+            name: sections
+            label_singular: Section
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Heading, name: title, widget: string, required: false }
+              - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary }
+              - { label: Width, name: stretch, widget: select, options: [base, wide], default: base }
+              - { label: Content, name: content, widget: markdown }
