@@ -65,16 +65,16 @@ const sandboxUrl = sandboxRecordId
       {/* Debug links (screen only): the live browser-print view for iterating
           on print styles, and the per-entry Zenodo sandbox deposit if minted. */}
       <div class="flex flex-row gap-x-4 text-small">
-        <a
-          class="cursor-pointer underline opacity-70 hover:opacity-100"
-          href={printHref}>Print preview</a
-        >
+        <!-- <a -->
+        <!--   class="cursor-pointer underline opacity-70 hover:opacity-100" -->
+        <!--   href={printHref}>Print preview</a -->
+        <!-- > -->
         {sandboxUrl && (
           <a
             class="underline opacity-70 hover:opacity-100"
             href={sandboxUrl}
             target="_blank"
-            rel="noopener noreferrer">Zenodo sandbox (debug)</a
+            rel="noopener noreferrer">Zenodo</a
           >
         )}
       </div>
