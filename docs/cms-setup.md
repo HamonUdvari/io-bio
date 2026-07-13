@@ -30,6 +30,13 @@ with GitHub" would need a small auth backend** (deliberately avoided here). Inst
 - **Pages** — About & Author Instructions via a **section block editor**: add / reorder /
   delete section blocks, each with a heading, style (primary/secondary), width (base/wide)
   and rich-text content. No `::::section` syntax for editors.
+- **Biographies** — a "Biographies" collection to **add a new bio** by uploading its `.docx`
+  (+ an optional better photo). The `.docx` lands in `src/content/bios/` and `docxLoader`
+  reads it. See the caveats under TODO.
+
+Verified with Playwright (Chromium) against a `test-repo` backend: the config parses, all
+three collections render, and the section block editor shows its Add-Section / heading /
+style / width / content fields. The login screen offers "Sign in with Token" (no Cloudflare).
 
 ### How the section blocks render
 
@@ -39,13 +46,17 @@ markup + markdown pipeline as before, so output is byte-identical to the old pag
 (verified). The homepage `entries.mdx` still uses a Markdown body (it embeds components),
 and `src/pages/[...slug].astro` renders whichever form a page uses.
 
-## TODO (needs interactive verification in the browser)
+## TODO (needs a real upload / real backend to confirm)
 
-- **Bios (.docx upload)** — a Git CMS can't rich-edit `.docx`; editors will upload/replace
-  the `.docx` in `src/content/bios/` as files. The exact Sveltia mechanism (media upload vs
-  a file-widget wrapper) needs to be tried in the running CMS and finalized.
-- **Portrait images** (`src/content/bios-images/<slug>.<ext>`) and **face-crop overrides**
-  (`src/data/portrait-subjects.json`) — add as media/collection once verified.
-- **Downloads** — PDFs live in `public/`; editors upload via the media button. Confirm the
+- **Bios upload path** — the config uploads the `.docx` to `/src/content/bios` and the photo to
+  `/src/content/bios-images` via per-field `media_folder`. Rendering is verified, but do one
+  real upload (local backend) to confirm the file lands in the right folder and builds.
+- **Existing bios** — the "Biographies" collection lists sidecar entries in `src/data/bios-cms/`,
+  so the ~110 existing `.docx` (no sidecar) don't appear yet. Decide: leave existing bios managed
+  as today (GitHub) and use the CMS only to *add* new ones, or backfill sidecars.
+- **Face-crop overrides** (`src/data/portrait-subjects.json`) — an arbitrary-key JSON map; needs a
+  `keyvalue`-style widget (verify it exists in this Sveltia version) or leave as a direct-edit file.
+- **Downloads (PDFs)** — editors upload via the media button (`media_folder: public`); confirm the
   base-path handling on a real upload.
-- Do **not** merge to `main` / deploy until the live token login + these items are verified.
+- **Live login** — verify the "Sign in with Token" flow once with a real GitHub fine-grained token.
+- Do **not** merge to `main` / deploy until the live token login + a real edit are confirmed.

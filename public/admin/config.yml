@@ -96,3 +96,30 @@ collections:
               - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary }
               - { label: Width, name: stretch, widget: select, options: [base, wide], default: base }
               - { label: Content, name: content, widget: markdown }
+
+  # ---------- Biographies (upload .docx) ----------
+  # A Git CMS can't rich-edit Word files, so bios are handled as file uploads.
+  # Each entry is a small sidecar in src/data/bios-cms/; the uploaded .docx lands
+  # in src/content/bios/ where docxLoader reads it (by filename → slug). Use this
+  # to ADD a new bio — the author's .docx must follow the "Surname-Initial Year"
+  # naming from the Author Instructions. (Existing bios have no sidecar yet.)
+  - name: bios
+    label: Biographies
+    label_singular: Biography
+    folder: src/data/bios-cms
+    identifier_field: slug
+    extension: json
+    create: true
+    fields:
+      - { label: URL name (slug), name: slug, widget: string, hint: "e.g. annan-ka-2019 — matches the .docx file name" }
+      - label: Word document (.docx)
+        name: document
+        widget: file
+        media_folder: "/src/content/bios"
+        public_folder: "/src/content/bios"
+      - label: Better photo (optional)
+        name: image
+        widget: image
+        required: false
+        media_folder: "/src/content/bios-images"
+        public_folder: "/src/content/bios-images"
