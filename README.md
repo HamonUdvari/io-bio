@@ -6,7 +6,15 @@ Live site: **https://hamonudvari.github.io/io-bio**
 
 **To edit any file:** open it on GitHub → click the ✏️ (pencil) → make your change → **"Commit
 changes"**. Committing *is* publishing — the site updates itself a few minutes later (see
-[Publishing](#publishing-how-changes-go-live)). Ordered from most to least common:
+[Publishing](#publishing-how-changes-go-live)).
+
+> **First, always check your change on the preview page.** A few minutes after you commit (changes
+> aren't instant), open what you edited to make sure it's right. For a biography, open its **Print
+> preview** page — `…/io-bio/print/<slug>` — which shows the whole entry exactly as it renders and
+> downloads as a PDF; you can also open the live entry at `…/io-bio/entries/<slug>`. There's no
+> preview of *un-committed* edits — you check once it's live.
+
+The tasks below are ordered from most to least common:
 
 ### 1. Add or update a biography entry
 
@@ -68,14 +76,6 @@ If the auto-crop picks the wrong person in a group photo:
 - Open **`src/data/portrait-subjects.json`** and add a line `"<slug>": N`, where **N is the person's
   position counting from the left** (1 = leftmost). Example: `"mcdonald-jg-2016": 1`.
 - Commit — the crop is redone on the next build.
-
-### Check your change went live
-
-- There's **no preview of un-committed edits** — changes appear a few minutes after you commit (see
-  [Publishing](#publishing-how-changes-go-live)).
-- Then open the page (a biography is at `…/io-bio/entries/<slug>`) to check text + photo. For the
-  printable/PDF version use **"Print preview"** / **"Download (PDF)"** on the entry (or
-  `…/io-bio/print/<slug>`).
 
 ## Publishing (how changes go live)
 
