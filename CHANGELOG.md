@@ -1,3 +1,17 @@
+# [1.9.0](https://github.com/HamonUdvari/io-bio/compare/v1.8.1...v1.9.0) (2026-07-13)
+
+
+### Bug Fixes
+
+* **cms:** fill section Style/Width, give bios their own folder, add Columns block ([](https://github.com/HamonUdvari/io-bio/commit/20a0cf50cff4844212b8d41ccae9b28c669e4fba))
+
+
+### Website Features
+
+* **cms:** add Biographies (.docx upload) collection; verified via Playwright ([](https://github.com/HamonUdvari/io-bio/commit/4244ef14c46d7201de2df4f77da569caa96b4228))
+* **cms:** add File-link block, drop the image button from the section editor ([](https://github.com/HamonUdvari/io-bio/commit/78426353a2a22cdbb6bbe1b95a33c52d604c42cd))
+* **cms:** add Sveltia CMS — site text + section block editor for pages ([](https://github.com/HamonUdvari/io-bio/commit/2772bc601c75dd48ebf169a9ca9d04d71f504459))
+
 ## [1.8.1](https://github.com/HamonUdvari/io-bio/compare/v1.8.0...v1.8.1) (2026-07-13)
 
 
