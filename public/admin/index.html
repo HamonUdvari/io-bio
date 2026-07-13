@@ -12,5 +12,75 @@
          "Work with Local Repository" → pick the io-bio repo root. No proxy needed.
          config.yml is auto-loaded from this same folder. -->
     <script src="https://unpkg.com/@sveltia/cms@0.170.8/dist/sveltia-cms.js"></script>
+
+    <!-- Custom "Columns" block for the section content editor, so a multi-column
+         list is added/edited as a friendly block (layout dropdown + a list of
+         items) instead of raw `:::columns{...}` directive syntax. It reads/writes
+         the same directive the site renders, so nothing about the output changes. -->
+    <script>
+      (function registerColumns() {
+        if (!(window.CMS && window.CMS.registerEditorComponent)) {
+          return void setTimeout(registerColumns, 100);
+        }
+        window.CMS.registerEditorComponent({
+          id: "columns",
+          label: "Columns (list)",
+          fields: [
+            {
+              name: "variant",
+              label: "Layout",
+              widget: "select",
+              options: ["compact", "default"],
+              default: "compact",
+            },
+            {
+              name: "items",
+              label: "Items",
+              widget: "list",
+              field: { name: "item", label: "Item", widget: "string" },
+            },
+          ],
+          // Match `:::columns` (optionally with a variant) wrapping a bullet list.
+          pattern: /:::columns(?:\{variant="([^"]*)"\})?\n([\s\S]*?)\n:::/,
+          fromBlock: function (match) {
+            var items = (match[2] || "")
+              .split("\n")
+              .map(function (l) {
+                return l.replace(/^\s*\*\s?/, "").trim();
+              })
+              .filter(Boolean);
+            return { variant: match[1] || "default", items: items };
+          },
+          toBlock: function (obj) {
+            var items = (obj.items || [])
+              .map(function (i) {
+                return "* " + i;
+              })
+              .join("\n");
+            return (
+              ':::columns{variant="' +
+              (obj.variant || "default") +
+              '"}\n' +
+              items +
+              "\n:::"
+            );
+          },
+          toPreview: function (obj) {
+            var items = (obj.items || [])
+              .map(function (i) {
+                return "<li>" + i + "</li>";
+              })
+              .join("");
+            return (
+              '<div class="columns columns--' +
+              (obj.variant || "default") +
+              '"><ul>' +
+              items +
+              "</ul></div>"
+            );
+          },
+        });
+      })();
+    </script>
   </body>
 </html>

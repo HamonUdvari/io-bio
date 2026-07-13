@@ -18,11 +18,10 @@ backend:
 
 site_url: https://hamonudvari.github.io/io-bio
 
-# Bio Word files are managed via the Asset Library (the "media" view): the global
-# media_folder points at src/content/bios, so editors browse, add and replace the
-# .docx there directly — nothing else. Page downloads (PDFs) use the Pages
-# collection's own media folder (public/), registered below.
-media_folder: src/content/bios
+# Global media (page images, downloadable PDFs) live in public/ — this is the
+# general "All assets". The bio Word files get their OWN labeled folder in the
+# Asset Library via the "Bio Word files" collection below.
+media_folder: public
 public_folder: /
 
 collections:
@@ -61,10 +60,6 @@ collections:
   - name: pages
     label: Pages
     delete: false
-    # Page media (e.g. a new downloadable PDF) goes to public/, and this also adds
-    # public/ as a second browsable folder in the Asset Library.
-    media_folder: /public
-    public_folder: /
     files:
       - name: about
         label: About
@@ -81,8 +76,8 @@ collections:
             summary: "{{fields.title}}"
             fields:
               - { label: Heading, name: title, widget: string, required: false }
-              - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary }
-              - { label: Width, name: stretch, widget: select, options: [base, wide], default: base }
+              - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary, required: false }
+              - { label: Width, name: stretch, widget: select, options: [base, wide], default: base, required: false }
               - { label: Content, name: content, widget: markdown }
       - name: author-instructions
         label: Author Instructions
@@ -99,6 +94,21 @@ collections:
             summary: "{{fields.title}}"
             fields:
               - { label: Heading, name: title, widget: string, required: false }
-              - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary }
-              - { label: Width, name: stretch, widget: select, options: [base, wide], default: base }
+              - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary, required: false }
+              - { label: Width, name: stretch, widget: select, options: [base, wide], default: base, required: false }
               - { label: Content, name: content, widget: markdown }
+
+  # ---------- Bio Word files ----------
+  # Gives the bio .docx their OWN labeled folder in the Asset Library (the media
+  # view), via this collection's media_folder. Manage the Word files THERE — add a
+  # new one, or replace an existing one. (No editable entries: .docx can't be
+  # text-edited; this collection only exists to give the files a labeled home.)
+  - name: bio-files
+    label: Bio Word files
+    folder: src/content/bios
+    extension: md
+    create: false
+    media_folder: /src/content/bios
+    public_folder: /src/content/bios
+    fields:
+      - { label: Name, name: title, widget: string }

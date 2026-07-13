@@ -6,6 +6,7 @@ order: 300
 sections:
   - title: Instructions for IO BIO Authors
     variant: primary
+    stretch: base
     content: |
       IO BIO is seeking authors. Are you an expert on an intergovernmental organization and its Executive Head(s), either as a scholar or as a (former) practitioner? Are you interested in writing a short biography of an executive head? IO BIO is looking for experts willing to add to our entries.
 
@@ -15,6 +16,8 @@ sections:
       Before you submit, you can [preview your entry](/preview): drop your Word document onto the page and it runs the same parser the website uses to build each entry — entirely in your browser, with nothing uploaded. This lets you check that the formatting is valid and see how your biography will appear once published.
       -->
   - title: Downloads
+    variant: secondary
+    stretch: base
     content: |
       ## Author Instructions
 
@@ -28,6 +31,8 @@ sections:
       - [Organizations Covered by the two Databases (PDF)](/io-bio-organizations-covered.pdf)
       - [Abbreviations Used in the two Databases (PDF)](/io-bio-abbreviations.pdf)
   - title: Connected Publications
+    variant: secondary
+    stretch: base
     content: |
       :::columns
       * Heinzel, M. (2022), Mediating Power? Delegation, Pooling and Leadership Selection at International Organisations’, The British Journal of Politics and International Relations, 24(1), 153-170.

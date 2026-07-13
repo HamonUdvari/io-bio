@@ -6,6 +6,7 @@ order: 400
 sections:
   - title: About
     variant: primary
+    stretch: base
     content: |
       *The IO BIO Project in Brief* The biographical literature on Secretaries-General, or other Executive Heads with different office titles is limited, giving an incomplete picture of the variety of people who have held these positions, their personal and professional trajectories and the interactions between them. IO BIO focuses on those Executive Heads of IGOs who have left a mark for any reason, whether good, bad or unusual. It includes deceased heads and those who have been out of office for five years or more and most probably will not return to office as Executive Head.
 
@@ -20,6 +21,8 @@ sections:
       # Bob Reinalda, Radboud University, Nijmegen, Netherlands, Kent J. Kille, The College of Wooster, United States and Jaci L. Eisenberg, Geneva, Switzerland, Dawisson Belém Lopes, Federal University of Minas Gerais, Brazil (Associate Editor) and Ellen Ravndal, University of Stavanger, Norway (Guest Editor)
       </div>
   - title: Our Contributors
+    variant: secondary
+    stretch: base
     content: |
       :::columns{variant="compact"}
 
