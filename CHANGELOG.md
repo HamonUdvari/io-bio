@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/HamonUdvari/io-bio/compare/v1.8.0...v1.8.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* **content:** Remove print preview debug button ([](https://github.com/HamonUdvari/io-bio/commit/7661a74a6c52d6073cfead52260e9277cf50e3ad))
+
 # [1.8.0](https://github.com/HamonUdvari/io-bio/compare/v1.7.1...v1.8.0) (2026-07-13)
 
 
