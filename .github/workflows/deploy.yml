@@ -10,13 +10,14 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    # A newer commit supersedes an older BUILD still in flight — cancel it so the
+    # newest content wins and rapid successive edits don't queue up (~5 min each).
+    concurrency:
+      group: pages-build-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -73,6 +74,11 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # Serialize the actual publish and NEVER cancel one mid-flight, so a live
+    # deployment is never left half-published.
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
