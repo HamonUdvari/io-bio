@@ -80,6 +80,32 @@
             );
           },
         });
+
+        // "File link" block: pick a file (e.g. a PDF) from the Asset Library and
+        // insert a Markdown link to it — the counterpart to the image button.
+        // Its pattern only matches links to real files (by extension), so ordinary
+        // links (mailto:, internal pages) stay as normal Markdown.
+        window.CMS.registerEditorComponent({
+          id: "file-link",
+          label: "File link",
+          fields: [
+            { name: "text", label: "Link text", widget: "string" },
+            { name: "file", label: "File", widget: "file" },
+          ],
+          pattern:
+            /\[([^\]]+)\]\((\S+\.(?:pdf|docx?|xlsx?|pptx?|csv|zip|txt))\)/i,
+          fromBlock: function (match) {
+            return { text: match[1], file: match[2] };
+          },
+          toBlock: function (obj) {
+            return "[" + (obj.text || "") + "](" + (obj.file || "") + ")";
+          },
+          toPreview: function (obj) {
+            return (
+              '<a href="' + (obj.file || "") + '">' + (obj.text || "") + "</a>"
+            );
+          },
+        });
       })();
     </script>
   </body>

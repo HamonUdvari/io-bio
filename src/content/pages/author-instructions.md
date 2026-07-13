@@ -1,24 +1,20 @@
 ---
-slug: author-instructions
 title: Author Instructions
 description: Write a short biography for IO BIO — invitation, guidance and downloads
 order: 300
+slug: author-instructions
 sections:
   - title: Instructions for IO BIO Authors
     variant: primary
     stretch: base
-    content: |
+    content: |-
       IO BIO is seeking authors. Are you an expert on an intergovernmental organization and its Executive Head(s), either as a scholar or as a (former) practitioner? Are you interested in writing a short biography of an executive head? IO BIO is looking for experts willing to add to our entries.
 
       Find full guidance on what to include and how to format an IO BIO entry in the Author Instructions (see below). To express an interest, or for more information, please contact us by [e-mail](mailto:bob.reinalda@ru.nl).
-
-      <!-- Preview-tool paragraph — temporarily disabled per client request; restore this block to re-enable.
-      Before you submit, you can [preview your entry](/preview): drop your Word document onto the page and it runs the same parser the website uses to build each entry — entirely in your browser, with nothing uploaded. This lets you check that the formatting is valid and see how your biography will appear once published.
-      -->
   - title: Downloads
     variant: secondary
     stretch: base
-    content: |
+    content: |-
       ## Author Instructions
 
       - [Author Instructions (PDF, version April 2025)](/io-bio-author-instructions-2025.pdf)
@@ -33,7 +29,7 @@ sections:
   - title: Connected Publications
     variant: secondary
     stretch: base
-    content: |
+    content: |-
       :::columns
       * Heinzel, M. (2022), Mediating Power? Delegation, Pooling and Leadership Selection at International Organisations’, The British Journal of Politics and International Relations, 24(1), 153-170.
       * Kille, K.J. (2023), Executive Head Leadership of United Nations Specialized Agencies’, in A.D. Edgar (Ed.), Handbook on Governance in International Organizations, Cheltenham: Edward Elgar, 122-139.
