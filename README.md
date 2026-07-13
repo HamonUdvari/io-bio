@@ -2,9 +2,6 @@
 
 # IO BIO — Biographical Dictionary of Secretaries-General of International Organizations
 
-**Editors:** the section below is for maintaining the site through GitHub's website — no coding
-needed. Developer/build notes are further down.
-
 ## Editing IO BIO (for editors)
 
 Live site: **https://hamonudvari.github.io/io-bio**
@@ -13,7 +10,25 @@ Live site: **https://hamonudvari.github.io/io-bio**
 changes"**. Committing *is* publishing — the site updates itself a few minutes later (see
 [Publishing](#publishing-how-changes-go-live)). Ordered from most to least common:
 
-### 1. Change website text
+### 1. Add or update a biography entry
+
+Each biography is a Word (`.docx`) file whose **name is the entry**: `Surname-Initial Year.docx` — e.g.
+`Annan-KA 2019.docx` becomes the page `…/io-bio/entries/annan-ka-2019`. The heading, life dates,
+biography text, Archives/Publications/Literature, portrait and citation are all read from the file
+automatically.
+
+Upload the `.docx` (GitHub → open the folder → **"Add file → Upload files"**) to **both** folders — same
+file, same name:
+
+- **`src/content/bios-processed/`** — the copy the site actually publishes.
+- **`src/content/bios-source/`** — the untouched original. (A maintainer's cleanup step rebuilds
+  `bios-processed` from here, so a file added only to `bios-processed` can be overwritten later.)
+
+To **update** an entry, upload the corrected file under the **same name** to replace it (Word files
+can't be edited in the browser — edit in Word, then re-upload). Follow the layout in the **Author
+Instructions** so the site reads it correctly.
+
+### 2. Change website text
 
 Edit the matching file:
 
@@ -29,38 +44,30 @@ Writing tips: normal Markdown — `**bold**`, `*italic*`, `## Heading`, `- bulle
 boxes use `::::section{title="…" variant="primary"}` … `::::`. To link to another page write
 `[text](/author-instructions)` — **don't** add `/io-bio`, it's added for you.
 
-### 2. Add a downloadable file (e.g. a PDF) and link to it
+### 3. Add or update a downloadable file (PDF, etc.)
 
-1. Put the file in the **`public/`** folder (GitHub → open `public` → **"Add file → Upload files"**).
+1. Put the file in the **`public/`** folder (GitHub → open `public` → **"Add file → Upload files"**). To
+   replace one, upload a file with the same name.
 2. Link to it with a leading slash and the filename only — **no `/io-bio`**:
    `[Databases Introduction (PDF)](/io-bio-databases-introduction.pdf)`
-3. The existing download links in `src/content/pages/author-instructions.md` are the template — copy
-   one and change the label + filename.
+3. The existing download links in `src/content/pages/author-instructions.md` are the template — copy one
+   and change the label + filename.
 
-### 3. Use a bigger / better photo for an entry
+---
 
-The entry photo comes from the author's Word file and is often small. To use a sharper/larger one:
+The rest are occasional fixes:
 
-- Add your image at **`src/content/bios-images/<slug>.jpg`**, where `<slug>` is the entry's URL name
-  (e.g. `annan-ka-2019` for `…/entries/annan-ka-2019`).
-- It replaces the original on the next build. Don't put `-portrait` in the name — that's reserved for
-  the auto-generated crop.
+### 4. Use a bigger / better photo for an entry
 
-### 4. Which picture formats work
+The portrait comes from inside the Word file and is often small. To use a sharper/larger one:
 
-- Best: **JPG** or **PNG**. Also accepted: WebP, GIF, SVG.
-- Bigger / higher-resolution is better — the small grid thumbnail is auto-cropped to 800×1000.
-- Make sure you have the right to use the image — copyright clearance is the author's responsibility.
+- Add your image at **`src/content/bios-images/<slug>.jpg`** — `<slug>` is the entry's URL name (e.g.
+  `annan-ka-2019`). It replaces the embedded photo on the next build. Don't put `-portrait` in the name
+  (that's the auto-generated crop).
+- **Formats:** JPG or PNG best; WebP, GIF, SVG also work. Bigger / higher-resolution = sharper (the grid
+  thumbnail is auto-cropped to 800×1000). You must have the right to use the image.
 
-### 5. Preview / check an entry looks right
-
-- There's **no preview of un-committed edits**. Changes appear on the live site a few minutes after
-  you commit (see [Publishing](#publishing-how-changes-go-live)).
-- After it deploys, open the entry `…/io-bio/entries/<slug>` to check the text and photo.
-- To check the **printable / PDF** version, click **"Print preview"** or **"Download (PDF)"** on the
-  entry (or go to `…/io-bio/print/<slug>`).
-
-### 6. Fix which face is cropped (group photos)
+### 5. Change which face is cropped (group photos)
 
 If the auto-crop picks the wrong person in a group photo:
 
@@ -68,9 +75,13 @@ If the auto-crop picks the wrong person in a group photo:
   position counting from the left** (1 = leftmost). Example: `"mcdonald-jg-2016": 1`.
 - Commit — the crop is redone on the next build.
 
-> **Adding a whole new biography?** Add the author's `.docx` to `src/content/bios-processed/`, named
-> `Surname-Initial Year.docx` (e.g. `Annan-KA 2019.docx`). The entry and its web address are created
-> automatically.
+### Check your change went live
+
+- There's **no preview of un-committed edits** — changes appear a few minutes after you commit (see
+  [Publishing](#publishing-how-changes-go-live)).
+- Then open the page (a biography is at `…/io-bio/entries/<slug>`) to check text + photo. For the
+  printable/PDF version use **"Print preview"** / **"Download (PDF)"** on the entry (or
+  `…/io-bio/print/<slug>`).
 
 ## Publishing (how changes go live)
 
