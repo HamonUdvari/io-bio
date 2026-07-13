@@ -1,3 +1,25 @@
+# [1.8.0](https://github.com/HamonUdvari/io-bio/compare/v1.7.1...v1.8.0) (2026-07-13)
+
+
+### Biography Updates
+
+* **about,authors:** client copy rework + downloads restructure ([](https://github.com/HamonUdvari/io-bio/commit/80a5a4398b709177af0189d072739b99c421535b))
+* **cite:** show only the DOI citation on entries ([](https://github.com/HamonUdvari/io-bio/commit/9db8cbe80a73a1623007720448d6483852e660db))
+
+
+### Bug Fixes
+
+* **content:** lowercase Woods-GD 2012 docx extension so the loader globs it ([](https://github.com/HamonUdvari/io-bio/commit/c35740ee0fb9d3834b5481660bff1391b4a653a1))
+* **crop:** per-entry portrait face override (src/data/portrait-subjects.json) ([](https://github.com/HamonUdvari/io-bio/commit/ca74027cae8ce113f0af664499997fc6880719e7))
+* **entry:** keep the whole intro block in the grey header, not the body ([](https://github.com/HamonUdvari/io-bio/commit/55e190a7ead911ce92c2f2d2c2e878839a3cf358))
+* **list:** locale-aware surname sort (accents, apostrophes) ([](https://github.com/HamonUdvari/io-bio/commit/53cb5b8226137bd3c28b8a8e2d0706e1a9ec7b76))
+
+
+### Website Features
+
+* **name:** render née maiden name as "(née X)", like known-as ([](https://github.com/HamonUdvari/io-bio/commit/aa71bf2fd60fc9faff21273c9de9fcd058126955))
+* **zenodo:** per-entry PDF DOIs belong to the dictionary via Book-section metadata ([](https://github.com/HamonUdvari/io-bio/commit/aeb7bdd984ad8f1b9312e8d404fd8cf24297a1de))
+
 ## [1.7.1](https://github.com/HamonUdvari/io-bio/compare/v1.7.0...v1.7.1) (2026-05-31)
 
 
