@@ -4,6 +4,8 @@ src/assets/bios-originals
 src/assets/bios-originals.zip
 src/assets/bios-overrides
 
+*.~lock.*
+
 # generated bios hand-off artifacts (originals/changed zips + changes doc + html)
 bios-deliverables/
 
