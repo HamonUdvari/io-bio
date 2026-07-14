@@ -74,7 +74,14 @@ function loadPortraitSubjectMap(): Record<string, number> {
   const p = path.resolve("./src/data", "portrait-subjects.json");
   if (!existsSync(p)) return {};
   try {
-    return (JSON.parse(readFileSync(p, "utf8")) as Record<string, number>) ?? {};
+    const raw = JSON.parse(readFileSync(p, "utf8")) as Record<string, unknown>;
+    const map: Record<string, number> = {};
+    for (const [slug, value] of Object.entries(raw ?? {})) {
+      if (slug.startsWith("_")) continue; // skip _comment / non-slug keys
+      const n = Number(value); // the CMS keyvalue widget stores values as strings
+      if (Number.isFinite(n) && n >= 1) map[slug] = n;
+    }
+    return map;
   } catch {
     return {};
   }

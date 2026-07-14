@@ -1,4 +1,3 @@
 {
-  "_comment": "Overrides which face becomes an entry's portrait thumbnail when the automatic 'largest face' pick is wrong (e.g. a multi-person photo). Key = entry slug; value = the subject's position counting faces from the LEFT (1 = leftmost person, 2 = next, ...). Only add an entry when a thumbnail crops the wrong person.",
   "mcdonald-jg-2016": 1
 }

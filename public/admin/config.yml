@@ -112,3 +112,38 @@ collections:
     public_folder: /src/content/bios
     fields:
       - { label: Name, name: title, widget: string }
+
+  # ---------- Bio photos (higher-res overrides) ----------
+  # A labeled folder for the optional higher-resolution portrait overrides. Drop
+  # an image named after the entry slug (e.g. annan-ka-2019.jpg) here and it
+  # replaces the small photo from the Word file on the next build. Same idea as
+  # "Bio Word files", but for images.
+  - name: bio-photos
+    label: Bio photos (overrides)
+    folder: src/content/bios-images
+    extension: json
+    create: false
+    media_folder: /src/content/bios-images
+    public_folder: /src/content/bios-images
+    fields:
+      - { label: Name, name: title, widget: string }
+
+  # ---------- Settings ----------
+  # Portrait face-crop overrides: when a multi-person photo crops the wrong person,
+  # add the entry's slug and the subject's position counting faces from the LEFT
+  # (1 = leftmost). Edited as a simple key → value table (portrait-subjects.json).
+  - name: settings
+    label: Settings
+    delete: false
+    files:
+      - name: face-crops
+        label: Portrait face crops
+        file: src/data/portrait-subjects.json
+        fields:
+          - label: Face crops
+            name: overrides
+            widget: keyvalue
+            root: true
+            required: false
+            key_label: Entry slug (e.g. annan-ka-2019)
+            value_label: Face position from the left (1 = leftmost)
