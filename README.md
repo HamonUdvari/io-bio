@@ -8,7 +8,14 @@
 
 ## Video Explanation
 
-<iframe width="640" height="360" src="https://www.loom.com/embed/262b899b0a1a46a49d161b9338783267" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<div>
+    <a href="https://www.loom.com/share/262b899b0a1a46a49d161b9338783267">
+      <p>260714 – io-bio website instructions - Watch Video</p>
+    </a>
+    <a href="https://www.loom.com/share/262b899b0a1a46a49d161b9338783267">
+      <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/262b899b0a1a46a49d161b9338783267-a0491212ef472e5f-full-play.gif#t=0.1">
+    </a>
+  </div>
 
 
 ## Editing IO BIO (for editors)
