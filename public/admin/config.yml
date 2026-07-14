@@ -10,11 +10,16 @@
 # repo (GitHub provides a pre-filled link). No Cloudflare / OAuth backend needed.
 # (When GitHub ships client-side PKCE, this becomes one-click with still no
 # backend — no config change required.)
+#
+# `auth_methods: [token]` hides the "Sign in with GitHub" (OAuth) button, which
+# without an OAuth backend just 404s against Netlify. Only token sign-in is shown
+# (plus "Work with Local Repository" in local dev).
 
 backend:
   name: github
   repo: HamonUdvari/io-bio
   branch: main
+  auth_methods: [token]
 
 site_url: https://hamonudvari.github.io/io-bio
 

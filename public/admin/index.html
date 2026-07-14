@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>IO BIO — Content editor</title>
+    <style>
+      /* Hide the "Sign in with GitHub" (OAuth) button on the login screen.
+         `auth_methods: [token]` in config.yml already disables it (it 404s
+         without an OAuth backend); this also removes it visually so editors
+         only ever see "Sign In Using Access Token". The GitHub brand name in
+         `data-label` doesn't get localised, so this selector is locale-safe. */
+      button[data-label*="GitHub"] {
+        display: none !important;
+      }
+    </style>
   </head>
   <body>
     <!-- Sveltia CMS (pinned). Local editing uses the browser File System Access
