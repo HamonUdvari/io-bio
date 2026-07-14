@@ -4,6 +4,8 @@
 
 Live site: **https://hamonudvari.github.io/io-bio**
 
+**Easiest way to edit — the visual CMS:** **https://hamonudvari.github.io/io-bio/admin/** (sign in with a GitHub token).
+
 **To edit any file:** open it on GitHub → click the ✏️ (pencil) → make your change → **"Commit
 changes"**. Committing *is* publishing — the site updates itself a few minutes later (see
 [Publishing](#publishing-how-changes-go-live)).
