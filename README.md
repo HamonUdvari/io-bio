@@ -6,6 +6,11 @@
 - **Preview a `.docx`** (check how a Word file parses before committing — nothing is uploaded) — https://hamonudvari.github.io/io-bio/preview
 - **Visual CMS** (easiest way to edit; sign in with a GitHub token) — https://hamonudvari.github.io/io-bio/admin/
 
+## Video Explanation
+
+<iframe width="640" height="360" src="https://www.loom.com/embed/262b899b0a1a46a49d161b9338783267" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+
 ## Editing IO BIO (for editors)
 
 **To edit any file:** open it on GitHub → click the ✏️ (pencil) → make your change → **"Commit
