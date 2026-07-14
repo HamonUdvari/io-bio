@@ -1,10 +1,12 @@
 # IO BIO — Biographical Dictionary of Secretaries-General of International Organizations
 
+## Quick links
+
+- **Live site** — https://hamonudvari.github.io/io-bio
+- **Preview a `.docx`** (check how a Word file parses before committing — nothing is uploaded) — https://hamonudvari.github.io/io-bio/preview
+- **Visual CMS** (easiest way to edit; sign in with a GitHub token) — https://hamonudvari.github.io/io-bio/admin/
+
 ## Editing IO BIO (for editors)
-
-Live site: **https://hamonudvari.github.io/io-bio**
-
-**Easiest way to edit — the visual CMS:** **https://hamonudvari.github.io/io-bio/admin/** (sign in with a GitHub token).
 
 **To edit any file:** open it on GitHub → click the ✏️ (pencil) → make your change → **"Commit
 changes"**. Committing *is* publishing — the site updates itself a few minutes later (see
