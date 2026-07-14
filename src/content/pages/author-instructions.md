@@ -4,7 +4,7 @@ description: Write a short biography for IO BIO — invitation, guidance and dow
 order: 300
 slug: author-instructions
 sections:
-  - title: Instructions for IO BIO Authors
+  - title: Author Instructions
     variant: primary
     stretch: base
     content: |-
@@ -30,7 +30,7 @@ sections:
     variant: secondary
     stretch: base
     content: |-
-      :::columns
+      :::columns{variant="default"}
       * Heinzel, M. (2022), Mediating Power? Delegation, Pooling and Leadership Selection at International Organisations’, The British Journal of Politics and International Relations, 24(1), 153-170.
       * Kille, K.J. (2023), Executive Head Leadership of United Nations Specialized Agencies’, in A.D. Edgar (Ed.), Handbook on Governance in International Organizations, Cheltenham: Edward Elgar, 122-139.
       * Lopes, D.B. and Oliveira, J.P. (2017), Latin American Secretaries-General of International Organizations: A Typical Case of “Diplomacy of Prestige” or Just Another Side Effect of Growing Cosmopolitanism?’, Global Summitry, 3(1), 68-85.
