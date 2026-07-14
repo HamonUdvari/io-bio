@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/HamonUdvari/io-bio/compare/v1.9.0...v1.10.0) (2026-07-14)
+
+
+### Website Features
+
+* **cms:** manage override photos + a face-crop chooser in the CMS ([](https://github.com/HamonUdvari/io-bio/commit/a2a3afc4345fc8eb901b1ce1d2019740e625784c))
+
 # [1.9.0](https://github.com/HamonUdvari/io-bio/compare/v1.8.1...v1.9.0) (2026-07-13)
 
 
