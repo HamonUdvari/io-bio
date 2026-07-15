@@ -164,11 +164,6 @@ export default function ListView({ data }: ListViewProps) {
       header: "Organization",
       filterFn: "includesString",
     }),
-    columnHelper.accessor((row) => row.nationality || "Unspecified", {
-      id: "nationality",
-      header: "Nationality",
-      filterFn: "includesString",
-    }),
     columnHelper.accessor(
       (row) => {
         const s = row.role?.startYear;
@@ -182,6 +177,11 @@ export default function ListView({ data }: ListViewProps) {
         filterFn: "includesString",
       },
     ),
+    columnHelper.accessor((row) => row.nationality || "Unspecified", {
+      id: "nationality",
+      header: "Nationality",
+      filterFn: "includesString",
+    }),
   ];
 
   // Default sort: surname A→Z, so the page lands sorted (equivalent to
