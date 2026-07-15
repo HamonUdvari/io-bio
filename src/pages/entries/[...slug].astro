@@ -59,7 +59,10 @@ const sandboxUrl = sandboxRecordId
 <Layout title={title} description={description}>
   <EntryArticle data={data} Content={Content}>
     <div slot="controls" class="flex flex-col items-center gap-y-3 print:hidden">
-      <a class="button button--primary button--download" href={pdfHref} download
+      <a
+        class="button button--primary button--download"
+        href={pdfHref}
+        download={`${slug}-iobio.pdf`}
         >Download (PDF)</a
       >
       {/* Debug links (screen only): the live browser-print view for iterating

@@ -270,7 +270,11 @@ async function main() {
     const { metadata, warnings } = buildMetadata(e, cfg);
     for (const w of warnings) console.warn(`  ! ${e.slug}: ${w}`);
     const bytes = readFileSync(pdfPath);
-    const filename = `${e.slug}.pdf`;
+    // The file Zenodo shows/serves gets an "-iobio" suffix so a downloaded
+    // deposit is identifiable out of context (e.g. lie-th-2017-iobio.pdf),
+    // matching the site's Download button (see the entry page's `download`
+    // attribute). The local rendered path keeps the plain <slug>.pdf name.
+    const filename = `${e.slug}-iobio.pdf`;
 
     try {
       let published: Deposition;
