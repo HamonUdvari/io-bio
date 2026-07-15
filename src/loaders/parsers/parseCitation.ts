@@ -12,10 +12,14 @@ const HOW_TO_CITE_MARKER = "how to cite this io bio entry";
 // Authors = the text before the quoted entry title. The old behaviour split on the
 // first comma, which dropped co-authors and the "Jr." suffix because the title
 // itself contains a comma (e.g. Lie lost "Jr. and Ellen Jenny Ravndal"). Instead,
-// take everything before the marker and strip the trailing quoted title. Straight
-// and curly single quotes are both handled; a stray leading quote in the source
-// (the Piot typo) is preserved unchanged rather than mangled.
-const TITLE_TAIL_RE = /[‘'][^‘’']*[’']\s*$/;
+// take everything before the marker and strip the trailing quoted title.
+//
+// The title's content class excludes ONLY the opening curly quote (U+2018), not the
+// closing one (U+2019) — because U+2019 doubles as the apostrophe inside names like
+// "M'Bow", so excluding it would stop the match short and leak the title into the
+// author. Anchoring on the last opening quote also leaves a stray leading quote in
+// the source (the Piot typo) untouched rather than mangled.
+const TITLE_TAIL_RE = /[‘'][^‘]*[’']\s*$/;
 
 function extractAuthors(citationText: string): string {
   const beforeMarker = citationText.split(CITATION_MARKER)[0];

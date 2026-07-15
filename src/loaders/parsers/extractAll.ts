@@ -52,15 +52,18 @@ export function extractAll(ast: any): ParserResult<ExtractedBio> {
   // stray photo URL…) sit right after the "Source:" line in the source docs, but
   // belong in the grey header, not the biography body. Lift the short non-empty
   // paragraph(s) immediately following "Source:" (up to the next blank line) into
-  // introNotes. The length guard means a biography paragraph that happens to
-  // follow "Source:" with no intervening blank can never be swallowed.
+  // introNotes. In practice the source docs always put a blank line before the
+  // biography, so the loop stops there; the length guard is a backstop so that,
+  // if a doc ever omits that blank, a biography paragraph still isn't swallowed
+  // (the longest media note in the corpus is ~240 chars, the shortest opening
+  // biography paragraph ~770, so 500 sits safely between).
   const sourceIndex = image.value.consumed[0];
   if (sourceIndex !== undefined) {
     for (let i = sourceIndex + 1; i < content.length; i++) {
       const node = content[i];
       const text = (node?.text ?? "").trim();
       if (node?.type !== "paragraph" || text === "") break;
-      if (text.length > 320) break;
+      if (text.length > 500) break;
       if (extractedIndices.has(i)) continue;
       introNotes.push(text);
       extractedIndices.add(i);
