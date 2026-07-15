@@ -9,6 +9,9 @@ import { remarkDemoteHeadings } from "./src/remarkPlugins/remarkDemoteHeadings";
 import { rehypeAddLinkClasses } from "./src/rehypePlugins/rehypeAddLinkClasses";
 import { remarkDirectiveSections } from "./src/remarkPlugins/remarkDirectiveSections";
 import { remarkDirectiveColumns } from "./src/remarkPlugins/remarkDirectiveColumns";
+import { remarkDirectiveMuted } from "./src/remarkPlugins/remarkDirectiveMuted";
+import { remarkDirectivePeople } from "./src/remarkPlugins/remarkDirectivePeople";
+import { remarkDirectiveContributors } from "./src/remarkPlugins/remarkDirectiveContributors";
 import { remarkPrefixRawLinks } from "./src/remarkPlugins/remarkPrefixRawLinks";
 
 // Astro 6.4 deprecated markdown.remarkPlugins/rehypePlugins in favour of a
@@ -103,6 +106,9 @@ const remarkPlugins = [
   remarkDirective,
   remarkDirectiveColumns,
   remarkDirectiveSections,
+  remarkDirectiveMuted,
+  remarkDirectivePeople,
+  remarkDirectiveContributors,
   [remarkPrefixRawLinks, { base: BASE }],
 ];
 const rehypePlugins = [[rehypeAddLinkClasses, { base: BASE }]];

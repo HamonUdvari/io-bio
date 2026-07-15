@@ -116,6 +116,153 @@
             );
           },
         });
+
+        // "Editorial team" block: a structured list of editors — Name /
+        // Affiliation / Role — so editors never hand-type the `:muted[…]` marker.
+        // It reads/writes a `:::people` block whose items are
+        // `* Name :muted[Affiliation (Role)]`, exactly what the site renders
+        // (name at heading scale, affiliation + role muted on the next line).
+        window.CMS.registerEditorComponent({
+          id: "people",
+          label: "Editorial team",
+          icon: "groups",
+          fields: [
+            {
+              name: "members",
+              label: "Editors",
+              label_singular: "Editor",
+              widget: "list",
+              summary: "{{fields.name}}",
+              fields: [
+                { name: "name", label: "Name", widget: "string" },
+                {
+                  name: "affiliation",
+                  label: "Affiliation",
+                  widget: "string",
+                  required: false,
+                },
+                {
+                  name: "role",
+                  label: "Role (optional)",
+                  widget: "string",
+                  required: false,
+                },
+              ],
+            },
+          ],
+          pattern: /:::people\n([\s\S]*?)\n:::/,
+          fromBlock: function (match) {
+            var members = (match[1] || "")
+              .split("\n")
+              .map(function (line) {
+                var m = line.match(/^\s*\*\s+(.+?)\s+:muted\[(.+)\]\s*$/);
+                if (!m) return null;
+                var secondary = m[2].trim();
+                var affiliation = secondary;
+                var role = "";
+                // role = trailing "(…)"; affiliation = the rest
+                var r = secondary.match(/^(.+?)\s+\(([^)]+)\)$/);
+                if (r) {
+                  affiliation = r[1].trim();
+                  role = r[2].trim();
+                }
+                return { name: m[1].trim(), affiliation: affiliation, role: role };
+              })
+              .filter(Boolean);
+            return { members: members };
+          },
+          toBlock: function (obj) {
+            var members = obj.members || [];
+            var lines = members.map(function (m) {
+              var sec = m.affiliation || "";
+              if (m.role) sec += " (" + m.role + ")";
+              return "* " + (m.name || "") + " :muted[" + sec + "]";
+            });
+            return ":::people\n" + lines.join("\n") + "\n:::";
+          },
+          toPreview: function (obj) {
+            var members = obj.members || [];
+            var items = members
+              .map(function (m) {
+                var sec = m.affiliation || "";
+                if (m.role) sec += " (" + m.role + ")";
+                return (
+                  "<li><strong>" +
+                  (m.name || "") +
+                  "</strong><br><span style=\"opacity:0.6\">" +
+                  sec +
+                  "</span></li>"
+                );
+              })
+              .join("");
+            return "<ul>" + items + "</ul>";
+          },
+        });
+
+        // "Contributors" block: a structured list of contributors — Name +
+        // Entries (the IO BIO entries they wrote) — so editors never hand-type
+        // the `:muted[…]` marker. It reads/writes a `:::contributors` block whose
+        // items are `* Name :muted[(ENTRIES)]`, exactly what the site renders
+        // (name normal, entries de-emphasised in parentheses). Keep any
+        // parenthetical that is part of the name (e.g. "Ine (C.M.) Megens") in
+        // the Name field; only the Entries field is muted.
+        window.CMS.registerEditorComponent({
+          id: "contributors",
+          label: "Contributors",
+          icon: "groups",
+          fields: [
+            {
+              name: "members",
+              label: "Contributors",
+              label_singular: "Contributor",
+              widget: "list",
+              summary: "{{fields.name}}",
+              fields: [
+                { name: "name", label: "Name", widget: "string" },
+                {
+                  name: "entries",
+                  label: "Entries (comma-separated, e.g. STOKES, REY)",
+                  widget: "string",
+                  required: false,
+                },
+              ],
+            },
+          ],
+          pattern: /:::contributors\n([\s\S]*?)\n:::/,
+          fromBlock: function (match) {
+            var members = (match[1] || "")
+              .split("\n")
+              .map(function (line) {
+                var m = line.match(/^\s*\*\s+(.+?)\s+:muted\[\((.*)\)\]\s*$/);
+                if (!m) return null;
+                return { name: m[1].trim(), entries: m[2].trim() };
+              })
+              .filter(Boolean);
+            return { members: members };
+          },
+          toBlock: function (obj) {
+            var members = obj.members || [];
+            var lines = members.map(function (m) {
+              return "* " + (m.name || "") + " :muted[(" + (m.entries || "") + ")]";
+            });
+            return ":::contributors\n" + lines.join("\n") + "\n:::";
+          },
+          toPreview: function (obj) {
+            var members = obj.members || [];
+            var items = members
+              .map(function (m) {
+                return (
+                  "<li>" +
+                  (m.name || "") +
+                  " <span style=\"opacity:0.6\">(" +
+                  (m.entries || "") +
+                  ")</span></li>"
+                );
+              })
+              .join("");
+            return "<ul>" + items + "</ul>";
+          },
+        });
       })();
     </script>
   </body>

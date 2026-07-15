@@ -83,7 +83,7 @@ collections:
               - { label: Heading, name: title, widget: string, required: false }
               - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary, required: false }
               - { label: Width, name: stretch, widget: select, options: [base, wide], default: base, required: false }
-              - { label: Content, name: content, widget: markdown, editor_components: [columns, file-link] }
+              - { label: Content, name: content, widget: markdown, editor_components: [columns, file-link, people, contributors] }
       - name: author-instructions
         label: Author Instructions
         file: src/content/pages/author-instructions.md
@@ -101,7 +101,7 @@ collections:
               - { label: Heading, name: title, widget: string, required: false }
               - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary, required: false }
               - { label: Width, name: stretch, widget: select, options: [base, wide], default: base, required: false }
-              - { label: Content, name: content, widget: markdown, editor_components: [columns, file-link] }
+              - { label: Content, name: content, widget: markdown, editor_components: [columns, file-link, people, contributors] }
 
   # ---------- Bio Word files ----------
   # Gives the bio .docx their OWN labeled folder in the Asset Library (the media

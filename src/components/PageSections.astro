@@ -13,6 +13,9 @@ import GithubSlugger from "github-slugger";
 import remarkDirective from "remark-directive";
 import { remarkDemoteHeadings } from "../remarkPlugins/remarkDemoteHeadings";
 import { remarkDirectiveColumns } from "../remarkPlugins/remarkDirectiveColumns";
+import { remarkDirectiveMuted } from "../remarkPlugins/remarkDirectiveMuted";
+import { remarkDirectivePeople } from "../remarkPlugins/remarkDirectivePeople";
+import { remarkDirectiveContributors } from "../remarkPlugins/remarkDirectiveContributors";
 import { remarkDirectiveSections } from "../remarkPlugins/remarkDirectiveSections";
 import { remarkPrefixRawLinks } from "../remarkPlugins/remarkPrefixRawLinks";
 import { rehypeAddLinkClasses } from "../rehypePlugins/rehypeAddLinkClasses";
@@ -34,6 +37,9 @@ const processor = await createMarkdownProcessor({
     remarkDirective,
     remarkDirectiveColumns,
     remarkDirectiveSections,
+    remarkDirectiveMuted,
+    remarkDirectivePeople,
+    remarkDirectiveContributors,
     [remarkPrefixRawLinks, { base: BASE }],
   ],
   rehypePlugins: [[rehypeAddLinkClasses, { base: BASE }]],
