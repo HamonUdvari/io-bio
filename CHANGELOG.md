@@ -1,3 +1,12 @@
+## [1.10.3](https://github.com/HamonUdvari/io-bio/compare/v1.10.2...v1.10.3) (2026-07-15)
+
+
+### Bug Fixes
+
+* **content:** Replace Years and Nationality columns ([](https://github.com/HamonUdvari/io-bio/commit/04835208dbb55cc3b27b4c8a5da3044644221e12))
+* **entry:** bold the author name and make the byline black in the PDF ([](https://github.com/HamonUdvari/io-bio/commit/651d27d2341115f2b1fbadcff65ab1b8a9b5e83f))
+* ul for connected publications ([](https://github.com/HamonUdvari/io-bio/commit/80b40e1f2f302eef9859d0b357cecdcb72e3566b))
+
 ## [1.10.2](https://github.com/HamonUdvari/io-bio/compare/v1.10.1...v1.10.2) (2026-07-14)
 
 
