@@ -30,12 +30,10 @@ sections:
     variant: secondary
     stretch: base
     content: |-
-      :::columns{variant="default"}
       * Heinzel, M. (2022), Mediating Power? Delegation, Pooling and Leadership Selection at International Organisations’, The British Journal of Politics and International Relations, 24(1), 153-170.
       * Kille, K.J. (2023), Executive Head Leadership of United Nations Specialized Agencies’, in A.D. Edgar (Ed.), Handbook on Governance in International Organizations, Cheltenham: Edward Elgar, 122-139.
       * Lopes, D.B. and Oliveira, J.P. (2017), Latin American Secretaries-General of International Organizations: A Typical Case of “Diplomacy of Prestige” or Just Another Side Effect of Growing Cosmopolitanism?’, Global Summitry, 3(1), 68-85.
       * Reinalda, B. (2020), Biographical Analysis: Insights and Perspectives from the IO BIO Dictionary Project’, in K. GramSkjoldager, H.A. Ikonomou and T. Kahlert (Eds), Organizing the 20th-Century World: International Organizations and the Emergence of International Public Administration, 1920-1960s, London: Bloomsbury Academic, 15-32.
       * Reinalda, B. and Kille, K.J. (2017), The Evolvement of International Secretariats, Executive Heads and Leadership in Inter-Organizational Relations’, in J.A. Koops and R. Biermann (Eds), Palgrave Handbook of Inter-Organizational Relations in World Politics, London: Palgrave Macmillan, 217-142.
       * Valente, M.S., D.B. Lopes and J.P.F. Oliveira (2019), Does the Appointment of Secretaries-General to Lead Global Bureaucracies Correlate with International Power Sharing? A Longitudinal Assessment Based on Empirical Evidence from 1945 to 2016’, Revista Brasileira de Política Internacional, 62(1), e013.
-      :::
 ---
