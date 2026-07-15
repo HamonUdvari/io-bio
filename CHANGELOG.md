@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/HamonUdvari/io-bio/compare/v1.10.3...v1.11.0) (2026-07-15)
+
+
+### Website Features
+
+* **pdf:** suffix entry PDF filenames with -iobio ([](https://github.com/HamonUdvari/io-bio/commit/c213725a3d800b1138ef02bea73aa585c505515a))
+
 ## [1.10.3](https://github.com/HamonUdvari/io-bio/compare/v1.10.2...v1.10.3) (2026-07-15)
 
 
