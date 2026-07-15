@@ -1,3 +1,10 @@
+## [1.12.2](https://github.com/HamonUdvari/io-bio/compare/v1.12.1...v1.12.2) (2026-07-15)
+
+
+### Bug Fixes
+
+* **bios:** handle name-internal apostrophes in author parsing ([](https://github.com/HamonUdvari/io-bio/commit/8711d65eec689458cae74a2fdd4d7046af97a998))
+
 ## [1.12.1](https://github.com/HamonUdvari/io-bio/compare/v1.12.0...v1.12.1) (2026-07-15)
 
 
