@@ -1,3 +1,11 @@
+# [1.12.0](https://github.com/HamonUdvari/io-bio/compare/v1.11.0...v1.12.0) (2026-07-15)
+
+
+### Website Features
+
+* **about:** structured editorial + contributor blocks, muted secondary text ([](https://github.com/HamonUdvari/io-bio/commit/ef1ba9d64421642c8dacf9594288df5140456431))
+* **author-instructions:** add an Entries under construction list ([](https://github.com/HamonUdvari/io-bio/commit/78a4f116efc9f55d594bc63506227b5cd27c58e0))
+
 # [1.11.0](https://github.com/HamonUdvari/io-bio/compare/v1.10.3...v1.11.0) (2026-07-15)
 
 
