@@ -26,6 +26,35 @@ sections:
       - [Introduction to the two Databases (PDF)](/io-bio-databases-introduction.pdf)
       - [Organizations Covered by the two Databases (PDF)](/io-bio-organizations-covered.pdf)
       - [Abbreviations Used in the two Databases (PDF)](/io-bio-abbreviations.pdf)
+  - title: Entries under construction
+    variant: secondary
+    stretch: base
+    content: |-
+      * Azzam, Abdel (Arab League 1945-52)
+      * Blix, Hans (IAEA 1981-97)
+      * Bogsch, Árpád (WIPO 1973-97)
+      * Dayan, Édouard (UPU 2005-12)
+      * Delors, Jacques (European Commission 1985-95)
+      * Dodd, Norris (FAO 1948-54)
+      * Eklund, Sigvard (IAEA 1961-81)
+      * Jean Pierre François (PCA 1954-68)
+      * Gremiger, Thomas (OSCE 2017-20)
+      * Gurría, Angel (OECD 2006-21)
+      * Hocké, Jean-Pierre (UNHCR 1986-89)
+      * Jacobsson, Per (IMF 1956-63)
+      * LaGuardia, Fiorello (UNRRA 1946)
+      * Lehman, Herbert (UNRRA 1943-46)
+      * Loveday, Alexander (LoN FEO, Princeton Mission 1931-46)
+      * Luchaire, Julien (IIIC 1925-31)
+      * Matsuura, Koichiro (UNESCO 1999-2009)
+      * Owada, Hisashi (ICJ 2009-12)
+      * Pachauri, Rajendra Kumar (IPCC 2002-15)
+      * Sadik, Nafis (UNFPA 1987-2000)
+      * Sergent, René (OEEC 1955-60)
+      * Sutherland, Peter (GATT 1993-95)
+      * Waldheim, Kurt (UN 1972-81)
+      * Wolfensohn, James (IBRD 1995-2005)
+      * Yanai, Shunji (ITLOS 2011-14)
   - title: Connected Publications
     variant: secondary
     stretch: base
