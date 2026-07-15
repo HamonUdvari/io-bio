@@ -327,7 +327,7 @@
      Excludes the nav and footer sections, the button system, and the clickable
      entry row/card links in the list view. */
   section:not(.section--nav):not(.section--footer)
-    a:not(.button):not(.entries-table__row):not(.entry):not(.source-link) {
+    a:not(.button):not(.entries-table__row):not(.entry) {
     text-decoration: underline;
     text-underline-offset: 0.15em;
   }
