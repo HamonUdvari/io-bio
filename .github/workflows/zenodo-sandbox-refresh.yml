@@ -76,13 +76,33 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/data/zenodo-dois.sandbox.json
-          if git diff --cached --quiet; then
+          if git diff --quiet -- src/data/zenodo-dois.sandbox.json; then
             echo "no sandbox map changes to commit"
-          else
-            git commit -m "chore(zenodo): refresh sandbox deposits [skip ci]"
-            # main may have advanced (release/deploy commits) during the mint —
-            # rebase our single map commit on top before pushing.
-            git pull --rebase origin main
-            git push
+            exit 0
           fi
+          # A print-template change re-versions every entry, so the mint rewrites
+          # the WHOLE map. Two overlapping refreshes (queued runs each check out
+          # their own trigger commit) then produce different full maps, and a plain
+          # `git pull --rebase` conflicts irrecoverably. The freshly-minted map is
+          # authoritative (sandbox deposits are disposable), so re-apply it on top
+          # of the latest main and push — retrying if main advances meanwhile.
+          cp src/data/zenodo-dois.sandbox.json "$RUNNER_TEMP/sandbox-map.json"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard FETCH_HEAD
+            cp "$RUNNER_TEMP/sandbox-map.json" src/data/zenodo-dois.sandbox.json
+            if git diff --quiet -- src/data/zenodo-dois.sandbox.json; then
+              echo "sandbox map already current on main"
+              exit 0
+            fi
+            git add src/data/zenodo-dois.sandbox.json
+            git commit -m "chore(zenodo): refresh sandbox deposits [skip ci]"
+            if git push origin HEAD:main; then
+              echo "pushed sandbox map (attempt $attempt)"
+              exit 0
+            fi
+            echo "push rejected (main advanced); retrying ($attempt/5)"
+            sleep 5
+          done
+          echo "::error::could not push refreshed sandbox map after 5 attempts"
+          exit 1
