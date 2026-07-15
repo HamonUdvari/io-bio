@@ -416,6 +416,14 @@
       @apply w-full;
       max-width: calc(100cqw * var(--img-ar, 1));
       left: calc(100% + 1rem);
+
+      /* Underline the source link everywhere, including the print/PDF. The
+         general `section a` underline (@layer base) relies on a section ancestor
+         + :not() chain that Paged.js doesn't reliably preserve when it re-flows
+         the paginated pages, so scope the underline directly on the link here. */
+      & .source-link {
+        @apply underline underline-offset-[0.15em];
+      }
     }
   }
 
