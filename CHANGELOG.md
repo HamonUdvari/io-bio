@@ -1,3 +1,10 @@
+## [1.12.3](https://github.com/HamonUdvari/io-bio/compare/v1.12.2...v1.12.3) (2026-07-15)
+
+
+### Bug Fixes
+
+* **print:** underline the source-credit link in the PDF ([](https://github.com/HamonUdvari/io-bio/commit/c75e4652f175d785beb6cf52d80f32c15fa799c1))
+
 ## [1.12.2](https://github.com/HamonUdvari/io-bio/compare/v1.12.1...v1.12.2) (2026-07-15)
 
 
