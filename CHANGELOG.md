@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/HamonUdvari/io-bio/compare/v1.12.0...v1.12.1) (2026-07-15)
+
+
+### Bug Fixes
+
+* **bios:** parse multi-author citations + lift media notes to grey header ([](https://github.com/HamonUdvari/io-bio/commit/9f85e824956f69c3f9ea702eb8f4063e30f12031))
+
 # [1.12.0](https://github.com/HamonUdvari/io-bio/compare/v1.11.0...v1.12.0) (2026-07-15)
 
 
