@@ -48,6 +48,25 @@ export function extractAll(ast: any): ParserResult<ExtractedBio> {
     }
   }
 
+  // Media/press notes ("On film", "Sound recordings", "Film clip", "Video", a
+  // stray photo URL…) sit right after the "Source:" line in the source docs, but
+  // belong in the grey header, not the biography body. Lift the short non-empty
+  // paragraph(s) immediately following "Source:" (up to the next blank line) into
+  // introNotes. The length guard means a biography paragraph that happens to
+  // follow "Source:" with no intervening blank can never be swallowed.
+  const sourceIndex = image.value.consumed[0];
+  if (sourceIndex !== undefined) {
+    for (let i = sourceIndex + 1; i < content.length; i++) {
+      const node = content[i];
+      const text = (node?.text ?? "").trim();
+      if (node?.type !== "paragraph" || text === "") break;
+      if (text.length > 320) break;
+      if (extractedIndices.has(i)) continue;
+      introNotes.push(text);
+      extractedIndices.add(i);
+    }
+  }
+
   const intro = parseIntro(introText);
   warnings.push(...intro.warnings);
 
