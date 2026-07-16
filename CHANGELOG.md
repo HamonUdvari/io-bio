@@ -1,3 +1,15 @@
+## [1.12.4](https://github.com/HamonUdvari/io-bio/compare/v1.12.3...v1.12.4) (2026-07-16)
+
+
+### Biography Updates
+
+* **author-instructions:** refresh construction list + move Connected Publications to a download ([](https://github.com/HamonUdvari/io-bio/commit/a9c4aa06f23396a906df85332bb02c14e687a297))
+
+
+### Bug Fixes
+
+* **print:** stop overflow:hidden clipping the source-link underline ([](https://github.com/HamonUdvari/io-bio/commit/7d1e6d99483cd3fe7f4c83e04e50122c72bf5705))
+
 ## [1.12.3](https://github.com/HamonUdvari/io-bio/compare/v1.12.2...v1.12.3) (2026-07-15)
 
 
