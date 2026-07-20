@@ -30,4 +30,8 @@ sections:
       ## Connected Publications
 
       - [Publications Connected to IO BIO (PDF)](/io-bio-connected-publications.pdf)
+
+      ## Entries Under Construction
+
+      * [IO BIO Entries under Construction (Word)](/IO%20BIO%20entries%20under%20construction.docx)
 ---
