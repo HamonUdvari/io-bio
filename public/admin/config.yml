@@ -51,7 +51,7 @@ collections:
         label: Footer
         file: src/content/globals/footer.md
         fields:
-          - { label: Footer text, name: body, widget: text }
+          - { label: Footer text, name: text, widget: text }
       - name: meta
         label: Browser tab & search text
         file: src/content/globals/global.md
