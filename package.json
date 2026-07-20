@@ -1,7 +1,7 @@
 {
   "name": "io-bio",
   "type": "module",
-  "version": "1.12.4",
+  "version": "1.12.5",
   "scripts": {
     "dev": "astro dev --host",
     "build": "astro build",

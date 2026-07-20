@@ -1,3 +1,10 @@
+## [1.12.5](https://github.com/HamonUdvari/io-bio/compare/v1.12.4...v1.12.5) (2026-07-20)
+
+
+### Bug Fixes
+
+* **cms:** stop Sveltia choking on footer.md empty frontmatter ([](https://github.com/HamonUdvari/io-bio/commit/a22330db699744d662f2a9c32244063287304a33))
+
 ## [1.12.4](https://github.com/HamonUdvari/io-bio/compare/v1.12.3...v1.12.4) (2026-07-16)
 
 
