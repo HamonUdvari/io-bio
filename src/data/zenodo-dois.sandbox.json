@@ -890,6 +890,17 @@
     "mintedAt": "2026-07-16T10:34:47.573Z",
     "env": "sandbox"
   },
+  "piot-pk-2021-iobio": {
+    "recordId": 570157,
+    "conceptRecId": 570156,
+    "conceptDoi": "10.5072/zenodo.570156",
+    "versionDoi": "10.5072/zenodo.570157",
+    "contentHash": "sha256:e62c355a696dee055bdbde35b619ad715061adb29e3415752f00671c1190d029",
+    "status": "published",
+    "version": "26 October 2021",
+    "mintedAt": "2026-07-21T14:15:15.087Z",
+    "env": "sandbox"
+  },
   "prebisch-rf-2014": {
     "recordId": 566576,
     "conceptRecId": 506573,
