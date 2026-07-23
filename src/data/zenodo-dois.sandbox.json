@@ -781,14 +781,14 @@
     "env": "sandbox"
   },
   "myrdal-g-2014": {
-    "recordId": 566561,
+    "recordId": 571323,
     "conceptRecId": 506551,
     "conceptDoi": "10.5072/zenodo.506551",
-    "versionDoi": "10.5072/zenodo.566561",
-    "contentHash": "sha256:91f1f93aadac281d2805aafe0f0c43b720e488578d5b51a1eab9d9b57f105ff8",
+    "versionDoi": "10.5072/zenodo.571323",
+    "contentHash": "sha256:b598c97f773ff2b24d9dd8d6e9a62a99ee5313882efd161c8d24dfc3020b4493",
     "status": "published",
     "version": "10 March 2014",
-    "mintedAt": "2026-07-16T10:33:46.502Z",
+    "mintedAt": "2026-07-23T11:33:28.342Z",
     "env": "sandbox"
   },
   "nakajima-h-2019": {
