@@ -43,6 +43,17 @@
     "mintedAt": "2026-07-16T10:26:49.878Z",
     "env": "sandbox"
   },
+  "avenol-j-2015_1": {
+    "recordId": 571287,
+    "conceptRecId": 571286,
+    "conceptDoi": "10.5072/zenodo.571286",
+    "versionDoi": "10.5072/zenodo.571287",
+    "contentHash": "sha256:f5ae84e861bdedeb84d6145f2b11871d284595503e7ef212c861a1e790465b5a",
+    "status": "published",
+    "version": "21 August 2012",
+    "mintedAt": "2026-07-23T10:54:48.165Z",
+    "env": "sandbox"
+  },
   "baenasoares-j-2015": {
     "recordId": 566495,
     "conceptRecId": 506419,
