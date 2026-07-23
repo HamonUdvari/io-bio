@@ -880,14 +880,14 @@
     "env": "sandbox"
   },
   "piot-pk-2021": {
-    "recordId": 566573,
+    "recordId": 571281,
     "conceptRecId": 506571,
     "conceptDoi": "10.5072/zenodo.506571",
-    "versionDoi": "10.5072/zenodo.566573",
-    "contentHash": "sha256:7271654d91ead83da631738938f74fa23117e05de6a0ee72d2ed2acfd664b0c7",
+    "versionDoi": "10.5072/zenodo.571281",
+    "contentHash": "sha256:e62c355a696dee055bdbde35b619ad715061adb29e3415752f00671c1190d029",
     "status": "published",
     "version": "26 October 2021",
-    "mintedAt": "2026-07-16T10:34:47.573Z",
+    "mintedAt": "2026-07-23T10:35:36.315Z",
     "env": "sandbox"
   },
   "piot-pk-2021-iobio": {
