@@ -33,14 +33,14 @@
     "env": "sandbox"
   },
   "avenol-j-2015": {
-    "recordId": 566494,
+    "recordId": 571308,
     "conceptRecId": 506417,
     "conceptDoi": "10.5072/zenodo.506417",
-    "versionDoi": "10.5072/zenodo.566494",
-    "contentHash": "sha256:f05649d10d9659b62d6e6e7a753454d622ec963a165ada969fd1dc4dc89b2b20",
+    "versionDoi": "10.5072/zenodo.571308",
+    "contentHash": "sha256:f5ae84e861bdedeb84d6145f2b11871d284595503e7ef212c861a1e790465b5a",
     "status": "published",
     "version": "21 August 2012",
-    "mintedAt": "2026-07-16T10:26:49.878Z",
+    "mintedAt": "2026-07-23T11:23:12.301Z",
     "env": "sandbox"
   },
   "avenol-j-2015_1": {
