@@ -616,14 +616,14 @@
     "env": "sandbox"
   },
   "lie-th-2017": {
-    "recordId": 566546,
+    "recordId": 571994,
     "conceptRecId": 506521,
     "conceptDoi": "10.5072/zenodo.506521",
-    "versionDoi": "10.5072/zenodo.566546",
-    "contentHash": "sha256:e5e735e0f852cdf19be87900ef8b8ad6857e6a5001c1876ddd6559406d22b88f",
+    "versionDoi": "10.5072/zenodo.571994",
+    "contentHash": "sha256:b6aa5f4c6487b315ba1bfd6244e481ebccc5a42857d0e80eebd71ab7b153ed48",
     "status": "published",
     "version": "22 October 2017",
-    "mintedAt": "2026-07-16T10:32:19.113Z",
+    "mintedAt": "2026-07-24T16:41:39.090Z",
     "env": "sandbox"
   },
   "lubbers-r-2026": {
