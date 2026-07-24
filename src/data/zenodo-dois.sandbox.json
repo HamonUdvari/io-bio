@@ -187,36 +187,36 @@
     "env": "sandbox"
   },
   "candau-mg-2015": {
-    "recordId": 571750,
+    "recordId": 571749,
     "conceptRecId": 506443,
     "conceptDoi": "10.5072/zenodo.506443",
-    "versionDoi": "10.5072/zenodo.571750",
+    "versionDoi": "10.5072/zenodo.571749",
     "contentHash": "sha256:afa046c1935aec35e01038d3a9a94d0bf3ab3a8565647f80dc658d7b68235aa4",
     "status": "published",
     "version": "18 October 2015",
-    "mintedAt": "2026-07-24T13:12:19.329Z",
+    "mintedAt": "2026-07-24T13:09:16.148Z",
     "env": "sandbox"
   },
   "carrington-par-2016": {
-    "recordId": 571751,
+    "recordId": 571752,
     "conceptRecId": 506445,
     "conceptDoi": "10.5072/zenodo.506445",
-    "versionDoi": "10.5072/zenodo.571751",
+    "versionDoi": "10.5072/zenodo.571752",
     "contentHash": "sha256:e5fa74bf7c64426bca40e448ddb8bdfb1d6ae494dca8398928bf87f13eb3f169",
     "status": "published",
     "version": "10 October 2016",
-    "mintedAt": "2026-07-24T13:13:03.858Z",
+    "mintedAt": "2026-07-24T13:15:47.406Z",
     "env": "sandbox"
   },
   "cavalcanti-ge-2015": {
-    "recordId": 566509,
+    "recordId": 571753,
     "conceptRecId": 506447,
     "conceptDoi": "10.5072/zenodo.506447",
-    "versionDoi": "10.5072/zenodo.566509",
-    "contentHash": "sha256:882c024bec920448aa28370e93f22114b483dc8f4404cab1f9c1ed3394108a21",
+    "versionDoi": "10.5072/zenodo.571753",
+    "contentHash": "sha256:7c2736db40e224991b305c59f8f75f888acfb3a1c462b085583304d59d04d69b",
     "status": "published",
     "version": "1 September 2015",
-    "mintedAt": "2026-07-16T10:28:32.566Z",
+    "mintedAt": "2026-07-24T13:15:56.389Z",
     "env": "sandbox"
   },
   "chan-m-2021": {
