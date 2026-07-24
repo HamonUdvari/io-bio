@@ -572,14 +572,14 @@
     "env": "sandbox"
   },
   "kirchner-n-2012": {
-    "recordId": 566542,
+    "recordId": 571992,
     "conceptRecId": 506513,
     "conceptDoi": "10.5072/zenodo.506513",
-    "versionDoi": "10.5072/zenodo.566542",
-    "contentHash": "sha256:1f457f539cfa3deb8c233498b45c1fc14cbdc6e543993475321b9ed71413a3c7",
+    "versionDoi": "10.5072/zenodo.571992",
+    "contentHash": "sha256:677fe145c42a34de7779d5722f980f6790fb65422002b2aa1c9febf7dabec06b",
     "status": "published",
     "version": "12 March 2012",
-    "mintedAt": "2026-07-16T10:31:55.835Z",
+    "mintedAt": "2026-07-24T16:31:35.559Z",
     "env": "sandbox"
   },
   "kotaite-aa-2025": {
