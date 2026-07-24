@@ -22,14 +22,14 @@
     "env": "sandbox"
   },
   "annan-ka-2019": {
-    "recordId": 566493,
+    "recordId": 571720,
     "conceptRecId": 506415,
     "conceptDoi": "10.5072/zenodo.506415",
-    "versionDoi": "10.5072/zenodo.566493",
-    "contentHash": "sha256:7277095546f28dcd4dc6c4e6d350cba6334d9d0514083ee3e0c6e2b9a06ff33f",
+    "versionDoi": "10.5072/zenodo.571720",
+    "contentHash": "sha256:27e9960710b522cb8ea3f48f0615784cb9d0b9f6b2821354ffdcbf8ceee73045",
     "status": "published",
     "version": "4 November 2019",
-    "mintedAt": "2026-07-16T10:26:44.374Z",
+    "mintedAt": "2026-07-24T11:18:59.643Z",
     "env": "sandbox"
   },
   "avenol-j-2015": {
