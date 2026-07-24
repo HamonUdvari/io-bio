@@ -187,25 +187,25 @@
     "env": "sandbox"
   },
   "candau-mg-2015": {
-    "recordId": 571749,
+    "recordId": 571750,
     "conceptRecId": 506443,
     "conceptDoi": "10.5072/zenodo.506443",
-    "versionDoi": "10.5072/zenodo.571749",
+    "versionDoi": "10.5072/zenodo.571750",
     "contentHash": "sha256:afa046c1935aec35e01038d3a9a94d0bf3ab3a8565647f80dc658d7b68235aa4",
     "status": "published",
     "version": "18 October 2015",
-    "mintedAt": "2026-07-24T13:09:16.148Z",
+    "mintedAt": "2026-07-24T13:12:19.329Z",
     "env": "sandbox"
   },
   "carrington-par-2016": {
-    "recordId": 566508,
+    "recordId": 571751,
     "conceptRecId": 506445,
     "conceptDoi": "10.5072/zenodo.506445",
-    "versionDoi": "10.5072/zenodo.566508",
-    "contentHash": "sha256:c010d8f825280d3eb5ae13c4527028057427b6bb713d05ec778ac9fdd9b86f08",
+    "versionDoi": "10.5072/zenodo.571751",
+    "contentHash": "sha256:e5fa74bf7c64426bca40e448ddb8bdfb1d6ae494dca8398928bf87f13eb3f169",
     "status": "published",
     "version": "10 October 2016",
-    "mintedAt": "2026-07-16T10:28:24.333Z",
+    "mintedAt": "2026-07-24T13:13:03.858Z",
     "env": "sandbox"
   },
   "cavalcanti-ge-2015": {
