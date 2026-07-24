@@ -583,14 +583,14 @@
     "env": "sandbox"
   },
   "kotaite-aa-2025": {
-    "recordId": 566543,
+    "recordId": 571993,
     "conceptRecId": 506515,
     "conceptDoi": "10.5072/zenodo.506515",
-    "versionDoi": "10.5072/zenodo.566543",
-    "contentHash": "sha256:83343f8599ddedbb101c2f4e436159f27c3274befddaf4d91458352a8f3b01cd",
+    "versionDoi": "10.5072/zenodo.571993",
+    "contentHash": "sha256:d1b71504635df1b23f1e1d3d2dcf83879e9edd423e892aa0f5da697c682df6a0",
     "status": "published",
     "version": "24 July 2026",
-    "mintedAt": "2026-07-16T10:32:00.712Z",
+    "mintedAt": "2026-07-24T16:36:42.985Z",
     "env": "sandbox"
   },
   "kristensen-t-2013": {
