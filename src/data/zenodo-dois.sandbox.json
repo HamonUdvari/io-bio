@@ -11,14 +11,14 @@
     "env": "sandbox"
   },
   "amano-y-2020": {
-    "recordId": 566492,
+    "recordId": 571691,
     "conceptRecId": 506626,
     "conceptDoi": "10.5072/zenodo.506626",
-    "versionDoi": "10.5072/zenodo.566492",
-    "contentHash": "sha256:6c4c61c0bd846b242d66acbb57cf5002923269dd2fd62bee2c1a36dc85cd96b2",
+    "versionDoi": "10.5072/zenodo.571691",
+    "contentHash": "sha256:76deb90911c51b0ec93b6973c8f229ea442c3af4fb35bb6f5f1b38191310ce90",
     "status": "published",
     "version": "2 September 2020",
-    "mintedAt": "2026-07-16T10:26:38.448Z",
+    "mintedAt": "2026-07-24T10:17:28.416Z",
     "env": "sandbox"
   },
   "annan-ka-2019": {
