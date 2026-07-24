@@ -451,14 +451,14 @@
     "env": "sandbox"
   },
   "hoffman-pg-2015": {
-    "recordId": 566531,
+    "recordId": 571987,
     "conceptRecId": 506491,
     "conceptDoi": "10.5072/zenodo.506491",
-    "versionDoi": "10.5072/zenodo.566531",
-    "contentHash": "sha256:07bf9817eb84ab1a1fe2e4240b09d079e4d5247b2e131d06fcc48be87c9493c5",
+    "versionDoi": "10.5072/zenodo.571987",
+    "contentHash": "sha256:a929e5084732554b436eca0269fc2b6d9e363d1dc0d1aabc2a33749feb4f8ee0",
     "status": "published",
     "version": "19 January 2015",
-    "mintedAt": "2026-07-16T10:30:41.157Z",
+    "mintedAt": "2026-07-24T16:19:19.841Z",
     "env": "sandbox"
   },
   "holtrop-mw-2021": {
