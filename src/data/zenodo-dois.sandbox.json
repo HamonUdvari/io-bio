@@ -241,17 +241,6 @@
     "mintedAt": "2026-07-24T13:22:42.135Z",
     "env": "sandbox"
   },
-  "clausen-aw-2015": {
-    "recordId": 566512,
-    "conceptRecId": 506453,
-    "conceptDoi": "10.5072/zenodo.506453",
-    "versionDoi": "10.5072/zenodo.566512",
-    "contentHash": "sha256:e235aa4c870aaa091290317c96d93024f0be2da45049869fca00dceb03129798",
-    "status": "published",
-    "version": "17 April 2015",
-    "mintedAt": "2026-07-16T10:28:48.918Z",
-    "env": "sandbox"
-  },
   "cole-ws-2014": {
     "recordId": 566513,
     "conceptRecId": 506455,
