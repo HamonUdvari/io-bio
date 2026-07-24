@@ -451,14 +451,14 @@
     "env": "sandbox"
   },
   "hoffman-pg-2015": {
-    "recordId": 571988,
+    "recordId": 571987,
     "conceptRecId": 506491,
     "conceptDoi": "10.5072/zenodo.506491",
-    "versionDoi": "10.5072/zenodo.571988",
+    "versionDoi": "10.5072/zenodo.571987",
     "contentHash": "sha256:a929e5084732554b436eca0269fc2b6d9e363d1dc0d1aabc2a33749feb4f8ee0",
     "status": "published",
     "version": "19 January 2015",
-    "mintedAt": "2026-07-24T16:22:21.040Z",
+    "mintedAt": "2026-07-24T16:19:19.841Z",
     "env": "sandbox"
   },
   "holtrop-mw-2021": {
@@ -473,14 +473,14 @@
     "env": "sandbox"
   },
   "huxley-js-2012": {
-    "recordId": 571989,
+    "recordId": 571990,
     "conceptRecId": 506495,
     "conceptDoi": "10.5072/zenodo.506495",
-    "versionDoi": "10.5072/zenodo.571989",
+    "versionDoi": "10.5072/zenodo.571990",
     "contentHash": "sha256:0191ff90ae7be14353070e945cbc430fb7ad414610803f99687d95b0a0f46484",
     "status": "published",
     "version": "29 June 2012",
-    "mintedAt": "2026-07-24T16:22:25.677Z",
+    "mintedAt": "2026-07-24T16:25:21.566Z",
     "env": "sandbox"
   },
   "idris-ke-2016": {
@@ -495,14 +495,14 @@
     "env": "sandbox"
   },
   "ingram-j-2014": {
-    "recordId": 566535,
+    "recordId": 571991,
     "conceptRecId": 506499,
     "conceptDoi": "10.5072/zenodo.506499",
-    "versionDoi": "10.5072/zenodo.566535",
-    "contentHash": "sha256:5648183f59a5f1460c5446866f225d173c7a149512ce03809b401784ef96cb61",
+    "versionDoi": "10.5072/zenodo.571991",
+    "contentHash": "sha256:12524cc488be4027cf174635a1eec61f2b427d67b2c978e17f99993a17ecf9d3",
     "status": "published",
     "version": "22 April 2014",
-    "mintedAt": "2026-07-16T10:31:08.522Z",
+    "mintedAt": "2026-07-24T16:25:27.402Z",
     "env": "sandbox"
   },
   "ismay-hl-2012": {
