@@ -77,14 +77,14 @@
     "env": "sandbox"
   },
   "beyen-jw-2018": {
-    "recordId": 566497,
+    "recordId": 571737,
     "conceptRecId": 506423,
     "conceptDoi": "10.5072/zenodo.506423",
-    "versionDoi": "10.5072/zenodo.566497",
-    "contentHash": "sha256:85d32a6d3b4d0f9ea004867c84a13f035729789c8985fada1c220d25e0bd5167",
+    "versionDoi": "10.5072/zenodo.571737",
+    "contentHash": "sha256:bec519eafbf820c4c1894e1120e5001b037b4ee11f9a70809528bd98f95291ab",
     "status": "published",
     "version": "20 March 2018",
-    "mintedAt": "2026-07-16T10:27:09.714Z",
+    "mintedAt": "2026-07-24T12:11:21.251Z",
     "env": "sandbox"
   },
   "black-er-2014": {
