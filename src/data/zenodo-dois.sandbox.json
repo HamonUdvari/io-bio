@@ -165,14 +165,14 @@
     "env": "sandbox"
   },
   "bustani-jm-2015": {
-    "recordId": 566505,
+    "recordId": 571748,
     "conceptRecId": 506439,
     "conceptDoi": "10.5072/zenodo.506439",
-    "versionDoi": "10.5072/zenodo.566505",
-    "contentHash": "sha256:20ebf9c4c793fbf3e3e651bde1af66fdfcf525275bf686abf5dbee52b7159d01",
+    "versionDoi": "10.5072/zenodo.571748",
+    "contentHash": "sha256:19d227bfa48c6810fab81f1e83f0886303cb64dca348ad0a1466fe9d7bc97c8b",
     "status": "published",
     "version": "19 January 2015",
-    "mintedAt": "2026-07-16T10:27:54.907Z",
+    "mintedAt": "2026-07-24T13:04:01.578Z",
     "env": "sandbox"
   },
   "butler-hb-2012": {
