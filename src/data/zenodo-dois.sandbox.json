@@ -154,14 +154,14 @@
     "env": "sandbox"
   },
   "brundtland-gh-2014": {
-    "recordId": 566504,
+    "recordId": 571744,
     "conceptRecId": 506437,
     "conceptDoi": "10.5072/zenodo.506437",
-    "versionDoi": "10.5072/zenodo.566504",
-    "contentHash": "sha256:257b60d4475dc220728b952358e0c3a937a3164e7d56dc98224cfb4b5e3242e1",
+    "versionDoi": "10.5072/zenodo.571744",
+    "contentHash": "sha256:1edbb94011c6e929e1284197d0923044b582c8df9fd4910e74ec03488a80a022",
     "status": "published",
     "version": "9 June 2014",
-    "mintedAt": "2026-07-16T10:27:48.452Z",
+    "mintedAt": "2026-07-24T12:34:59.069Z",
     "env": "sandbox"
   },
   "bustani-jm-2015": {
