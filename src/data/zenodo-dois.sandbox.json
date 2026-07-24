@@ -143,14 +143,14 @@
     "env": "sandbox"
   },
   "boutros-ghali-2019": {
-    "recordId": 566503,
+    "recordId": 571743,
     "conceptRecId": 506435,
     "conceptDoi": "10.5072/zenodo.506435",
-    "versionDoi": "10.5072/zenodo.566503",
-    "contentHash": "sha256:a2426351767c7c11a9cf4556c28a6a99b7f4543c008d2fbd89b33085998aa1cb",
+    "versionDoi": "10.5072/zenodo.571743",
+    "contentHash": "sha256:8e5f3baacfef2bc20c15d625bb42d000ea440a8999ff5c1d79a9b95527252a49",
     "status": "published",
     "version": "23 September 2019",
-    "mintedAt": "2026-07-16T10:27:43.847Z",
+    "mintedAt": "2026-07-24T12:29:34.533Z",
     "env": "sandbox"
   },
   "brundtland-gh-2014": {
