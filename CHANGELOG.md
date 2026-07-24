@@ -1,3 +1,10 @@
+## [1.12.6](https://github.com/HamonUdvari/io-bio/compare/v1.12.5...v1.12.6) (2026-07-24)
+
+
+### Bug Fixes
+
+* **zenodo:** adopt dangling new-version draft instead of discard-and-retry ([](https://github.com/HamonUdvari/io-bio/commit/f1974fa3c60e5e6ffc76172248d4e9a470b0fb8f))
+
 ## [1.12.5](https://github.com/HamonUdvari/io-bio/compare/v1.12.4...v1.12.5) (2026-07-20)
 
 
