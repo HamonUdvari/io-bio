@@ -55,14 +55,14 @@
     "env": "sandbox"
   },
   "baenasoares-j-2015": {
-    "recordId": 566495,
+    "recordId": 571729,
     "conceptRecId": 506419,
     "conceptDoi": "10.5072/zenodo.506419",
-    "versionDoi": "10.5072/zenodo.566495",
-    "contentHash": "sha256:c06c4ef8c67972f1a66decaf50298f15998f247583c4aac5c1de8f001e5cef2c",
+    "versionDoi": "10.5072/zenodo.571729",
+    "contentHash": "sha256:90b5cb94d6b84ad86334c796235838f2fc02ed0ab66ea628396e2a9f9e93f59f",
     "status": "published",
     "version": "18 November 2013",
-    "mintedAt": "2026-07-16T10:26:55.111Z",
+    "mintedAt": "2026-07-24T11:40:46.882Z",
     "env": "sandbox"
   },
   "bertini-ca-2018": {
