@@ -66,14 +66,14 @@
     "env": "sandbox"
   },
   "bertini-ca-2018": {
-    "recordId": 566496,
+    "recordId": 571734,
     "conceptRecId": 506421,
     "conceptDoi": "10.5072/zenodo.506421",
-    "versionDoi": "10.5072/zenodo.566496",
-    "contentHash": "sha256:49e351364335abbe87e3b7db335dbd19f8ad1db8d9e63fc717c59badce366b4b",
+    "versionDoi": "10.5072/zenodo.571734",
+    "contentHash": "sha256:1c326823b9cb9671f9ad523aa1a3d732b11e78fe69e1406a37a3ec7568fdab73",
     "status": "published",
     "version": "19 January 2018",
-    "mintedAt": "2026-07-16T10:27:02.668Z",
+    "mintedAt": "2026-07-24T12:03:55.722Z",
     "env": "sandbox"
   },
   "beyen-jw-2018": {
