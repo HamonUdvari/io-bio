@@ -88,14 +88,14 @@
     "env": "sandbox"
   },
   "black-er-2014": {
-    "recordId": 566498,
+    "recordId": 571738,
     "conceptRecId": 506425,
     "conceptDoi": "10.5072/zenodo.506425",
-    "versionDoi": "10.5072/zenodo.566498",
-    "contentHash": "sha256:87e00c8ddb2776e417384a9d879db0b3e2c0a50d02850b7f2d95172fbbd12ee8",
+    "versionDoi": "10.5072/zenodo.571738",
+    "contentHash": "sha256:4209a788fd30c55afc589581b74d43ade1cd5b5b1ccc8a439783451e6277f5b9",
     "status": "published",
     "version": "1 October 2014",
-    "mintedAt": "2026-07-16T10:27:14.647Z",
+    "mintedAt": "2026-07-24T12:16:40.376Z",
     "env": "sandbox"
   },
   "bodenhausen-ghc-2023": {
