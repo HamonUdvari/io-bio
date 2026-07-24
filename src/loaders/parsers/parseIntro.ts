@@ -1,8 +1,11 @@
 import { nameCase } from "@foundernest/namecase";
 import type { IntroFields, ParserResult, Warning } from "./types";
 
-// Group 3 captures the qualifier ("known as" | "née"); group 4 the alias name.
-const NAME_RE = /^([^,]+),\s*([^(,]+)(?:\s*\((known as|née)\s+(.+?)\))?,/i;
+// Group 3 captures the qualifier ("known as" | "née" | "called"); group 4 the
+// alias name. "called" is a nickname form (e.g. "Alden Winship (called Tom)")
+// and is treated like "known as" — without it the name fails to parse, leaving
+// an empty title that later breaks Zenodo minting.
+const NAME_RE = /^([^,]+),\s*([^(,]+)(?:\s*\((known as|née|called)\s+(.+?)\))?,/i;
 const SUMMARY_RE = /^[^,]+,\s*[^,]+,\s*(.+?)\s*,\s*was born/i;
 const LIFE_RE = /(was.+)$/i;
 

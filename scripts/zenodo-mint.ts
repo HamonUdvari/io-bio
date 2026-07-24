@@ -269,6 +269,21 @@ async function main() {
     }
     const { metadata, warnings } = buildMetadata(e, cfg);
     for (const w of warnings) console.warn(`  ! ${e.slug}: ${w}`);
+
+    // A missing title makes Zenodo reject the *publish* — but only AFTER a draft
+    // and file upload have been created, leaving a dangling draft that then
+    // blocks every future newversion ("remove all files first") and wedges the
+    // deposit. Refuse to start such a mint: skip the entry with a clear error so
+    // the source (the docx name/intro) can be fixed, rather than corrupting the
+    // Zenodo state.
+    if (!metadata.title || !String(metadata.title).trim()) {
+      console.error(
+        `✗ ${e.slug}: empty title (name failed to parse?) — skipping to avoid a dangling draft`,
+      );
+      failed++;
+      continue;
+    }
+
     const bytes = readFileSync(pdfPath);
     // The file Zenodo shows/serves gets an "-iobio" suffix so a downloaded
     // deposit is identifiable out of context (e.g. lie-th-2017-iobio.pdf),
