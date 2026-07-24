@@ -1,3 +1,10 @@
+## [1.12.7](https://github.com/HamonUdvari/io-bio/compare/v1.12.6...v1.12.7) (2026-07-24)
+
+
+### Bug Fixes
+
+* **bios:** parse '(called X)' nickname in intro; guard empty Zenodo title ([](https://github.com/HamonUdvari/io-bio/commit/e3cbaa300024f3fd6d70d22c335065b74a36c254))
+
 ## [1.12.6](https://github.com/HamonUdvari/io-bio/compare/v1.12.5...v1.12.6) (2026-07-24)
 
 
