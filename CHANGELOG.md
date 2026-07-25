@@ -1,3 +1,10 @@
+## [1.12.8](https://github.com/HamonUdvari/io-bio/compare/v1.12.7...v1.12.8) (2026-07-25)
+
+
+### Bug Fixes
+
+* **bios:** accept any parenthetical nickname in intro name (not just qualified) ([](https://github.com/HamonUdvari/io-bio/commit/29f80cca9793a4e1e7e5861f64784aac16aa69c8))
+
 ## [1.12.7](https://github.com/HamonUdvari/io-bio/compare/v1.12.6...v1.12.7) (2026-07-24)
 
 
