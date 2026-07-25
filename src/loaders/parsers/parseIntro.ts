@@ -1,11 +1,14 @@
 import { nameCase } from "@foundernest/namecase";
 import type { IntroFields, ParserResult, Warning } from "./types";
 
-// Group 3 captures the qualifier ("known as" | "née" | "called"); group 4 the
-// alias name. "called" is a nickname form (e.g. "Alden Winship (called Tom)")
-// and is treated like "known as" — without it the name fails to parse, leaving
-// an empty title that later breaks Zenodo minting.
-const NAME_RE = /^([^,]+),\s*([^(,]+)(?:\s*\((known as|née|called)\s+(.+?)\))?,/i;
+// The first name may be followed by a parenthetical nickname or maiden name in
+// several forms — "(known as X)", "(called X)", "(née X)", or a bare "(X)" —
+// captured whole as group 3 and classified below. Accepting a bare nickname
+// matters: an unclassified "(Ruud)" would otherwise fail the entire name match,
+// yielding an empty title that breaks Zenodo minting.
+const NAME_RE = /^([^,]+),\s*([^(,]+?)\s*(?:\(([^)]*)\)\s*)?,/i;
+const NEE_RE = /^n[eé]e\s+(.+)$/i;
+const KNOWN_AS_RE = /^(?:known as|called)\s+(.+)$/i;
 const SUMMARY_RE = /^[^,]+,\s*[^,]+,\s*(.+?)\s*,\s*was born/i;
 const LIFE_RE = /(was.+)$/i;
 
@@ -37,12 +40,15 @@ export function parseIntro(introText: string): ParserResult<IntroFields> {
       nameMatch[1].replace(/[[\]]/g, " ").replace(/\s+/g, " ").trim(),
     );
     value.firstName = nameMatch[2].trim();
-    if (nameMatch[4]) {
-      const alias = nameMatch[4].trim();
-      // Two distinct fields, chosen by the source qualifier (group 3):
-      // "known as" → a nickname (knownAs); "née" → a maiden name (nee).
-      if (/née/i.test(nameMatch[3])) value.nee = alias;
-      else value.knownAs = alias;
+    const paren = nameMatch[3]?.trim();
+    if (paren) {
+      // Classify the parenthetical: "née X" → maiden name (nee);
+      // "known as X" / "called X" → nickname (knownAs); a bare "(X)" → nickname.
+      const nee = paren.match(NEE_RE);
+      const knownAs = paren.match(KNOWN_AS_RE);
+      if (nee) value.nee = nee[1].trim();
+      else if (knownAs) value.knownAs = knownAs[1].trim();
+      else value.knownAs = paren;
     }
   } else {
     warnings.push({
