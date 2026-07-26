@@ -1023,14 +1023,14 @@
     "env": "sandbox"
   },
   "saouma-ev-2013": {
-    "recordId": 572404,
+    "recordId": 572732,
     "conceptRecId": 572403,
     "conceptDoi": "10.5072/zenodo.572403",
-    "versionDoi": "10.5072/zenodo.572404",
-    "contentHash": "sha256:0b61e5c4b9a1f72469a888b09ff299be370d49f5788d5a4560b424bd15d7d5f8",
+    "versionDoi": "10.5072/zenodo.572732",
+    "contentHash": "sha256:b10502015bec09c564a48b73ca23175a9828dfb94807cb989146926ffb420c9d",
     "status": "published",
     "version": "15 January 2013",
-    "mintedAt": "2026-07-25T11:16:25.797Z",
+    "mintedAt": "2026-07-26T08:34:15.957Z",
     "env": "sandbox"
   },
   "spaak-p-h-2015": {
