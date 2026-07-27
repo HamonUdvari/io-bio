@@ -1,13 +1,13 @@
 {
   "adatci-m-2021": {
-    "recordId": 566491,
+    "recordId": 573776,
     "conceptRecId": 506411,
     "conceptDoi": "10.5072/zenodo.506411",
-    "versionDoi": "10.5072/zenodo.566491",
-    "contentHash": "sha256:0fdfdfc689b1606cceb7e653106fa84b3c3c3f90a14d358e1e25b12450c09656",
+    "versionDoi": "10.5072/zenodo.573776",
+    "contentHash": "sha256:fc551e3c9ab5fb805c3cf57992e2191ff0c9f9093468b1961777492634b71e8d",
     "status": "published",
     "version": "10 December 2020",
-    "mintedAt": "2026-07-16T10:26:32.141Z",
+    "mintedAt": "2026-07-27T14:31:14.223Z",
     "env": "sandbox"
   },
   "amano-y-2020": {
