@@ -1,13 +1,13 @@
 {
   "adatci-m-2021": {
-    "recordId": 573776,
+    "recordId": 573781,
     "conceptRecId": 506411,
     "conceptDoi": "10.5072/zenodo.506411",
-    "versionDoi": "10.5072/zenodo.573776",
+    "versionDoi": "10.5072/zenodo.573781",
     "contentHash": "sha256:fc551e3c9ab5fb805c3cf57992e2191ff0c9f9093468b1961777492634b71e8d",
     "status": "published",
     "version": "10 December 2020",
-    "mintedAt": "2026-07-27T14:31:14.223Z",
+    "mintedAt": "2026-07-27T14:33:30.652Z",
     "env": "sandbox"
   },
   "amano-y-2020": {
@@ -33,14 +33,14 @@
     "env": "sandbox"
   },
   "avenol-j-2015": {
-    "recordId": 571308,
+    "recordId": 573782,
     "conceptRecId": 506417,
     "conceptDoi": "10.5072/zenodo.506417",
-    "versionDoi": "10.5072/zenodo.571308",
-    "contentHash": "sha256:f5ae84e861bdedeb84d6145f2b11871d284595503e7ef212c861a1e790465b5a",
+    "versionDoi": "10.5072/zenodo.573782",
+    "contentHash": "sha256:77171024924663f9020bdb93a18f870cbac9f2716fd52530d84dca880716bb0d",
     "status": "published",
     "version": "21 August 2012",
-    "mintedAt": "2026-07-23T11:23:12.301Z",
+    "mintedAt": "2026-07-27T14:33:34.865Z",
     "env": "sandbox"
   },
   "avenol-j-2015_1": {
@@ -99,14 +99,14 @@
     "env": "sandbox"
   },
   "bodenhausen-ghc-2023": {
-    "recordId": 566499,
+    "recordId": 573783,
     "conceptRecId": 506427,
     "conceptDoi": "10.5072/zenodo.506427",
-    "versionDoi": "10.5072/zenodo.566499",
-    "contentHash": "sha256:679db62c35210f574cf4aa2c227a3c3bc5e899de5a416882a5f3884f78befd8a",
+    "versionDoi": "10.5072/zenodo.573783",
+    "contentHash": "sha256:375f2b5bf9c6bf81c48d2cf25ef55f39104406baf962504bbee2df4110662e8c",
     "status": "published",
     "version": "10 June 2023",
-    "mintedAt": "2026-07-16T10:27:19.400Z",
+    "mintedAt": "2026-07-27T14:33:39.263Z",
     "env": "sandbox"
   },
   "boerma-ah-2020": {
