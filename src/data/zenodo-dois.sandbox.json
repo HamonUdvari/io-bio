@@ -1,13 +1,13 @@
 {
   "adatci-m-2021": {
-    "recordId": 573781,
+    "recordId": 573776,
     "conceptRecId": 506411,
     "conceptDoi": "10.5072/zenodo.506411",
-    "versionDoi": "10.5072/zenodo.573781",
+    "versionDoi": "10.5072/zenodo.573776",
     "contentHash": "sha256:fc551e3c9ab5fb805c3cf57992e2191ff0c9f9093468b1961777492634b71e8d",
     "status": "published",
     "version": "10 December 2020",
-    "mintedAt": "2026-07-27T14:33:30.652Z",
+    "mintedAt": "2026-07-27T14:31:14.223Z",
     "env": "sandbox"
   },
   "amano-y-2020": {
@@ -33,14 +33,14 @@
     "env": "sandbox"
   },
   "avenol-j-2015": {
-    "recordId": 573782,
+    "recordId": 573785,
     "conceptRecId": 506417,
     "conceptDoi": "10.5072/zenodo.506417",
-    "versionDoi": "10.5072/zenodo.573782",
+    "versionDoi": "10.5072/zenodo.573785",
     "contentHash": "sha256:77171024924663f9020bdb93a18f870cbac9f2716fd52530d84dca880716bb0d",
     "status": "published",
     "version": "21 August 2012",
-    "mintedAt": "2026-07-27T14:33:34.865Z",
+    "mintedAt": "2026-07-27T14:35:56.228Z",
     "env": "sandbox"
   },
   "avenol-j-2015_1": {
@@ -99,14 +99,14 @@
     "env": "sandbox"
   },
   "bodenhausen-ghc-2023": {
-    "recordId": 573783,
+    "recordId": 573786,
     "conceptRecId": 506427,
     "conceptDoi": "10.5072/zenodo.506427",
-    "versionDoi": "10.5072/zenodo.573783",
+    "versionDoi": "10.5072/zenodo.573786",
     "contentHash": "sha256:375f2b5bf9c6bf81c48d2cf25ef55f39104406baf962504bbee2df4110662e8c",
     "status": "published",
     "version": "10 June 2023",
-    "mintedAt": "2026-07-27T14:33:39.263Z",
+    "mintedAt": "2026-07-27T14:36:00.583Z",
     "env": "sandbox"
   },
   "boerma-ah-2020": {
@@ -121,25 +121,25 @@
     "env": "sandbox"
   },
   "bokova-ig-2025": {
-    "recordId": 566501,
+    "recordId": 573787,
     "conceptRecId": 506431,
     "conceptDoi": "10.5072/zenodo.506431",
-    "versionDoi": "10.5072/zenodo.566501",
-    "contentHash": "sha256:cd0606f7ad95f5000f9e94755b733e25dac8fd94b0df9c17cfb8fb8ea5cddc10",
+    "versionDoi": "10.5072/zenodo.573787",
+    "contentHash": "sha256:312cf09e9af90454fb1c49f863bbdd7f9dd6c8310f6c5d25978b941cf883e051",
     "status": "published",
     "version": "10 February 2025",
-    "mintedAt": "2026-07-16T10:27:31.905Z",
+    "mintedAt": "2026-07-27T14:36:04.824Z",
     "env": "sandbox"
   },
   "bonnet-h-2024": {
-    "recordId": 566502,
+    "recordId": 573788,
     "conceptRecId": 506433,
     "conceptDoi": "10.5072/zenodo.506433",
-    "versionDoi": "10.5072/zenodo.566502",
-    "contentHash": "sha256:6d5901d5cb339ea4e5fcc402330c51a5f6d2844601fb204533ead63919e1eb51",
+    "versionDoi": "10.5072/zenodo.573788",
+    "contentHash": "sha256:6cecdbf5684666b5ca102c76b33471ea47d308a0ea3d6be82a8991ea6f78c01b",
     "status": "published",
     "version": "7 October 2024",
-    "mintedAt": "2026-07-16T10:27:38.586Z",
+    "mintedAt": "2026-07-27T14:36:09.476Z",
     "env": "sandbox"
   },
   "boutros-ghali-2019": {
@@ -176,14 +176,14 @@
     "env": "sandbox"
   },
   "butler-hb-2012": {
-    "recordId": 566506,
+    "recordId": 573789,
     "conceptRecId": 506441,
     "conceptDoi": "10.5072/zenodo.506441",
-    "versionDoi": "10.5072/zenodo.566506",
-    "contentHash": "sha256:b12c7a6d6bea50fe6911a984082cccba7d75fe5d55d06baa21182fa66509420a",
+    "versionDoi": "10.5072/zenodo.573789",
+    "contentHash": "sha256:d57208a2bbc762970ffa58c757fce800e997a0044172a42c8f1057c8e87fc793",
     "status": "published",
     "version": "21 August 2012",
-    "mintedAt": "2026-07-16T10:28:02.661Z",
+    "mintedAt": "2026-07-27T14:36:13.872Z",
     "env": "sandbox"
   },
   "candau-mg-2015": {
