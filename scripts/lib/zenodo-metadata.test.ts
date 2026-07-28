@@ -16,7 +16,7 @@ const cfg: MetadataConfig = {
   ],
   entryUrl: (slug) => `https://hamonudvari.github.io/io-bio/entries/${slug}`,
   rightsNote:
-    "Text © the author(s), licensed under CC BY-NC-ND 4.0. The portrait is excluded and remains under the rights of its credited source.",
+    "Text © the author(s) and IO BIO, licensed under CC BY-NC-ND 4.0. The portrait is excluded and remains under the rights of its credited source. We have tried to trace the rights holder to obtain permission for the use of the portrait, but contact us in case we have failed.",
 };
 
 const entry: MetaEntry = {

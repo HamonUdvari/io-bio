@@ -7,7 +7,6 @@
 import Image from "@components/Image.astro";
 import { aliasSuffix } from "@utils/displayName";
 import { parseImageSource } from "@utils/imageSource";
-import type { ImageMetadata } from "astro";
 
 interface Props {
   data: Record<string, any>;
@@ -56,25 +55,6 @@ const zenodoCite = data.zenodoCite ?? null;
 // Image credit: parsed into a short clickable host label + full URL (see
 // @utils/imageSource). The same parser is used by the image-source CSV export.
 const source = parseImageSource(imageSource);
-
-// Hero image intrinsic aspect ratio (height / width), resolved at build from the
-// same glob Image.astro uses, and fed to the rotated source credit's max-width
-// so the (bottom-to-top) caption can never run past the top of the image.
-// NFC-normalised basename lookup matches the docxLoader output; on a miss the
-// CSS falls back to var(--img-ar, 1) (square).
-const figureImages = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/assets/bios/**/*.{svg,jpeg,jpg,png,gif}",
-);
-const figureImgLoader = Object.entries(figureImages).find(
-  ([k]) =>
-    k.split("/").pop()?.normalize("NFC") === (imageFn ?? "").normalize("NFC"),
-)?.[1];
-const figureImgMeta = figureImgLoader
-  ? (await figureImgLoader()).default
-  : undefined;
-const imgAr = figureImgMeta
-  ? (figureImgMeta.height / figureImgMeta.width).toFixed(4)
-  : undefined;
 ---
 
 <section
@@ -82,7 +62,6 @@ const imgAr = figureImgMeta
   >
   <figure
     class="figure"
-    style={imgAr ? `--img-ar:${imgAr}` : undefined}
   >
     <picture>
       <Image class="w-full" imagePath={imageFn} alt={title} />
@@ -203,13 +182,14 @@ const imgAr = figureImgMeta
       scripts/zenodo-mint.ts. The license covers the entry TEXT; the embedded
       portrait stays under its credited source (see the "Source:" credit). */}
   <p class="text-small opacity-70">
-    Text © the author(s), licensed under{" "}
+    Text © the author(s) and IO BIO, licensed under{" "}
     <a
       class="underline"
       href="https://creativecommons.org/licenses/by-nc-nd/4.0/"
       target="_blank"
       rel="noopener noreferrer">CC BY-NC-ND 4.0</a
     >. The portrait is excluded and remains under the rights of its credited
-    source.
+    source. We have tried to trace the rights holder to obtain permission for the
+    use of the portrait, but contact us in case we have failed.
   </p>
 </section>

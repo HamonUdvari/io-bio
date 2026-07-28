@@ -411,14 +411,11 @@
 
     & .figure__credit {
       @apply text-credit text-left;
-      @apply absolute bottom-0 origin-bottom-left -rotate-90;
-      @apply overflow-hidden whitespace-nowrap text-ellipsis;
-      /* Room for the source-link underline (below the baseline) so `overflow:
-         hidden` — needed for the ellipsis on long source URLs — doesn't clip it. */
-      @apply pb-[0.3em];
-      @apply w-full;
-      max-width: calc(100cqw * var(--img-ar, 1));
-      left: calc(100% + 1rem);
+      /* Horizontal caption underneath the picture (previously a rotated, upright
+         credit). It carries the photo's date, source and photographer — not just
+         copyright — so it reads as a normal caption and wraps across the image
+         width. Font size unchanged (text-credit). */
+      @apply mt-2;
     }
   }
 

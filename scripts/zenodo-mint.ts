@@ -59,8 +59,10 @@ const EDITORS = [
 // under its credited source. Keep in sync with the footnote in EntryArticle.astro.
 const RIGHTS_NOTE =
   process.env.ZENODO_RIGHTS_NOTE ??
-  `Text © the author(s), licensed under ${LICENSE_LABEL}. The portrait is excluded ` +
-    `and remains under the rights of its credited source.`;
+  `Text © the author(s) and IO BIO, licensed under ${LICENSE_LABEL}. The portrait ` +
+    `is excluded and remains under the rights of its credited source. We have tried ` +
+    `to trace the rights holder to obtain permission for the use of the portrait, ` +
+    `but contact us in case we have failed.`;
 
 // Files + dirs that determine the rendered PDF's VISUAL output: the Paged.js
 // print route, the article template + its helpers (Image, displayName), the
