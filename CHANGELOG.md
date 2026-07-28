@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/HamonUdvari/io-bio/compare/v1.12.8...v1.13.0) (2026-07-28)
+
+
+### Website Features
+
+* **entry:** horizontal source caption under photo; add disclaimer + IO BIO © ([](https://github.com/HamonUdvari/io-bio/commit/a675e7eae0c5b99b9d95a9d38aa984012da5777b))
+
 ## [1.12.8](https://github.com/HamonUdvari/io-bio/compare/v1.12.7...v1.12.8) (2026-07-25)
 
 
