@@ -36,6 +36,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Some entries embed a non-web image (e.g. Prebisch's .tif) that the docx
+      # loader converts to PNG via LibreOffice at build time. The runner has no
+      # LibreOffice by default (`soffice: not found`), so the loader silently
+      # drops the image and the entry renders blank on deploy — even though it
+      # works locally where LibreOffice is installed. Provide a headless
+      # LibreOffice so the conversion runs on CI too.
+      - name: Install LibreOffice (headless image conversion)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-core libreoffice-draw
+          soffice --version
+
       - name: Build with Astro
         run: pnpm run build
 

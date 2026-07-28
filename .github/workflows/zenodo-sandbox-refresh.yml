@@ -65,6 +65,14 @@ jobs:
         id: chrome
         with:
           chrome-version: stable
+      # Convert non-web embedded images (e.g. Prebisch's .tif) to PNG at build
+      # time — the runner lacks LibreOffice by default, so without this the
+      # entry PDF is rendered without its portrait. Mirrors deploy.yml.
+      - name: Install LibreOffice (headless image conversion)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-core libreoffice-draw
+          soffice --version
       - name: Build (emits dist/zenodo-meta.json + the /print routes)
         run: pnpm run build
       - name: Refresh sandbox deposits (re-versions changed content/layout only)
