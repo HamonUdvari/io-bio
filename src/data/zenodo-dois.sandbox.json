@@ -858,14 +858,14 @@
     "env": "sandbox"
   },
   "pastizzi-d-2024": {
-    "recordId": 578335,
+    "recordId": 578336,
     "conceptRecId": 506565,
     "conceptDoi": "10.5072/zenodo.506565",
-    "versionDoi": "10.5072/zenodo.578335",
+    "versionDoi": "10.5072/zenodo.578336",
     "contentHash": "sha256:0314882a6c29eddc72f3e1e4d19b6c28791210e387340c2d2e9186e83916eb65",
     "status": "published",
     "version": "8 March 2024",
-    "mintedAt": "2026-07-31T14:06:57.844Z",
+    "mintedAt": "2026-07-31T14:09:36.096Z",
     "env": "sandbox"
   },
   "pate-m-2016": {
@@ -1144,14 +1144,14 @@
     "env": "sandbox"
   },
   "van-heuven-goedhart-gj-2012": {
-    "recordId": 574942,
+    "recordId": 578337,
     "conceptRecId": 506613,
     "conceptDoi": "10.5072/zenodo.506613",
-    "versionDoi": "10.5072/zenodo.574942",
-    "contentHash": "sha256:f04adbda91a0bb26770202b36df87582790afff3a959795d6a280fbe0ec2cf18",
+    "versionDoi": "10.5072/zenodo.578337",
+    "contentHash": "sha256:a58014f26c1cab3453e3f763b050ff8fa5d5723fa2a7eb1c7e5f7514fe5cf347",
     "status": "published",
     "version": "20 June 2012",
-    "mintedAt": "2026-07-28T13:46:34.253Z",
+    "mintedAt": "2026-07-31T14:09:40.440Z",
     "env": "sandbox"
   },
   "van-lennep-e-2017": {
@@ -1199,14 +1199,14 @@
     "env": "sandbox"
   },
   "woods-gd-2012": {
-    "recordId": 574947,
+    "recordId": 578338,
     "conceptRecId": 563951,
     "conceptDoi": "10.5072/zenodo.563951",
-    "versionDoi": "10.5072/zenodo.574947",
-    "contentHash": "sha256:1820d4f69471b2d4860d0578f8694e3df730d551c82b47ba39f94f9bc2846d66",
+    "versionDoi": "10.5072/zenodo.578338",
+    "contentHash": "sha256:2ea2192a86c8c9ec51ab86599d7582eacbd99a6a3717fccbfcf11fc4336d247c",
     "status": "published",
     "version": "26 February 2012",
-    "mintedAt": "2026-07-28T13:47:00.968Z",
+    "mintedAt": "2026-07-31T14:09:44.929Z",
     "env": "sandbox"
   },
   "wyndham-white-e-2012": {
