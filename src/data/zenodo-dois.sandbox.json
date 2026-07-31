@@ -858,14 +858,14 @@
     "env": "sandbox"
   },
   "pastizzi-d-2024": {
-    "recordId": 574918,
+    "recordId": 578335,
     "conceptRecId": 506565,
     "conceptDoi": "10.5072/zenodo.506565",
-    "versionDoi": "10.5072/zenodo.574918",
-    "contentHash": "sha256:57c11a4aace309fcc8fa638cd32e1980a20942adccfdecd91d34ecfd9044842c",
+    "versionDoi": "10.5072/zenodo.578335",
+    "contentHash": "sha256:0314882a6c29eddc72f3e1e4d19b6c28791210e387340c2d2e9186e83916eb65",
     "status": "published",
     "version": "8 March 2024",
-    "mintedAt": "2026-07-28T13:44:19.196Z",
+    "mintedAt": "2026-07-31T14:06:57.844Z",
     "env": "sandbox"
   },
   "pate-m-2016": {
