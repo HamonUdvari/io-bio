@@ -737,14 +737,14 @@
     "env": "sandbox"
   },
   "meyer-ei-2015": {
-    "recordId": 574907,
+    "recordId": 578310,
     "conceptRecId": 506543,
     "conceptDoi": "10.5072/zenodo.506543",
-    "versionDoi": "10.5072/zenodo.574907",
-    "contentHash": "sha256:51117764d540a19745ec2a452a753483aa95e2bc15b698df69d82b0dc0ec0a20",
+    "versionDoi": "10.5072/zenodo.578310",
+    "contentHash": "sha256:4a9744a700091795d738ae4941485e82dc657a38b35bdcf28e52fbc9167b436a",
     "status": "published",
     "version": "9 February 2015",
-    "mintedAt": "2026-07-28T13:43:20.153Z",
+    "mintedAt": "2026-07-31T12:20:44.646Z",
     "env": "sandbox"
   },
   "michelmore-lv-2015": {
