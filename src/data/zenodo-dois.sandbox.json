@@ -1012,14 +1012,14 @@
     "env": "sandbox"
   },
   "saouma-e-2013": {
-    "recordId": 566587,
+    "recordId": 578299,
     "conceptRecId": 506591,
     "conceptDoi": "10.5072/zenodo.506591",
-    "versionDoi": "10.5072/zenodo.566587",
-    "contentHash": "sha256:ed1491ef3a54062c69472c3b4c452d587d99e991cdbbf0faf563535d3cd40b1c",
+    "versionDoi": "10.5072/zenodo.578299",
+    "contentHash": "sha256:0b12c68ecfd5b8f91be35a67f13723c1d445d8b6c7f89d357aa1520b4615376a",
     "status": "published",
     "version": "15 January 2013",
-    "mintedAt": "2026-07-16T10:35:42.115Z",
+    "mintedAt": "2026-07-31T11:31:05.961Z",
     "env": "sandbox"
   },
   "saouma-ev-2013": {
