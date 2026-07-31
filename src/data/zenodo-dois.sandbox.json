@@ -242,14 +242,14 @@
     "env": "sandbox"
   },
   "clausen-aw-2015": {
-    "recordId": 574859,
+    "recordId": 578315,
     "conceptRecId": 571941,
     "conceptDoi": "10.5072/zenodo.571941",
-    "versionDoi": "10.5072/zenodo.574859",
-    "contentHash": "sha256:301bc8850f60a4da526600ad0c23ec2111be6d8911ee9f845dbe7ce563c09dfb",
+    "versionDoi": "10.5072/zenodo.578315",
+    "contentHash": "sha256:9ee62ed2a96fc3094a268f498a61b3a481c2c96c2f8c87cfb78e24f84d5dbf70",
     "status": "published",
     "version": "17 April 2015",
-    "mintedAt": "2026-07-28T13:39:26.153Z",
+    "mintedAt": "2026-07-31T12:56:17.656Z",
     "env": "sandbox"
   },
   "cole-ws-2014": {
