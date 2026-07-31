@@ -341,14 +341,14 @@
     "env": "sandbox"
   },
   "eichhoff-jj-2024": {
-    "recordId": 574868,
+    "recordId": 578326,
     "conceptRecId": 506471,
     "conceptDoi": "10.5072/zenodo.506471",
-    "versionDoi": "10.5072/zenodo.574868",
-    "contentHash": "sha256:283d8c1e1f7d6405d8ee69c5841d9c1c91a0d669181b20ee04a34aa2ca5a7041",
+    "versionDoi": "10.5072/zenodo.578326",
+    "contentHash": "sha256:5a376fbce9249a5374a25fec34a57144f2ff4867a633ab8caf603270e0f2200a",
     "status": "published",
     "version": "15 July 2024",
-    "mintedAt": "2026-07-28T13:40:11.180Z",
+    "mintedAt": "2026-07-31T13:17:23.668Z",
     "env": "sandbox"
   },
   "evans-l-2013": {
