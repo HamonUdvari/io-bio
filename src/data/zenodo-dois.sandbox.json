@@ -132,14 +132,14 @@
     "env": "sandbox"
   },
   "bonnet-h-2024": {
-    "recordId": 574847,
+    "recordId": 578314,
     "conceptRecId": 506433,
     "conceptDoi": "10.5072/zenodo.506433",
-    "versionDoi": "10.5072/zenodo.574847",
-    "contentHash": "sha256:64983ad7bd7222e0220ec7589a7cfbe6b6593660164de7263d9dbd55385f2743",
+    "versionDoi": "10.5072/zenodo.578314",
+    "contentHash": "sha256:94220a0d9ba4e1f082167b5c2f98da04939a7f4508052f09e40b8ac154178337",
     "status": "published",
     "version": "7 October 2024",
-    "mintedAt": "2026-07-28T13:38:32.954Z",
+    "mintedAt": "2026-07-31T12:45:22.556Z",
     "env": "sandbox"
   },
   "boutros-ghali-2019": {
