@@ -803,14 +803,14 @@
     "env": "sandbox"
   },
   "nansen-f-2014": {
-    "recordId": 581734,
+    "recordId": 581733,
     "conceptRecId": 506555,
     "conceptDoi": "10.5072/zenodo.506555",
-    "versionDoi": "10.5072/zenodo.581734",
+    "versionDoi": "10.5072/zenodo.581733",
     "contentHash": "sha256:5aef92394f771afb19944f7f07eba4a2a7319ffeea46a7f4223bdf5331c6ece6",
     "status": "published",
     "version": "17 March 2014",
-    "mintedAt": "2026-08-04T15:06:28.342Z",
+    "mintedAt": "2026-08-04T15:03:35.358Z",
     "env": "sandbox"
   },
   "ogata-s-2014": {
@@ -847,14 +847,14 @@
     "env": "sandbox"
   },
   "orr-jb-2021": {
-    "recordId": 581735,
+    "recordId": 581738,
     "conceptRecId": 506563,
     "conceptDoi": "10.5072/zenodo.506563",
-    "versionDoi": "10.5072/zenodo.581735",
+    "versionDoi": "10.5072/zenodo.581738",
     "contentHash": "sha256:c398730f3f9bb5ec66e039e38b63918ec0a15c86f4ab5da07005feaf723672c7",
     "status": "published",
     "version": "1 June 2021",
-    "mintedAt": "2026-08-04T15:06:32.398Z",
+    "mintedAt": "2026-08-04T15:09:28.594Z",
     "env": "sandbox"
   },
   "pastizzi-d-2024": {
@@ -869,36 +869,36 @@
     "env": "sandbox"
   },
   "pate-m-2016": {
-    "recordId": 581736,
+    "recordId": 581739,
     "conceptRecId": 506567,
     "conceptDoi": "10.5072/zenodo.506567",
-    "versionDoi": "10.5072/zenodo.581736",
+    "versionDoi": "10.5072/zenodo.581739",
     "contentHash": "sha256:1528d34ef06df19e2335659a45b2e8051bc825f2c246ee1d1712aafc0ec3c2af",
     "status": "published",
     "version": "9 February 2016",
-    "mintedAt": "2026-08-04T15:06:39.597Z",
+    "mintedAt": "2026-08-04T15:09:34.494Z",
     "env": "sandbox"
   },
   "phelan-ej-2016": {
-    "recordId": 581737,
+    "recordId": 581740,
     "conceptRecId": 506569,
     "conceptDoi": "10.5072/zenodo.506569",
-    "versionDoi": "10.5072/zenodo.581737",
+    "versionDoi": "10.5072/zenodo.581740",
     "contentHash": "sha256:85f09438a00931f6aca859d9ecfd38d4fe4e38fefeff9b8f15446020e914df2b",
     "status": "published",
     "version": "24 January 2016",
-    "mintedAt": "2026-08-04T15:06:44.708Z",
+    "mintedAt": "2026-08-04T15:09:39.106Z",
     "env": "sandbox"
   },
   "piot-pk-2021": {
-    "recordId": 574921,
+    "recordId": 581741,
     "conceptRecId": 506571,
     "conceptDoi": "10.5072/zenodo.506571",
-    "versionDoi": "10.5072/zenodo.574921",
-    "contentHash": "sha256:6c221bf03d8ad19cd2e418e496dc24612ba5b5f5d7d3b89c12f6bb63c1230ddb",
+    "versionDoi": "10.5072/zenodo.581741",
+    "contentHash": "sha256:f03fbc1ec1bf0d0f0837d6a9b56d42e52cf2cedb3ecf8a370f98524bafb930e8",
     "status": "published",
     "version": "26 October 2021",
-    "mintedAt": "2026-07-28T13:44:39.577Z",
+    "mintedAt": "2026-08-04T15:09:44.190Z",
     "env": "sandbox"
   },
   "piot-pk-2021-iobio": {
