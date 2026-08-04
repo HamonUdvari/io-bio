@@ -253,14 +253,14 @@
     "env": "sandbox"
   },
   "cole-ws-2014": {
-    "recordId": 581657,
+    "recordId": 581647,
     "conceptRecId": 506455,
     "conceptDoi": "10.5072/zenodo.506455",
-    "versionDoi": "10.5072/zenodo.581657",
+    "versionDoi": "10.5072/zenodo.581647",
     "contentHash": "sha256:b861fc4859d301fc36e5bb9e52196f9e83ca975ab528bb42e5fff8a54beb6a9b",
     "status": "published",
     "version": "20 January 2014",
-    "mintedAt": "2026-08-04T13:05:36.568Z",
+    "mintedAt": "2026-08-04T13:02:34.670Z",
     "env": "sandbox"
   },
   "crowdy-re-2014": {
@@ -275,25 +275,25 @@
     "env": "sandbox"
   },
   "curchod-cl-2017": {
-    "recordId": 581658,
+    "recordId": 581663,
     "conceptRecId": 506459,
     "conceptDoi": "10.5072/zenodo.506459",
-    "versionDoi": "10.5072/zenodo.581658",
+    "versionDoi": "10.5072/zenodo.581663",
     "contentHash": "sha256:18601b6a7bee97e172c41e00b035cc42502cdbd36e9ef4a134855d70581bc2a7",
     "status": "published",
     "version": "25 September 2017",
-    "mintedAt": "2026-08-04T13:05:44.468Z",
+    "mintedAt": "2026-08-04T13:08:28.322Z",
     "env": "sandbox"
   },
   "davies-da-2016": {
-    "recordId": 581659,
+    "recordId": 581664,
     "conceptRecId": 506461,
     "conceptDoi": "10.5072/zenodo.506461",
-    "versionDoi": "10.5072/zenodo.581659",
+    "versionDoi": "10.5072/zenodo.581664",
     "contentHash": "sha256:2d4b91df4bba5fb3dcbdba509c3163444ac9807527cdefc65f46d4dc25f29708",
     "status": "published",
     "version": "7 June 2016",
-    "mintedAt": "2026-08-04T13:05:49.889Z",
+    "mintedAt": "2026-08-04T13:08:33.293Z",
     "env": "sandbox"
   },
   "de-boer-y-2016": {
@@ -319,25 +319,25 @@
     "env": "sandbox"
   },
   "diallo-bt-2022": {
-    "recordId": 581660,
+    "recordId": 581665,
     "conceptRecId": 506467,
     "conceptDoi": "10.5072/zenodo.506467",
-    "versionDoi": "10.5072/zenodo.581660",
+    "versionDoi": "10.5072/zenodo.581665",
     "contentHash": "sha256:32b86e59a0c10f84d0331251903d2d0ca641f795b175aebce1db7cbdb5080b6b",
     "status": "published",
     "version": "4 May 2022",
-    "mintedAt": "2026-08-04T13:05:54.993Z",
+    "mintedAt": "2026-08-04T13:08:38.635Z",
     "env": "sandbox"
   },
   "drummond-je-2017": {
-    "recordId": 574867,
+    "recordId": 581666,
     "conceptRecId": 506469,
     "conceptDoi": "10.5072/zenodo.506469",
-    "versionDoi": "10.5072/zenodo.574867",
-    "contentHash": "sha256:f035937f7dd2a247189fd214abee88fe1afad157bfc7c85dfdf3b435d5fc4ecc",
+    "versionDoi": "10.5072/zenodo.581666",
+    "contentHash": "sha256:cf3c83666159eef299160650506baaddbc81e934f059bb538f5681643f4481c5",
     "status": "published",
     "version": "25 January 2017",
-    "mintedAt": "2026-07-28T13:40:06.410Z",
+    "mintedAt": "2026-08-04T13:08:44.052Z",
     "env": "sandbox"
   },
   "eichhoff-jj-2024": {
@@ -363,14 +363,14 @@
     "env": "sandbox"
   },
   "gardiner-r-2014": {
-    "recordId": 574870,
+    "recordId": 581667,
     "conceptRecId": 506475,
     "conceptDoi": "10.5072/zenodo.506475",
-    "versionDoi": "10.5072/zenodo.574870",
-    "contentHash": "sha256:d0b2e4e03e6af98df0378220a42ae55f6ecf10aa84c86b0a57a77a9d62dec628",
+    "versionDoi": "10.5072/zenodo.581667",
+    "contentHash": "sha256:de7fee01fcb70eb0cdbd78edead0c7219d878b4ea802d1f53285ef5548062378",
     "status": "published",
     "version": "28 May 2014",
-    "mintedAt": "2026-07-28T13:40:20.171Z",
+    "mintedAt": "2026-08-04T13:08:48.668Z",
     "env": "sandbox"
   },
   "gaviria-ca-2015": {
@@ -396,25 +396,25 @@
     "env": "sandbox"
   },
   "grant-jp-2016": {
-    "recordId": 574873,
+    "recordId": 581668,
     "conceptRecId": 506481,
     "conceptDoi": "10.5072/zenodo.506481",
-    "versionDoi": "10.5072/zenodo.574873",
-    "contentHash": "sha256:8b2edc970cb39d10af6dfad381b9b1142027c13c61e7b03706dd45ad8bc59348",
+    "versionDoi": "10.5072/zenodo.581668",
+    "contentHash": "sha256:88196875462f0aeddc1a0133117b154a109169f3333165cf9b62370399e917c0",
     "status": "published",
     "version": "29 May 2016",
-    "mintedAt": "2026-07-28T13:40:35.106Z",
+    "mintedAt": "2026-08-04T13:08:53.153Z",
     "env": "sandbox"
   },
   "gutt-c-2025": {
-    "recordId": 574876,
+    "recordId": 581669,
     "conceptRecId": 506483,
     "conceptDoi": "10.5072/zenodo.506483",
-    "versionDoi": "10.5072/zenodo.574876",
-    "contentHash": "sha256:15cdb899eb65e6252ce3a3ace9c055d32e16f2cbc672b7310c3aac947eaccbe6",
+    "versionDoi": "10.5072/zenodo.581669",
+    "contentHash": "sha256:13c886926c3c17553279e1347554790b2a728c6a5aeb52339e59190b9631ae0a",
     "status": "published",
     "version": "10 February 2025",
-    "mintedAt": "2026-07-28T13:40:40.652Z",
+    "mintedAt": "2026-08-04T13:08:57.922Z",
     "env": "sandbox"
   },
   "hammarskjöld-d-2025": {
