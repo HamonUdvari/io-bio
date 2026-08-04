@@ -517,14 +517,14 @@
     "env": "sandbox"
   },
   "jebb-g-2024": {
-    "recordId": 574887,
+    "recordId": 581689,
     "conceptRecId": 506503,
     "conceptDoi": "10.5072/zenodo.506503",
-    "versionDoi": "10.5072/zenodo.574887",
-    "contentHash": "sha256:ee4bc42439ba325d0c8f3fdf9c62b12e2095895c2225d2ad0aa53b849f7db164",
+    "versionDoi": "10.5072/zenodo.581689",
+    "contentHash": "sha256:2a27c6c569f8df398911c868ec9dfb4bcb49be20d3360c12c542a74541596d75",
     "status": "published",
     "version": "17 December 2024",
-    "mintedAt": "2026-07-28T13:41:30.052Z",
+    "mintedAt": "2026-08-04T14:11:17.882Z",
     "env": "sandbox"
   },
   "jenkins-r-2024": {
