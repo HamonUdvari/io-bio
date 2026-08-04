@@ -429,14 +429,14 @@
     "env": "sandbox"
   },
   "hansenne-m-2016": {
-    "recordId": 574878,
+    "recordId": 581785,
     "conceptRecId": 506487,
     "conceptDoi": "10.5072/zenodo.506487",
-    "versionDoi": "10.5072/zenodo.574878",
-    "contentHash": "sha256:3d07b7e34a3259fb40f13ccee2e8d4a69b8ab4ece4ad6d53ed5c9e1d83270824",
+    "versionDoi": "10.5072/zenodo.581785",
+    "contentHash": "sha256:c21ec260f1eb4d4ca7f0a164b80250114c3de89cd77d9db32528c75d7f56d94d",
     "status": "published",
     "version": "13 June 2016",
-    "mintedAt": "2026-07-28T13:40:50.677Z",
+    "mintedAt": "2026-08-04T17:11:44.085Z",
     "env": "sandbox"
   },
   "haveman-bw-2017": {
