@@ -484,14 +484,14 @@
     "env": "sandbox"
   },
   "idris-ke-2016": {
-    "recordId": 574883,
+    "recordId": 581686,
     "conceptRecId": 506497,
     "conceptDoi": "10.5072/zenodo.506497",
-    "versionDoi": "10.5072/zenodo.574883",
-    "contentHash": "sha256:a0093186348ae095a765ae1a349d85d373174e9f9bd09a28e113aab6390d5928",
+    "versionDoi": "10.5072/zenodo.581686",
+    "contentHash": "sha256:83c243190fb9d34210ca58d1ad0332b7ce0b3c7153418983d3e71f50b8575d64",
     "status": "published",
     "version": "7 March 2016",
-    "mintedAt": "2026-07-28T13:41:14.728Z",
+    "mintedAt": "2026-08-04T14:05:19.893Z",
     "env": "sandbox"
   },
   "ingram-j-2014": {
