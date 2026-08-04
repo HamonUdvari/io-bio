@@ -913,14 +913,14 @@
     "env": "sandbox"
   },
   "prebisch-rf-2014": {
-    "recordId": 581743,
+    "recordId": 581797,
     "conceptRecId": 506573,
     "conceptDoi": "10.5072/zenodo.506573",
-    "versionDoi": "10.5072/zenodo.581743",
-    "contentHash": "sha256:01be0c30f8841c3b32daab07ad6888f2b96f4abd6151fafed6103aebaf74d575",
+    "versionDoi": "10.5072/zenodo.581797",
+    "contentHash": "sha256:2e517650923fdb53155522de803bc9c8ae8a8271b257fe354593d7aefe5bf901",
     "status": "published",
     "version": "7 July 2014",
-    "mintedAt": "2026-08-04T15:12:22.398Z",
+    "mintedAt": "2026-08-04T18:33:55.613Z",
     "env": "sandbox"
   },
   "rajchman-lw-2014": {
