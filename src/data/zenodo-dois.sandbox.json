@@ -1001,14 +1001,14 @@
     "env": "sandbox"
   },
   "salter-ja-2022": {
-    "recordId": 581752,
+    "recordId": 581798,
     "conceptRecId": 506589,
     "conceptDoi": "10.5072/zenodo.506589",
-    "versionDoi": "10.5072/zenodo.581752",
-    "contentHash": "sha256:7da799adc7e076cf2b0a40a90c4995385ffabccccf3d0c2291d3abcece4d6355",
+    "versionDoi": "10.5072/zenodo.581798",
+    "contentHash": "sha256:9222762b4d139610dec1f2bf98fa80c58c39e0c87ec30e8be606b6975fe8b2a3",
     "status": "published",
     "version": "27 January 2022",
-    "mintedAt": "2026-08-04T15:18:55.336Z",
+    "mintedAt": "2026-08-04T19:17:58.463Z",
     "env": "sandbox"
   },
   "saouma-e-2013": {
