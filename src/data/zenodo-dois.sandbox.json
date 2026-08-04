@@ -803,14 +803,14 @@
     "env": "sandbox"
   },
   "nansen-f-2014": {
-    "recordId": 581733,
+    "recordId": 581734,
     "conceptRecId": 506555,
     "conceptDoi": "10.5072/zenodo.506555",
-    "versionDoi": "10.5072/zenodo.581733",
+    "versionDoi": "10.5072/zenodo.581734",
     "contentHash": "sha256:5aef92394f771afb19944f7f07eba4a2a7319ffeea46a7f4223bdf5331c6ece6",
     "status": "published",
     "version": "17 March 2014",
-    "mintedAt": "2026-08-04T15:03:35.358Z",
+    "mintedAt": "2026-08-04T15:06:28.342Z",
     "env": "sandbox"
   },
   "ogata-s-2014": {
@@ -847,14 +847,14 @@
     "env": "sandbox"
   },
   "orr-jb-2021": {
-    "recordId": 574917,
+    "recordId": 581735,
     "conceptRecId": 506563,
     "conceptDoi": "10.5072/zenodo.506563",
-    "versionDoi": "10.5072/zenodo.574917",
-    "contentHash": "sha256:4cb7c6747d47e426a0788a90eda014e988c5470705c9e8b18438f403b3b74567",
+    "versionDoi": "10.5072/zenodo.581735",
+    "contentHash": "sha256:c398730f3f9bb5ec66e039e38b63918ec0a15c86f4ab5da07005feaf723672c7",
     "status": "published",
     "version": "1 June 2021",
-    "mintedAt": "2026-07-28T13:44:14.365Z",
+    "mintedAt": "2026-08-04T15:06:32.398Z",
     "env": "sandbox"
   },
   "pastizzi-d-2024": {
@@ -869,25 +869,25 @@
     "env": "sandbox"
   },
   "pate-m-2016": {
-    "recordId": 574919,
+    "recordId": 581736,
     "conceptRecId": 506567,
     "conceptDoi": "10.5072/zenodo.506567",
-    "versionDoi": "10.5072/zenodo.574919",
-    "contentHash": "sha256:5589e1f2fc76a25728fb8362a257dec775f992837a3937f7391ac26b412e21c7",
+    "versionDoi": "10.5072/zenodo.581736",
+    "contentHash": "sha256:1528d34ef06df19e2335659a45b2e8051bc825f2c246ee1d1712aafc0ec3c2af",
     "status": "published",
     "version": "9 February 2016",
-    "mintedAt": "2026-07-28T13:44:25.161Z",
+    "mintedAt": "2026-08-04T15:06:39.597Z",
     "env": "sandbox"
   },
   "phelan-ej-2016": {
-    "recordId": 574920,
+    "recordId": 581737,
     "conceptRecId": 506569,
     "conceptDoi": "10.5072/zenodo.506569",
-    "versionDoi": "10.5072/zenodo.574920",
-    "contentHash": "sha256:df81733809eff09b6b4e931dc63ac6024bec5f23c5a1bf270c84966eac25a37c",
+    "versionDoi": "10.5072/zenodo.581737",
+    "contentHash": "sha256:85f09438a00931f6aca859d9ecfd38d4fe4e38fefeff9b8f15446020e914df2b",
     "status": "published",
     "version": "24 January 2016",
-    "mintedAt": "2026-07-28T13:44:31.334Z",
+    "mintedAt": "2026-08-04T15:06:44.708Z",
     "env": "sandbox"
   },
   "piot-pk-2021": {
