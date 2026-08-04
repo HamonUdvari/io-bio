@@ -803,14 +803,14 @@
     "env": "sandbox"
   },
   "nansen-f-2014": {
-    "recordId": 581733,
+    "recordId": 581734,
     "conceptRecId": 506555,
     "conceptDoi": "10.5072/zenodo.506555",
-    "versionDoi": "10.5072/zenodo.581733",
+    "versionDoi": "10.5072/zenodo.581734",
     "contentHash": "sha256:5aef92394f771afb19944f7f07eba4a2a7319ffeea46a7f4223bdf5331c6ece6",
     "status": "published",
     "version": "17 March 2014",
-    "mintedAt": "2026-08-04T15:03:35.358Z",
+    "mintedAt": "2026-08-04T15:06:28.342Z",
     "env": "sandbox"
   },
   "ogata-s-2014": {
@@ -847,14 +847,14 @@
     "env": "sandbox"
   },
   "orr-jb-2021": {
-    "recordId": 581738,
+    "recordId": 581735,
     "conceptRecId": 506563,
     "conceptDoi": "10.5072/zenodo.506563",
-    "versionDoi": "10.5072/zenodo.581738",
+    "versionDoi": "10.5072/zenodo.581735",
     "contentHash": "sha256:c398730f3f9bb5ec66e039e38b63918ec0a15c86f4ab5da07005feaf723672c7",
     "status": "published",
     "version": "1 June 2021",
-    "mintedAt": "2026-08-04T15:09:28.594Z",
+    "mintedAt": "2026-08-04T15:06:32.398Z",
     "env": "sandbox"
   },
   "pastizzi-d-2024": {
@@ -869,36 +869,36 @@
     "env": "sandbox"
   },
   "pate-m-2016": {
-    "recordId": 581739,
+    "recordId": 581736,
     "conceptRecId": 506567,
     "conceptDoi": "10.5072/zenodo.506567",
-    "versionDoi": "10.5072/zenodo.581739",
+    "versionDoi": "10.5072/zenodo.581736",
     "contentHash": "sha256:1528d34ef06df19e2335659a45b2e8051bc825f2c246ee1d1712aafc0ec3c2af",
     "status": "published",
     "version": "9 February 2016",
-    "mintedAt": "2026-08-04T15:09:34.494Z",
+    "mintedAt": "2026-08-04T15:06:39.597Z",
     "env": "sandbox"
   },
   "phelan-ej-2016": {
-    "recordId": 581740,
+    "recordId": 581737,
     "conceptRecId": 506569,
     "conceptDoi": "10.5072/zenodo.506569",
-    "versionDoi": "10.5072/zenodo.581740",
+    "versionDoi": "10.5072/zenodo.581737",
     "contentHash": "sha256:85f09438a00931f6aca859d9ecfd38d4fe4e38fefeff9b8f15446020e914df2b",
     "status": "published",
     "version": "24 January 2016",
-    "mintedAt": "2026-08-04T15:09:39.106Z",
+    "mintedAt": "2026-08-04T15:06:44.708Z",
     "env": "sandbox"
   },
   "piot-pk-2021": {
-    "recordId": 581741,
+    "recordId": 581742,
     "conceptRecId": 506571,
     "conceptDoi": "10.5072/zenodo.506571",
-    "versionDoi": "10.5072/zenodo.581741",
+    "versionDoi": "10.5072/zenodo.581742",
     "contentHash": "sha256:f03fbc1ec1bf0d0f0837d6a9b56d42e52cf2cedb3ecf8a370f98524bafb930e8",
     "status": "published",
     "version": "26 October 2021",
-    "mintedAt": "2026-08-04T15:09:44.190Z",
+    "mintedAt": "2026-08-04T15:12:17.828Z",
     "env": "sandbox"
   },
   "piot-pk-2021-iobio": {
@@ -913,25 +913,25 @@
     "env": "sandbox"
   },
   "prebisch-rf-2014": {
-    "recordId": 574922,
+    "recordId": 581743,
     "conceptRecId": 506573,
     "conceptDoi": "10.5072/zenodo.506573",
-    "versionDoi": "10.5072/zenodo.574922",
-    "contentHash": "sha256:a7716f232c2a6fb8c258b045d898435c676f10557c416549831fd7b28d40854e",
+    "versionDoi": "10.5072/zenodo.581743",
+    "contentHash": "sha256:01be0c30f8841c3b32daab07ad6888f2b96f4abd6151fafed6103aebaf74d575",
     "status": "published",
     "version": "7 July 2014",
-    "mintedAt": "2026-07-28T13:44:44.802Z",
+    "mintedAt": "2026-08-04T15:12:22.398Z",
     "env": "sandbox"
   },
   "rajchman-lw-2014": {
-    "recordId": 574923,
+    "recordId": 581744,
     "conceptRecId": 506575,
     "conceptDoi": "10.5072/zenodo.506575",
-    "versionDoi": "10.5072/zenodo.574923",
-    "contentHash": "sha256:56c3bbaf668ec9b9e0ac4c6cae969d2bf6b9883170ad815caa7cd39f39309bdf",
+    "versionDoi": "10.5072/zenodo.581744",
+    "contentHash": "sha256:6cb4417f26b731ee38f6722ded41e431812a8e205d73df625caaab0d4e83aa53",
     "status": "published",
     "version": "19 November 2014",
-    "mintedAt": "2026-07-28T13:44:50.619Z",
+    "mintedAt": "2026-08-04T15:12:26.667Z",
     "env": "sandbox"
   },
   "rey-f-2025": {
@@ -968,14 +968,14 @@
     "env": "sandbox"
   },
   "robinson-mtw-2014": {
-    "recordId": 574927,
+    "recordId": 581745,
     "conceptRecId": 506583,
     "conceptDoi": "10.5072/zenodo.506583",
-    "versionDoi": "10.5072/zenodo.574927",
-    "contentHash": "sha256:a2ca8d2d4aaab2388cee01501c67bfd34c9695f98421314d18f15bf36cb5441e",
+    "versionDoi": "10.5072/zenodo.581745",
+    "contentHash": "sha256:c95d5180b37f6955360a337549ae3461441053fab9c7c011b4950ce9d7d31f2f",
     "status": "published",
     "version": "4 March 2014",
-    "mintedAt": "2026-07-28T13:45:13.002Z",
+    "mintedAt": "2026-08-04T15:12:31.415Z",
     "env": "sandbox"
   },
   "rooth-i-2025": {
