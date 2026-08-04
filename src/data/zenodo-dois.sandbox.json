@@ -253,14 +253,14 @@
     "env": "sandbox"
   },
   "cole-ws-2014": {
-    "recordId": 574860,
+    "recordId": 581647,
     "conceptRecId": 506455,
     "conceptDoi": "10.5072/zenodo.506455",
-    "versionDoi": "10.5072/zenodo.574860",
-    "contentHash": "sha256:2676ae5512c5e5c66b602b8e94c0876ea8ce83be8602b3c6b6639c34717858d2",
+    "versionDoi": "10.5072/zenodo.581647",
+    "contentHash": "sha256:b861fc4859d301fc36e5bb9e52196f9e83ca975ab528bb42e5fff8a54beb6a9b",
     "status": "published",
     "version": "20 January 2014",
-    "mintedAt": "2026-07-28T13:39:31.130Z",
+    "mintedAt": "2026-08-04T13:02:34.670Z",
     "env": "sandbox"
   },
   "crowdy-re-2014": {
