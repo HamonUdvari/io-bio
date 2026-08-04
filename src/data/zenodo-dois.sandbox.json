@@ -715,14 +715,14 @@
     "env": "sandbox"
   },
   "mcdonald-jg-2016": {
-    "recordId": 581728,
+    "recordId": 581792,
     "conceptRecId": 506539,
     "conceptDoi": "10.5072/zenodo.506539",
-    "versionDoi": "10.5072/zenodo.581728",
-    "contentHash": "sha256:2489619e0594cab4c97ec5419afec1bff583255c55ce58fa490f430c1fa70e57",
+    "versionDoi": "10.5072/zenodo.581792",
+    "contentHash": "sha256:e9713022bc1f353ebed2f86087a728194b5cb9e7750b99b10f5c307f683362a5",
     "status": "published",
     "version": "26 January 2016",
-    "mintedAt": "2026-08-04T14:30:12.399Z",
+    "mintedAt": "2026-08-04T17:43:14.860Z",
     "env": "sandbox"
   },
   "mcnamara-rs-2013": {
