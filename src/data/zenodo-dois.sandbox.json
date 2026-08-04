@@ -528,36 +528,36 @@
     "env": "sandbox"
   },
   "jenkins-r-2024": {
-    "recordId": 581690,
+    "recordId": 581691,
     "conceptRecId": 506505,
     "conceptDoi": "10.5072/zenodo.506505",
-    "versionDoi": "10.5072/zenodo.581690",
+    "versionDoi": "10.5072/zenodo.581691",
     "contentHash": "sha256:eb2415d98004790abe8ebbca152656aa70bf8e9578914ed4be550dcd9157b9ea",
     "status": "published",
     "version": "11 January 2024",
-    "mintedAt": "2026-08-04T14:14:53.330Z",
+    "mintedAt": "2026-08-04T14:17:41.556Z",
     "env": "sandbox"
   },
   "jenks-cw-2016": {
-    "recordId": 574889,
+    "recordId": 581692,
     "conceptRecId": 506507,
     "conceptDoi": "10.5072/zenodo.506507",
-    "versionDoi": "10.5072/zenodo.574889",
-    "contentHash": "sha256:2c6eb2142ea4037db3b9b9eeef06930e6cd64802148cd0d6b5af2473271d15fb",
+    "versionDoi": "10.5072/zenodo.581692",
+    "contentHash": "sha256:566f6420dc743fc51d3d2f33580f1cfb96b0fbca78119c5451cfdf2a0d8f4082",
     "status": "published",
     "version": "8 February 2016",
-    "mintedAt": "2026-07-28T13:41:41.183Z",
+    "mintedAt": "2026-08-04T14:17:46.311Z",
     "env": "sandbox"
   },
   "johnston-dj-2013": {
-    "recordId": 574890,
+    "recordId": 581693,
     "conceptRecId": 506509,
     "conceptDoi": "10.5072/zenodo.506509",
-    "versionDoi": "10.5072/zenodo.574890",
-    "contentHash": "sha256:5bf6cfee5aa3b7f74f48c391ccbd8c9bc20155ef5658afd1e554d44d5cb68ebf",
+    "versionDoi": "10.5072/zenodo.581693",
+    "contentHash": "sha256:e125e8cf4b746d7ac041b788829310a4c61439c55b43dd5f1d796c944b0dbbca",
     "status": "published",
     "version": "23 May 2013",
-    "mintedAt": "2026-07-28T13:41:46.597Z",
+    "mintedAt": "2026-08-04T14:17:50.687Z",
     "env": "sandbox"
   },
   "keenleyside-hl-2016": {
