@@ -528,47 +528,47 @@
     "env": "sandbox"
   },
   "jenkins-r-2024": {
-    "recordId": 581691,
+    "recordId": 581690,
     "conceptRecId": 506505,
     "conceptDoi": "10.5072/zenodo.506505",
-    "versionDoi": "10.5072/zenodo.581691",
+    "versionDoi": "10.5072/zenodo.581690",
     "contentHash": "sha256:eb2415d98004790abe8ebbca152656aa70bf8e9578914ed4be550dcd9157b9ea",
     "status": "published",
     "version": "11 January 2024",
-    "mintedAt": "2026-08-04T14:17:41.556Z",
+    "mintedAt": "2026-08-04T14:14:53.330Z",
     "env": "sandbox"
   },
   "jenks-cw-2016": {
-    "recordId": 581692,
+    "recordId": 581694,
     "conceptRecId": 506507,
     "conceptDoi": "10.5072/zenodo.506507",
-    "versionDoi": "10.5072/zenodo.581692",
+    "versionDoi": "10.5072/zenodo.581694",
     "contentHash": "sha256:566f6420dc743fc51d3d2f33580f1cfb96b0fbca78119c5451cfdf2a0d8f4082",
     "status": "published",
     "version": "8 February 2016",
-    "mintedAt": "2026-08-04T14:17:46.311Z",
+    "mintedAt": "2026-08-04T14:20:30.241Z",
     "env": "sandbox"
   },
   "johnston-dj-2013": {
-    "recordId": 581693,
+    "recordId": 581695,
     "conceptRecId": 506509,
     "conceptDoi": "10.5072/zenodo.506509",
-    "versionDoi": "10.5072/zenodo.581693",
+    "versionDoi": "10.5072/zenodo.581695",
     "contentHash": "sha256:e125e8cf4b746d7ac041b788829310a4c61439c55b43dd5f1d796c944b0dbbca",
     "status": "published",
     "version": "23 May 2013",
-    "mintedAt": "2026-08-04T14:17:50.687Z",
+    "mintedAt": "2026-08-04T14:20:36.094Z",
     "env": "sandbox"
   },
   "keenleyside-hl-2016": {
-    "recordId": 581704,
+    "recordId": 581696,
     "conceptRecId": 506511,
     "conceptDoi": "10.5072/zenodo.506511",
-    "versionDoi": "10.5072/zenodo.581704",
+    "versionDoi": "10.5072/zenodo.581696",
     "contentHash": "sha256:a6c248e7d8c890f8b050c0351aafa839d5ab163f777997a9d3f7f6f00b986e7e",
     "status": "published",
     "version": "29 January 2016",
-    "mintedAt": "2026-08-04T14:23:28.412Z",
+    "mintedAt": "2026-08-04T14:20:41.030Z",
     "env": "sandbox"
   },
   "kirchner-n-2012": {
@@ -583,58 +583,58 @@
     "env": "sandbox"
   },
   "kotaite-aa-2025": {
-    "recordId": 581705,
+    "recordId": 581697,
     "conceptRecId": 506515,
     "conceptDoi": "10.5072/zenodo.506515",
-    "versionDoi": "10.5072/zenodo.581705",
+    "versionDoi": "10.5072/zenodo.581697",
     "contentHash": "sha256:db3f493f0535419ca644176d9e8aa2b7e36189ff594662b30fb38289733a7807",
     "status": "published",
     "version": "24 July 2026",
-    "mintedAt": "2026-08-04T14:23:33.351Z",
+    "mintedAt": "2026-08-04T14:20:46.762Z",
     "env": "sandbox"
   },
   "kristensen-t-2013": {
-    "recordId": 581706,
+    "recordId": 581698,
     "conceptRecId": 506517,
     "conceptDoi": "10.5072/zenodo.506517",
-    "versionDoi": "10.5072/zenodo.581706",
+    "versionDoi": "10.5072/zenodo.581698",
     "contentHash": "sha256:5fc90c74f6831c9c27326739a04376fcbc0c5bdb3f6ab968a96a725462582513",
     "status": "published",
     "version": "10 December 2013",
-    "mintedAt": "2026-08-04T14:23:40.795Z",
+    "mintedAt": "2026-08-04T14:20:52.657Z",
     "env": "sandbox"
   },
   "lester-je-2015": {
-    "recordId": 581708,
+    "recordId": 581723,
     "conceptRecId": 506519,
     "conceptDoi": "10.5072/zenodo.506519",
-    "versionDoi": "10.5072/zenodo.581708",
+    "versionDoi": "10.5072/zenodo.581723",
     "contentHash": "sha256:de6184800d26dd9eeaa232d193efbc8713919c4009183d312b2179844df300de",
     "status": "published",
     "version": "21 January 2015",
-    "mintedAt": "2026-08-04T14:23:48.382Z",
+    "mintedAt": "2026-08-04T14:26:49.877Z",
     "env": "sandbox"
   },
   "lie-th-2017": {
-    "recordId": 581710,
+    "recordId": 581724,
     "conceptRecId": 506521,
     "conceptDoi": "10.5072/zenodo.506521",
-    "versionDoi": "10.5072/zenodo.581710",
+    "versionDoi": "10.5072/zenodo.581724",
     "contentHash": "sha256:0da264ee7b941bda37a9062eb64bdbff8c1bbd7724e2b500aed10d3f25376e7c",
     "status": "published",
     "version": "22 October 2017",
-    "mintedAt": "2026-08-04T14:23:55.635Z",
+    "mintedAt": "2026-08-04T14:26:55.204Z",
     "env": "sandbox"
   },
   "lubbers-r-2026": {
-    "recordId": 581711,
+    "recordId": 581725,
     "conceptRecId": 506523,
     "conceptDoi": "10.5072/zenodo.506523",
-    "versionDoi": "10.5072/zenodo.581711",
+    "versionDoi": "10.5072/zenodo.581725",
     "contentHash": "sha256:cea00323fa5f5d56ac391b7376cabbd44ad9fcace8b902ca9adcebf3e22c4447",
     "status": "published",
     "version": "15 January 2026",
-    "mintedAt": "2026-08-04T14:24:03.067Z",
+    "mintedAt": "2026-08-04T14:27:02.918Z",
     "env": "sandbox"
   },
   "luns-jamh-2015": {
@@ -715,14 +715,14 @@
     "env": "sandbox"
   },
   "mcdonald-jg-2016": {
-    "recordId": 574905,
+    "recordId": 581726,
     "conceptRecId": 506539,
     "conceptDoi": "10.5072/zenodo.506539",
-    "versionDoi": "10.5072/zenodo.574905",
-    "contentHash": "sha256:1204035c2ce57ec75ef71ca2cdd849eebefefcf04213fb14ab5bccecceee3bf7",
+    "versionDoi": "10.5072/zenodo.581726",
+    "contentHash": "sha256:2489619e0594cab4c97ec5419afec1bff583255c55ce58fa490f430c1fa70e57",
     "status": "published",
     "version": "26 January 2016",
-    "mintedAt": "2026-07-28T13:43:09.666Z",
+    "mintedAt": "2026-08-04T14:27:07.919Z",
     "env": "sandbox"
   },
   "mcnamara-rs-2013": {
@@ -781,14 +781,14 @@
     "env": "sandbox"
   },
   "myrdal-g-2014": {
-    "recordId": 574911,
+    "recordId": 581727,
     "conceptRecId": 506551,
     "conceptDoi": "10.5072/zenodo.506551",
-    "versionDoi": "10.5072/zenodo.574911",
-    "contentHash": "sha256:d59092de019f3c85e8192884c319320fa1e8064a1ffd3b56e36040e4ee208b30",
+    "versionDoi": "10.5072/zenodo.581727",
+    "contentHash": "sha256:c30b2df1627a982c571c20a096ff9acb6409e727dfb012838f8328ce858fc9c1",
     "status": "published",
     "version": "10 March 2014",
-    "mintedAt": "2026-07-28T13:43:41.095Z",
+    "mintedAt": "2026-08-04T14:27:12.846Z",
     "env": "sandbox"
   },
   "nakajima-h-2019": {
