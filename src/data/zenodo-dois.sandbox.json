@@ -484,14 +484,14 @@
     "env": "sandbox"
   },
   "idris-ke-2016": {
-    "recordId": 581686,
+    "recordId": 581687,
     "conceptRecId": 506497,
     "conceptDoi": "10.5072/zenodo.506497",
-    "versionDoi": "10.5072/zenodo.581686",
+    "versionDoi": "10.5072/zenodo.581687",
     "contentHash": "sha256:83c243190fb9d34210ca58d1ad0332b7ce0b3c7153418983d3e71f50b8575d64",
     "status": "published",
     "version": "7 March 2016",
-    "mintedAt": "2026-08-04T14:05:19.893Z",
+    "mintedAt": "2026-08-04T14:08:03.098Z",
     "env": "sandbox"
   },
   "ingram-j-2014": {
@@ -506,14 +506,14 @@
     "env": "sandbox"
   },
   "ismay-hl-2012": {
-    "recordId": 574886,
+    "recordId": 581688,
     "conceptRecId": 506501,
     "conceptDoi": "10.5072/zenodo.506501",
-    "versionDoi": "10.5072/zenodo.574886",
-    "contentHash": "sha256:3bd2b3dc910facea0aa57485773c10dd732c7a0a7480554459a25dcfc0d08f61",
+    "versionDoi": "10.5072/zenodo.581688",
+    "contentHash": "sha256:f899f44bb77ec7061650873e6fa46917a8d978af45fd059d2846fb355ba8bd48",
     "status": "published",
     "version": "29 July 2012",
-    "mintedAt": "2026-07-28T13:41:24.716Z",
+    "mintedAt": "2026-08-04T14:08:07.803Z",
     "env": "sandbox"
   },
   "jebb-g-2024": {
