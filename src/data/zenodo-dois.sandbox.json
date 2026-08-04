@@ -253,14 +253,14 @@
     "env": "sandbox"
   },
   "cole-ws-2014": {
-    "recordId": 581647,
+    "recordId": 581657,
     "conceptRecId": 506455,
     "conceptDoi": "10.5072/zenodo.506455",
-    "versionDoi": "10.5072/zenodo.581647",
+    "versionDoi": "10.5072/zenodo.581657",
     "contentHash": "sha256:b861fc4859d301fc36e5bb9e52196f9e83ca975ab528bb42e5fff8a54beb6a9b",
     "status": "published",
     "version": "20 January 2014",
-    "mintedAt": "2026-08-04T13:02:34.670Z",
+    "mintedAt": "2026-08-04T13:05:36.568Z",
     "env": "sandbox"
   },
   "crowdy-re-2014": {
@@ -275,25 +275,25 @@
     "env": "sandbox"
   },
   "curchod-cl-2017": {
-    "recordId": 574862,
+    "recordId": 581658,
     "conceptRecId": 506459,
     "conceptDoi": "10.5072/zenodo.506459",
-    "versionDoi": "10.5072/zenodo.574862",
-    "contentHash": "sha256:bab5c643a09c109be99f342622df7b8be020f5653479a30ee95204c3de3feb14",
+    "versionDoi": "10.5072/zenodo.581658",
+    "contentHash": "sha256:18601b6a7bee97e172c41e00b035cc42502cdbd36e9ef4a134855d70581bc2a7",
     "status": "published",
     "version": "25 September 2017",
-    "mintedAt": "2026-07-28T13:39:41.937Z",
+    "mintedAt": "2026-08-04T13:05:44.468Z",
     "env": "sandbox"
   },
   "davies-da-2016": {
-    "recordId": 574863,
+    "recordId": 581659,
     "conceptRecId": 506461,
     "conceptDoi": "10.5072/zenodo.506461",
-    "versionDoi": "10.5072/zenodo.574863",
-    "contentHash": "sha256:205caa5c97b0f74d454ff53ed5c7574d599a34986964bfef6124776cdf74d7c6",
+    "versionDoi": "10.5072/zenodo.581659",
+    "contentHash": "sha256:2d4b91df4bba5fb3dcbdba509c3163444ac9807527cdefc65f46d4dc25f29708",
     "status": "published",
     "version": "7 June 2016",
-    "mintedAt": "2026-07-28T13:39:47.140Z",
+    "mintedAt": "2026-08-04T13:05:49.889Z",
     "env": "sandbox"
   },
   "de-boer-y-2016": {
@@ -319,14 +319,14 @@
     "env": "sandbox"
   },
   "diallo-bt-2022": {
-    "recordId": 574866,
+    "recordId": 581660,
     "conceptRecId": 506467,
     "conceptDoi": "10.5072/zenodo.506467",
-    "versionDoi": "10.5072/zenodo.574866",
-    "contentHash": "sha256:6812c65cb8ade4f3e6f9311284160266f6418fae05665dfb8302e74c36c374bb",
+    "versionDoi": "10.5072/zenodo.581660",
+    "contentHash": "sha256:32b86e59a0c10f84d0331251903d2d0ca641f795b175aebce1db7cbdb5080b6b",
     "status": "published",
     "version": "4 May 2022",
-    "mintedAt": "2026-07-28T13:40:01.349Z",
+    "mintedAt": "2026-08-04T13:05:54.993Z",
     "env": "sandbox"
   },
   "drummond-je-2017": {
