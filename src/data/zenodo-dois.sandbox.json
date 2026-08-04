@@ -803,14 +803,14 @@
     "env": "sandbox"
   },
   "nansen-f-2014": {
-    "recordId": 574913,
+    "recordId": 581733,
     "conceptRecId": 506555,
     "conceptDoi": "10.5072/zenodo.506555",
-    "versionDoi": "10.5072/zenodo.574913",
-    "contentHash": "sha256:625655df1e399a1085feb91f11f4e1e465d4d9186ac66e42ec9918879fc5f443",
+    "versionDoi": "10.5072/zenodo.581733",
+    "contentHash": "sha256:5aef92394f771afb19944f7f07eba4a2a7319ffeea46a7f4223bdf5331c6ece6",
     "status": "published",
     "version": "17 March 2014",
-    "mintedAt": "2026-07-28T13:43:52.104Z",
+    "mintedAt": "2026-08-04T15:03:35.358Z",
     "env": "sandbox"
   },
   "ogata-s-2014": {
