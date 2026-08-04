@@ -462,14 +462,14 @@
     "env": "sandbox"
   },
   "holtrop-mw-2021": {
-    "recordId": 574881,
+    "recordId": 581685,
     "conceptRecId": 506493,
     "conceptDoi": "10.5072/zenodo.506493",
-    "versionDoi": "10.5072/zenodo.574881",
-    "contentHash": "sha256:d48743f5428e65845c32af7d8969296ae167f73277d08ee8a883b8aff1e76562",
+    "versionDoi": "10.5072/zenodo.581685",
+    "contentHash": "sha256:896fb0c32f3fb2790a4b1cd1db6ab4694ae99afb9becf3c7475e705dc49f05a9",
     "status": "published",
     "version": "15 February 2021",
-    "mintedAt": "2026-07-28T13:41:04.779Z",
+    "mintedAt": "2026-08-04T14:00:24.222Z",
     "env": "sandbox"
   },
   "huxley-js-2012": {
