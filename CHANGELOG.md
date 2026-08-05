@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/HamonUdvari/io-bio/compare/v1.13.0...v1.13.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* **loader:** invalidate portrait-crop cache when the source image changes ([](https://github.com/HamonUdvari/io-bio/commit/3705e9aeb0d9e6f6f130a5f1dc5cb04746bd1663))
+
 # [1.13.0](https://github.com/HamonUdvari/io-bio/compare/v1.12.8...v1.13.0) (2026-07-28)
 
 
