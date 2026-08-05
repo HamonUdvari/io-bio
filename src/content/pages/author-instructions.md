@@ -33,5 +33,5 @@ sections:
 
       ## Entries Under Construction
 
-      * [IO BIO Entries under Construction (Word)](/IO%20BIO%20entries%20under%20construction.docx)
+      * [IO BIO Entries under Construction (Word)](/IO%20BIO%20entries%20under%20construction.pdf)
 ---
