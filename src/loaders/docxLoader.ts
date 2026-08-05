@@ -14,6 +14,7 @@ import type { Loader } from "./types.js";
 import { OfficeParser } from "officeparser";
 import path from "node:path";
 import { execSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { slug as githubSlug } from "github-slugger";
 import { extractAll } from "./parsers/extractAll";
 
@@ -346,10 +347,28 @@ const docxEntryType: ContentEntryType = {
     }
 
     // 4) Generate the face-detected portrait crop next to the active image.
+    // The crop cache is keyed on a signature of the ACTIVE image + the
+    // subject-face override, so a changed source (a new override, a re-upload,
+    // a swapped image) regenerates the crop locally instead of serving a stale
+    // one — the old plain skip-if-exists left `astro dev` showing an out-of-date
+    // crop after the source changed (e.g. a restored override), while a fresh CI
+    // build regenerated it. CI starts with an empty cache and regenerates
+    // regardless, so this only changes incremental LOCAL builds, keeping dev in
+    // sync with a fresh deploy for the same sources. Bump CROP_CACHE_VERSION if
+    // crop-portrait.ts's output changes.
     if (activePath) {
       const portraitFn = `${slug}-portrait.jpg`;
       const portraitPath = path.join(activeDir, portraitFn);
-      if (existsSync(portraitPath)) {
+      const sigPath = `${portraitPath}.sig`;
+      const CROP_CACHE_VERSION = "1";
+      const sig =
+        createHash("sha256").update(readFileSync(activePath)).digest("hex") +
+        `:${PORTRAIT_SUBJECT_MAP[slug] ?? ""}:v${CROP_CACHE_VERSION}`;
+      const cacheFresh =
+        existsSync(portraitPath) &&
+        existsSync(sigPath) &&
+        readFileSync(sigPath, "utf8") === sig;
+      if (cacheFresh) {
         imagePortraitFn = portraitFn;
       } else {
         try {
@@ -361,6 +380,7 @@ const docxEntryType: ContentEntryType = {
             portraitPath,
             PORTRAIT_SUBJECT_MAP[slug],
           );
+          await fs.writeFile(sigPath, sig);
           imagePortraitFn = portraitFn;
           console.warn(
             `[docx] ${basename(filePath)}: portrait${usedFace ? "" : " (saliency fallback)"} → ${portraitFn}`,
