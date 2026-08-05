@@ -183,9 +183,16 @@ export async function cropToPortrait(
     [detectH, detectW, 3],
     "int32",
   );
+  // Every source image is a portrait that we KNOW contains a face, so bias
+  // heavily toward detecting one: a low score threshold recovers borderline
+  // faces (old/soft/grainy historical photos, glasses, slight angles) that the
+  // default 0.35 rejected — sending them to the non-face saliency fallback. The
+  // risk of a false positive is low given the single-subject portraits; the
+  // largest detected box is still chosen (see selectSubjectFace), so a stray
+  // low-confidence box loses to the real face.
   const detections = await fapi.detectAllFaces(
     tensor as any,
-    new fapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.35 }),
+    new fapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.1 }),
   );
   tensor.dispose();
 

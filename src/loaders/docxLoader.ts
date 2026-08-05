@@ -360,7 +360,7 @@ const docxEntryType: ContentEntryType = {
       const portraitFn = `${slug}-portrait.jpg`;
       const portraitPath = path.join(activeDir, portraitFn);
       const sigPath = `${portraitPath}.sig`;
-      const CROP_CACHE_VERSION = "1";
+      const CROP_CACHE_VERSION = "2";
       const sig =
         createHash("sha256").update(readFileSync(activePath)).digest("hex") +
         `:${PORTRAIT_SUBJECT_MAP[slug] ?? ""}:v${CROP_CACHE_VERSION}`;
