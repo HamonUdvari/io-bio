@@ -66,14 +66,14 @@
     "env": "sandbox"
   },
   "bertini-ca-2018": {
-    "recordId": 581881,
+    "recordId": 581874,
     "conceptRecId": 506421,
     "conceptDoi": "10.5072/zenodo.506421",
-    "versionDoi": "10.5072/zenodo.581881",
+    "versionDoi": "10.5072/zenodo.581874",
     "contentHash": "sha256:0ebffbc056dc9a4d69366f24c2c1ce9d0ec3b9de247d6b92f97077f4ba731fd2",
     "status": "published",
     "version": "19 January 2018",
-    "mintedAt": "2026-08-05T07:15:52.452Z",
+    "mintedAt": "2026-08-05T07:13:20.223Z",
     "env": "sandbox"
   },
   "beyen-jw-2018": {
@@ -154,14 +154,14 @@
     "env": "sandbox"
   },
   "brundtland-gh-2014": {
-    "recordId": 581882,
+    "recordId": 581892,
     "conceptRecId": 506437,
     "conceptDoi": "10.5072/zenodo.506437",
-    "versionDoi": "10.5072/zenodo.581882",
+    "versionDoi": "10.5072/zenodo.581892",
     "contentHash": "sha256:7aec35274788645016973639304a1e9bb28bb4bd48a587c4bcb379a23d603e60",
     "status": "published",
     "version": "9 June 2014",
-    "mintedAt": "2026-08-05T07:15:57.903Z",
+    "mintedAt": "2026-08-05T07:18:19.470Z",
     "env": "sandbox"
   },
   "bustani-jm-2015": {
@@ -220,14 +220,14 @@
     "env": "sandbox"
   },
   "chan-m-2021": {
-    "recordId": 581883,
+    "recordId": 581893,
     "conceptRecId": 506449,
     "conceptDoi": "10.5072/zenodo.506449",
-    "versionDoi": "10.5072/zenodo.581883",
+    "versionDoi": "10.5072/zenodo.581893",
     "contentHash": "sha256:93de6987ed672609cb53d2f2d61c188db7afa107e07304c0a4e475f69a98ed78",
     "status": "published",
     "version": "1 June 2021",
-    "mintedAt": "2026-08-05T07:16:03.181Z",
+    "mintedAt": "2026-08-05T07:18:24.196Z",
     "env": "sandbox"
   },
   "chisholm-b-2014": {
@@ -297,14 +297,14 @@
     "env": "sandbox"
   },
   "de-boer-y-2016": {
-    "recordId": 581897,
+    "recordId": 581894,
     "conceptRecId": 506463,
     "conceptDoi": "10.5072/zenodo.506463",
-    "versionDoi": "10.5072/zenodo.581897",
+    "versionDoi": "10.5072/zenodo.581894",
     "contentHash": "sha256:6030abddaa8618675e969c1a3225a0e9724758e5aac3cfe2c294be0105e52d4a",
     "status": "published",
     "version": "19 November 2016",
-    "mintedAt": "2026-08-05T07:20:37.836Z",
+    "mintedAt": "2026-08-05T07:18:28.741Z",
     "env": "sandbox"
   },
   "de-larosière-jmhm-2016": {
@@ -352,14 +352,14 @@
     "env": "sandbox"
   },
   "evans-l-2013": {
-    "recordId": 581898,
+    "recordId": 581895,
     "conceptRecId": 506473,
     "conceptDoi": "10.5072/zenodo.506473",
-    "versionDoi": "10.5072/zenodo.581898",
+    "versionDoi": "10.5072/zenodo.581895",
     "contentHash": "sha256:19b2a11055582a5a55144c5a6834d7ab0bd961f240f291890185c7bcc48f0477",
     "status": "published",
     "version": "11 March 2013",
-    "mintedAt": "2026-08-05T07:20:42.364Z",
+    "mintedAt": "2026-08-05T07:18:33.180Z",
     "env": "sandbox"
   },
   "gardiner-r-2014": {
@@ -451,14 +451,14 @@
     "env": "sandbox"
   },
   "hoffman-pg-2015": {
-    "recordId": 581899,
+    "recordId": 581896,
     "conceptRecId": 506491,
     "conceptDoi": "10.5072/zenodo.506491",
-    "versionDoi": "10.5072/zenodo.581899",
+    "versionDoi": "10.5072/zenodo.581896",
     "contentHash": "sha256:5aa8e612eb78418f89d3fcd9712db02157bc856176b8c4172f5b892b6419ef61",
     "status": "published",
     "version": "19 January 2015",
-    "mintedAt": "2026-08-05T07:20:46.499Z",
+    "mintedAt": "2026-08-05T07:18:37.837Z",
     "env": "sandbox"
   },
   "holtrop-mw-2021": {
@@ -814,14 +814,14 @@
     "env": "sandbox"
   },
   "ogata-s-2014": {
-    "recordId": 581900,
+    "recordId": 581902,
     "conceptRecId": 506557,
     "conceptDoi": "10.5072/zenodo.506557",
-    "versionDoi": "10.5072/zenodo.581900",
+    "versionDoi": "10.5072/zenodo.581902",
     "contentHash": "sha256:f51122df8c909fd2939618feae3ab088d1dcc2e118c2a3397a32cce2d35df388",
     "status": "published",
     "version": "4 November 2019",
-    "mintedAt": "2026-08-05T07:20:50.787Z",
+    "mintedAt": "2026-08-05T07:23:03.046Z",
     "env": "sandbox"
   },
   "oreja-m-2017": {
@@ -946,14 +946,14 @@
     "env": "sandbox"
   },
   "ricupero-r-2013": {
-    "recordId": 581901,
+    "recordId": 581903,
     "conceptRecId": 506579,
     "conceptDoi": "10.5072/zenodo.506579",
-    "versionDoi": "10.5072/zenodo.581901",
+    "versionDoi": "10.5072/zenodo.581903",
     "contentHash": "sha256:1f45a8b73e2b6a89a81d6c4615fcc2db9e4ddae3bbc6914f1ca875e26d188066",
     "status": "published",
     "version": "28 February 2013",
-    "mintedAt": "2026-08-05T07:20:55.094Z",
+    "mintedAt": "2026-08-05T07:23:08.197Z",
     "env": "sandbox"
   },
   "robertson-gim-2018": {
@@ -990,14 +990,14 @@
     "env": "sandbox"
   },
   "salim-sa-2016": {
-    "recordId": 574929,
+    "recordId": 581904,
     "conceptRecId": 506587,
     "conceptDoi": "10.5072/zenodo.506587",
-    "versionDoi": "10.5072/zenodo.574929",
-    "contentHash": "sha256:2446fc51f1ab5ea41ab8b19fe993a55cf63016f38e8140e4797b228971029b27",
+    "versionDoi": "10.5072/zenodo.581904",
+    "contentHash": "sha256:b09ba930fa6453339cfe64ef838536f9084b9a4eb0f86dcc9eb87ba28ee12dd2",
     "status": "published",
     "version": "24 January 2016",
-    "mintedAt": "2026-07-28T13:45:23.482Z",
+    "mintedAt": "2026-08-05T07:23:13.168Z",
     "env": "sandbox"
   },
   "salter-ja-2022": {
@@ -1034,25 +1034,25 @@
     "env": "sandbox"
   },
   "spaak-p-h-2015": {
-    "recordId": 574932,
+    "recordId": 581905,
     "conceptRecId": 506593,
     "conceptDoi": "10.5072/zenodo.506593",
-    "versionDoi": "10.5072/zenodo.574932",
-    "contentHash": "sha256:be3b5ece38c61a8cf53d43f59f64d1f272e8716f2c5b71ca5e043f86503c4271",
+    "versionDoi": "10.5072/zenodo.581905",
+    "contentHash": "sha256:67c6512e581cdddca89ffe66f11843471de42f2d89ac6abceae45d3f5e66527a",
     "status": "published",
     "version": "19 January 2015",
-    "mintedAt": "2026-07-28T13:45:41.332Z",
+    "mintedAt": "2026-08-05T07:23:17.425Z",
     "env": "sandbox"
   },
   "stikker-du-2014": {
-    "recordId": 574933,
+    "recordId": 581906,
     "conceptRecId": 506595,
     "conceptDoi": "10.5072/zenodo.506595",
-    "versionDoi": "10.5072/zenodo.574933",
-    "contentHash": "sha256:cf10d839b518caea32e24e805e4993ab75743990979ae978b842f478624adcb8",
+    "versionDoi": "10.5072/zenodo.581906",
+    "contentHash": "sha256:d71640a15f533f69c4c56f7a5431c28c9736be63f98d4fbd04f0719e8bc503b1",
     "status": "published",
     "version": "13 June 2014",
-    "mintedAt": "2026-07-28T13:45:45.871Z",
+    "mintedAt": "2026-08-05T07:23:21.805Z",
     "env": "sandbox"
   },
   "stokes-j-2018": {
