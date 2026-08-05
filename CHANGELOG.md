@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/HamonUdvari/io-bio/compare/v1.13.1...v1.14.0) (2026-08-05)
+
+
+### Website Features
+
+* **images:** lower face-detection threshold 0.35 -> 0.1 to recover borderline faces ([](https://github.com/HamonUdvari/io-bio/commit/11eae8ecbadd1eefca1e4364eb502fa9d3a6cceb))
+
 ## [1.13.1](https://github.com/HamonUdvari/io-bio/compare/v1.13.0...v1.13.1) (2026-08-05)
 
 
