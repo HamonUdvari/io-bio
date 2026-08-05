@@ -66,14 +66,14 @@
     "env": "sandbox"
   },
   "bertini-ca-2018": {
-    "recordId": 581874,
+    "recordId": 581881,
     "conceptRecId": 506421,
     "conceptDoi": "10.5072/zenodo.506421",
-    "versionDoi": "10.5072/zenodo.581874",
+    "versionDoi": "10.5072/zenodo.581881",
     "contentHash": "sha256:0ebffbc056dc9a4d69366f24c2c1ce9d0ec3b9de247d6b92f97077f4ba731fd2",
     "status": "published",
     "version": "19 January 2018",
-    "mintedAt": "2026-08-05T07:13:20.223Z",
+    "mintedAt": "2026-08-05T07:15:52.452Z",
     "env": "sandbox"
   },
   "beyen-jw-2018": {
@@ -154,14 +154,14 @@
     "env": "sandbox"
   },
   "brundtland-gh-2014": {
-    "recordId": 574851,
+    "recordId": 581882,
     "conceptRecId": 506437,
     "conceptDoi": "10.5072/zenodo.506437",
-    "versionDoi": "10.5072/zenodo.574851",
-    "contentHash": "sha256:0375e361df44f7feabdbed1200bd4bf20d6ba198aa4ca41a86c521151cd652b0",
+    "versionDoi": "10.5072/zenodo.581882",
+    "contentHash": "sha256:7aec35274788645016973639304a1e9bb28bb4bd48a587c4bcb379a23d603e60",
     "status": "published",
     "version": "9 June 2014",
-    "mintedAt": "2026-07-28T13:38:43.278Z",
+    "mintedAt": "2026-08-05T07:15:57.903Z",
     "env": "sandbox"
   },
   "bustani-jm-2015": {
@@ -220,14 +220,14 @@
     "env": "sandbox"
   },
   "chan-m-2021": {
-    "recordId": 574857,
+    "recordId": 581883,
     "conceptRecId": 506449,
     "conceptDoi": "10.5072/zenodo.506449",
-    "versionDoi": "10.5072/zenodo.574857",
-    "contentHash": "sha256:96e07acd11aae742df56be3cc91a00937e9236a39996fab6dc938f98987afc9d",
+    "versionDoi": "10.5072/zenodo.581883",
+    "contentHash": "sha256:93de6987ed672609cb53d2f2d61c188db7afa107e07304c0a4e475f69a98ed78",
     "status": "published",
     "version": "1 June 2021",
-    "mintedAt": "2026-07-28T13:39:16.361Z",
+    "mintedAt": "2026-08-05T07:16:03.181Z",
     "env": "sandbox"
   },
   "chisholm-b-2014": {
