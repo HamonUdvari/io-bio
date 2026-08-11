@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/HamonUdvari/io-bio/compare/v1.14.0...v1.14.1) (2026-08-11)
+
+
+### Bug Fixes
+
+* **search:** tighten entries filter to CONTAINS (drop loose subsequence match) ([](https://github.com/HamonUdvari/io-bio/commit/383b6edcdf7fc84df373cfca8d416524b0cdb2b7))
+
 # [1.14.0](https://github.com/HamonUdvari/io-bio/compare/v1.13.1...v1.14.0) (2026-08-05)
 
 
