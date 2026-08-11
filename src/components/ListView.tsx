@@ -2,7 +2,11 @@ import type { BioData, Role } from "../content.config";
 import { aliasSuffix } from "../utils/displayName";
 
 import * as React from "react";
-import { type RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
+import {
+  type RankingInfo,
+  rankItem,
+  rankings,
+} from "@tanstack/match-sorter-utils";
 
 import {
   createColumnHelper,
@@ -62,8 +66,16 @@ function DebouncedInput({
   );
 }
 
+// Require at least a CONTAINS-level match. Match-sorter's default passes down to
+// the MATCHES tier — a loose subsequence (typed letters in order but not
+// adjacent), so "sml" matched "Samuel" and the search felt far too broad. The
+// CONTAINS threshold keeps the useful part — it still folds diacritics, so
+// "larosiere" → "de Larosière" and "hammarskjold" → "Hammarskjöld" — while
+// dropping the subsequence + acronym tiers.
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  const itemRank = rankItem(row.getValue(columnId), value);
+  const itemRank = rankItem(row.getValue(columnId), value, {
+    threshold: rankings.CONTAINS,
+  });
   addMeta({ itemRank });
   return itemRank.passed;
 };
