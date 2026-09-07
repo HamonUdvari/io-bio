@@ -692,6 +692,17 @@
     "mintedAt": "2026-07-28T13:42:53.410Z",
     "env": "sandbox"
   },
+  "matsuura-28june20261": {
+    "recordId": 598959,
+    "conceptRecId": 598958,
+    "conceptDoi": "10.5072/zenodo.598958",
+    "versionDoi": "10.5072/zenodo.598959",
+    "contentHash": "sha256:a94acc575d07d4973b1f767e3d4ca9b054980e96c38f9cb329480f83db418778",
+    "status": "published",
+    "version": "28 June 2026",
+    "mintedAt": "2026-09-07T16:42:33.339Z",
+    "env": "sandbox"
+  },
   "mayor-f-2019": {
     "recordId": 574903,
     "conceptRecId": 506535,
