@@ -31,9 +31,14 @@ const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     class="nav__search ml-auto"
     data-search-trigger
     aria-haspopup="dialog"
+    aria-label="Search"
   >
     <span class="material-symbols-outlined" aria-hidden="true">search</span>
-    Search
+    {
+      /* Icon-only on mobile (the nav is too tight for the label there); the
+        label returns at tablet+. aria-label keeps the button named in both. */
+    }
+    <span class="hidden tablet:inline">Search</span>
   </button>
 </nav>
 

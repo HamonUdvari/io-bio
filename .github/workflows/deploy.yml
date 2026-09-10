@@ -41,7 +41,7 @@ jobs:
 
       # Full-text search index. Pagefind reads the built entry HTML in dist/ and
       # writes a static index + its default UI to dist/pagefind/ (loaded by the
-      # /search page). Scoped to entries/** so it indexes only the biographies —
+      # global search overlay). Scoped to entries/** so it indexes only the biographies —
       # not the print/PDF-preview routes (which share the same article markup) or
       # the static pages. Runs after the Astro build, before the Pages upload.
       - name: Build Pagefind search index
