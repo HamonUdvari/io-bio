@@ -39,6 +39,7 @@ on:
 
 permissions:
   contents: write # to commit the refreshed sandbox DOI map
+  actions: write # to dispatch the Deploy workflow after pushing the map
 
 concurrency:
   group: zenodo-sandbox
@@ -80,7 +81,9 @@ jobs:
           ZENODO_TOKEN: ${{ secrets.ZENODO_SANDBOX_TOKEN }}
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: pnpm run zenodo:mint:sandbox
-      - name: Commit refreshed sandbox DOI map
+      - name: Commit refreshed sandbox DOI map + trigger deploy
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for `gh workflow run` (Deploy dispatch)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -104,16 +107,18 @@ jobs:
               exit 0
             fi
             git add src/data/zenodo-dois.sandbox.json
-            # NOTE: intentionally NO [skip ci]. The DOI map is read at BUILD time,
-            # so a freshly-minted DOI only reaches the live entry page when the site
-            # rebuilds. Letting this commit trigger the Deploy workflow (any push to
-            # main) publishes the new DOI automatically — otherwise a new entry's
-            # "How to cite" stays DOI-less until some unrelated later deploy. This
-            # does NOT re-trigger this refresh (src/data is not in this workflow's
-            # `paths:`), and Deploy makes no commits, so there is no loop.
-            git commit -m "chore(zenodo): refresh sandbox deposits"
+            # The DOI map is read at BUILD time, so a freshly-minted DOI only reaches
+            # the live entry page when the site rebuilds. This commit does NOT trigger
+            # Deploy by itself: a push made with the default GITHUB_TOKEN never starts
+            # a new workflow run (GitHub's recursion guard), and `[skip ci]` makes that
+            # explicit. So after pushing we DISPATCH Deploy ourselves — workflow_dispatch
+            # IS exempt from that guard, even via GITHUB_TOKEN (needs `actions: write`).
+            # That rebuilds with the fresh DOIs. No loop: src/data isn't in this
+            # workflow's `paths:`, and Deploy makes no commits.
+            git commit -m "chore(zenodo): refresh sandbox deposits [skip ci]"
             if git push origin HEAD:main; then
-              echo "pushed sandbox map (attempt $attempt)"
+              echo "pushed sandbox map (attempt $attempt); dispatching Deploy"
+              gh workflow run deploy.yml --ref main
               exit 0
             fi
             echo "push rejected (main advanced); retrying ($attempt/5)"
