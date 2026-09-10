@@ -96,6 +96,7 @@ sections:
       * Sebastian Schindler :muted[(INGRAM)]
       * Matthias Schmelzer :muted[(KRISTENSEN)]
       * Carolyn M. Shaw :muted[(GAVIRIA TRUJILLO)]
+      * Mariko Shoji :muted[(MATSUURA)]
       * Kendall W. Stiles :muted[(DE LAROSIÉRE)]
       * Kayo Takuma :muted[(NAKAJIMA)]
       * Marijke van Faassen :muted[(HAVEMAN)]
@@ -103,6 +104,5 @@ sections:
       * Joan van Heijster :muted[(IDRIS)]
       * Jessica Walker :muted[(BOKOVA)]
       * David Webster :muted[(KEENSLEYSIDE)]
-      * Mariko Shoji :muted[(MATSUURA)]
       :::
 ---
