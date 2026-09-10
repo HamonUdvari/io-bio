@@ -1,5 +1,6 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import PageSections from "@components/PageSections.astro";
 import { render } from "astro:content";
 import { getCollection } from "astro:content";
 
@@ -17,9 +18,10 @@ export async function getStaticPaths() {
 }
 
 const { Content } = await render(Astro.props);
-const { title, description, hideFooter } = Astro.props.data;
+const { title, description, hideFooter, sections } = Astro.props.data;
 ---
 
 <Layout title={title} description={description} hideFooter={hideFooter}>
-  <Content />
+  {sections && sections.length > 0 && <PageSections sections={sections} />}
+  {(!sections || sections.length === 0) && <Content />}
 </Layout>

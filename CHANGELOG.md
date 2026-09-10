@@ -1,3 +1,158 @@
+## [1.14.1](https://github.com/HamonUdvari/io-bio/compare/v1.14.0...v1.14.1) (2026-08-11)
+
+
+### Bug Fixes
+
+* **search:** tighten entries filter to CONTAINS (drop loose subsequence match) ([](https://github.com/HamonUdvari/io-bio/commit/383b6edcdf7fc84df373cfca8d416524b0cdb2b7))
+
+# [1.14.0](https://github.com/HamonUdvari/io-bio/compare/v1.13.1...v1.14.0) (2026-08-05)
+
+
+### Website Features
+
+* **images:** lower face-detection threshold 0.35 -> 0.1 to recover borderline faces ([](https://github.com/HamonUdvari/io-bio/commit/11eae8ecbadd1eefca1e4364eb502fa9d3a6cceb))
+
+## [1.13.1](https://github.com/HamonUdvari/io-bio/compare/v1.13.0...v1.13.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* **loader:** invalidate portrait-crop cache when the source image changes ([](https://github.com/HamonUdvari/io-bio/commit/3705e9aeb0d9e6f6f130a5f1dc5cb04746bd1663))
+
+# [1.13.0](https://github.com/HamonUdvari/io-bio/compare/v1.12.8...v1.13.0) (2026-07-28)
+
+
+### Website Features
+
+* **entry:** horizontal source caption under photo; add disclaimer + IO BIO © ([](https://github.com/HamonUdvari/io-bio/commit/a675e7eae0c5b99b9d95a9d38aa984012da5777b))
+
+## [1.12.8](https://github.com/HamonUdvari/io-bio/compare/v1.12.7...v1.12.8) (2026-07-25)
+
+
+### Bug Fixes
+
+* **bios:** accept any parenthetical nickname in intro name (not just qualified) ([](https://github.com/HamonUdvari/io-bio/commit/29f80cca9793a4e1e7e5861f64784aac16aa69c8))
+
+## [1.12.7](https://github.com/HamonUdvari/io-bio/compare/v1.12.6...v1.12.7) (2026-07-24)
+
+
+### Bug Fixes
+
+* **bios:** parse '(called X)' nickname in intro; guard empty Zenodo title ([](https://github.com/HamonUdvari/io-bio/commit/e3cbaa300024f3fd6d70d22c335065b74a36c254))
+
+## [1.12.6](https://github.com/HamonUdvari/io-bio/compare/v1.12.5...v1.12.6) (2026-07-24)
+
+
+### Bug Fixes
+
+* **zenodo:** adopt dangling new-version draft instead of discard-and-retry ([](https://github.com/HamonUdvari/io-bio/commit/f1974fa3c60e5e6ffc76172248d4e9a470b0fb8f))
+
+## [1.12.5](https://github.com/HamonUdvari/io-bio/compare/v1.12.4...v1.12.5) (2026-07-20)
+
+
+### Bug Fixes
+
+* **cms:** stop Sveltia choking on footer.md empty frontmatter ([](https://github.com/HamonUdvari/io-bio/commit/a22330db699744d662f2a9c32244063287304a33))
+
+## [1.12.4](https://github.com/HamonUdvari/io-bio/compare/v1.12.3...v1.12.4) (2026-07-16)
+
+
+### Biography Updates
+
+* **author-instructions:** refresh construction list + move Connected Publications to a download ([](https://github.com/HamonUdvari/io-bio/commit/a9c4aa06f23396a906df85332bb02c14e687a297))
+
+
+### Bug Fixes
+
+* **print:** stop overflow:hidden clipping the source-link underline ([](https://github.com/HamonUdvari/io-bio/commit/7d1e6d99483cd3fe7f4c83e04e50122c72bf5705))
+
+## [1.12.3](https://github.com/HamonUdvari/io-bio/compare/v1.12.2...v1.12.3) (2026-07-15)
+
+
+### Bug Fixes
+
+* **print:** underline the source-credit link in the PDF ([](https://github.com/HamonUdvari/io-bio/commit/c75e4652f175d785beb6cf52d80f32c15fa799c1))
+
+## [1.12.2](https://github.com/HamonUdvari/io-bio/compare/v1.12.1...v1.12.2) (2026-07-15)
+
+
+### Bug Fixes
+
+* **bios:** handle name-internal apostrophes in author parsing ([](https://github.com/HamonUdvari/io-bio/commit/8711d65eec689458cae74a2fdd4d7046af97a998))
+
+## [1.12.1](https://github.com/HamonUdvari/io-bio/compare/v1.12.0...v1.12.1) (2026-07-15)
+
+
+### Bug Fixes
+
+* **bios:** parse multi-author citations + lift media notes to grey header ([](https://github.com/HamonUdvari/io-bio/commit/9f85e824956f69c3f9ea702eb8f4063e30f12031))
+
+# [1.12.0](https://github.com/HamonUdvari/io-bio/compare/v1.11.0...v1.12.0) (2026-07-15)
+
+
+### Website Features
+
+* **about:** structured editorial + contributor blocks, muted secondary text ([](https://github.com/HamonUdvari/io-bio/commit/ef1ba9d64421642c8dacf9594288df5140456431))
+* **author-instructions:** add an Entries under construction list ([](https://github.com/HamonUdvari/io-bio/commit/78a4f116efc9f55d594bc63506227b5cd27c58e0))
+
+# [1.11.0](https://github.com/HamonUdvari/io-bio/compare/v1.10.3...v1.11.0) (2026-07-15)
+
+
+### Website Features
+
+* **pdf:** suffix entry PDF filenames with -iobio ([](https://github.com/HamonUdvari/io-bio/commit/c213725a3d800b1138ef02bea73aa585c505515a))
+
+## [1.10.3](https://github.com/HamonUdvari/io-bio/compare/v1.10.2...v1.10.3) (2026-07-15)
+
+
+### Bug Fixes
+
+* **content:** Replace Years and Nationality columns ([](https://github.com/HamonUdvari/io-bio/commit/04835208dbb55cc3b27b4c8a5da3044644221e12))
+* **entry:** bold the author name and make the byline black in the PDF ([](https://github.com/HamonUdvari/io-bio/commit/651d27d2341115f2b1fbadcff65ab1b8a9b5e83f))
+* ul for connected publications ([](https://github.com/HamonUdvari/io-bio/commit/80b40e1f2f302eef9859d0b357cecdcb72e3566b))
+
+## [1.10.2](https://github.com/HamonUdvari/io-bio/compare/v1.10.1...v1.10.2) (2026-07-14)
+
+
+### Bug Fixes
+
+* **cms:** hide the Sign in with GitHub button on the login screen ([](https://github.com/HamonUdvari/io-bio/commit/03adf594b64b51acca0cdc2e8a796015c73ea3da))
+
+## [1.10.1](https://github.com/HamonUdvari/io-bio/compare/v1.10.0...v1.10.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* **cms:** store portrait face-crop values as strings ([](https://github.com/HamonUdvari/io-bio/commit/39ffab231a38ba528ed53477b8f16646f7003d42))
+
+# [1.10.0](https://github.com/HamonUdvari/io-bio/compare/v1.9.0...v1.10.0) (2026-07-14)
+
+
+### Website Features
+
+* **cms:** manage override photos + a face-crop chooser in the CMS ([](https://github.com/HamonUdvari/io-bio/commit/a2a3afc4345fc8eb901b1ce1d2019740e625784c))
+
+# [1.9.0](https://github.com/HamonUdvari/io-bio/compare/v1.8.1...v1.9.0) (2026-07-13)
+
+
+### Bug Fixes
+
+* **cms:** fill section Style/Width, give bios their own folder, add Columns block ([](https://github.com/HamonUdvari/io-bio/commit/20a0cf50cff4844212b8d41ccae9b28c669e4fba))
+
+
+### Website Features
+
+* **cms:** add Biographies (.docx upload) collection; verified via Playwright ([](https://github.com/HamonUdvari/io-bio/commit/4244ef14c46d7201de2df4f77da569caa96b4228))
+* **cms:** add File-link block, drop the image button from the section editor ([](https://github.com/HamonUdvari/io-bio/commit/78426353a2a22cdbb6bbe1b95a33c52d604c42cd))
+* **cms:** add Sveltia CMS — site text + section block editor for pages ([](https://github.com/HamonUdvari/io-bio/commit/2772bc601c75dd48ebf169a9ca9d04d71f504459))
+
+## [1.8.1](https://github.com/HamonUdvari/io-bio/compare/v1.8.0...v1.8.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* **content:** Remove print preview debug button ([](https://github.com/HamonUdvari/io-bio/commit/7661a74a6c52d6073cfead52260e9277cf50e3ad))
+
 # [1.8.0](https://github.com/HamonUdvari/io-bio/compare/v1.7.1...v1.8.0) (2026-07-13)
 
 

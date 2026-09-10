@@ -36,6 +36,25 @@ describe("parseIntro", () => {
     expect(value.knownAs).toBeUndefined();
   });
 
+  it("treats a bare parenthetical '(Nickname)' as knownAs", () => {
+    const intro =
+      "LUBBERS, Rudolphus Franciscus Marie (Ruud), Dutch politician and ninth United Nations High Commissioner for Refugees (UNHCR) 2001-2005, was born 7 May 1939 in Rotterdam, the Netherlands.";
+    const { value, warnings } = parseIntro(intro);
+    expect(value.lastName).toBe("Lubbers");
+    expect(value.firstName).toBe("Rudolphus Franciscus Marie");
+    expect(value.knownAs).toBe("Ruud");
+    expect(warnings.find((w) => w.code === "name_unparsed")).toBeUndefined();
+  });
+
+  it("extracts knownAs from a '(called ...)' aside", () => {
+    const intro =
+      "CLAUSEN, Alden Winship (called Tom), sixth President of the World Bank Group 1981-1986, was born 17 February 1923 in Hamilton, Illinois, United States.";
+    const { value } = parseIntro(intro);
+    expect(value.lastName).toBe("Clausen");
+    expect(value.firstName).toBe("Alden Winship");
+    expect(value.knownAs).toBe("Tom");
+  });
+
   it("handles entry with multiple roles in summary", () => {
     const intro =
       "BOUTROS-GHALI, Boutros Youssef, Egyptian politician, sixth Secretary-General of the United Nations (UN) 1992-1996 and first Secretary-General of the International Organization of La Francophonie 1997-2002, was born 14 November 1922 in Cairo, Egypt.";

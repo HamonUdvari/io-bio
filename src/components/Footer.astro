@@ -1,8 +1,10 @@
 ---
 import Nav from "@components/Nav.astro";
-import { rawContent } from "@content/globals/footer.md";
+import { frontmatter } from "@content/globals/footer.md";
 import { marked } from "marked";
-const html = marked(rawContent());
+// `breaks: true` turns each newline into a <br> so the footer keeps its
+// three-line layout without relying on trailing-space hard breaks.
+const html = marked(frontmatter.text ?? "", { breaks: true });
 ---
 
 <footer class="footer flex flex-col">

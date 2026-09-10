@@ -59,8 +59,10 @@ const EDITORS = [
 // under its credited source. Keep in sync with the footnote in EntryArticle.astro.
 const RIGHTS_NOTE =
   process.env.ZENODO_RIGHTS_NOTE ??
-  `Text © the author(s), licensed under ${LICENSE_LABEL}. The portrait is excluded ` +
-    `and remains under the rights of its credited source.`;
+  `Text © the author(s) and IO BIO, licensed under ${LICENSE_LABEL}. The portrait ` +
+    `is excluded and remains under the rights of its credited source. We have tried ` +
+    `to trace the rights holder to obtain permission for the use of the portrait, ` +
+    `but contact us in case we have failed.`;
 
 // Files + dirs that determine the rendered PDF's VISUAL output: the Paged.js
 // print route, the article template + its helpers (Image, displayName), the
@@ -269,8 +271,27 @@ async function main() {
     }
     const { metadata, warnings } = buildMetadata(e, cfg);
     for (const w of warnings) console.warn(`  ! ${e.slug}: ${w}`);
+
+    // A missing title makes Zenodo reject the *publish* — but only AFTER a draft
+    // and file upload have been created, leaving a dangling draft that then
+    // blocks every future newversion ("remove all files first") and wedges the
+    // deposit. Refuse to start such a mint: skip the entry with a clear error so
+    // the source (the docx name/intro) can be fixed, rather than corrupting the
+    // Zenodo state.
+    if (!metadata.title || !String(metadata.title).trim()) {
+      console.error(
+        `✗ ${e.slug}: empty title (name failed to parse?) — skipping to avoid a dangling draft`,
+      );
+      failed++;
+      continue;
+    }
+
     const bytes = readFileSync(pdfPath);
-    const filename = `${e.slug}.pdf`;
+    // The file Zenodo shows/serves gets an "-iobio" suffix so a downloaded
+    // deposit is identifiable out of context (e.g. lie-th-2017-iobio.pdf),
+    // matching the site's Download button (see the entry page's `download`
+    // attribute). The local rendered path keeps the plain <slug>.pdf name.
+    const filename = `${e.slug}-iobio.pdf`;
 
     try {
       let published: Deposition;
@@ -289,23 +310,33 @@ async function main() {
       } else {
         // new version of an existing record
         const prev = state[e.slug];
-        let nv: Deposition;
+
+        // Resolve the new-version draft's id. Normally newVersion() creates the
+        // draft and returns its latest_draft link. But a run interrupted between
+        // creating that draft and publishing it leaves a dangling unpublished
+        // draft, and Zenodo then refuses to open another ("files.enabled: Please
+        // remove all files first"). In that case ADOPT the existing draft (via
+        // the record's latest_draft) and finish publishing it — safe and
+        // idempotent: it completes the SAME version rather than minting a second
+        // one. We deliberately don't discard + recreate: the discard/newversion
+        // race reproduces the same 400. Never fall back to links.self — that's
+        // the already-published original record.
+        let draftId: number;
         try {
-          nv = await zen.newVersion(prev.recordId);
+          const nv = await zen.newVersion(prev.recordId);
+          const draftUrl = nv.links?.latest_draft;
+          if (!draftUrl) throw new Error("no latest_draft link on newversion response");
+          draftId = idFromUrl(draftUrl);
         } catch (err) {
-          // A dangling unpublished draft blocks newversion — discard and retry once.
-          const latest = (err as Error).message;
-          console.warn(`  ${e.slug}: newversion failed (${latest}); attempting to discard stale draft…`);
           const rec = await zen.getDeposition(prev.recordId);
           const draftUrl = rec.links?.latest_draft;
-          if (draftUrl) await zen.discard(idFromUrl(draftUrl)).catch(() => {});
-          nv = await zen.newVersion(prev.recordId);
+          if (!draftUrl) throw err; // no draft to adopt — surface the real error
+          draftId = idFromUrl(draftUrl);
+          console.warn(
+            `  ${e.slug}: newversion blocked (${(err as Error).message}); adopting existing draft ${draftId}`,
+          );
         }
-        // Must be latest_draft (the NEW version's draft). Never fall back to
-        // links.self — that's the already-published original record.
-        const draftUrl = nv.links?.latest_draft;
-        if (!draftUrl) throw new Error("no latest_draft link on newversion response");
-        const draftId = idFromUrl(draftUrl);
+
         const draft = await zen.getDeposition(draftId);
         const bucket = draft.links.bucket;
         if (!bucket) throw new Error("no bucket link on new-version draft");

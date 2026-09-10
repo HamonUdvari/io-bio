@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>IO BIO — Content editor</title>
+    <style>
+      /* Hide the "Sign in with GitHub" (OAuth) button on the login screen.
+         `auth_methods: [token]` in config.yml already disables it (it 404s
+         without an OAuth backend); this also removes it visually so editors
+         only ever see "Sign In Using Access Token". The GitHub brand name in
+         `data-label` doesn't get localised, so this selector is locale-safe. */
+      button[data-label*="GitHub"] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sveltia CMS (pinned). Local editing uses the browser File System Access
+         API: run the dev server, open this page in Chrome/Edge/Brave, and click
+         "Work with Local Repository" → pick the io-bio repo root. No proxy needed.
+         config.yml is auto-loaded from this same folder. -->
+    <script src="https://unpkg.com/@sveltia/cms@0.170.8/dist/sveltia-cms.js"></script>
+
+    <!-- Custom "Columns" block for the section content editor, so a multi-column
+         list is added/edited as a friendly block (layout dropdown + a list of
+         items) instead of raw `:::columns{...}` directive syntax. It reads/writes
+         the same directive the site renders, so nothing about the output changes. -->
+    <script>
+      (function registerColumns() {
+        if (!(window.CMS && window.CMS.registerEditorComponent)) {
+          return void setTimeout(registerColumns, 100);
+        }
+        window.CMS.registerEditorComponent({
+          id: "columns",
+          label: "Columns (list)",
+          fields: [
+            {
+              name: "variant",
+              label: "Layout",
+              widget: "select",
+              options: ["compact", "default"],
+              default: "compact",
+            },
+            {
+              name: "items",
+              label: "Items",
+              widget: "list",
+              field: { name: "item", label: "Item", widget: "string" },
+            },
+          ],
+          // Match `:::columns` (optionally with a variant) wrapping a bullet list.
+          pattern: /:::columns(?:\{variant="([^"]*)"\})?\n([\s\S]*?)\n:::/,
+          fromBlock: function (match) {
+            var items = (match[2] || "")
+              .split("\n")
+              .map(function (l) {
+                return l.replace(/^\s*\*\s?/, "").trim();
+              })
+              .filter(Boolean);
+            return { variant: match[1] || "default", items: items };
+          },
+          toBlock: function (obj) {
+            var items = (obj.items || [])
+              .map(function (i) {
+                return "* " + i;
+              })
+              .join("\n");
+            return (
+              ':::columns{variant="' +
+              (obj.variant || "default") +
+              '"}\n' +
+              items +
+              "\n:::"
+            );
+          },
+          toPreview: function (obj) {
+            var items = (obj.items || [])
+              .map(function (i) {
+                return "<li>" + i + "</li>";
+              })
+              .join("");
+            return (
+              '<div class="columns columns--' +
+              (obj.variant || "default") +
+              '"><ul>' +
+              items +
+              "</ul></div>"
+            );
+          },
+        });
+
+        // "File link" block: pick a file (e.g. a PDF) from the Asset Library and
+        // insert a Markdown link to it — the counterpart to the image button.
+        // Its pattern only matches links to real files (by extension), so ordinary
+        // links (mailto:, internal pages) stay as normal Markdown.
+        window.CMS.registerEditorComponent({
+          id: "file-link",
+          label: "File link",
+          fields: [
+            { name: "text", label: "Link text", widget: "string" },
+            { name: "file", label: "File", widget: "file" },
+          ],
+          pattern:
+            /\[([^\]]+)\]\((\S+\.(?:pdf|docx?|xlsx?|pptx?|csv|zip|txt))\)/i,
+          fromBlock: function (match) {
+            return { text: match[1], file: match[2] };
+          },
+          toBlock: function (obj) {
+            return "[" + (obj.text || "") + "](" + (obj.file || "") + ")";
+          },
+          toPreview: function (obj) {
+            return (
+              '<a href="' + (obj.file || "") + '">' + (obj.text || "") + "</a>"
+            );
+          },
+        });
+
+        // "Editorial team" block: a structured list of editors — Name /
+        // Affiliation / Role — so editors never hand-type the `:muted[…]` marker.
+        // It reads/writes a `:::people` block whose items are
+        // `* Name :muted[Affiliation (Role)]`, exactly what the site renders
+        // (name at heading scale, affiliation + role muted on the next line).
+        window.CMS.registerEditorComponent({
+          id: "people",
+          label: "Editorial team",
+          icon: "groups",
+          fields: [
+            {
+              name: "members",
+              label: "Editors",
+              label_singular: "Editor",
+              widget: "list",
+              summary: "{{fields.name}}",
+              fields: [
+                { name: "name", label: "Name", widget: "string" },
+                {
+                  name: "affiliation",
+                  label: "Affiliation",
+                  widget: "string",
+                  required: false,
+                },
+                {
+                  name: "role",
+                  label: "Role (optional)",
+                  widget: "string",
+                  required: false,
+                },
+              ],
+            },
+          ],
+          pattern: /:::people\n([\s\S]*?)\n:::/,
+          fromBlock: function (match) {
+            var members = (match[1] || "")
+              .split("\n")
+              .map(function (line) {
+                var m = line.match(/^\s*\*\s+(.+?)\s+:muted\[(.+)\]\s*$/);
+                if (!m) return null;
+                var secondary = m[2].trim();
+                var affiliation = secondary;
+                var role = "";
+                // role = trailing "(…)"; affiliation = the rest
+                var r = secondary.match(/^(.+?)\s+\(([^)]+)\)$/);
+                if (r) {
+                  affiliation = r[1].trim();
+                  role = r[2].trim();
+                }
+                return { name: m[1].trim(), affiliation: affiliation, role: role };
+              })
+              .filter(Boolean);
+            return { members: members };
+          },
+          toBlock: function (obj) {
+            var members = obj.members || [];
+            var lines = members.map(function (m) {
+              var sec = m.affiliation || "";
+              if (m.role) sec += " (" + m.role + ")";
+              return "* " + (m.name || "") + " :muted[" + sec + "]";
+            });
+            return ":::people\n" + lines.join("\n") + "\n:::";
+          },
+          toPreview: function (obj) {
+            var members = obj.members || [];
+            var items = members
+              .map(function (m) {
+                var sec = m.affiliation || "";
+                if (m.role) sec += " (" + m.role + ")";
+                return (
+                  "<li><strong>" +
+                  (m.name || "") +
+                  "</strong><br><span style=\"opacity:0.6\">" +
+                  sec +
+                  "</span></li>"
+                );
+              })
+              .join("");
+            return "<ul>" + items + "</ul>";
+          },
+        });
+
+        // "Contributors" block: a structured list of contributors — Name +
+        // Entries (the IO BIO entries they wrote) — so editors never hand-type
+        // the `:muted[…]` marker. It reads/writes a `:::contributors` block whose
+        // items are `* Name :muted[(ENTRIES)]`, exactly what the site renders
+        // (name normal, entries de-emphasised in parentheses). Keep any
+        // parenthetical that is part of the name (e.g. "Ine (C.M.) Megens") in
+        // the Name field; only the Entries field is muted.
+        window.CMS.registerEditorComponent({
+          id: "contributors",
+          label: "Contributors",
+          icon: "groups",
+          fields: [
+            {
+              name: "members",
+              label: "Contributors",
+              label_singular: "Contributor",
+              widget: "list",
+              summary: "{{fields.name}}",
+              fields: [
+                { name: "name", label: "Name", widget: "string" },
+                {
+                  name: "entries",
+                  label: "Entries (comma-separated, e.g. STOKES, REY)",
+                  widget: "string",
+                  required: false,
+                },
+              ],
+            },
+          ],
+          pattern: /:::contributors\n([\s\S]*?)\n:::/,
+          fromBlock: function (match) {
+            var members = (match[1] || "")
+              .split("\n")
+              .map(function (line) {
+                var m = line.match(/^\s*\*\s+(.+?)\s+:muted\[\((.*)\)\]\s*$/);
+                if (!m) return null;
+                return { name: m[1].trim(), entries: m[2].trim() };
+              })
+              .filter(Boolean);
+            return { members: members };
+          },
+          toBlock: function (obj) {
+            var members = obj.members || [];
+            var lines = members.map(function (m) {
+              return "* " + (m.name || "") + " :muted[(" + (m.entries || "") + ")]";
+            });
+            return ":::contributors\n" + lines.join("\n") + "\n:::";
+          },
+          toPreview: function (obj) {
+            var members = obj.members || [];
+            var items = members
+              .map(function (m) {
+                return (
+                  "<li>" +
+                  (m.name || "") +
+                  " <span style=\"opacity:0.6\">(" +
+                  (m.entries || "") +
+                  ")</span></li>"
+                );
+              })
+              .join("");
+            return "<ul>" + items + "</ul>";
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -327,7 +327,7 @@
      Excludes the nav and footer sections, the button system, and the clickable
      entry row/card links in the list view. */
   section:not(.section--nav):not(.section--footer)
-    a:not(.button):not(.entries-table__row):not(.entry):not(.source-link) {
+    a:not(.button):not(.entries-table__row):not(.entry) {
     text-decoration: underline;
     text-underline-offset: 0.15em;
   }
@@ -411,11 +411,11 @@
 
     & .figure__credit {
       @apply text-credit text-left;
-      @apply absolute bottom-0 origin-bottom-left -rotate-90;
-      @apply overflow-hidden whitespace-nowrap text-ellipsis;
-      @apply w-full;
-      max-width: calc(100cqw * var(--img-ar, 1));
-      left: calc(100% + 1rem);
+      /* Horizontal caption underneath the picture (previously a rotated, upright
+         credit). It carries the photo's date, source and photographer — not just
+         copyright — so it reads as a normal caption and wraps across the image
+         width. Font size unchanged (text-credit). */
+      @apply mt-2;
     }
   }
 
@@ -429,8 +429,28 @@
       @apply text-body;
     }
 
+    /* The editorial-team list: the name reads at heading scale (like the first
+       "About" section's demoted `#` → h2), with the affiliation/role stacked on
+       the next line at body size. Keeping the big line to just the (short) name
+       avoids the ragged wrap the long affiliations caused at h2 size. */
+    &.columns--primary {
+      ul {
+        list-style: none;
+      }
+
+      ul li {
+        @apply text-h2;
+        @apply mb-4;
+      }
+
+      /* the :muted[…] part (affiliation, role) drops below the name, smaller */
+      .muted {
+        @apply block text-body;
+      }
+    }
+
     ul {
-      list-style: none;
+      /* list-style: none; */
       padding-left: 0;
       li {
         /* @apply mb-[0.25em]; */
@@ -439,6 +459,13 @@
       /* @apply flex flex-col ; */
       /* @apply gap-y-[0.25em];  */
     }
+  }
+
+  /* Inline `:muted[…]` marker (remarkDirectiveMuted): de-emphasises the
+     secondary part of a line — an affiliation, or the entries a contributor
+     wrote — so the name reads first. */
+  .muted {
+    @apply opacity-60;
   }
 
   .bio-header {

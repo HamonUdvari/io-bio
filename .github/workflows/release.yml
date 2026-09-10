@@ -2,6 +2,13 @@ name: Release
 on:
   push:
     branches: [main]
+    # The Zenodo mint bots commit only the DOI map(s). Those are `chore` commits
+    # that never cut a release, and the sandbox-refresh commit now runs without a
+    # skip-ci marker (so it can trigger Deploy) — which would otherwise spin up a
+    # full, pointless Release build on every refresh. Skip Release for map-only
+    # changes. (Deploy has no path filter, so it still runs on the map commit.)
+    paths-ignore:
+      - "src/data/zenodo-dois*.json"
 
 permissions:
   contents: write

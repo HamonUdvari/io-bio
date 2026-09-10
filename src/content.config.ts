@@ -94,6 +94,18 @@ const bios = defineCollection({
   }),
 });
 
+// A page's body can be authored either as Markdown (rendered via <Content />) or
+// as a list of CMS-editable "section" blocks (rendered by PageSections.astro).
+// Each block is one on-page <section>; `content` is Markdown (so the existing
+// directives/links still work). Kept optional so Markdown pages (e.g. the
+// homepage entries.mdx) are unaffected.
+const sectionSchema = z.object({
+  title: z.string().optional(),
+  variant: z.enum(["primary", "secondary"]).default("secondary"),
+  stretch: z.enum(["base", "wide"]).default("base"),
+  content: z.string().default(""),
+});
+
 export const pages = defineCollection({
   loader: glob({
     pattern: ["**/*.{md,mdx}", "!**/_*"],
@@ -108,6 +120,7 @@ export const pages = defineCollection({
     order: z.number().optional(),
     hideFooter: z.boolean().optional(),
     hideFromNav: z.boolean().optional(),
+    sections: z.array(sectionSchema).optional(),
   }),
 });
 

@@ -65,6 +65,14 @@ jobs:
         id: chrome
         with:
           chrome-version: stable
+      # Convert non-web embedded images (e.g. Prebisch's .tif) to PNG at build
+      # time — the runner lacks LibreOffice by default, so without this the
+      # entry PDF is rendered without its portrait. Mirrors deploy.yml.
+      - name: Install LibreOffice (headless image conversion)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-core libreoffice-draw
+          soffice --version
       - name: Build (emits dist/zenodo-meta.json + the /print routes)
         run: pnpm run build
       - name: Refresh sandbox deposits (re-versions changed content/layout only)
@@ -76,13 +84,40 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/data/zenodo-dois.sandbox.json
-          if git diff --cached --quiet; then
+          if git diff --quiet -- src/data/zenodo-dois.sandbox.json; then
             echo "no sandbox map changes to commit"
-          else
-            git commit -m "chore(zenodo): refresh sandbox deposits [skip ci]"
-            # main may have advanced (release/deploy commits) during the mint —
-            # rebase our single map commit on top before pushing.
-            git pull --rebase origin main
-            git push
+            exit 0
           fi
+          # A print-template change re-versions every entry, so the mint rewrites
+          # the WHOLE map. Two overlapping refreshes (queued runs each check out
+          # their own trigger commit) then produce different full maps, and a plain
+          # `git pull --rebase` conflicts irrecoverably. The freshly-minted map is
+          # authoritative (sandbox deposits are disposable), so re-apply it on top
+          # of the latest main and push — retrying if main advances meanwhile.
+          cp src/data/zenodo-dois.sandbox.json "$RUNNER_TEMP/sandbox-map.json"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard FETCH_HEAD
+            cp "$RUNNER_TEMP/sandbox-map.json" src/data/zenodo-dois.sandbox.json
+            if git diff --quiet -- src/data/zenodo-dois.sandbox.json; then
+              echo "sandbox map already current on main"
+              exit 0
+            fi
+            git add src/data/zenodo-dois.sandbox.json
+            # NOTE: intentionally NO [skip ci]. The DOI map is read at BUILD time,
+            # so a freshly-minted DOI only reaches the live entry page when the site
+            # rebuilds. Letting this commit trigger the Deploy workflow (any push to
+            # main) publishes the new DOI automatically — otherwise a new entry's
+            # "How to cite" stays DOI-less until some unrelated later deploy. This
+            # does NOT re-trigger this refresh (src/data is not in this workflow's
+            # `paths:`), and Deploy makes no commits, so there is no loop.
+            git commit -m "chore(zenodo): refresh sandbox deposits"
+            if git push origin HEAD:main; then
+              echo "pushed sandbox map (attempt $attempt)"
+              exit 0
+            fi
+            echo "push rejected (main advanced); retrying ($attempt/5)"
+            sleep 5
+          done
+          echo "::error::could not push refreshed sandbox map after 5 attempts"
+          exit 1

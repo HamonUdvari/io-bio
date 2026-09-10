@@ -1,0 +1,154 @@
+# Sveltia CMS configuration for IO BIO.
+# Docs: https://sveltiacms.app/en/docs/intro
+#
+# LOCAL editing (no login needed): run `pnpm dev`, open
+#   http://localhost:4321/io-bio/admin/index.html
+# in Chrome/Edge/Brave, click "Work with Local Repository", pick the repo root.
+#
+# LIVE login (no extra hosting): editors click "Sign in with Token" on the login
+# screen and paste a GitHub fine-grained personal access token scoped to this
+# repo (GitHub provides a pre-filled link). No Cloudflare / OAuth backend needed.
+# (When GitHub ships client-side PKCE, this becomes one-click with still no
+# backend — no config change required.)
+#
+# `auth_methods: [token]` hides the "Sign in with GitHub" (OAuth) button, which
+# without an OAuth backend just 404s against Netlify. Only token sign-in is shown
+# (plus "Work with Local Repository" in local dev).
+
+backend:
+  name: github
+  repo: HamonUdvari/io-bio
+  branch: main
+  auth_methods: [token]
+
+site_url: https://hamonudvari.github.io/io-bio
+
+# Global media (page images, downloadable PDFs) live in public/ — this is the
+# general "All assets". The bio Word files get their OWN labeled folder in the
+# Asset Library via the "Bio Word files" collection below.
+media_folder: public
+public_folder: /
+
+collections:
+  # ---------- Site text ----------
+  - name: site
+    label: Site text
+    delete: false
+    files:
+      - name: hero
+        label: Home page (hero)
+        file: src/content/globals/hero.md
+        fields:
+          - label: Buttons
+            name: links
+            widget: list
+            required: false
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Link, name: href, widget: string }
+          - { label: Hero text, name: body, widget: text }
+      - name: footer
+        label: Footer
+        file: src/content/globals/footer.md
+        fields:
+          - { label: Footer text, name: text, widget: text }
+      - name: meta
+        label: Browser tab & search text
+        file: src/content/globals/global.md
+        fields:
+          - { label: Site title, name: title, widget: string }
+          - { label: Search description, name: description, widget: text }
+
+  # ---------- Pages (section block editor) ----------
+  # Each page is a list of "section" blocks: add / reorder / delete blocks, each
+  # with a heading, a style, a width, and rich-text content. No ::: syntax.
+  - name: pages
+    label: Pages
+    delete: false
+    files:
+      - name: about
+        label: About
+        file: src/content/pages/about.md
+        fields:
+          - { label: Page title, name: title, widget: string }
+          - { label: Search description, name: description, widget: text, required: false }
+          - { label: Menu order, name: order, widget: number, required: false, value_type: int }
+          - { label: URL name, name: slug, widget: hidden, default: about }
+          - label: Sections
+            name: sections
+            label_singular: Section
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Heading, name: title, widget: string, required: false }
+              - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary, required: false }
+              - { label: Width, name: stretch, widget: select, options: [base, wide], default: base, required: false }
+              - { label: Content, name: content, widget: markdown, editor_components: [columns, file-link, people, contributors] }
+      - name: author-instructions
+        label: Author Instructions
+        file: src/content/pages/author-instructions.md
+        fields:
+          - { label: Page title, name: title, widget: string }
+          - { label: Search description, name: description, widget: text, required: false }
+          - { label: Menu order, name: order, widget: number, required: false, value_type: int }
+          - { label: URL name, name: slug, widget: hidden, default: author-instructions }
+          - label: Sections
+            name: sections
+            label_singular: Section
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Heading, name: title, widget: string, required: false }
+              - { label: Style, name: variant, widget: select, options: [primary, secondary], default: secondary, required: false }
+              - { label: Width, name: stretch, widget: select, options: [base, wide], default: base, required: false }
+              - { label: Content, name: content, widget: markdown, editor_components: [columns, file-link, people, contributors] }
+
+  # ---------- Bio Word files ----------
+  # Gives the bio .docx their OWN labeled folder in the Asset Library (the media
+  # view), via this collection's media_folder. Manage the Word files THERE — add a
+  # new one, or replace an existing one. (No editable entries: .docx can't be
+  # text-edited; this collection only exists to give the files a labeled home.)
+  - name: bio-files
+    label: Bio Word files
+    folder: src/content/bios
+    extension: md
+    create: false
+    media_folder: /src/content/bios
+    public_folder: /src/content/bios
+    fields:
+      - { label: Name, name: title, widget: string }
+
+  # ---------- Bio photos (higher-res overrides) ----------
+  # A labeled folder for the optional higher-resolution portrait overrides. Drop
+  # an image named after the entry slug (e.g. annan-ka-2019.jpg) here and it
+  # replaces the small photo from the Word file on the next build. Same idea as
+  # "Bio Word files", but for images.
+  - name: bio-photos
+    label: Bio photos (overrides)
+    folder: src/content/bios-images
+    extension: json
+    create: false
+    media_folder: /src/content/bios-images
+    public_folder: /src/content/bios-images
+    fields:
+      - { label: Name, name: title, widget: string }
+
+  # ---------- Settings ----------
+  # Portrait face-crop overrides: when a multi-person photo crops the wrong person,
+  # add the entry's slug and the subject's position counting faces from the LEFT
+  # (1 = leftmost). Edited as a simple key → value table (portrait-subjects.json).
+  - name: settings
+    label: Settings
+    delete: false
+    files:
+      - name: face-crops
+        label: Portrait face crops
+        file: src/data/portrait-subjects.json
+        fields:
+          - label: Face crops
+            name: overrides
+            widget: keyvalue
+            root: true
+            required: false
+            key_label: Entry slug (e.g. annan-ka-2019)
+            value_label: Face position from the left (1 = leftmost)
