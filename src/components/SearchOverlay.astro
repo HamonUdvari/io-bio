@@ -229,6 +229,22 @@ const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     display: none;
   }
 
+  /* Make the WHOLE result clickable, not just the title: stretch the single
+     title link across the result card. Stays a real anchor, so keyboard focus
+     and cmd/middle-click "open in new tab" keep working. (Each result has one
+     link; if sub-results are ever enabled, raise them above this overlay.)
+     `#search` (id) is required: Pagefind's own CSS loads after this hoisted
+     style, so a bare `.pagefind-ui__result` position would lose and every link's
+     ::after would stretch to the panel instead of its own card. */
+  #search .pagefind-ui__result {
+    position: relative;
+  }
+  #search .pagefind-ui__result-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
   /* Point 3 — recolor the matched-term highlight to the site red.
      The default UI resets <mark> via `.pagefind-ui--reset mark { all: revert }`
      (browser-default yellow). The Pagefind <link> loads AFTER this hoisted style,
