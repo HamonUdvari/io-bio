@@ -21,7 +21,9 @@ const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 <link rel="stylesheet" href={`${BASE}pagefind/pagefind-ui.css`} />
 
 <dialog class="search-overlay" aria-label="Search the biographies">
-  <div class="search-overlay__panel">
+  <div
+    class="search-overlay__panel scrollbar-thumb-white scrollbar-track-transparent"
+  >
     <button
       type="button"
       class="search-overlay__close"
@@ -220,19 +222,11 @@ const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     border: 1px solid var(--color-io-gray-600);
     border-radius: 6px;
   }
+  /* Close affordance hidden for now (per client). Esc and backdrop click still
+     dismiss the overlay; the button stays in the DOM so restoring it is a
+     one-line revert (delete this rule). */
   .search-overlay__close {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    display: inline-flex;
-    background: none;
-    border: 0;
-    cursor: pointer;
-    color: var(--color-io-onprimary);
-    line-height: 1;
-  }
-  .search-overlay__close:hover {
-    color: var(--text-hover);
+    display: none;
   }
 
   /* Point 3 — recolor the matched-term highlight to the site red.
