@@ -22,6 +22,7 @@ on:
 
 permissions:
   contents: write # to commit the updated DOI map
+  actions: write # to dispatch the Deploy workflow after pushing the map
 
 # Share a concurrency group with the auto sandbox-refresh (zenodo-sandbox-refresh.yml)
 # so a manual sandbox mint and the auto-refresh never run at once against the same
@@ -64,13 +65,27 @@ jobs:
           [ -n "$MINT_LIMIT" ] && ARGS="$ARGS --limit $MINT_LIMIT"
           [ -n "$MINT_ONLY" ] && ARGS="$ARGS --only $MINT_ONLY"
           node scripts/zenodo-mint.ts $ARGS
-      - name: Commit DOI map
+      - name: Commit DOI map + trigger deploy
         # The production map is always tracked; the sandbox map is currently also
         # committed (temporarily, for the client demo — issue #2). Stage both;
         # only the map that changed for this env actually gets committed.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for `gh workflow run` (Deploy dispatch)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add src/data/zenodo-dois.json src/data/zenodo-dois.sandbox.json
-          git commit -m "chore(zenodo): update DOI map [skip ci]" || echo "no changes to commit"
+          if git diff --cached --quiet; then
+            echo "no DOI map changes to commit"
+            exit 0
+          fi
+          git commit -m "chore(zenodo): update DOI map [skip ci]"
           git push
+          # The map is read at BUILD time, so new DOIs only reach the live pages on
+          # a rebuild. A push made with the default GITHUB_TOKEN never starts a new
+          # workflow run (GitHub's recursion guard), so dispatch Deploy explicitly —
+          # workflow_dispatch is exempt from the guard even via GITHUB_TOKEN (needs
+          # `actions: write`). Mirrors zenodo-sandbox-refresh.yml so a mint never
+          # leaves fresh DOIs unpublished waiting on a manual deploy.
+          echo "pushed DOI map; dispatching Deploy"
+          gh workflow run deploy.yml --ref main
