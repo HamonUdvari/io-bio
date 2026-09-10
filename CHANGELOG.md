@@ -1,3 +1,13 @@
+# [1.15.0](https://github.com/HamonUdvari/io-bio/compare/v1.14.1...v1.15.0) (2026-09-10)
+
+
+### Website Features
+
+* **search:** add Pagefind full-text search (preview) ([](https://github.com/HamonUdvari/io-bio/commit/611481a66aa18396ed9a3728a1e8a88f7869c445))
+* **search:** global overlay, deep-link highlight, red highlighting ([](https://github.com/HamonUdvari/io-bio/commit/b57b7fa4d6d6e620fa648c4c2425b1c625ecbcd3)), closes [#search](https://github.com/HamonUdvari/io-bio/issues/search)
+* **search:** icon-only Search on mobile; fix stale deploy comment ([](https://github.com/HamonUdvari/io-bio/commit/8aab489b0fcc5701c72a3bfbd4e5625196426167))
+* **search:** make the whole result clickable (stretched link) ([](https://github.com/HamonUdvari/io-bio/commit/5fc2abd63a6a994bc723dea42974e6ea999c7116)), closes [#search](https://github.com/HamonUdvari/io-bio/issues/search)
+
 ## [1.14.1](https://github.com/HamonUdvari/io-bio/compare/v1.14.0...v1.14.1) (2026-08-11)
 
 
