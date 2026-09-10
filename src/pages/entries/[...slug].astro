@@ -58,25 +58,35 @@ const sandboxUrl = sandboxRecordId
 
 <Layout title={title} description={description}>
   <EntryArticle data={data} Content={Content}>
-    <div slot="controls" class="flex flex-col items-center gap-y-3 print:hidden">
+    <div
+      slot="controls"
+      class="flex flex-col items-center gap-y-3 print:hidden"
+      data-pagefind-ignore
+    >
       <a class="button button--primary button--download" href={pdfHref} download
         >Download (PDF)</a
       >
-      {/* Debug links (screen only): the live browser-print view for iterating
-          on print styles, and the per-entry Zenodo sandbox deposit if minted. */}
+      {
+        /* Debug links (screen only): the live browser-print view for iterating
+          on print styles, and the per-entry Zenodo sandbox deposit if minted. */
+      }
       <div class="flex flex-row gap-x-4 text-small">
         <!-- <a -->
         <!--   class="cursor-pointer underline opacity-70 hover:opacity-100" -->
         <!--   href={printHref}>Print preview</a -->
         <!-- > -->
-        {sandboxUrl && (
-          <a
-            class="underline opacity-70 hover:opacity-100"
-            href={sandboxUrl}
-            target="_blank"
-            rel="noopener noreferrer">Zenodo</a
-          >
-        )}
+        {
+          sandboxUrl && (
+            <a
+              class="underline opacity-70 hover:opacity-100"
+              href={sandboxUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Zenodo
+            </a>
+          )
+        }
       </div>
     </div>
   </EntryArticle>

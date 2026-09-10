@@ -19,7 +19,10 @@ const {
 
 const image = new URL(`${BASE}og.jpg`, SITE).toString();
 const currentUrl = new URL(Astro.url.pathname, SITE).toString();
-const locale = Astro.currentLocale;
+// Default to English so every page has a valid `<html lang>` (accessibility)
+// and Pagefind indexes with English stemming — currentLocale is undefined
+// until/unless Astro i18n is configured.
+const locale = Astro.currentLocale ?? "en";
 ---
 
 <!doctype html>
@@ -111,7 +114,9 @@ const locale = Astro.currentLocale;
     </script>
   </head>
   <body>
-    <section class="section section--primary section--nav section--wide print:hidden">
+    <section
+      class="section section--primary section--nav section--wide print:hidden"
+    >
       <Nav />
     </section>
     <slot />

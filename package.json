@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev --host",
     "build": "astro build",
+    "build:search": "astro build && pagefind --site dist --glob \"entries/**/*.html\"",
     "preview": "astro preview",
     "pdfs:site": "node scripts/render-site-pdfs.ts",
     "pdf:dev": "node scripts/render-dev-pdf.ts",
@@ -52,6 +53,7 @@
     "marked": "^15.0.12",
     "officeparser": "^6.0.4",
     "p-limit": "7.3.0",
+    "pagefind": "^1.5.2",
     "piccolore": "0.1.3",
     "picomatch": "4.0.4",
     "prettier": "^3.8.1",

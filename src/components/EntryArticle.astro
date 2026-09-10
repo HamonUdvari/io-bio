@@ -77,139 +77,149 @@ const imgAr = figureImgMeta
   : undefined;
 ---
 
-<section
-  class="bio-header"
-  >
-  <figure
-    class="figure"
-    style={imgAr ? `--img-ar:${imgAr}` : undefined}
-  >
-    <picture>
-      <Image class="w-full" imagePath={imageFn} alt={title} />
-    </picture>
-    <figcaption
-      class="figure__credit"
-    >
-      Source:{" "}
-      {!source.href && imageSource}
-      {source.href && (
-        <>
-          {source.text && <>{source.text} </>}
-          <a
-            href={source.href}
-            class="source-link"
-            target="_blank"
-            rel="noopener noreferrer">{source.label}</a>
-        </>
-      )}
-    </figcaption>
-  </figure>
-  <div class="flex flex-col gap-y-2 leading-none">
-    <h1 class="text-h2 leading-none">{displayName}</h1>
-    <h2 class="text-h2 max-w-[45ch] mx-auto leading-none">{summary}</h2>
-  </div>
-  <p class="text-io-onsecondary">By {authors} · {version}</p>
-  <p class="text-balance">{life}</p>
-  {introNotes?.map((note) => <p class="text-balance">{note}</p>)}
-  <slot name="controls" />
-</section>
-<section id="biography">
-  <h2 class="section__title">Biography</h2>
-  <Content />
-</section>
 {
-  archives?.items?.length > 0 && (
-    <section id="archives">
-      <h2 class="section__title">Archives</h2>
-      {archives.items.length === 1 ? (
-        <p>{archives.items[0].raw}</p>
-      ) : (
-        <ul>
-          {archives.items.map((c) => (
-            <li>{c.raw}</li>
-          ))}
-        </ul>
-      )}
-      {archives.websitesAccessedOn && (
-        <p class="text-sm opacity-70">
-          (all websites accessed {archives.websitesAccessedOn})
-        </p>
-      )}
-    </section>
-  )
+  /* Full-text search scope (Pagefind). `data-pagefind-body` marks the whole
+    entry as the indexable region — the site-wide rule then indexes ONLY pages
+    that carry it, so nav/footer and the static pages stay out. `display:contents`
+    makes this wrapper transparent to layout (it generates no box), so the entry
+    sections render exactly as before. The How-to-cite/rights boilerplate and the
+    non-content chrome opt out individually via `data-pagefind-ignore` below. */
 }
-{
-  publications?.items?.length > 0 && (
-    <section id="publications">
-      <h2 class="section__title">Publications</h2>
-      {publications.items.length === 1 ? (
-        <p>{publications.items[0].raw}</p>
-      ) : (
-        <ul>
-          {publications.items.map((c) => (
-            <li>{c.raw}</li>
-          ))}
-        </ul>
-      )}
-      {publications.websitesAccessedOn && (
-        <p class="text-sm opacity-70">
-          (all websites accessed {publications.websitesAccessedOn})
-        </p>
-      )}
-    </section>
-  )
-}
-{
-  literature?.items?.length > 0 && (
-    <section id="literature">
-      <h2 class="section__title">Literature</h2>
-      {literature.items.length === 1 ? (
-        <p>{literature.items[0].raw}</p>
-      ) : (
-        <ul>
-          {literature.items.map((c) => (
-            <li>{c.raw}</li>
-          ))}
-        </ul>
-      )}
-      {literature.websitesAccessedOn && (
-        <p class="text-sm opacity-70">
-          (all websites accessed {literature.websitesAccessedOn})
-        </p>
-      )}
-    </section>
-  )
-}
-<section id="cite">
-  <h2 class="section__title">How to cite</h2>
-
+<div data-pagefind-body style="display: contents">
+  <section class="bio-header">
+    <figure class="figure" style={imgAr ? `--img-ar:${imgAr}` : undefined}>
+      <picture>
+        <Image class="w-full" imagePath={imageFn} alt={title} />
+      </picture>
+      <figcaption class="figure__credit" data-pagefind-ignore>
+        Source:{" "}
+        {!source.href && imageSource}
+        {
+          source.href && (
+            <>
+              {source.text && <>{source.text} </>}
+              <a
+                href={source.href}
+                class="source-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {source.label}
+              </a>
+            </>
+          )
+        }
+      </figcaption>
+    </figure>
+    <div class="flex flex-col gap-y-2 leading-none">
+      <h1 class="text-h2 leading-none">{displayName}</h1>
+      <h2 class="text-h2 max-w-[45ch] mx-auto leading-none">{summary}</h2>
+    </div>
+    <p class="text-io-onsecondary">By {authors} · {version}</p>
+    <p class="text-balance">{life}</p>
+    {introNotes?.map((note) => <p class="text-balance">{note}</p>)}
+    <slot name="controls" />
+  </section>
+  <section id="biography">
+    <h2 class="section__title">Biography</h2>
+    <Content />
+  </section>
   {
-    zenodoCite && (
-      <p>
-        {authors}, '{lastName}, {firstName}' in{" "}
-        <cite>
-          IO BIO, Biographical Dictionary of Secretaries-General of
-          International Organizations
-        </cite>
-        , edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg.{" "}
-        <a href={zenodoCite.url}>{zenodoCite.url}</a>
-        {zenodoCite.sandbox && (
-          <span class="text-small opacity-70"> (sandbox preview)</span>
+    archives?.items?.length > 0 && (
+      <section id="archives">
+        <h2 class="section__title">Archives</h2>
+        {archives.items.length === 1 ? (
+          <p>{archives.items[0].raw}</p>
+        ) : (
+          <ul>
+            {archives.items.map((c) => (
+              <li>{c.raw}</li>
+            ))}
+          </ul>
         )}
-      </p>
+        {archives.websitesAccessedOn && (
+          <p class="text-sm opacity-70">
+            (all websites accessed {archives.websitesAccessedOn})
+          </p>
+        )}
+      </section>
     )
   }
-  {/* Rights/colophon footnote — keep in sync with RIGHTS_NOTE in
+  {
+    publications?.items?.length > 0 && (
+      <section id="publications">
+        <h2 class="section__title">Publications</h2>
+        {publications.items.length === 1 ? (
+          <p>{publications.items[0].raw}</p>
+        ) : (
+          <ul>
+            {publications.items.map((c) => (
+              <li>{c.raw}</li>
+            ))}
+          </ul>
+        )}
+        {publications.websitesAccessedOn && (
+          <p class="text-sm opacity-70">
+            (all websites accessed {publications.websitesAccessedOn})
+          </p>
+        )}
+      </section>
+    )
+  }
+  {
+    literature?.items?.length > 0 && (
+      <section id="literature">
+        <h2 class="section__title">Literature</h2>
+        {literature.items.length === 1 ? (
+          <p>{literature.items[0].raw}</p>
+        ) : (
+          <ul>
+            {literature.items.map((c) => (
+              <li>{c.raw}</li>
+            ))}
+          </ul>
+        )}
+        {literature.websitesAccessedOn && (
+          <p class="text-sm opacity-70">
+            (all websites accessed {literature.websitesAccessedOn})
+          </p>
+        )}
+      </section>
+    )
+  }
+  <section id="cite" data-pagefind-ignore>
+    <h2 class="section__title">How to cite</h2>
+
+    {
+      zenodoCite && (
+        <p>
+          {authors}, '{lastName}, {firstName}' in{" "}
+          <cite>
+            IO BIO, Biographical Dictionary of Secretaries-General of
+            International Organizations
+          </cite>
+          , edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg.{" "}
+          <a href={zenodoCite.url}>{zenodoCite.url}</a>
+          {zenodoCite.sandbox && (
+            <span class="text-small opacity-70"> (sandbox preview)</span>
+          )}
+        </p>
+      )
+    }
+    {
+      /* Rights/colophon footnote — keep in sync with RIGHTS_NOTE in
       scripts/zenodo-mint.ts. The license covers the entry TEXT; the embedded
-      portrait stays under its credited source (see the "Source:" credit). */}
-  <p class="text-small opacity-70">
-    Text © the author(s), licensed under{" "}
-    <a
-      class="underline"
-      href="https://creativecommons.org/licenses/by-nc-nd/4.0/"
-      target="_blank"
-      rel="noopener noreferrer">CC BY-NC-ND 4.0</a
-    >. The portrait is excluded and remains under the rights of its credited
-    source.
-  </p>
-</section>
+      portrait stays under its credited source (see the "Source:" credit). */
+    }
+    <p class="text-small opacity-70">
+      Text © the author(s), licensed under{" "}
+      <a
+        class="underline"
+        href="https://creativecommons.org/licenses/by-nc-nd/4.0/"
+        target="_blank"
+        rel="noopener noreferrer">CC BY-NC-ND 4.0</a
+      >. The portrait is excluded and remains under the rights of its credited
+      source.
+    </p>
+  </section>
+</div>
