@@ -2,6 +2,7 @@
 import "@styles/global.css";
 import Nav from "@components/Nav.astro";
 import Footer from "@components/Footer.astro";
+import SearchOverlay from "@components/SearchOverlay.astro";
 import { frontmatter as globals } from "@content/globals/global.md";
 
 const SITE = import.meta.env.SITE;
@@ -127,5 +128,10 @@ const locale = Astro.currentLocale ?? "en";
         </section>
       )
     }
+    {
+      /* Global full-text search overlay — opened from the nav's Search button.
+        A native <dialog> (top layer), so DOM position here is irrelevant. */
+    }
+    <SearchOverlay />
   </body>
 </html>

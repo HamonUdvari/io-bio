@@ -22,9 +22,39 @@ const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
       links.map(({ slug, title }) => <a href={`${BASE}${slug}`}>{title}</a>)
   }
   {
-    /* PREVIEW: temporary entry point for the full-text search page. `ml-auto`
-      right-aligns it as a standalone action. Remove or fold into the normal
-      nav once the final search UI is decided. */
+    /* PREVIEW: opens the global full-text search overlay (SearchOverlay.astro,
+      rendered once in Layout). `ml-auto` right-aligns it as a standalone action.
+      Fold into the normal nav once the final search UI is decided. */
   }
-  <a href={`${BASE}search`} class="ml-auto">Search</a>
+  <button
+    type="button"
+    class="nav__search ml-auto"
+    data-search-trigger
+    aria-haspopup="dialog"
+  >
+    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+    Search
+  </button>
 </nav>
+
+<style>
+  /* Match the plain nav links: inherit the nav's font/colour, turn red on hover
+     (like `a` via --text-hover), and reset the native <button> chrome. */
+  .nav__search {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .nav__search:hover {
+    color: var(--text-hover);
+  }
+  .nav__search .material-symbols-outlined {
+    font-size: 1.15em;
+  }
+</style>
