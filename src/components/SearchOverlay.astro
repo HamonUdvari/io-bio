@@ -192,8 +192,46 @@ const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     --pagefind-ui-border: var(--color-io-gray-600);
     --pagefind-ui-tag: var(--color-io-secondary);
     --pagefind-ui-border-width: 1px;
-    --pagefind-ui-border-radius: 4px;
+    --pagefind-ui-border-radius: 0; /* sharp corners, like the entries filter */
     --pagefind-ui-font: var(--font-sans), system-ui, sans-serif;
+  }
+
+  /* Match the entries column-filter input (.entries__search): same 20px / weight
+     400 text, 56px box height, sharp corners. The default UI otherwise renders
+     larger, bold text (21px / 700) in a taller (64px) box — that's the "fatter"
+     look. The magnifier icon and clear button are absolutely positioned for the
+     original 64px height, so re-centre / resize them for the reduced box. */
+  /* `--si-lh` = the entries-filter line-height at the current breakpoint
+     (leading × body font). The box height then mirrors `.entries__search`
+     exactly: line-height + 2·--btn-py, with --btn-py the same responsive token
+     the filter uses (12/14/16px mobile/tablet/desktop). So the search box is the
+     SAME height as the filter at every breakpoint — not a fixed 64px (which read
+     taller than the filter, especially on mobile). Font is 16px until desktop
+     (20px), matching --text-body. */
+  #search .pagefind-ui__form {
+    --si-lh: calc(var(--leading-body-base) * var(--text-body-base));
+  }
+  #search .pagefind-ui__search-input {
+    height: calc(var(--si-lh) + 2 * var(--btn-py));
+    font-size: var(--text-body-base);
+    line-height: var(--si-lh);
+    font-weight: 400;
+  }
+  /* Re-centre the absolutely-placed magnifier + resize the clear button to fit. */
+  #search .pagefind-ui__form::before {
+    top: calc((var(--si-lh) + 2 * var(--btn-py) - 18px) / 2);
+  }
+  #search .pagefind-ui__search-clear {
+    top: 3px;
+    height: calc(var(--si-lh) + 2 * var(--btn-py) - 6px);
+  }
+  @media (min-width: 80rem) {
+    #search .pagefind-ui__form {
+      --si-lh: calc(var(--leading-body-desktop) * var(--text-body-desktop));
+    }
+    #search .pagefind-ui__search-input {
+      font-size: var(--text-body-desktop);
+    }
   }
 
   /* Overlay: a native <dialog> filling the viewport so backdrop clicks close it;

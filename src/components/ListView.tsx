@@ -94,7 +94,10 @@ const nameCollator = new Intl.Collator("en", {
   ignorePunctuation: true,
 });
 const sortByName = (a: any, b: any, columnId: string): number =>
-  nameCollator.compare(String(a.getValue(columnId)), String(b.getValue(columnId)));
+  nameCollator.compare(
+    String(a.getValue(columnId)),
+    String(b.getValue(columnId)),
+  );
 
 /**
  * Format an organisation for display. When the parser captured both the full
@@ -281,7 +284,7 @@ export default function ListView({ data }: ListViewProps) {
           value={globalFilter ?? ""}
           onChange={(value) => setGlobalFilter(String(value))}
           class="entries__search"
-          placeholder="Search all columns..."
+          placeholder="Filter all columns..."
         />
         <div class="entries__view-toggle">
           <button
@@ -337,7 +340,10 @@ export default function ListView({ data }: ListViewProps) {
                   />
                 )}
                 <div class="entry__body">
-                  <span class="entry__name" style={{ textBoxTrim: "trim-both" }}>
+                  <span
+                    class="entry__name"
+                    style={{ textBoxTrim: "trim-both" }}
+                  >
                     {lastName.toUpperCase()} {firstName}
                     {aliasSuffix(knownAs, `${firstName} ${lastName}`, nee)}
                   </span>
@@ -404,11 +410,15 @@ export default function ListView({ data }: ListViewProps) {
                           "entries-table__sort-indicator--inactive",
                       )}
                     >
-                      <span class="material-symbols-outlined" aria-hidden="true">
+                      <span
+                        class="material-symbols-outlined"
+                        aria-hidden="true"
+                      >
                         {{
                           asc: "arrow_upward",
                           desc: "arrow_downward",
-                        }[header.column.getIsSorted() as string] ?? "unfold_more"}
+                        }[header.column.getIsSorted() as string] ??
+                          "unfold_more"}
                       </span>
                     </span>
                   </div>
