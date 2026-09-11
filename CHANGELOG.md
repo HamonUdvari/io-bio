@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/HamonUdvari/io-bio/compare/v1.15.0...v1.16.0) (2026-09-11)
+
+
+### Website Features
+
+* **cms:** make the "How to cite" editors credit CMS-editable ([](https://github.com/HamonUdvari/io-bio/commit/a051d76fee648ef3d96d7d57cdd15b4cc9af5a2d))
+
 # [1.15.0](https://github.com/HamonUdvari/io-bio/compare/v1.14.1...v1.15.0) (2026-09-10)
 
 
