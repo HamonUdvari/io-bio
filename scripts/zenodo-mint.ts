@@ -12,6 +12,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
+import { marked } from "marked";
 import { createZenodoClient } from "./lib/zenodo-client.ts";
 import type { Deposition } from "./lib/zenodo-client.ts";
 import {
@@ -46,8 +47,10 @@ const IMPRINT_PUBLISHER =
   process.env.ZENODO_IMPRINT_PUBLISHER ?? "IO BIO Project, Radboud University Nijmegen";
 const IMPRINT_PLACE = process.env.ZENODO_IMPRINT_PLACE ?? "Nijmegen, Netherlands";
 
-// Dictionary editors → Zenodo `contributors` (type "Editor"); matches the on-site
-// "How to cite" ("edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg").
+// FALLBACK editors → Zenodo `contributors` (type "Editor"). Each entry normally
+// mirrors its OWN "How to cite" editors (meta `editors` → splitEditors); this
+// curated list (with affiliations) is used only for an entry whose docx carries
+// no editors segment.
 const EDITORS = [
   { name: "Reinalda, Bob", type: "Editor", affiliation: "Radboud University, Nijmegen, Netherlands" },
   { name: "Kille, Kent J.", type: "Editor", affiliation: "The College of Wooster, United States" },
@@ -56,13 +59,73 @@ const EDITORS = [
 
 // Rights/colophon note mirrored onto each record's `notes` (and shown in-document
 // on the entry/PDF): the license covers the TEXT; the embedded portrait stays
-// under its credited source. Keep in sync with the footnote in EntryArticle.astro.
-const RIGHTS_NOTE =
-  process.env.ZENODO_RIGHTS_NOTE ??
+// under its credited source.
+//
+// SINGLE SOURCE (no drift): the note lives in the CMS at
+// src/content/globals/rights.md (field `notice`), read by BOTH the site
+// (EntryArticle.astro) and this mint. `readRightsNote()` parses that frontmatter
+// and flattens the markdown to plain text for Zenodo's `notes`. Order:
+// ZENODO_RIGHTS_NOTE env override → CMS file → the hardcoded fallback below
+// (used only if the file is missing/empty).
+const RIGHTS_NOTE_FALLBACK =
   `Text © the author(s) and IO BIO, licensed under ${LICENSE_LABEL}. The portrait ` +
-    `is excluded and remains under the rights of its credited source. We have tried ` +
-    `to trace the rights holder to obtain permission for the use of the portrait, ` +
-    `but contact us in case we have failed.`;
+  `is excluded and remains under the rights of its credited source. We have tried ` +
+  `to trace the rights holder to obtain permission for the use of the portrait, ` +
+  `but contact us in case we have failed.`;
+
+// Flatten the rights markdown to plain text using the SAME renderer the site
+// uses (marked), then strip the HTML. This keeps Zenodo's `notes` in step with
+// the on-page text for ANY markdown an editor might type — links, bold, italics,
+// lists, multiple paragraphs — not just `[label](url)`. Block ends become
+// paragraph breaks; inline emphasis collapses to its text. (No drift with
+// EntryArticle.astro, which renders the same source to HTML.)
+function mdToPlainText(md: string): string {
+  const html = marked.parse(md, { async: false }) as string;
+  return html
+    .replace(/<\/(p|h[1-6]|li|blockquote|div)>/gi, "\n\n")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#(?:39|x27);/gi, "'")
+    .replace(/[ \t]+/g, " ")
+    .replace(/ *\n */g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+/** Read the `notice` field from src/content/globals/rights.md frontmatter. */
+function readRightsNotice(): string {
+  const file = path.resolve("src/content/globals/rights.md");
+  if (!existsSync(file)) return "";
+  const raw = readFileSync(file, "utf8");
+  const fm = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!fm) return "";
+  const body = fm[1];
+  // YAML block scalar: `notice: |` / `|-` / `|+`, then 2-space-indented lines.
+  const block = body.match(/^notice:\s*\|[-+]?\s*\r?\n([\s\S]*)$/m);
+  if (block) {
+    return block[1]
+      .split(/\r?\n/)
+      .map((l) => l.replace(/^ {2}/, ""))
+      .join("\n")
+      .trim();
+  }
+  // Plain scalar: `notice: "…"` / `notice: …`.
+  const plain = body.match(/^notice:\s*(.+)$/m);
+  if (plain) return plain[1].replace(/^["']|["']$/g, "").trim();
+  return "";
+}
+
+function readRightsNote(): string {
+  const env = process.env.ZENODO_RIGHTS_NOTE;
+  if (env) return env;
+  const notice = readRightsNotice().trim();
+  const plain = notice ? mdToPlainText(notice) : "";
+  return plain || RIGHTS_NOTE_FALLBACK;
+}
 
 // Files + dirs that determine the rendered PDF's VISUAL output: the Paged.js
 // print route, the article template + its helpers (Image, displayName), the
@@ -187,7 +250,7 @@ async function main() {
     imprintPlace: IMPRINT_PLACE,
     editors: EDITORS,
     entryUrl: (slug) => `${SITE}${BASE}/entries/${slug}`,
-    rightsNote: RIGHTS_NOTE,
+    rightsNote: readRightsNote(),
     publicationType: PUBLICATION_TYPE,
     // SANDBOX only: fold the print-template fingerprint into the idempotency
     // hash so a layout/CSS change re-versions the demo deposits. Production stays

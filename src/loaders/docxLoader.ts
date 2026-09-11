@@ -422,6 +422,7 @@ const docxEntryType: ContentEntryType = {
       literature: extracted?.literature ?? { items: [] },
       version: extracted?.version ?? "",
       authors: extracted?.authors ?? "",
+      editors: extracted?.editors ?? "",
       nationality: extracted?.nationality ?? undefined,
       country: extracted?.country ?? "",
       html: extracted?.html ?? "",

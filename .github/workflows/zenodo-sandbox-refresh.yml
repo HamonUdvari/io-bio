@@ -32,6 +32,9 @@ on:
       - "src/loaders/**"
       - "src/content.config.ts"
       - "src/pages/zenodo-meta.json.ts"
+      # Rights note (single source) → folded into the state hash (see
+      # computeStateHash), so a CMS edit re-versions the deposits.
+      - "src/content/globals/rights.md"
       # The mint pipeline itself:
       - "scripts/zenodo-*.ts"
       - "scripts/lib/zenodo-*.ts"

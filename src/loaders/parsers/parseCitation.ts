@@ -29,6 +29,33 @@ function extractAuthors(citationText: string): string {
     .trim();
 }
 
+// The citation tail reads: "… Edited by <EDITORS>, www.ru.nl/fm/iobio, Accessed …".
+// Capture just <EDITORS>, stopping at the trailing URL / "Accessed" / end. Every
+// source doc carries this, so each entry can now show its OWN editors (older
+// entries keep the three-editor wording; newer ones may differ / use "et al.").
+const EDITED_BY_RE = /,\s*Edited by\s+(.+?)(?:,\s*www\.|,\s*Accessed\b|$)/i;
+
+// Known-editor OCR fixes. The source docs are scanned/retyped, so the one
+// recurring typo is the middle initial in "Jaci L. Eisenberg" — seen as
+// "Jaci Eisenberg", "Jaci L.Eisenberg", "Jaci . Eisenberg", "Jaci L.  Eisenberg".
+// Canonicalise just that name; every other name passes through untouched, so a
+// genuinely different future editor is never rewritten.
+const EDITOR_NAME_FIXES: Array<[RegExp, string]> = [
+  [/Jaci\s*(?:L\s*\.?|\.)?\s*Eisenberg/gi, "Jaci L. Eisenberg"],
+];
+
+function normalizeEditors(raw: string): string {
+  let s = raw.replace(/\s+/g, " ").trim().replace(/[,\s]+$/, "");
+  for (const [re, canon] of EDITOR_NAME_FIXES) s = s.replace(re, canon);
+  return s;
+}
+
+function extractEditors(citationText: string): string | null {
+  const m = citationText.match(EDITED_BY_RE);
+  if (!m) return null;
+  return normalizeEditors(m[1]) || null;
+}
+
 /**
  * Find the citation paragraph (which contains the author name) and any
  * companion "How to cite this IO BIO entry" paragraph + standalone author
@@ -39,11 +66,13 @@ function extractAuthors(citationText: string): string {
  */
 export function parseCitation(content: any[]): ParserResult<{
   authors: string | null;
+  editors: string | null;
   consumed: number[];
 }> {
   const warnings: Warning[] = [];
   const consumed: number[] = [];
   let authors: string | null = null;
+  let editors: string | null = null;
 
   const citationIdx = content.findIndex(
     (c) => c?.type === "paragraph" && c.text?.includes(CITATION_MARKER),
@@ -51,7 +80,16 @@ export function parseCitation(content: any[]): ParserResult<{
   if (citationIdx >= 0) {
     const node = content[citationIdx];
     authors = extractAuthors(node.text) || null;
+    editors = extractEditors(node.text);
     consumed.push(citationIdx);
+    if (!editors) {
+      warnings.push({
+        code: "editors_missing",
+        field: "editors",
+        message: `Citation paragraph has no "Edited by …" segment`,
+        severity: "info",
+      });
+    }
   } else {
     warnings.push({
       code: "citation_missing",
@@ -79,5 +117,5 @@ export function parseCitation(content: any[]): ParserResult<{
       consumed.push(authorIdx);
   }
 
-  return { value: { authors, consumed }, warnings };
+  return { value: { authors, editors, consumed }, warnings };
 }

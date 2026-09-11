@@ -59,10 +59,15 @@ collections:
           - { label: Site title, name: title, widget: string }
           - { label: Search description, name: description, widget: text }
       - name: citation
-        label: How to cite (editors)
+        label: How to cite (default editors)
         file: src/content/globals/citation.md
         fields:
-          - { label: Editors credit, name: editors, widget: string, hint: "Shown in every entry's 'How to cite', after the dictionary title (e.g. edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg)" }
+          - { label: Default editors credit, name: editors, widget: string, hint: "Fallback only. Each entry normally shows the editors from its own Word file's 'How to cite' line. This default is used only for an entry whose Word file has no editors (e.g. edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg)." }
+      - name: rights
+        label: Rights notice (entry footer)
+        file: src/content/globals/rights.md
+        fields:
+          - { label: Rights notice, name: notice, widget: markdown, hint: "Legal footnote at the bottom of every entry and its PDF. Keep the license as a link, e.g. [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)." }
 
   # ---------- Pages (section block editor) ----------
   # Each page is a list of "section" blocks: add / reorder / delete blocks, each

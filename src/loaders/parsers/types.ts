@@ -71,6 +71,9 @@ export type ExtractedBio = {
   imageAttachment: ImageAttachment | null;
   version: string | null;
   authors: string | null;
+  /** Per-entry editors credit from the "How to cite" line ("Bob Reinalda, Kent
+   * J. Kille and Jaci L. Eisenberg"). Null when the docx lacks the segment. */
+  editors: string | null;
   archives: APLSectionData;
   publications: APLSectionData;
   literature: APLSectionData;

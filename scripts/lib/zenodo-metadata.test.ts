@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { buildMetadata } from "./zenodo-metadata.ts";
+import {
+  buildMetadata,
+  computeStateHash,
+  splitEditors,
+} from "./zenodo-metadata.ts";
 import type { MetaEntry, MetadataConfig } from "./zenodo-metadata.ts";
 
 const cfg: MetadataConfig = {
@@ -28,6 +32,7 @@ const entry: MetaEntry = {
   life: "Born 8 April 1938 in Kumasi; died 18 August 2018 in Bern.",
   version: "Version 23 September 2019",
   authors: "Jane Doe and John Smith",
+  editors: "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
   nationality: "Ghanaian",
   roles: [
     { title: "Secretary-General", abbreviation: "UN", organisation: "United Nations" },
@@ -44,11 +49,25 @@ describe("buildMetadata — belongs-to-the-dictionary shape", () => {
     expect(metadata.imprint_place).toBe(cfg.imprintPlace);
   });
 
-  it("emits the editors as contributors (type Editor)", () => {
+  it("mirrors the entry's own editors as contributors (type Editor)", () => {
     const { metadata } = buildMetadata(entry, cfg);
     expect(metadata.contributors).toHaveLength(3);
     expect(metadata.contributors?.every((c) => c.type === "Editor")).toBe(true);
-    expect(metadata.contributors?.map((c) => c.name)).toContain("Reinalda, Bob");
+    // Per-entry prose ("First Last"), not the curated "Last, First" list.
+    expect(metadata.contributors?.map((c) => c.name)).toEqual([
+      "Bob Reinalda",
+      "Kent J. Kille",
+      "Jaci L. Eisenberg",
+    ]);
+  });
+
+  it("falls back to the curated editor list when the entry has no editors", () => {
+    const { metadata } = buildMetadata({ ...entry, editors: "" }, cfg);
+    expect(metadata.contributors?.map((c) => c.name)).toEqual([
+      "Reinalda, Bob",
+      "Kille, Kent J.",
+      "Eisenberg, Jaci L.",
+    ]);
   });
 
   it("links to the dictionary home and the online entry — never a whole-work/software DOI", () => {
@@ -84,5 +103,41 @@ describe("buildMetadata — belongs-to-the-dictionary shape", () => {
     expect(metadata.title).toBe("ANNAN, Kofi");
     expect(metadata.creators.map((c) => c.name)).toEqual(["Jane Doe", "John Smith"]);
     expect(metadata.publication_date).toBe("2019-09-23");
+  });
+});
+
+describe("splitEditors", () => {
+  it("splits 'A, B and C' prose into Editor contributors", () => {
+    expect(
+      splitEditors("Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg"),
+    ).toEqual([
+      { name: "Bob Reinalda", type: "Editor" },
+      { name: "Kent J. Kille", type: "Editor" },
+      { name: "Jaci L. Eisenberg", type: "Editor" },
+    ]);
+  });
+
+  it("drops a leading 'edited by' and any 'et al.' token", () => {
+    expect(splitEditors("edited by Bob Reinalda et al.")).toEqual([
+      { name: "Bob Reinalda", type: "Editor" },
+    ]);
+  });
+
+  it("returns [] for empty input", () => {
+    expect(splitEditors("")).toEqual([]);
+  });
+});
+
+describe("computeStateHash", () => {
+  it("changes when the rights note changes (keeps the record in sync — no drift)", () => {
+    const a = computeStateHash(entry, cfg);
+    const b = computeStateHash(entry, { ...cfg, rightsNote: "A different note." });
+    expect(a).not.toBe(b);
+  });
+
+  it("changes when the entry content hash changes (editors ride in it)", () => {
+    const a = computeStateHash(entry, cfg);
+    const b = computeStateHash({ ...entry, contentHash: "sha256:changed" }, cfg);
+    expect(a).not.toBe(b);
   });
 });

@@ -10,6 +10,8 @@ export interface MetaEntry {
   life: string;
   version: string;
   authors: string;
+  /** Per-entry editors credit (prose) from the entry's "How to cite" line. */
+  editors: string;
   nationality: string;
   roles: { title?: string; abbreviation?: string; organisation?: string }[];
   contentHash: string; // content signature emitted by the zenodo-meta endpoint
@@ -72,7 +74,11 @@ export interface MetadataConfig {
   imprintPublisher: string;
   /** `imprint_place` — place of publication, "city, country". */
   imprintPlace: string;
-  /** The dictionary editors, emitted as `contributors` with type "Editor". */
+  /**
+   * FALLBACK editors, emitted as `contributors` (type "Editor") only when an
+   * entry has no per-entry `editors` prose. Each entry normally mirrors its own
+   * "How to cite" editors via `splitEditors(e.editors)`.
+   */
   editors: ZenodoContributor[];
   /** Builds the canonical public URL for an entry slug (notes + isVariantFormOf). */
   entryUrl: (slug: string) => string;
@@ -138,6 +144,31 @@ export function splitAuthors(authors: string): ZenodoCreator[] {
   return (parts.length ? parts : [raw]).map((name) => ({ name }));
 }
 
+/**
+ * Split a per-entry editors credit ("A, B and C") into Zenodo `contributors`
+ * (type "Editor"). Mirrors the entry's own "How to cite" line. Drops a leading
+ * "edited by" and any "et al." token (Zenodo has no truncation syntax, so the
+ * NAMED editors are listed). Names stay in the source's "First Last" prose form
+ * without affiliations — matching how `authors` → `creators` are handled.
+ *
+ * ASSUMES the source uses "First Last" prose (as all current docs do): it splits
+ * on commas, so a "Last, First" form (e.g. "Kille, Kent J.") would over-split.
+ * The docx citation line is standardised as First-Last, so this holds.
+ */
+export function splitEditors(editors: string): ZenodoContributor[] {
+  const raw = (editors ?? "")
+    .replace(/^\s*edited by\s+/i, "")
+    .replace(/[,\s]+et\s*al\.?\s*$/i, "") // drop a trailing "et al."
+    .trim();
+  if (!raw) return [];
+  return raw
+    .split(/\s*,\s*|\s+and\s+|\s*&\s*/i)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .filter((s) => !/^et\s*al\.?$/i.test(s)) // and any standalone "et al." token
+    .map((name) => ({ name, type: "Editor" }));
+}
+
 export function buildMetadata(
   e: MetaEntry,
   cfg: MetadataConfig,
@@ -186,12 +217,19 @@ export function buildMetadata(
     .filter(Boolean)
     .join("\n\n");
 
+  // Editors mirror THIS entry's own "How to cite" line; fall back to the curated
+  // list only when an entry's docx carries no editors segment.
+  const perEntryEditors = splitEditors(e.editors);
+  const contributors = perEntryEditors.length
+    ? perEntryEditors
+    : (cfg.editors ?? []);
+
   const metadata: ZenodoMetadata = {
     upload_type: "publication",
     publication_type: cfg.publicationType ?? "section",
     title,
     creators: splitAuthors(e.authors),
-    contributors: cfg.editors?.length ? cfg.editors : undefined,
+    contributors: contributors.length ? contributors : undefined,
     description,
     publication_date,
     version: versionLabel(e.version) || undefined,
@@ -224,9 +262,10 @@ export function buildMetadata(
 
 /**
  * Idempotency key. Combines the content signature (from the endpoint) with the
- * metadata knobs that affect what we publish (license, publication_type), so a
- * content edit OR a license/type change triggers a new version, while cosmetic
- * site changes do not.
+ * metadata knobs that affect what we publish (license, publication_type, the
+ * rights note), so a content edit OR a license/type/rights change triggers a new
+ * version, while cosmetic site changes do not. `e.contentHash` already covers the
+ * per-entry `editors`, so an editors change re-versions through it.
  */
 export function computeStateHash(e: MetaEntry, cfg: MetadataConfig): string {
   return (
@@ -237,6 +276,11 @@ export function computeStateHash(e: MetaEntry, cfg: MetadataConfig): string {
           content: e.contentHash,
           license: cfg.license,
           publication_type: cfg.publicationType ?? "section",
+          // The rights/colophon note lands in `notes`. It has ONE source
+          // (src/content/globals/rights.md), so folding it in keeps the record
+          // in sync with the CMS — no drift. Applies to both envs: a rights edit
+          // is a metadata change, not a cosmetic one (unlike `render` below).
+          rights: cfg.rightsNote ?? "",
           // Only present for sandbox — a layout/template change re-versions the
           // demo deposits; absent for production (content-only permanence).
           ...(cfg.renderVersion ? { render: cfg.renderVersion } : {}),

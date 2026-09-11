@@ -7,14 +7,27 @@
 import Image from "@components/Image.astro";
 import { aliasSuffix } from "@utils/displayName";
 import { parseImageSource } from "@utils/imageSource";
-// The "How to cite" editors credit is site-wide (same on every entry) and
-// editable in the CMS under "Site text → How to cite (editors)". Falls back to
-// the default wording if the field is ever blank.
+// The "How to cite" editors credit now comes from each entry's OWN Word file
+// (its "How to cite" line, parsed in docxLoader → data.editors), so entries can
+// differ. `citation.editors` is the CMS-editable DEFAULT, used only when an
+// entry's docx lacks the segment; then a hardcoded default as a last resort.
 import { frontmatter as citation } from "@content/globals/citation.md";
-const editorsCredit =
-  // `||` (not `??`): also fall back when an editor clears the field to "".
-  citation.editors ||
-  "edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg";
+
+// Rights/colophon footnote — site-wide, CMS-editable (Site text → Rights notice).
+// Stored as markdown so the license link stays editable; rendered here. Falls
+// back to the default wording if blank. Keep in sync with RIGHTS_NOTE in
+// scripts/zenodo-mint.ts (the Zenodo record's `notes`).
+import { marked } from "marked";
+import { frontmatter as rights } from "@content/globals/rights.md";
+const DEFAULT_RIGHTS =
+  "Text © the author(s) and IO BIO, licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/). The portrait is excluded and remains under the rights of its credited source. We have tried to trace the rights holder to obtain permission for the use of the portrait, but contact us in case we have failed.";
+const rightsHtml = (
+  marked.parse((rights.notice || "").trim() || DEFAULT_RIGHTS) as string
+).replace(
+  // keep external links opening in a new tab (marked doesn't add target/rel)
+  /<a href="(https?:[^"]+)"/g,
+  '<a href="$1" target="_blank" rel="noopener noreferrer"',
+);
 
 interface Props {
   data: Record<string, any>;
@@ -38,11 +51,19 @@ const {
   imageSource,
   summary,
   authors,
+  editors,
   version,
   imageFn,
   life,
   introNotes,
 } = data;
+
+// Prefer the entry's own editors; else the CMS default; else a hardcoded default.
+const entryEditors = (editors || "").trim();
+const editorsCredit = entryEditors
+  ? `edited by ${entryEditors}`
+  : citation.editors ||
+    "edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg";
 
 if (!image) {
   throw new Error("Image was missing");
@@ -201,20 +222,10 @@ const source = parseImageSource(imageSource);
       )
     }
     {
-      /* Rights/colophon footnote — keep in sync with RIGHTS_NOTE in
-        scripts/zenodo-mint.ts. The license covers the entry TEXT; the embedded
-        portrait stays under its credited source (see the "Source:" credit). */
+      /* Rights/colophon footnote — CMS-editable (Site text → Rights notice),
+        rendered from markdown. Keep in sync with RIGHTS_NOTE in
+        scripts/zenodo-mint.ts (the Zenodo record's `notes`). */
     }
-    <p class="text-small opacity-70">
-      Text © the author(s) and IO BIO, licensed under{" "}
-      <a
-        class="underline"
-        href="https://creativecommons.org/licenses/by-nc-nd/4.0/"
-        target="_blank"
-        rel="noopener noreferrer">CC BY-NC-ND 4.0</a
-      >. The portrait is excluded and remains under the rights of its credited
-      source. We have tried to trace the rights holder to obtain permission for
-      the use of the portrait, but contact us in case we have failed.
-    </p>
+    <div class="text-small opacity-70" set:html={rightsHtml} />
   </section>
 </div>
