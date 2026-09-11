@@ -1056,6 +1056,6 @@
 input:focus,
 textarea:focus,
 select:focus {
-  outline: 1px solid white;
-  outline-offset: 1px;
+  outline: 2px solid white;
+  outline-offset: 0;
 }
