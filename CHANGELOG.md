@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/HamonUdvari/io-bio/compare/v1.16.0...v1.17.0) (2026-09-11)
+
+
+### Website Features
+
+* **bios:** per-entry editors from Word files + single-source rights note ([](https://github.com/HamonUdvari/io-bio/commit/33ce124132c4019f3a3bb7e5aff438f97cc926e6))
+
 # [1.16.0](https://github.com/HamonUdvari/io-bio/compare/v1.15.0...v1.16.0) (2026-09-11)
 
 
