@@ -11,8 +11,12 @@ import { parseImageSource } from "@utils/imageSource";
 interface Props {
   data: Record<string, any>;
   Content: any;
+  // Whether this render should be indexed by Pagefind. The on-site entry page
+  // leaves it true; the print route sets it false so the shared article markup
+  // isn't indexed twice (Pagefind indexes every page carrying data-pagefind-body).
+  pagefindBody?: boolean;
 }
-const { data, Content } = Astro.props;
+const { data, Content, pagefindBody = true } = Astro.props;
 
 const {
   image,
@@ -57,38 +61,41 @@ const zenodoCite = data.zenodoCite ?? null;
 const source = parseImageSource(imageSource);
 ---
 
-{/* Full-text search scope (Pagefind). `data-pagefind-body` marks the whole
+{
+  /* Full-text search scope (Pagefind). `data-pagefind-body` marks the whole
     entry as the indexable region — the site-wide rule then indexes ONLY pages
     that carry it, so nav/footer and the static pages stay out. `display:contents`
     makes this wrapper transparent to layout (it generates no box), so the entry
     sections render exactly as before. The How-to-cite/rights boilerplate and the
-    non-content chrome opt out individually via `data-pagefind-ignore` below. */}
-<div data-pagefind-body style="display: contents">
-  <section
-    class="bio-header"
-    >
-    <figure
-      class="figure"
-    >
+    non-content chrome opt out individually via `data-pagefind-ignore` below. */
+}
+<div
+  data-pagefind-body={pagefindBody ? "" : undefined}
+  style="display: contents"
+>
+  <section class="bio-header">
+    <figure class="figure">
       <picture>
         <Image class="w-full" imagePath={imageFn} alt={title} />
       </picture>
-      <figcaption
-        class="figure__credit"
-        data-pagefind-ignore
-      >
+      <figcaption class="figure__credit" data-pagefind-ignore>
         Source:{" "}
         {!source.href && imageSource}
-        {source.href && (
-          <>
-            {source.text && <>{source.text} </>}
-            <a
-              href={source.href}
-              class="source-link"
-              target="_blank"
-              rel="noopener noreferrer">{source.label}</a>
-          </>
-        )}
+        {
+          source.href && (
+            <>
+              {source.text && <>{source.text} </>}
+              <a
+                href={source.href}
+                class="source-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {source.label}
+              </a>
+            </>
+          )
+        }
       </figcaption>
     </figure>
     <div class="flex flex-col gap-y-2 leading-none">
@@ -186,9 +193,11 @@ const source = parseImageSource(imageSource);
         </p>
       )
     }
-    {/* Rights/colophon footnote — keep in sync with RIGHTS_NOTE in
+    {
+      /* Rights/colophon footnote — keep in sync with RIGHTS_NOTE in
         scripts/zenodo-mint.ts. The license covers the entry TEXT; the embedded
-        portrait stays under its credited source (see the "Source:" credit). */}
+        portrait stays under its credited source (see the "Source:" credit). */
+    }
     <p class="text-small opacity-70">
       Text © the author(s) and IO BIO, licensed under{" "}
       <a
@@ -197,8 +206,8 @@ const source = parseImageSource(imageSource);
         target="_blank"
         rel="noopener noreferrer">CC BY-NC-ND 4.0</a
       >. The portrait is excluded and remains under the rights of its credited
-      source. We have tried to trace the rights holder to obtain permission for the
-      use of the portrait, but contact us in case we have failed.
+      source. We have tried to trace the rights holder to obtain permission for
+      the use of the portrait, but contact us in case we have failed.
     </p>
   </section>
 </div>

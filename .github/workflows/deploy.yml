@@ -48,16 +48,12 @@ jobs:
           sudo apt-get install -y --no-install-recommends libreoffice-core libreoffice-draw
           soffice --version
 
-      - name: Build with Astro
+      # Builds the site AND the full-text search index in one step: the
+      # astro-pagefind integration hooks astro:build:done to index dist/ and
+      # write dist/pagefind/ (only pages carrying data-pagefind-body — i.e. the
+      # entries; the print route opts out). No separate Pagefind CLI step needed.
+      - name: Build with Astro (+ Pagefind index)
         run: pnpm run build
-
-      # Full-text search index. Pagefind reads the built entry HTML in dist/ and
-      # writes a static index + its default UI to dist/pagefind/ (loaded by the
-      # global search overlay). Scoped to entries/** so it indexes only the biographies —
-      # not the print/PDF-preview routes (which share the same article markup) or
-      # the static pages. Runs after the Astro build, before the Pages upload.
-      - name: Build Pagefind search index
-        run: pnpm exec pagefind --site dist --glob "entries/**/*.html"
 
       # Headless Chrome to render each entry's downloadable PDF (with the
       # per-page footer) straight into dist/entries/<slug>.pdf, so the on-site

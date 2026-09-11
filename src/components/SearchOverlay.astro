@@ -7,10 +7,11 @@
 // [data-search-trigger] button. Uses a native <dialog> (showModal) for free
 // top-layer stacking, ::backdrop, Esc-to-close and focus handling.
 //
-// The index + UI bundle (dist/pagefind/*) are produced AFTER `astro build` by
-// the Pagefind CLI (see `build:search` in package.json + the deploy.yml step),
-// so search is inert under `astro dev`. Test locally with:
-//     pnpm run build:search && pnpm run preview
+// The index + UI bundle (dist/pagefind/*) are produced by the astro-pagefind
+// integration (astro.config.mjs) on `astro build`, and that integration also
+// serves /pagefind/* from the last build during `astro dev` — so search works in
+// dev too, reflecting the most recent build. After adding/editing an entry, run
+// `pnpm build` once to refresh what dev search returns.
 //
 // Still a preview UI to react to — swapping this modal for a nav-embedded
 // dropdown later would touch only this file + the nav trigger.

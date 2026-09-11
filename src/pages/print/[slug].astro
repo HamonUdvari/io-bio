@@ -33,7 +33,11 @@ const title = `${lastName.toUpperCase()}, ${firstName}`;
     <title>{`Print · ${title}`}</title>
   </head>
   <body class="pagedjs-print-root">
-    <EntryArticle data={data} Content={Content} />
+    {
+      /* pagefindBody=false: this print route shares EntryArticle with the on-site
+        entry page, so opt out of Pagefind indexing to avoid duplicate results. */
+    }
+    <EntryArticle data={data} Content={Content} pagefindBody={false} />
 
     <script>
       import { Previewer } from "pagedjs";
@@ -67,7 +71,9 @@ const title = `${lastName.toUpperCase()}, ${firstName}`;
 
         // Marker the headless-Chrome renderer polls before Page.printToPDF.
         document.documentElement.dataset.pagedjsReady = "true";
-        document.documentElement.dataset.pagedjsPages = String(flow?.total ?? "");
+        document.documentElement.dataset.pagedjsPages = String(
+          flow?.total ?? "",
+        );
       }
       paginate();
 

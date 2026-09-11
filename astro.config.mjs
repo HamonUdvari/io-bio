@@ -22,6 +22,7 @@ import { remarkPrefixRawLinks } from "./src/remarkPlugins/remarkPrefixRawLinks";
 import { unified } from "@astrojs/markdown-remark";
 
 import mdx from "@astrojs/mdx";
+import pagefind from "astro-pagefind";
 
 import { devPdfRenderer } from "./scripts/dev-pdf-renderer.ts";
 
@@ -44,7 +45,8 @@ function fontDisplayBlock() {
     enforce: "post",
     // dev + most build cases: rewrite as each CSS module passes through.
     transform(code, id) {
-      if (!/\.css(\?|$)/.test(id) || !code.includes("font-display")) return null;
+      if (!/\.css(\?|$)/.test(id) || !code.includes("font-display"))
+        return null;
       const out = flip(code);
       return out === code ? null : { code: out, map: null };
     },
@@ -131,6 +133,11 @@ export default defineConfig({
     // Feed the same plugins to MDX explicitly (it can't read markdown.processor).
     mdx({ remarkPlugins, rehypePlugins }),
     devPdfRenderer(BASE),
+    // Full-text search: indexes dist/ on `astro build` (astro:build:done) and
+    // serves /pagefind/* from the last build during `astro dev` (so search works
+    // in dev too). Only pages carrying `data-pagefind-body` are indexed — the
+    // print route opts out (see EntryArticle `pagefindBody`), so no duplicates.
+    pagefind(),
   ],
   vite: {
     plugins: [tailwindcss(), fontDisplayBlock(), mediaRangeToLegacy()],
