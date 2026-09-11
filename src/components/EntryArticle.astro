@@ -7,6 +7,14 @@
 import Image from "@components/Image.astro";
 import { aliasSuffix } from "@utils/displayName";
 import { parseImageSource } from "@utils/imageSource";
+// The "How to cite" editors credit is site-wide (same on every entry) and
+// editable in the CMS under "Site text → How to cite (editors)". Falls back to
+// the default wording if the field is ever blank.
+import { frontmatter as citation } from "@content/globals/citation.md";
+const editorsCredit =
+  // `||` (not `??`): also fall back when an editor clears the field to "".
+  citation.editors ||
+  "edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg";
 
 interface Props {
   data: Record<string, any>;
@@ -185,8 +193,7 @@ const source = parseImageSource(imageSource);
             IO BIO, Biographical Dictionary of Secretaries-General of
             International Organizations
           </cite>
-          , edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg.{" "}
-          <a href={zenodoCite.url}>{zenodoCite.url}</a>
+          , {editorsCredit}. <a href={zenodoCite.url}>{zenodoCite.url}</a>
           {zenodoCite.sandbox && (
             <span class="text-small opacity-70"> (sandbox preview)</span>
           )}

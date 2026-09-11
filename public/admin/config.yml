@@ -58,6 +58,11 @@ collections:
         fields:
           - { label: Site title, name: title, widget: string }
           - { label: Search description, name: description, widget: text }
+      - name: citation
+        label: How to cite (editors)
+        file: src/content/globals/citation.md
+        fields:
+          - { label: Editors credit, name: editors, widget: string, hint: "Shown in every entry's 'How to cite', after the dictionary title (e.g. edited by Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg)" }
 
   # ---------- Pages (section block editor) ----------
   # Each page is a list of "section" blocks: add / reorder / delete blocks, each
