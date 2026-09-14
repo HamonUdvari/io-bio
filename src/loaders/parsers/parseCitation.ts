@@ -35,19 +35,11 @@ function extractAuthors(citationText: string): string {
 // entries keep the three-editor wording; newer ones may differ / use "et al.").
 const EDITED_BY_RE = /,\s*Edited by\s+(.+?)(?:,\s*www\.|,\s*Accessed\b|$)/i;
 
-// Known-editor OCR fixes. The source docs are scanned/retyped, so the one
-// recurring typo is the middle initial in "Jaci L. Eisenberg" — seen as
-// "Jaci Eisenberg", "Jaci L.Eisenberg", "Jaci . Eisenberg", "Jaci L.  Eisenberg".
-// Canonicalise just that name; every other name passes through untouched, so a
-// genuinely different future editor is never rewritten.
-const EDITOR_NAME_FIXES: Array<[RegExp, string]> = [
-  [/Jaci\s*(?:L\s*\.?|\.)?\s*Eisenberg/gi, "Jaci L. Eisenberg"],
-];
-
+// Pure extraction: the Word file is the source of truth for the editor names, so
+// we do NOT correct spellings here — only a generic whitespace tidy + a trailing
+// comma/space trim. Any wrong editor name is fixed in the source .docx, not here.
 function normalizeEditors(raw: string): string {
-  let s = raw.replace(/\s+/g, " ").trim().replace(/[,\s]+$/, "");
-  for (const [re, canon] of EDITOR_NAME_FIXES) s = s.replace(re, canon);
-  return s;
+  return raw.replace(/\s+/g, " ").trim().replace(/[,\s]+$/, "");
 }
 
 function extractEditors(citationText: string): string | null {

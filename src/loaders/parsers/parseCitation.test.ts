@@ -24,16 +24,18 @@ describe("parseCitation — editors", () => {
     expect(value.consumed).toContain(0);
   });
 
-  // The six scanned/retyped docs mangle only the "Jaci L. Eisenberg" initial.
-  it.each([
-    ["Jaci L. Eisenberg", "standard"],
-    ["Jaci L.  Eisenberg", "double space"],
-    ["Jaci L.Eisenberg", "no space"],
-    ["Jaci . Eisenberg", "period, no L"],
-    ["Jaci Eisenberg", "missing initial"],
-  ])("normalises the OCR variant %j (%s) → 'Jaci L. Eisenberg'", (variant) => {
+  // Pure extraction: names come through verbatim (the docx is the source of
+  // truth). Only generic whitespace is tidied — no name spellings are corrected.
+  it("extracts editor names verbatim, without correcting spellings", () => {
     const { value } = parseCitation([
-      cite(`Bob Reinalda, Kent J. Kille and ${variant}`),
+      cite("Bob Reinalda, Kent J. Kille and Jaci Eisenberg"),
+    ]);
+    expect(value.editors).toBe("Bob Reinalda, Kent J. Kille and Jaci Eisenberg");
+  });
+
+  it("collapses run-boundary double spaces only", () => {
+    const { value } = parseCitation([
+      cite("Bob Reinalda, Kent J. Kille and Jaci L.  Eisenberg"),
     ]);
     expect(value.editors).toBe(
       "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
