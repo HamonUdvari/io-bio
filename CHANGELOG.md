@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/HamonUdvari/io-bio/compare/v1.17.0...v1.17.1) (2026-09-14)
+
+
+### Bug Fixes
+
+* **bios:** extract editors verbatim from the Word file ([](https://github.com/HamonUdvari/io-bio/commit/ef20a541454f768b8268e7ea291a647cc137f04f))
+
 # [1.17.0](https://github.com/HamonUdvari/io-bio/compare/v1.16.0...v1.17.0) (2026-09-11)
 
 
