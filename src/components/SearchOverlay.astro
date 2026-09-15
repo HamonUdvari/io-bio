@@ -28,10 +28,6 @@
     >
       <span class="material-symbols-outlined" aria-hidden="true">close</span>
     </button>
-    {/* Quoted phrases match literally; surfaced so users get precise results. */}
-    <p class="search-overlay__hint">
-      Tip: put an exact phrase in <strong>"quotes"</strong> for precise results.
-    </p>
     <div id="search" class="search">
       <form class="search__form" role="search" onsubmit="return false">
         <span class="material-symbols-outlined search__icon" aria-hidden="true"
@@ -96,25 +92,20 @@
       .join("");
   }
 
-  // Parse a query into exact phrases ("...") + individual words (>= 2 chars).
-  // A stray/open quote is dropped (so mid-typing a phrase still matches). Longer
-  // terms first so a phrase wins over its component words when wrapping.
-  function parseTerms(q: string): string[] {
-    const phrases = [...q.matchAll(/"([^"]+)"/g)].map((m) => m[1].trim());
-    const rest = q.replace(/"[^"]*"/g, " ").replace(/"/g, " ");
-    const words = rest.split(/\s+/).filter((w) => w.length >= 2);
-    const seen = new Set<string>();
-    return [...phrases, ...words]
-      .map((t) => t.toLowerCase())
-      .filter((t) => t && !seen.has(t) && seen.add(t))
-      .sort((a, b) => b.length - a.length);
+  // Build a case/accent-insensitive regex SOURCE that matches the WHOLE query as
+  // one phrase — words in order, at a word boundary, with flexible whitespace.
+  // Empty when the query is blank. Any quotes the user types are ignored (search
+  // is always exact-phrase now, so quotes are redundant).
+  function phraseSource(q: string): string {
+    const words = q.replace(/"/g, " ").trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return "";
+    return "\\b" + words.map(termToRe).join("\\s+");
   }
 
-  // Wrap term occurrences in <mark> at a word boundary (so "for" doesn't
-  // highlight inside "California"), escaping everything else.
-  function highlight(text: string, terms: string[]): string {
-    if (!terms.length) return esc(text);
-    const re = new RegExp("\\b(" + terms.map(termToRe).join("|") + ")", "gi");
+  // Wrap the phrase match in <mark>, escaping everything else.
+  function highlight(text: string, source: string): string {
+    if (!source) return esc(text);
+    const re = new RegExp("(" + source + ")", "gi");
     let out = "";
     let last = 0;
     let m: RegExpExecArray | null;
@@ -135,55 +126,41 @@
     authors: string;
     roles: { title: string; organisation: string; abbreviation: string }[];
     body: string;
-    _text?: string; // lowercased combined text, for exact-phrase filtering
-    _fields?: [string, number][]; // [lowercased field text, weight] for ranking
+    _fields?: [string, number][]; // [folded field text, weight] for ranking
   };
 
-  // Precision matcher: every query word must match a field at a WORD BOUNDARY
-  // (prefix), so "ILO" hits "(ILO)" but not "pilot", and "underprivileged" hits
-  // only itself, not "under". Quoted phrases must appear literally. Returns a
-  // relevance score (sum of matched field weights) or null when it doesn't match.
-  function matchDoc(doc: Doc, phrases: string[], words: string[]): number | null {
-    let score = 0;
-    for (const w of words) {
-      const re = new RegExp("\\b" + escRe(w), "i");
-      let best = 0;
-      for (const [text, weight] of doc._fields || [])
-        if (re.test(text)) best = Math.max(best, weight);
-      if (best === 0) return null; // a query word matched nothing → drop
-      score += best;
-    }
-    for (const p of phrases) {
-      if (!(doc._text || "").includes(p)) return null;
-      score += 3;
-    }
-    return score;
+  // Exact-phrase matcher: the whole query must appear as a phrase (words in
+  // order, at a word boundary) in SOME field. Ranks by that field's weight; null
+  // when it appears in none. `matchRe` is folded, so matching is accent- and
+  // case-insensitive. No fuzzy fallback — an absent phrase returns 0 results.
+  function matchDoc(doc: Doc, matchRe: RegExp): number | null {
+    let best = 0;
+    for (const [text, weight] of doc._fields || [])
+      if (matchRe.test(text)) best = Math.max(best, weight);
+    return best > 0 ? best : null;
   }
 
-  // A short excerpt around the first matched term, with matches highlighted.
-  function excerpt(doc: Doc, terms: string[]): string {
+  // A short excerpt around the phrase match, highlighted.
+  function excerpt(doc: Doc, source: string): string {
     const text =
       doc.body && doc.body.trim()
         ? doc.body
         : `${doc.summary || ""} ${doc.life || ""}`.trim();
     if (!text) return "";
-    if (terms.length) {
-      // Accent-insensitive find of the first matched term (word boundary).
-      const re = new RegExp("\\b(" + terms.map(termToRe).join("|") + ")", "i");
-      const m = re.exec(text);
+    if (source) {
+      const m = new RegExp(source, "i").exec(text);
       if (m) {
-        const idx = m.index;
-        const start = Math.max(0, idx - 60);
-        const end = Math.min(text.length, idx + 140);
+        const start = Math.max(0, m.index - 60);
+        const end = Math.min(text.length, m.index + 140);
         const snip =
           (start > 0 ? "…" : "") +
           text.slice(start, end) +
           (end < text.length ? "…" : "");
-        return highlight(snip, terms);
+        return highlight(snip, source);
       }
     }
     const head = text.slice(0, 160) + (text.length > 160 ? "…" : "");
-    return highlight(head, terms);
+    return highlight(head, source);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -195,13 +172,14 @@
     // pagefind-highlight.js; the scroll-poll wrapper is kept from the old code.
     const hp = new URLSearchParams(location.search).get("highlight");
     if (hp) {
-      const terms = parseTerms(hp);
+      const source = phraseSource(hp);
       const scope =
         document.getElementById("entry-content") ||
         document.querySelector("main") ||
         document.body;
-      if (terms.length && scope) {
-        const re = new RegExp("\\b(" + terms.map(termToRe).join("|") + ")", "gi");
+      if (source && scope) {
+        const test = new RegExp(source, "i");
+        const re = new RegExp("(" + source + ")", "gi");
         const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT, {
           acceptNode(n) {
             const v = n.nodeValue;
@@ -210,7 +188,7 @@
             const tag = p.nodeName;
             if (tag === "SCRIPT" || tag === "STYLE" || tag === "MARK")
               return NodeFilter.FILTER_REJECT;
-            return terms.some((t) => v.toLowerCase().includes(t))
+            return test.test(v)
               ? NodeFilter.FILTER_ACCEPT
               : NodeFilter.FILTER_REJECT;
           },
@@ -287,7 +265,6 @@
             [d.authors, 1],
             [`${d.life} ${d.body}`, 1],
           ].map(([t, w]) => [fold(String(t || "").toLowerCase()), w as number]);
-          d._text = d._fields.map(([t]) => t).join(" ");
         }
         ready = true;
         render(input?.value ?? ""); // re-render once the index has loaded
@@ -300,39 +277,32 @@
 
     function render(q: string) {
       if (!list || !countEl) return;
-      const query = q.trim();
-      if (clearBtn) clearBtn.hidden = query === "";
+      if (clearBtn) clearBtn.hidden = q.trim() === "";
+      // The WHOLE query is one exact phrase (as if the user wrapped it in quotes).
+      // Quotes are stripped and whitespace collapsed.
+      const query = q.replace(/"/g, " ").replace(/\s+/g, " ").trim();
       if (!query) {
         list.innerHTML = "";
         countEl.textContent = "";
         return;
       }
-      const terms = parseTerms(query); // for <mark> highlighting (as typed)
-      // Folded phrases + words for matching. A stray/open quote is dropped so
-      // mid-typing a phrase (e.g. `"Bank for`) still returns results, and the
-      // matcher is precise: no fuzzy fallback → an absent term gives 0 results.
-      const phrases = [...query.matchAll(/"([^"]+)"/g)]
-        .map((m) => fold(m[1].trim().toLowerCase()))
-        .filter(Boolean);
-      const words = query
-        .replace(/"[^"]*"/g, " ")
-        .replace(/"/g, " ")
-        .split(/\s+/)
-        .map((w) => fold(w.toLowerCase()))
-        .filter((w) => w.length >= 2);
+      // Folded regex → accent- and case-insensitive matching; hlSource keeps
+      // accent-insensitive highlighting of the original (accented) text.
+      const matchRe = new RegExp(
+        "\\b" + fold(query.toLowerCase()).split(" ").map(escRe).join("\\s+"),
+        "i",
+      );
+      const hlSource = phraseSource(query);
 
-      let hits: Doc[] = [];
-      if (phrases.length || words.length) {
-        hits = docs
-          .map((d) => ({ d, s: matchDoc(d, phrases, words) }))
-          .filter((r) => r.s !== null)
-          .sort(
-            (a, b) =>
-              (b.s as number) - (a.s as number) ||
-              a.d.title.localeCompare(b.d.title),
-          )
-          .map((r) => r.d);
-      }
+      const hits = docs
+        .map((d) => ({ d, s: matchDoc(d, matchRe) }))
+        .filter((r) => r.s !== null)
+        .sort(
+          (a, b) =>
+            (b.s as number) - (a.s as number) ||
+            a.d.title.localeCompare(b.d.title),
+        )
+        .map((r) => r.d);
 
       countEl.textContent = `${hits.length} result${hits.length === 1 ? "" : "s"} for ${query}`;
       const hl = `?highlight=${encodeURIComponent(query)}`;
@@ -341,8 +311,8 @@
         .map(
           (d) => `
         <li class="search__result">
-          <a class="search__result-link" href="${BASE}entries/${d.slug}/${hl}">${highlight(d.title, terms)}</a>
-          <p class="search__excerpt">${excerpt(d, terms)}</p>
+          <a class="search__result-link" href="${BASE}entries/${d.slug}/${hl}">${highlight(d.title, hlSource)}</a>
+          <p class="search__excerpt">${excerpt(d, hlSource)}</p>
         </li>`,
         )
         .join("");
@@ -423,15 +393,6 @@
   .search-overlay__close {
     display: none;
   }
-  .search-overlay__hint {
-    margin: 0 0 0.75rem;
-    font-size: 0.8125rem;
-    line-height: 1.3;
-    color: var(--color-io-onprimary);
-    opacity: 0.6;
-    text-align: center;
-  }
-
   /* ---- Search input (matches the entries column-filter look) ------------- */
   /* `--si-lh` = the entries-filter line-height at the current breakpoint, so the
      box height mirrors `.entries__search` exactly: line-height + 2·--btn-py.
