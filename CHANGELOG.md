@@ -1,3 +1,16 @@
+# [1.19.0](https://github.com/HamonUdvari/io-bio/compare/v1.18.0...v1.19.0) (2026-09-15)
+
+
+### Bug Fixes
+
+* **search:** precise matching — drop fuzzy fallback, add accent-folding ([](https://github.com/HamonUdvari/io-bio/commit/7d26e941f21c524ce666a4dda16786d9a0ce13e9))
+
+
+### Website Features
+
+* **search:** replace Pagefind with a headless Fuse.js search (same overlay UI) ([](https://github.com/HamonUdvari/io-bio/commit/bc85e678afb99547fc793540024102585a5330f5))
+* **search:** treat the whole query as an exact phrase; remove the quotes hint ([](https://github.com/HamonUdvari/io-bio/commit/8041138e3765eea1b4994a1c1b4d52ddd84353b9))
+
 # [1.18.0](https://github.com/HamonUdvari/io-bio/compare/v1.17.1...v1.18.0) (2026-09-15)
 
 
