@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/HamonUdvari/io-bio/compare/v1.17.1...v1.18.0) (2026-09-15)
+
+
+### Website Features
+
+* **bios:** CMS-editable org acronym map + org/search refinements ([](https://github.com/HamonUdvari/io-bio/commit/fb040b0489fb6c9de639aa74e3baef563cc08cb2))
+
 ## [1.17.1](https://github.com/HamonUdvari/io-bio/compare/v1.17.0...v1.17.1) (2026-09-14)
 
 
