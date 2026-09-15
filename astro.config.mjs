@@ -22,7 +22,6 @@ import { remarkPrefixRawLinks } from "./src/remarkPlugins/remarkPrefixRawLinks";
 import { unified } from "@astrojs/markdown-remark";
 
 import mdx from "@astrojs/mdx";
-import pagefind from "astro-pagefind";
 
 import { devPdfRenderer } from "./scripts/dev-pdf-renderer.ts";
 
@@ -133,11 +132,9 @@ export default defineConfig({
     // Feed the same plugins to MDX explicitly (it can't read markdown.processor).
     mdx({ remarkPlugins, rehypePlugins }),
     devPdfRenderer(BASE),
-    // Full-text search: indexes dist/ on `astro build` (astro:build:done) and
-    // serves /pagefind/* from the last build during `astro dev` (so search works
-    // in dev too). Only pages carrying `data-pagefind-body` are indexed — the
-    // print route opts out (see EntryArticle `pagefindBody`), so no duplicates.
-    pagefind(),
+    // Full-text search is client-side Fuse.js over a static JSON index
+    // (src/pages/search-index.json.ts + src/components/SearchOverlay.astro) —
+    // no build integration needed.
   ],
   vite: {
     plugins: [tailwindcss(), fontDisplayBlock(), mediaRangeToLegacy()],

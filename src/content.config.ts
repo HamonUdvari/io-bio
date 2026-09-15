@@ -82,6 +82,8 @@ export const bioDataSchema = z.object({
   nationality: z.string().optional(),
   country: z.string().optional(),
   html: z.string().optional(),
+  // Cleaned biography prose (no citation/APL/intro) — feeds the search index.
+  body: z.string().optional(),
 });
 
 export type BioData = z.infer<typeof bioDataSchema>;

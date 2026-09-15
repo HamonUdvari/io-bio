@@ -1,25 +1,20 @@
 ---
-// PREVIEW — global full-text search overlay (Pagefind).
+// Global full-text search overlay — headless Fuse.js behind our own overlay UI.
 // ----------------------------------------------------------------------------
-// Single home for ALL Pagefind concerns: the overlay dialog, Pagefind's default
-// UI, the on-landing highlighter, and the red theming. Rendered once by
-// Layout.astro, so search works from every page — opened via the nav
-// [data-search-trigger] button. Uses a native <dialog> (showModal) for free
-// top-layer stacking, ::backdrop, Esc-to-close and focus handling.
+// Single home for ALL search concerns: the overlay dialog, the results render,
+// the on-landing highlighter, and the red theming. Rendered once by Layout.astro
+// so search works from every page — opened via the nav [data-search-trigger]
+// button. Uses a native <dialog> (showModal) for free top-layer stacking,
+// ::backdrop, Esc-to-close and focus handling.
 //
-// The index + UI bundle (dist/pagefind/*) are produced by the astro-pagefind
-// integration (astro.config.mjs) on `astro build`, and that integration also
-// serves /pagefind/* from the last build during `astro dev` — so search works in
-// dev too, reflecting the most recent build. After adding/editing an entry, run
-// `pnpm build` once to refresh what dev search returns.
-//
-// Still a preview UI to react to — swapping this modal for a nav-embedded
-// dropdown later would touch only this file + the nav trigger.
-const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+// The index is a static JSON asset produced at build by
+// src/pages/search-index.json.ts (prerendered → also served in `astro dev`, so
+// search works in dev without a full build). We fetch it lazily on first open,
+// run Fuse.js in the browser, and render results into #search with our own
+// markup. Precision: a quoted "phrase" is an exact/literal filter; unquoted terms
+// use Fuse's ranked matching (typo-tolerant for names). No stemming, no query
+// backtracking — full control, unlike Pagefind.
 ---
-
-{/* Pagefind's default-UI stylesheet, served from the built bundle. */}
-<link rel="stylesheet" href={`${BASE}pagefind/pagefind-ui.css`} />
 
 <dialog class="search-overlay" aria-label="Search the biographies">
   <div
@@ -33,215 +28,364 @@ const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     >
       <span class="material-symbols-outlined" aria-hidden="true">close</span>
     </button>
-    {/* Pagefind matches every word separately and stems them; wrapping an exact
-       phrase in quotes narrows to that phrase (e.g. "Bank for International
-       Settlements"). Surfaced here so users get precise multi-word results. */}
+    {/* Quoted phrases match literally; surfaced so users get precise results. */}
     <p class="search-overlay__hint">
       Tip: put an exact phrase in <strong>"quotes"</strong> for precise results.
     </p>
-    {/* Pagefind injects the search box + results inside this container. */}
-    <div id="search"></div>
+    <div id="search" class="search">
+      <form class="search__form" role="search" onsubmit="return false">
+        <span class="material-symbols-outlined search__icon" aria-hidden="true"
+          >search</span
+        >
+        <input
+          class="search__input"
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          placeholder="Search"
+          aria-label="Search the biographies"
+        />
+        <button
+          type="button"
+          class="search__clear"
+          data-search-clear
+          aria-label="Clear search"
+          hidden
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+      </form>
+      <p class="search__count" aria-live="polite"></p>
+      <ul class="search__results"></ul>
+    </div>
   </div>
 </dialog>
 
-{
-  /* Default-UI bundle (a classic script that sets window.PagefindUI). `is:inline`
-    so Astro leaves it untouched — generated post-build under `${BASE}pagefind/`. */
-}
-<script is:inline defer src={`${BASE}pagefind/pagefind-ui.js`}></script>
+<script>
+  import Fuse from "fuse.js";
 
-{
-  /* On-landing highlighter. pagefind-highlight.js is an ES MODULE and does NOT
-    auto-run, so import + instantiate it. Loaded only when arriving from a result
-    (the ?pagefind-highlight param is present), so other pages never fetch it.
-    The constructor reads the param, wraps matches in <mark class="pagefind-highlight">;
-    we then scroll the first match into view. */
-}
-<script type="module" is:inline define:vars={{ base: BASE }}>
-  if (location.search.indexOf("pagefind-highlight") !== -1) {
-    import(`${base}pagefind/pagefind-highlight.js`)
-      .then((m) => {
-        const PH = m.PagefindHighlight || window.PagefindHighlight;
-        if (!PH) return;
-        new PH();
-        // pagefind-highlight has no scroll option, so bring the first match into
-        // view ourselves. Wait for window `load` first: the large portrait loads
-        // late and would otherwise shift the target out from under the scroll.
-        // mark.js wraps asynchronously, so poll briefly for the first highlight.
+  // Base path (e.g. "/io-bio/") — one source of truth for the index fetch + URLs.
+  const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+
+  const MAP: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+  };
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => MAP[c]);
+  const escRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  // Parse a query into exact phrases ("...") + individual words (>= 2 chars).
+  // Longer terms first so a phrase wins over its component words when wrapping.
+  function parseTerms(q: string): string[] {
+    const phrases = [...q.matchAll(/"([^"]+)"/g)].map((m) => m[1].trim());
+    const rest = q.replace(/"[^"]*"/g, " ");
+    const words = rest.split(/\s+/).filter((w) => w.length >= 2);
+    const seen = new Set<string>();
+    return [...phrases, ...words]
+      .map((t) => t.toLowerCase())
+      .filter((t) => t && !seen.has(t) && seen.add(t))
+      .sort((a, b) => b.length - a.length);
+  }
+
+  // Wrap term occurrences in <mark>, escaping everything else.
+  function highlight(text: string, terms: string[]): string {
+    if (!terms.length) return esc(text);
+    const re = new RegExp("(" + terms.map(escRe).join("|") + ")", "gi");
+    let out = "";
+    let last = 0;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(text))) {
+      out += esc(text.slice(last, m.index)) + "<mark>" + esc(m[0]) + "</mark>";
+      last = m.index + m[0].length;
+      if (m.index === re.lastIndex) re.lastIndex++;
+    }
+    return out + esc(text.slice(last));
+  }
+
+  type Doc = {
+    slug: string;
+    title: string;
+    summary: string;
+    life: string;
+    nationality: string;
+    authors: string;
+    roles: { title: string; organisation: string; abbreviation: string }[];
+    body: string;
+    _text?: string; // lowercased combined text, for exact-phrase filtering
+    _fields?: [string, number][]; // [lowercased field text, weight] for ranking
+  };
+
+  // Precision matcher: every query word must match a field at a WORD BOUNDARY
+  // (prefix), so "ILO" hits "(ILO)" but not "pilot", and "underprivileged" hits
+  // only itself, not "under". Quoted phrases must appear literally. Returns a
+  // relevance score (sum of matched field weights) or null when it doesn't match.
+  function matchDoc(doc: Doc, phrases: string[], words: string[]): number | null {
+    let score = 0;
+    for (const w of words) {
+      const re = new RegExp("\\b" + escRe(w), "i");
+      let best = 0;
+      for (const [text, weight] of doc._fields || [])
+        if (re.test(text)) best = Math.max(best, weight);
+      if (best === 0) return null; // a query word matched nothing → drop
+      score += best;
+    }
+    for (const p of phrases) {
+      if (!(doc._text || "").includes(p)) return null;
+      score += 3;
+    }
+    return score;
+  }
+
+  // A short excerpt around the first matched term, with matches highlighted.
+  function excerpt(doc: Doc, terms: string[]): string {
+    const text =
+      doc.body && doc.body.trim()
+        ? doc.body
+        : `${doc.summary || ""} ${doc.life || ""}`.trim();
+    if (!text) return "";
+    if (terms.length) {
+      const lower = text.toLowerCase();
+      let idx = -1;
+      for (const t of terms) {
+        const i = lower.indexOf(t);
+        if (i >= 0 && (idx < 0 || i < idx)) idx = i;
+      }
+      if (idx >= 0) {
+        const start = Math.max(0, idx - 60);
+        const end = Math.min(text.length, idx + 140);
+        const snip =
+          (start > 0 ? "…" : "") +
+          text.slice(start, end) +
+          (end < text.length ? "…" : "");
+        return highlight(snip, terms);
+      }
+    }
+    const head = text.slice(0, 160) + (text.length > 160 ? "…" : "");
+    return highlight(head, terms);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const dlg = document.querySelector<HTMLDialogElement>(".search-overlay");
+
+    // --- On-landing highlighter (runs on every page) -----------------------
+    // A result links to `entries/<slug>/?highlight=<query>`; wrap matches in the
+    // page's main content and scroll the first into view. Replaces Pagefind's
+    // pagefind-highlight.js; the scroll-poll wrapper is kept from the old code.
+    const hp = new URLSearchParams(location.search).get("highlight");
+    if (hp) {
+      const terms = parseTerms(hp);
+      const scope = document.querySelector("main") || document.body;
+      if (terms.length && scope) {
+        const re = new RegExp("(" + terms.map(escRe).join("|") + ")", "gi");
+        const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT, {
+          acceptNode(n) {
+            const v = n.nodeValue;
+            const p = n.parentNode as HTMLElement | null;
+            if (!v || !v.trim() || !p) return NodeFilter.FILTER_REJECT;
+            const tag = p.nodeName;
+            if (tag === "SCRIPT" || tag === "STYLE" || tag === "MARK")
+              return NodeFilter.FILTER_REJECT;
+            return terms.some((t) => v.toLowerCase().includes(t))
+              ? NodeFilter.FILTER_ACCEPT
+              : NodeFilter.FILTER_REJECT;
+          },
+        });
+        const nodes: Text[] = [];
+        let tn: Node | null;
+        while ((tn = walker.nextNode())) nodes.push(tn as Text);
+        for (const node of nodes) {
+          const text = node.nodeValue as string;
+          const frag = document.createDocumentFragment();
+          let last = 0;
+          let m: RegExpExecArray | null;
+          re.lastIndex = 0;
+          while ((m = re.exec(text))) {
+            if (m.index > last)
+              frag.appendChild(
+                document.createTextNode(text.slice(last, m.index)),
+              );
+            const mark = document.createElement("mark");
+            mark.className = "search-highlight";
+            mark.textContent = m[0];
+            frag.appendChild(mark);
+            last = m.index + m[0].length;
+            if (m.index === re.lastIndex) re.lastIndex++;
+          }
+          if (last < text.length)
+            frag.appendChild(document.createTextNode(text.slice(last)));
+          node.parentNode?.replaceChild(frag, node);
+        }
+        // Bring the first match into view; wait for `load` (late portrait shifts
+        // layout) and poll briefly. `behavior:instant` beats the global smooth.
         const run = () => {
-          let tries = 0;
-          const poll = () => {
-            const el = document.querySelector(".pagefind-highlight");
-            // `behavior: instant` overrides the site's global
-            // `scroll-behavior: smooth`, whose animated scroll gets interrupted
-            // by late layout shifts and never lands on the match.
-            if (el) el.scrollIntoView({ block: "center", behavior: "instant" });
-            else if (tries++ < 40) setTimeout(poll, 50);
-          };
-          poll();
+          const el = document.querySelector(".search-highlight");
+          if (el)
+            (el as HTMLElement).scrollIntoView({
+              block: "center",
+              behavior: "instant" as ScrollBehavior,
+            });
         };
         if (document.readyState === "complete") run();
         else window.addEventListener("load", run, { once: true });
-      })
-      .catch(() => {});
-  }
-</script>
-
-<script is:inline define:vars={{ base: BASE }}>
-  (function () {
-    function ready(fn) {
-      if (document.readyState !== "loading") fn();
-      else document.addEventListener("DOMContentLoaded", fn);
+      }
     }
-    ready(function () {
-      var dlg = document.querySelector(".search-overlay");
-      if (!dlg) return;
-      var pfui = null;
 
-      // Pagefind records URLs relative to the indexed dist/ root
-      // (e.g. "/entries/<slug>/"); the site is served under `base`, so prefix.
-      function prefixBase(u) {
-        if (!u) return u;
-        if (base === "/" || u.indexOf(base) === 0) return u;
-        return base.replace(/\/$/, "") + u;
-      }
-      function currentQuery() {
-        var i = dlg.querySelector(".pagefind-ui__search-input");
-        return i && i.value ? i.value.trim() : "";
-      }
-      // Append ?pagefind-highlight=<query> so the landing page highlights the
-      // matched word (manual stand-in — the default UI has no highlightParam).
-      // Inserted before any #anchor so sub-result fragments still work.
-      function withHighlight(u) {
-        u = prefixBase(u);
-        var q = currentQuery();
-        if (!u || !q) return u;
-        var param = "pagefind-highlight=" + encodeURIComponent(q);
-        var h = u.indexOf("#");
-        var hash = h >= 0 ? u.slice(h) : "";
-        var pq = h >= 0 ? u.slice(0, h) : u;
-        pq += (pq.indexOf("?") >= 0 ? "&" : "?") + param;
-        return pq + hash;
-      }
+    if (!dlg) return;
 
-      function focusInput() {
-        var i = dlg.querySelector(".pagefind-ui__search-input");
-        if (i) i.focus();
-      }
-      function init() {
-        if (pfui) return;
-        // The default-UI bundle loads deferred — if a very fast click beats it,
-        // retry until it's ready rather than mounting nothing.
-        if (typeof PagefindUI === "undefined") {
-          setTimeout(init, 60);
-          return;
+    // --- Overlay open/close ------------------------------------------------
+    const input = dlg.querySelector<HTMLInputElement>(".search__input");
+    const clearBtn = dlg.querySelector<HTMLButtonElement>("[data-search-clear]");
+    const countEl = dlg.querySelector<HTMLParagraphElement>(".search__count");
+    const list = dlg.querySelector<HTMLUListElement>(".search__results");
+
+    let fuse: Fuse<Doc> | null = null;
+    let docs: Doc[] = [];
+    let loading = false;
+
+    async function ensureIndex() {
+      if (fuse || loading) return;
+      loading = true;
+      try {
+        const res = await fetch(`${BASE}search-index.json`);
+        docs = (await res.json()) as Doc[];
+        for (const d of docs) {
+          const roles = d.roles || [];
+          // Weighted fields for ranking + word-boundary matching (lowercased).
+          d._fields = [
+            [d.title, 3],
+            [roles.map((r) => r.abbreviation).join(" "), 3],
+            [roles.map((r) => r.organisation).join(" "), 2],
+            [roles.map((r) => r.title).join(" "), 1.5],
+            [d.summary, 2],
+            [d.nationality, 1],
+            [d.authors, 1],
+            [`${d.life} ${d.body}`, 1],
+          ].map(([t, w]) => [String(t || "").toLowerCase(), w as number]);
+          d._text = d._fields.map(([t]) => t).join(" ");
         }
-        pfui = new PagefindUI({
-          element: "#search",
-          bundlePath: base + "pagefind/",
-          showSubResults: true,
-          showImages: false,
-          processResult: function (r) {
-            if (r.url) r.url = withHighlight(r.url);
-            if (Array.isArray(r.sub_results)) {
-              r.sub_results.forEach(function (s) {
-                if (s.url) s.url = withHighlight(s.url);
-              });
-            }
-            return r;
-          },
+        fuse = new Fuse(docs, {
+          includeScore: true,
+          ignoreLocation: true, // match anywhere in the long body
+          threshold: 0.3, // fairly strict — cuts fuzzy noise, keeps name typos
+          minMatchCharLength: 2,
+          keys: [
+            { name: "title", weight: 3 },
+            { name: "roles.abbreviation", weight: 3 },
+            { name: "roles.organisation", weight: 2 },
+            { name: "roles.title", weight: 1.5 },
+            { name: "summary", weight: 2 },
+            { name: "nationality", weight: 1 },
+            { name: "authors", weight: 1 },
+            { name: "life", weight: 1 },
+            { name: "body", weight: 1 },
+          ],
         });
-        requestAnimationFrame(focusInput);
+      } catch {
+        /* leave fuse null — render() shows an empty state */
+      } finally {
+        loading = false;
+      }
+    }
+
+    function render(q: string) {
+      if (!list || !countEl) return;
+      const query = q.trim();
+      if (clearBtn) clearBtn.hidden = query === "";
+      if (!query) {
+        list.innerHTML = "";
+        countEl.textContent = "";
+        return;
+      }
+      const terms = parseTerms(query);
+      const phrases = [...query.matchAll(/"([^"]+)"/g)]
+        .map((m) => m[1].trim().toLowerCase())
+        .filter(Boolean);
+      const words = query
+        .replace(/"[^"]*"/g, " ")
+        .split(/\s+/)
+        .map((w) => w.toLowerCase())
+        .filter((w) => w.length >= 2);
+
+      let hits: Doc[] = [];
+      if (phrases.length || words.length) {
+        hits = docs
+          .map((d) => ({ d, s: matchDoc(d, phrases, words) }))
+          .filter((r) => r.s !== null)
+          .sort(
+            (a, b) =>
+              (b.s as number) - (a.s as number) ||
+              a.d.title.localeCompare(b.d.title),
+          )
+          .map((r) => r.d);
+        // Typo fallback: a single-word query with no precise hit (likely a
+        // misspelled name) → Fuse fuzzy over the index.
+        if (!hits.length && fuse && words.length === 1 && !phrases.length) {
+          hits = fuse.search(words[0]).slice(0, 20).map((r) => r.item);
+        }
       }
 
-      function open() {
-        init(); // lazy — index chunks stay unloaded until the first search
-        if (!dlg.open) dlg.showModal();
-        requestAnimationFrame(focusInput);
-      }
-      function close() {
-        if (dlg.open) dlg.close();
-      }
+      countEl.textContent = `${hits.length} result${hits.length === 1 ? "" : "s"} for ${query}`;
+      const hl = `?highlight=${encodeURIComponent(query)}`;
+      list.innerHTML = hits
+        .map(
+          (d) => `
+        <li class="search__result">
+          <a class="search__result-link" href="${BASE}entries/${d.slug}/${hl}">${highlight(d.title, terms)}</a>
+          <p class="search__excerpt">${excerpt(d, terms)}</p>
+        </li>`,
+        )
+        .join("");
+    }
 
-      document.querySelectorAll("[data-search-trigger]").forEach(function (t) {
-        t.addEventListener("click", function (e) {
-          e.preventDefault();
-          open();
-        });
-      });
-      // Backdrop dismiss: close only when BOTH pointerdown and click land on the
-      // dialog itself (outside the panel). Requiring pointerdown-on-backdrop
-      // avoids the classic race where the same gesture that opens the modal
-      // closes it as the modal appears mid-click. Esc is native to <dialog>.
-      var downOnBackdrop = false;
-      dlg.addEventListener("pointerdown", function (e) {
-        downOnBackdrop = e.target === dlg;
-      });
-      dlg.addEventListener("click", function (e) {
-        if (e.target === dlg && downOnBackdrop) close();
-        downOnBackdrop = false;
-      });
-      var c = dlg.querySelector("[data-search-close]");
-      if (c) c.addEventListener("click", close);
+    let t = 0;
+    function onInput() {
+      window.clearTimeout(t);
+      t = window.setTimeout(() => render(input?.value ?? ""), 140);
+    }
+    input?.addEventListener("input", onInput);
+    clearBtn?.addEventListener("click", () => {
+      if (input) input.value = "";
+      render("");
+      input?.focus();
     });
-  })();
+
+    function focusInput() {
+      requestAnimationFrame(() => input?.focus());
+    }
+    function open() {
+      ensureIndex(); // lazy — the index only loads on the first open
+      if (!dlg!.open) dlg!.showModal();
+      focusInput();
+    }
+    function close() {
+      if (dlg!.open) dlg!.close();
+    }
+
+    document.querySelectorAll("[data-search-trigger]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        open();
+      });
+    });
+    // Backdrop dismiss: close only when BOTH pointerdown and click land on the
+    // dialog itself (outside the panel) — avoids the open-gesture closing it.
+    let downOnBackdrop = false;
+    dlg.addEventListener("pointerdown", (e) => {
+      downOnBackdrop = e.target === dlg;
+    });
+    dlg.addEventListener("click", (e) => {
+      if (e.target === dlg && downOnBackdrop) close();
+      downOnBackdrop = false;
+    });
+    dlg.querySelector("[data-search-close]")?.addEventListener("click", close);
+  });
 </script>
 
 <style is:global>
-  /* Theme Pagefind's injected UI to the dark site — custom properties inherit
-     into the runtime-injected DOM, so a plain #search selector is enough. */
-  #search {
-    --pagefind-ui-scale: 1;
-    --pagefind-ui-primary: var(--color-io-brand);
-    --pagefind-ui-text: var(--color-io-onprimary);
-    --pagefind-ui-background: var(--color-io-primary);
-    --pagefind-ui-border: var(--color-io-gray-600);
-    --pagefind-ui-tag: var(--color-io-secondary);
-    --pagefind-ui-border-width: 1px;
-    --pagefind-ui-border-radius: 0; /* sharp corners, like the entries filter */
-    --pagefind-ui-font: var(--font-sans), system-ui, sans-serif;
-  }
-
-  /* Match the entries column-filter input (.entries__search): same 20px / weight
-     400 text, 56px box height, sharp corners. The default UI otherwise renders
-     larger, bold text (21px / 700) in a taller (64px) box — that's the "fatter"
-     look. The magnifier icon and clear button are absolutely positioned for the
-     original 64px height, so re-centre / resize them for the reduced box. */
-  /* `--si-lh` = the entries-filter line-height at the current breakpoint
-     (leading × body font). The box height then mirrors `.entries__search`
-     exactly: line-height + 2·--btn-py, with --btn-py the same responsive token
-     the filter uses (12/14/16px mobile/tablet/desktop). So the search box is the
-     SAME height as the filter at every breakpoint — not a fixed 64px (which read
-     taller than the filter, especially on mobile). Font is 16px until desktop
-     (20px), matching --text-body. */
-  #search .pagefind-ui__form {
-    --si-lh: calc(var(--leading-body-base) * var(--text-body-base));
-  }
-  #search .pagefind-ui__search-input {
-    height: calc(var(--si-lh) + 2 * var(--btn-py));
-    font-size: var(--text-body-base);
-    line-height: var(--si-lh);
-    font-weight: 400;
-  }
-  /* Re-centre the absolutely-placed magnifier + resize the clear button to fit. */
-  #search .pagefind-ui__form::before {
-    top: calc((var(--si-lh) + 2 * var(--btn-py) - 18px) / 2);
-  }
-  #search .pagefind-ui__search-clear {
-    top: 3px;
-    height: calc(var(--si-lh) + 2 * var(--btn-py) - 6px);
-  }
-  @media (min-width: 80rem) {
-    #search .pagefind-ui__form {
-      --si-lh: calc(var(--leading-body-desktop) * var(--text-body-desktop));
-    }
-    #search .pagefind-ui__search-input {
-      font-size: var(--text-body-desktop);
-    }
-  }
-
-  /* Overlay: a native <dialog> filling the viewport so backdrop clicks close it;
-     the inner panel holds the search UI near the top. */
+  /* ---- Overlay shell (unchanged from the Pagefind version) --------------- */
   .search-overlay {
     width: 100vw;
     max-width: 100vw;
@@ -267,14 +411,10 @@ const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     border: 1px solid var(--color-io-gray-600);
     border-radius: 6px;
   }
-  /* Close affordance hidden for now (per client). Esc and backdrop click still
-     dismiss the overlay; the button stays in the DOM so restoring it is a
-     one-line revert (delete this rule). */
+  /* Close affordance hidden for now (per client). Esc + backdrop still dismiss. */
   .search-overlay__close {
     display: none;
   }
-
-  /* Small muted tip above the search box (quoted-phrase syntax). */
   .search-overlay__hint {
     margin: 0 0 0.75rem;
     font-size: 0.8125rem;
@@ -284,38 +424,121 @@ const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     text-align: center;
   }
 
-  /* Make the WHOLE result clickable, not just the title: stretch the single
-     title link across the result card. Stays a real anchor, so keyboard focus
-     and cmd/middle-click "open in new tab" keep working. (Each result has one
-     link; if sub-results are ever enabled, raise them above this overlay.)
-     `#search` (id) is required: Pagefind's own CSS loads after this hoisted
-     style, so a bare `.pagefind-ui__result` position would lose and every link's
-     ::after would stretch to the panel instead of its own card. */
-  #search .pagefind-ui__result {
+  /* ---- Search input (matches the entries column-filter look) ------------- */
+  /* `--si-lh` = the entries-filter line-height at the current breakpoint, so the
+     box height mirrors `.entries__search` exactly: line-height + 2·--btn-py.
+     Font is 16px until desktop (20px), matching --text-body. */
+  .search__form {
+    --si-lh: calc(var(--leading-body-base) * var(--text-body-base));
     position: relative;
+    display: flex;
+    align-items: center;
   }
-  #search .pagefind-ui__result-link::after {
+  .search__icon {
+    position: absolute;
+    left: 0.75rem;
+    font-size: 20px;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  .search__input {
+    width: 100%;
+    height: calc(var(--si-lh) + 2 * var(--btn-py));
+    padding: 0 2.5rem;
+    font-size: var(--text-body-base);
+    line-height: var(--si-lh);
+    font-weight: 400;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    color: var(--color-io-onprimary);
+    background: transparent;
+    border: 1px solid var(--color-io-gray-600);
+    border-radius: 0; /* sharp corners, like the entries filter */
+    outline-offset: -2px;
+  }
+  .search__input::placeholder {
+    color: var(--color-io-onprimary);
+    opacity: 0.5;
+  }
+  .search__clear {
+    position: absolute;
+    right: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    color: var(--color-io-onprimary);
+    opacity: 0.7;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+  .search__clear[hidden] {
+    display: none;
+  }
+  .search__clear .material-symbols-outlined {
+    font-size: 18px;
+  }
+  @media (min-width: 80rem) {
+    .search__form {
+      --si-lh: calc(var(--leading-body-desktop) * var(--text-body-desktop));
+    }
+    .search__input {
+      font-size: var(--text-body-desktop);
+    }
+  }
+
+  /* ---- Results ---------------------------------------------------------- */
+  .search__count {
+    margin: 1rem 0 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-io-onprimary);
+  }
+  .search__count:empty {
+    display: none;
+  }
+  .search__results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  /* Whole card clickable via the title link's stretched ::after. Stays a real
+     anchor, so keyboard focus + cmd/middle-click "open in new tab" keep working. */
+  .search__result {
+    position: relative;
+    padding: 0.85rem 0;
+    border-top: 1px solid var(--color-io-gray-600);
+  }
+  .search__result:first-child {
+    border-top: 0;
+  }
+  .search__result-link {
+    color: var(--color-io-onprimary);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .search__result-link::after {
     content: "";
     position: absolute;
     inset: 0;
   }
+  .search__excerpt {
+    margin: 0.35rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--color-io-onprimary);
+    opacity: 0.75;
+  }
 
-  /* Point 3 — recolor the matched-term highlight to the site red.
-     The default UI resets <mark> via `.pagefind-ui--reset mark { all: revert }`
-     (browser-default yellow). The Pagefind <link> loads AFTER this hoisted style,
-     so match on equal specificity would lose — `#search` (id) outranks it
-     regardless of source order. */
-  #search mark {
+  /* Matched-term highlight → site red (results + on-landing). */
+  .search mark,
+  .search-highlight {
     background-color: var(--color-io-red);
     color: var(--color-io-onbrand);
     padding: 0 0.1em;
     border-radius: 2px;
   }
-  /* On-landing highlight: pagefind-highlight.js injects a zero-specificity
-     `:where(.pagefind-highlight)` yellow default — easily overridden here. */
-  .pagefind-highlight {
-    background-color: var(--color-io-red);
-    color: var(--color-io-onbrand);
+  .search-highlight {
     scroll-margin-top: 2rem;
   }
 </style>

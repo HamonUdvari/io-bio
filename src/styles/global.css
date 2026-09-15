@@ -1046,13 +1046,9 @@
   }
 }
 
-/* TODO(search): interim focus ring — replace Chrome's default blue focus outline
-   on text fields with a thin white one. Kept UNLAYERED on purpose: Pagefind's own
-   reset (.pagefind-ui--reset :where(...)) is unlayered, and unlayered rules beat
-   any @layer regardless of specificity — so this must be unlayered too (then its
-   (0,1,1) specificity outranks the reset's (0,1,0)). One shared rule for every
-   field: the search-overlay input, the entries filter, and any future input.
-   Revisit the exact colour/thickness when the search UI is finalised. */
+/* Focus ring — replace Chrome's default blue outline on text fields with a thin
+   white one. One shared rule for every field: the search-overlay input, the
+   entries filter, and any future input. Kept unlayered so it reliably wins. */
 input:focus,
 textarea:focus,
 select:focus {

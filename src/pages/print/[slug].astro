@@ -33,11 +33,7 @@ const title = `${lastName.toUpperCase()}, ${firstName}`;
     <title>{`Print · ${title}`}</title>
   </head>
   <body class="pagedjs-print-root">
-    {
-      /* pagefindBody=false: this print route shares EntryArticle with the on-site
-        entry page, so opt out of Pagefind indexing to avoid duplicate results. */
-    }
-    <EntryArticle data={data} Content={Content} pagefindBody={false} />
+    <EntryArticle data={data} Content={Content} />
 
     <script>
       import { Previewer } from "pagedjs";

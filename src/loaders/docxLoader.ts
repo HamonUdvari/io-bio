@@ -465,6 +465,9 @@ const docxEntryType: ContentEntryType = {
       nationality: extracted?.nationality ?? undefined,
       country: extracted?.country ?? "",
       html: extracted?.html ?? "",
+      // Cleaned biography prose (citation/APL/intro already removed) — used by
+      // the full-text search index endpoint (src/pages/search-index.json.ts).
+      body: extracted?.body ?? "",
     };
 
     // Inject the per-entry Zenodo DOIs (if minted), keyed by the canonical route

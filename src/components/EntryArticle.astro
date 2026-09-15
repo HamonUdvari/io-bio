@@ -32,12 +32,8 @@ const rightsHtml = (
 interface Props {
   data: Record<string, any>;
   Content: any;
-  // Whether this render should be indexed by Pagefind. The on-site entry page
-  // leaves it true; the print route sets it false so the shared article markup
-  // isn't indexed twice (Pagefind indexes every page carrying data-pagefind-body).
-  pagefindBody?: boolean;
 }
-const { data, Content, pagefindBody = true } = Astro.props;
+const { data, Content } = Astro.props;
 
 const {
   image,
@@ -91,23 +87,17 @@ const source = parseImageSource(imageSource);
 ---
 
 {
-  /* Full-text search scope (Pagefind). `data-pagefind-body` marks the whole
-    entry as the indexable region — the site-wide rule then indexes ONLY pages
-    that carry it, so nav/footer and the static pages stay out. `display:contents`
-    makes this wrapper transparent to layout (it generates no box), so the entry
-    sections render exactly as before. The How-to-cite/rights boilerplate and the
-    non-content chrome opt out individually via `data-pagefind-ignore` below. */
+  /* Transparent wrapper (`display:contents` generates no box, so the entry
+    sections lay out exactly as before). Search indexing is handled separately by
+    the build-time endpoint (src/pages/search-index.json.ts), not the DOM. */
 }
-<div
-  data-pagefind-body={pagefindBody ? "" : undefined}
-  style="display: contents"
->
+<div style="display: contents">
   <section class="bio-header">
     <figure class="figure">
       <picture>
         <Image class="w-full" imagePath={imageFn} alt={title} />
       </picture>
-      <figcaption class="figure__credit" data-pagefind-ignore>
+      <figcaption class="figure__credit">
         Source:{" "}
         {!source.href && imageSource}
         {
@@ -203,7 +193,7 @@ const source = parseImageSource(imageSource);
       </section>
     )
   }
-  <section id="cite" data-pagefind-ignore>
+  <section id="cite">
     <h2 class="section__title">How to cite</h2>
 
     {
