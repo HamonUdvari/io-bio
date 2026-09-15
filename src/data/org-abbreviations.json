@@ -1,0 +1,17 @@
+{
+  "_comment": "Canonical organization full-name -> acronym. Editable in the CMS (Settings -> Organization acronyms). Used to FILL a role's acronym when the Word file named the organization but not its (ACRONYM). An acronym already written in the Word file always wins. Matching is on the full organization name, ignoring case and extra spaces.",
+  "United Nations": "UN",
+  "World Health Organization": "WHO",
+  "European Commission of the Danube": "ECD",
+  "International Labour Organization": "ILO",
+  "Food and Agriculture Organization": "FAO",
+  "United Nations Educational, Scientific and Cultural Organization": "UNESCO",
+  "International Atomic Energy Agency": "IAEA",
+  "International Monetary Fund": "IMF",
+  "World Meteorological Organization": "WMO",
+  "World Intellectual Property Organization": "WIPO",
+  "International Telecommunication Union": "ITU",
+  "International Civil Aviation Organization": "ICAO",
+  "United Nations Children's Fund": "UNICEF",
+  "World Food Programme": "WFP"
+}

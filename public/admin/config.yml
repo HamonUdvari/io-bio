@@ -162,3 +162,18 @@ collections:
             required: false
             key_label: Entry slug (e.g. annan-ka-2019)
             value_label: Face position from the left (1 = leftmost)
+      # Organization acronyms: fills the "(ACRONYM)" in the entries "Organization"
+      # column when a Word file named the organization but not its acronym. An
+      # acronym already written in the Word file always wins. Match is on the full
+      # organization name (case + spacing ignored).
+      - name: org-acronyms
+        label: Organization acronyms
+        file: src/data/org-abbreviations.json
+        fields:
+          - label: Acronyms
+            name: overrides
+            widget: keyvalue
+            root: true
+            required: false
+            key_label: Organization full name (e.g. World Health Organization)
+            value_label: Acronym (e.g. WHO)

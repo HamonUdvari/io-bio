@@ -89,6 +89,42 @@ function loadPortraitSubjectMap(): Record<string, number> {
 }
 const PORTRAIT_SUBJECT_MAP = loadPortraitSubjectMap();
 
+// --- Organisation acronym map (src/data/org-abbreviations.json) --------------
+// Canonical organisation full-name → acronym, editable in the CMS (Settings →
+// Organization acronyms). FILLS a role's abbreviation when the docx named the
+// organisation but not its "(ACRONYM)". Fill-only: an abbreviation already parsed
+// from the docx always wins. Matching ignores case + extra spaces. Keys starting
+// with "_" (e.g. "_comment") are never org names, so they're skipped.
+function normalizeOrgKey(s: string): string {
+  return s.toLowerCase().replace(/\s+/g, " ").trim();
+}
+function loadOrgAbbrMap(): Record<string, string> {
+  const p = path.resolve("./src/data", "org-abbreviations.json");
+  if (!existsSync(p)) return {};
+  try {
+    const raw = JSON.parse(readFileSync(p, "utf8")) as Record<string, unknown>;
+    const map: Record<string, string> = {};
+    for (const [name, value] of Object.entries(raw ?? {})) {
+      if (name.startsWith("_")) continue;
+      const abbr = String(value ?? "").trim();
+      if (abbr) map[normalizeOrgKey(name)] = abbr;
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+const ORG_ABBR_MAP = loadOrgAbbrMap();
+
+/** Fill a role's missing abbreviation from the canonical org→acronym map. */
+function fillRoleAbbr<T extends { organisation?: string; abbreviation?: string }>(
+  role: T,
+): T {
+  if (role.abbreviation || !role.organisation) return role;
+  const abbr = ORG_ABBR_MAP[normalizeOrgKey(role.organisation)];
+  return abbr ? { ...role, abbreviation: abbr } : role;
+}
+
 /**
  * Write a docx image attachment to `outputDir` as `<stem>.<ext>`.
  *
@@ -416,7 +452,10 @@ const docxEntryType: ContentEntryType = {
       imageSource: extracted?.imageSource ?? "",
       life: extracted?.life ?? "",
       introNotes: extracted?.introNotes ?? [],
-      roles: extracted?.roles ?? [],
+      // Fill any missing "(ACRONYM)" from the CMS-editable org→acronym map
+      // (docx-parsed abbreviations always win — see fillRoleAbbr).
+      roles: (extracted?.roles ?? []).map(fillRoleAbbr),
+
       archives: extracted?.archives ?? { items: [] },
       publications: extracted?.publications ?? { items: [] },
       literature: extracted?.literature ?? { items: [] },

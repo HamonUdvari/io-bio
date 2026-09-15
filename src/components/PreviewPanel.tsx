@@ -228,6 +228,9 @@ function ResultPanel({
         </Field>
         <Field label="Version">{bio.version}</Field>
         <Field label="Author(s)">{bio.authors}</Field>
+        {/* Per-entry editors from the "How to cite" line. "—" means the docx had
+            no "Edited by …", so the site falls back to the default credit. */}
+        <Field label="Editors">{bio.editors || "—"}</Field>
 
         {/* Biography prose. Render bio.body — the nodes left AFTER the intro,
             version, citation and APL parsers claim theirs — NOT bio.html (the

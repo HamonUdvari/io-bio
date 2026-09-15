@@ -87,8 +87,7 @@ describe("parseRoles", () => {
     expect(value[0]).toMatchObject({
       ordinalText: "seventh",
       title: "United Nations High Commissioner for Refugees",
-      organisation:
-        "Office of the United Nations High Commissioner for Refugees",
+      organisation: "United Nations High Commissioner for Refugees",
       abbreviation: "UNHCR",
     });
   });
@@ -100,8 +99,7 @@ describe("parseRoles", () => {
     expect(value).toHaveLength(1);
     expect(value[0]).toMatchObject({
       title: "United Nations High Commissioner for Human Rights",
-      organisation:
-        "Office of the United Nations High Commissioner for Human Rights",
+      organisation: "United Nations High Commissioner for Human Rights",
       abbreviation: "OHCHR",
     });
   });

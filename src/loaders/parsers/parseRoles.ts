@@ -38,14 +38,14 @@ const ROLE_TITLE_ALIASES: Array<{
 }> = [
   {
     pattern: /\bHigh\s+Commissioner\s+for\s+Refugees\b/i,
-    organisation:
-      "Office of the United Nations High Commissioner for Refugees",
+    // Editors' preferred display drops the "Office of the" prefix (Bob, Sept 2026).
+    organisation: "United Nations High Commissioner for Refugees",
     abbreviation: "UNHCR",
   },
   {
     pattern: /\bHigh\s+Commissioner\s+for\s+Human\s+Rights\b/i,
-    organisation:
-      "Office of the United Nations High Commissioner for Human Rights",
+    // Editors' preferred display drops the "Office of the" prefix (Bob, Sept 2026).
+    organisation: "United Nations High Commissioner for Human Rights",
     abbreviation: "OHCHR",
   },
 ];
