@@ -659,6 +659,17 @@
     "mintedAt": "2026-09-15T16:57:40.998Z",
     "env": "sandbox"
   },
+  "maheu-rge-2012-1": {
+    "recordId": 604374,
+    "conceptRecId": 604373,
+    "conceptDoi": "10.5072/zenodo.604373",
+    "versionDoi": "10.5072/zenodo.604374",
+    "contentHash": "sha256:c5e36a43ca73f10d6e663b1201b120af8da6ed75ac45f9e88b079b06e10ed832",
+    "status": "published",
+    "version": "14 March 2012",
+    "mintedAt": "2026-09-16T07:33:09.604Z",
+    "env": "sandbox"
+  },
   "mahler-h-2013": {
     "recordId": 603532,
     "conceptRecId": 506529,
