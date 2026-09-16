@@ -890,6 +890,17 @@
     "mintedAt": "2026-09-15T16:59:11.825Z",
     "env": "sandbox"
   },
+  "pelt-a-2026": {
+    "recordId": 604357,
+    "conceptRecId": 604356,
+    "conceptDoi": "10.5072/zenodo.604356",
+    "versionDoi": "10.5072/zenodo.604357",
+    "contentHash": "sha256:0f38c8ea763b9ea2f65f2ac32edda56028f2c34bd6621cd7f098145796824390",
+    "status": "published",
+    "version": "25 June 2026",
+    "mintedAt": "2026-09-16T06:40:04.046Z",
+    "env": "sandbox"
+  },
   "pelt-a-25june2026": {
     "recordId": 604353,
     "conceptRecId": 604352,
