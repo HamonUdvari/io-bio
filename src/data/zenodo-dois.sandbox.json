@@ -1121,6 +1121,17 @@
     "mintedAt": "2026-09-15T17:00:31.272Z",
     "env": "sandbox"
   },
+  "sweetser-a-2026": {
+    "recordId": 604359,
+    "conceptRecId": 604358,
+    "conceptDoi": "10.5072/zenodo.604358",
+    "versionDoi": "10.5072/zenodo.604359",
+    "contentHash": "sha256:3ab07d8551ba7be1f8e62382d5c4e2d991b4995e6fea1385590490f625f81621",
+    "status": "published",
+    "version": "13 July 2026",
+    "mintedAt": "2026-09-16T06:48:01.592Z",
+    "env": "sandbox"
+  },
   "thant-u-2019": {
     "recordId": 603587,
     "conceptRecId": 506603,
