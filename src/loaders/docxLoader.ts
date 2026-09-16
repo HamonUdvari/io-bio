@@ -17,6 +17,7 @@ import { execSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { slug as githubSlug } from "github-slugger";
 import { extractAll } from "./parsers/extractAll";
+import type { Role } from "./parsers/types";
 
 const WEB_IMAGE_EXTS = new Set(["png", "jpg", "jpeg", "gif", "svg"]);
 
@@ -124,6 +125,49 @@ function fillRoleAbbr<T extends { organisation?: string; abbreviation?: string }
   const abbr = ORG_ABBR_MAP[normalizeOrgKey(role.organisation)];
   return abbr ? { ...role, abbreviation: abbr } : role;
 }
+
+// --- Per-entry ROLES override (src/data/roles-override.json) ------------------
+// One CMS-editable file shaped { overrides: [ { slug, roles[] } ] }. A NON-EMPTY
+// roles array REPLACES that entry's auto-parsed roles; an empty/absent one keeps
+// the Word-file roles (see the apply site in getEntryInfo). Keyed by
+// githubSlug(basename) — the same key as the store id / DOI key — so a lookup
+// matches every consumer. Only non-empty overrides become map keys, so empty
+// rows naturally fall through to the auto behaviour. Keys starting with "_" and
+// rows without a title are skipped; years are coerced to numbers.
+function loadRolesOverrideMap(): Record<string, Role[]> {
+  const p = path.resolve("./src/data", "roles-override.json");
+  if (!existsSync(p)) return {};
+  try {
+    const raw = JSON.parse(readFileSync(p, "utf8")) as {
+      overrides?: Array<{ slug?: string; roles?: unknown[] }>;
+    };
+    const map: Record<string, Role[]> = {};
+    for (const item of raw?.overrides ?? []) {
+      const slug = String(item?.slug ?? "").trim();
+      if (!slug || slug.startsWith("_")) continue;
+      const rows = Array.isArray(item?.roles) ? item.roles : [];
+      const cleaned: Role[] = [];
+      for (const r of rows as Array<Record<string, unknown>>) {
+        const title = String(r?.title ?? "").trim();
+        if (!title) continue; // title is required — skip empty rows
+        const role: Role = { title };
+        if (r.ordinalText) role.ordinalText = String(r.ordinalText).trim();
+        if (r.organisation) role.organisation = String(r.organisation).trim();
+        if (r.abbreviation) role.abbreviation = String(r.abbreviation).trim();
+        const sy = Number(r.startYear);
+        if (Number.isFinite(sy) && sy) role.startYear = sy;
+        const ey = Number(r.endYear);
+        if (Number.isFinite(ey) && ey) role.endYear = ey;
+        cleaned.push(role);
+      }
+      if (cleaned.length) map[slug] = cleaned; // only non-empty overrides count
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+const ROLES_OVERRIDE_MAP = loadRolesOverrideMap();
 
 // Authors naturally spell an organisation out on first mention — "Secretary of
 // the European Commission of the Danube (ECD)" — then use only the acronym after
@@ -488,11 +532,15 @@ const docxEntryType: ContentEntryType = {
       imageSource: extracted?.imageSource ?? "",
       life: extracted?.life ?? "",
       introNotes: extracted?.introNotes ?? [],
-      // First expand any "acronym-only" later role from an earlier role in the
-      // same entry (expandAcronymOrgs), then fill any still-missing "(ACRONYM)"
-      // from the CMS-editable org→acronym map (docx-parsed abbreviations always
-      // win — see fillRoleAbbr).
-      roles: expandAcronymOrgs(extracted?.roles ?? []).map(fillRoleAbbr),
+      // Per-entry roles override (src/data/roles-override.json): a non-empty
+      // override REPLACES the auto-parsed roles; empty/absent falls back to the
+      // docx roles (expandAcronymOrgs backfills acronym-only orgs). Either way we
+      // run fillRoleAbbr so a missing "(ACRONYM)" is filled from the org map.
+      roles: (
+        ROLES_OVERRIDE_MAP[
+          githubSlug(basename(filePath, path.extname(filePath)))
+        ] ?? expandAcronymOrgs(extracted?.roles ?? [])
+      ).map(fillRoleAbbr),
 
       archives: extracted?.archives ?? { items: [] },
       publications: extracted?.publications ?? { items: [] },
@@ -640,7 +688,14 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
         }
         // Read as buffer for digest, but officeparser uses path
         const fileBuffer = await fs.readFile(filePath);
-        const digest = generateDigest(fileBuffer);
+        // Fold this entry's roles-override into the digest so a CMS override edit
+        // (which never touches the .docx) still invalidates the incremental cache
+        // and re-processes the entry. Same github-slug key as the store id.
+        const overrideKey = githubSlug(basename(filePath, path.extname(filePath)));
+        const overrideJson = JSON.stringify(ROLES_OVERRIDE_MAP[overrideKey] ?? null);
+        const digest = generateDigest(
+          Buffer.concat([fileBuffer, Buffer.from(" " + overrideJson, "utf8")]),
+        );
 
         const { body, data } = await entryType.getEntryInfo({
           contents: "", // Dummy string as officeparser uses path

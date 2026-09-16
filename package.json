@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "images:sources": "node scripts/export-image-sources.ts",
+    "overrides:roles": "node scripts/seed-roles-override.ts",
     "zenodo:dry-run": "node --env-file-if-exists=.env scripts/zenodo-mint.ts --dry-run",
     "zenodo:render": "node --env-file-if-exists=.env scripts/zenodo-render-pdfs.ts",
     "zenodo:mint:sandbox": "node --env-file-if-exists=.env scripts/zenodo-mint.ts --env sandbox",

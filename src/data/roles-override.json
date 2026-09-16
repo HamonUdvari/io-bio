@@ -1,0 +1,472 @@
+{
+  "_comment": "Per-entry ROLES override. Empty roles => the roles are auto-read from the Word file. Fill roles to REPLACE the whole roles table for that entry. 'title' is required per row; organisation/abbreviation/startYear/endYear are optional. Edit in the CMS under Settings -> Roles override. Re-seed with: node scripts/seed-roles-override.ts",
+  "overrides": [
+    {
+      "slug": "adatci-m-2021",
+      "roles": []
+    },
+    {
+      "slug": "amano-y-2020",
+      "roles": []
+    },
+    {
+      "slug": "annan-ka-2019",
+      "roles": []
+    },
+    {
+      "slug": "avenol-j-2015",
+      "roles": []
+    },
+    {
+      "slug": "baenasoares-j-2015",
+      "roles": []
+    },
+    {
+      "slug": "bertini-ca-2018",
+      "roles": []
+    },
+    {
+      "slug": "beyen-jw-2018",
+      "roles": []
+    },
+    {
+      "slug": "black-er-2014",
+      "roles": []
+    },
+    {
+      "slug": "bodenhausen-ghc-2023",
+      "roles": []
+    },
+    {
+      "slug": "boerma-ah-2020",
+      "roles": []
+    },
+    {
+      "slug": "bokova-ig-2025",
+      "roles": []
+    },
+    {
+      "slug": "bonnet-h-2024",
+      "roles": []
+    },
+    {
+      "slug": "boutros-ghali-2019",
+      "roles": []
+    },
+    {
+      "slug": "brundtland-gh-2014",
+      "roles": []
+    },
+    {
+      "slug": "bustani-jm-2015",
+      "roles": []
+    },
+    {
+      "slug": "butler-hb-2012",
+      "roles": []
+    },
+    {
+      "slug": "candau-mg-2015",
+      "roles": []
+    },
+    {
+      "slug": "carrington-par-2016",
+      "roles": []
+    },
+    {
+      "slug": "cavalcanti-ge-2015",
+      "roles": []
+    },
+    {
+      "slug": "chan-m-2021",
+      "roles": []
+    },
+    {
+      "slug": "chisholm-b-2014",
+      "roles": []
+    },
+    {
+      "slug": "clausen-aw-2015",
+      "roles": []
+    },
+    {
+      "slug": "cole-ws-2014",
+      "roles": []
+    },
+    {
+      "slug": "crowdy-re-2014",
+      "roles": []
+    },
+    {
+      "slug": "curchod-cl-2017",
+      "roles": []
+    },
+    {
+      "slug": "davies-da-2016",
+      "roles": []
+    },
+    {
+      "slug": "de-boer-y-2016",
+      "roles": []
+    },
+    {
+      "slug": "de-larosière-jmhm-2016",
+      "roles": []
+    },
+    {
+      "slug": "diallo-bt-2022",
+      "roles": []
+    },
+    {
+      "slug": "drummond-je-2017",
+      "roles": []
+    },
+    {
+      "slug": "eichhoff-jj-2024",
+      "roles": []
+    },
+    {
+      "slug": "evans-l-2013",
+      "roles": []
+    },
+    {
+      "slug": "gardiner-r-2014",
+      "roles": []
+    },
+    {
+      "slug": "gaviria-ca-2015",
+      "roles": []
+    },
+    {
+      "slug": "goad-ecv-2015",
+      "roles": []
+    },
+    {
+      "slug": "grant-jp-2016",
+      "roles": []
+    },
+    {
+      "slug": "gutt-c-2025",
+      "roles": []
+    },
+    {
+      "slug": "hammarskjöld-d-2025",
+      "roles": []
+    },
+    {
+      "slug": "hansenne-m-2016",
+      "roles": []
+    },
+    {
+      "slug": "haveman-bw-2017",
+      "roles": []
+    },
+    {
+      "slug": "hoffman-pg-2015",
+      "roles": []
+    },
+    {
+      "slug": "holtrop-mw-2021",
+      "roles": [
+        {
+          "title": "President and Chairman of the Board of Directors",
+          "organisation": "Bank for International Settlements",
+          "abbreviation": "BIS",
+          "startYear": 1958,
+          "endYear": 1967
+        }
+      ]
+    },
+    {
+      "slug": "huxley-js-2012",
+      "roles": []
+    },
+    {
+      "slug": "idris-ke-2016",
+      "roles": []
+    },
+    {
+      "slug": "ingram-j-2014",
+      "roles": []
+    },
+    {
+      "slug": "ismay-hl-2012",
+      "roles": []
+    },
+    {
+      "slug": "jebb-g-2024",
+      "roles": []
+    },
+    {
+      "slug": "jenkins-r-2024",
+      "roles": []
+    },
+    {
+      "slug": "jenks-cw-2016",
+      "roles": []
+    },
+    {
+      "slug": "johnston-dj-2013",
+      "roles": []
+    },
+    {
+      "slug": "keenleyside-hl-2016",
+      "roles": []
+    },
+    {
+      "slug": "kirchner-n-2012",
+      "roles": []
+    },
+    {
+      "slug": "kotaite-aa-2025",
+      "roles": []
+    },
+    {
+      "slug": "kristensen-t-2013",
+      "roles": []
+    },
+    {
+      "slug": "lester-je-2015",
+      "roles": []
+    },
+    {
+      "slug": "lie-th-2017",
+      "roles": []
+    },
+    {
+      "slug": "lubbers-r-2026",
+      "roles": []
+    },
+    {
+      "slug": "luns-jamh-2015",
+      "roles": []
+    },
+    {
+      "slug": "maheu-rge-2012",
+      "roles": []
+    },
+    {
+      "slug": "mahler-h-2013",
+      "roles": []
+    },
+    {
+      "slug": "mansholt-sl-2013",
+      "roles": []
+    },
+    {
+      "slug": "marjolin-re-2014",
+      "roles": []
+    },
+    {
+      "slug": "matsuura-28june20261",
+      "roles": []
+    },
+    {
+      "slug": "mayor-f-2019",
+      "roles": []
+    },
+    {
+      "slug": "mbow-am-2018",
+      "roles": []
+    },
+    {
+      "slug": "mcdonald-jg-2016",
+      "roles": []
+    },
+    {
+      "slug": "mcnamara-rs-2013",
+      "roles": []
+    },
+    {
+      "slug": "meyer-ei-2015",
+      "roles": []
+    },
+    {
+      "slug": "michelmore-lv-2015",
+      "roles": []
+    },
+    {
+      "slug": "michiels-van-verduynen-lpmh-2019",
+      "roles": []
+    },
+    {
+      "slug": "morse-da-2013",
+      "roles": []
+    },
+    {
+      "slug": "myrdal-g-2014",
+      "roles": []
+    },
+    {
+      "slug": "nakajima-h-2019",
+      "roles": []
+    },
+    {
+      "slug": "nansen-f-2014",
+      "roles": []
+    },
+    {
+      "slug": "ogata-s-2014",
+      "roles": []
+    },
+    {
+      "slug": "oreja-m-2017",
+      "roles": []
+    },
+    {
+      "slug": "orfila-wajl-2017",
+      "roles": []
+    },
+    {
+      "slug": "orr-jb-2021",
+      "roles": []
+    },
+    {
+      "slug": "pastizzi-d-2024",
+      "roles": []
+    },
+    {
+      "slug": "pate-m-2016",
+      "roles": []
+    },
+    {
+      "slug": "pelt-a-2026",
+      "roles": []
+    },
+    {
+      "slug": "phelan-ej-2016",
+      "roles": []
+    },
+    {
+      "slug": "piot-pk-2021",
+      "roles": []
+    },
+    {
+      "slug": "prebisch-rf-2014",
+      "roles": []
+    },
+    {
+      "slug": "rajchman-lw-2014",
+      "roles": []
+    },
+    {
+      "slug": "rey-f-2025",
+      "roles": []
+    },
+    {
+      "slug": "ricupero-r-2013",
+      "roles": []
+    },
+    {
+      "slug": "robertson-gim-2018",
+      "roles": []
+    },
+    {
+      "slug": "robinson-mtw-2014",
+      "roles": []
+    },
+    {
+      "slug": "rooth-i-2025",
+      "roles": []
+    },
+    {
+      "slug": "salim-sa-2016",
+      "roles": []
+    },
+    {
+      "slug": "salter-ja-2022",
+      "roles": []
+    },
+    {
+      "slug": "saouma-e-2013",
+      "roles": []
+    },
+    {
+      "slug": "spaak-p-h-2015",
+      "roles": []
+    },
+    {
+      "slug": "stikker-du-2014",
+      "roles": []
+    },
+    {
+      "slug": "stokes-j-2018",
+      "roles": []
+    },
+    {
+      "slug": "stoltenberg-th-2014",
+      "roles": []
+    },
+    {
+      "slug": "stoppani-p-2025",
+      "roles": []
+    },
+    {
+      "slug": "sweetser-a-2026",
+      "roles": []
+    },
+    {
+      "slug": "thant-u-2019",
+      "roles": []
+    },
+    {
+      "slug": "thomas-aa-2020",
+      "roles": []
+    },
+    {
+      "slug": "tolba-mkmk-2025",
+      "roles": []
+    },
+    {
+      "slug": "unckel-p-2012",
+      "roles": []
+    },
+    {
+      "slug": "van-der-stoel-m-2024",
+      "roles": [
+        {
+          "title": "High Commissioner on National Minorities",
+          "organisation": "Conference on Security and Cooperation in Europe",
+          "abbreviation": "CSCE",
+          "startYear": 1993,
+          "endYear": 1994
+        },
+        {
+          "title": "High Commissioner on National Minorities",
+          "organisation": "Organization for Security and Cooperation in Europe",
+          "abbreviation": "OSCE",
+          "startYear": 1995,
+          "endYear": 2001
+        }
+      ]
+    },
+    {
+      "slug": "van-heuven-goedhart-gj-2012",
+      "roles": []
+    },
+    {
+      "slug": "van-lennep-e-2017",
+      "roles": []
+    },
+    {
+      "slug": "vieira-de-mello-s-2017",
+      "roles": []
+    },
+    {
+      "slug": "winant-jg-2016",
+      "roles": []
+    },
+    {
+      "slug": "witteveen-hj-2016",
+      "roles": []
+    },
+    {
+      "slug": "woods-gd-2012",
+      "roles": []
+    },
+    {
+      "slug": "wyndham-white-e-2012",
+      "roles": []
+    }
+  ]
+}

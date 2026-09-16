@@ -177,3 +177,34 @@ collections:
             required: false
             key_label: Organization full name (e.g. World Health Organization)
             value_label: Acronym (e.g. WHO)
+      # Roles override: REPLACE an entry's auto-read roles (the Title /
+      # Organization / Years columns) for the few tricky cases the Word file
+      # can't express cleanly. Find the entry by its slug, open it, and add rows.
+      # LEAVE an entry's Roles list EMPTY to keep the roles auto-read from the
+      # Word file. Only "Title" is required per row; leave Abbreviation blank to
+      # auto-fill it from the Organization acronyms table above.
+      - name: roles-override
+        label: Roles override
+        file: src/data/roles-override.json
+        fields:
+          - label: Overrides
+            name: overrides
+            widget: list
+            required: false
+            collapsed: true
+            summary: "{{fields.slug}}"
+            fields:
+              - { label: Entry slug, name: slug, widget: string, hint: "e.g. holtrop-mw-2021 — do not change" }
+              - label: Roles (leave empty to auto-read from the Word file)
+                name: roles
+                widget: list
+                required: false
+                collapsed: true
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: Title, name: title, widget: string, hint: "Required, e.g. Secretary-General" }
+                  - { label: Organisation, name: organisation, widget: string, required: false }
+                  - { label: Abbreviation, name: abbreviation, widget: string, required: false, hint: "leave blank to auto-fill from the acronym table" }
+                  - { label: Start year, name: startYear, widget: number, required: false, value_type: int, min: 1000, max: 2100 }
+                  - { label: End year, name: endYear, widget: number, required: false, value_type: int, min: 1000, max: 2100 }
+                  - { label: Ordinal text (optional), name: ordinalText, widget: string, required: false }
