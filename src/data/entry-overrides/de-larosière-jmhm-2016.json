@@ -1,0 +1,25 @@
+{
+  "slug": "de-larosière-jmhm-2016",
+  "name": "DE LAROSIÈRE, Jacques Martin Henri Marie",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Managing Director",
+      "organisation": "International Monetary Fund",
+      "abbreviation": "IMF",
+      "startYear": 1978,
+      "endYear": 1987,
+      "ordinalText": "sixth"
+    },
+    {
+      "title": "President",
+      "organisation": "European Bank for Reconstruction and Development",
+      "abbreviation": "EBRD",
+      "startYear": 1993,
+      "endYear": 1998,
+      "ordinalText": "second"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

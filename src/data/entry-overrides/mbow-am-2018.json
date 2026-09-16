@@ -1,0 +1,17 @@
+{
+  "slug": "mbow-am-2018",
+  "name": "M’BOW, Amadou Mahtar",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "United Nations Educational, Scientific and Cultural Organization",
+      "abbreviation": "UNESCO",
+      "startYear": 1974,
+      "endYear": 1987,
+      "ordinalText": "seventh"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

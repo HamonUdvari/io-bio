@@ -1,0 +1,17 @@
+{
+  "slug": "robertson-gim-2018",
+  "name": "ROBERTSON, George Islay McNeill",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary General",
+      "organisation": "North Atlantic Treaty Organization",
+      "abbreviation": "NATO",
+      "startYear": 1999,
+      "endYear": 2003,
+      "ordinalText": "tenth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

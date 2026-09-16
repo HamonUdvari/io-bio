@@ -1,0 +1,17 @@
+{
+  "slug": "saouma-e-2013",
+  "name": "SAOUMA, Edouard Victor",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "Food and Agriculture Organization of the United Nations",
+      "abbreviation": "FAO",
+      "startYear": 1976,
+      "endYear": 1993,
+      "ordinalText": "sixth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

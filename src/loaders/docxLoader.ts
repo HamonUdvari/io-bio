@@ -1,4 +1,4 @@
-import { existsSync, promises as fs, readFileSync } from "node:fs";
+import { existsSync, promises as fs, readdirSync, readFileSync } from "node:fs";
 import { relative, basename } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import pLimit from "p-limit";
@@ -18,6 +18,7 @@ import { createHash } from "node:crypto";
 import { slug as githubSlug } from "github-slugger";
 import { extractAll } from "./parsers/extractAll";
 import type { Role } from "./parsers/types";
+import { expandAcronymOrgs, fillRoleAbbr } from "./roleTransforms";
 
 const WEB_IMAGE_EXTS = new Set(["png", "jpg", "jpeg", "gif", "svg"]);
 
@@ -66,88 +67,42 @@ function loadSandboxMap(): Record<string, SandboxEntry> {
 }
 const SANDBOX_MAP = loadSandboxMap();
 
-// --- Per-entry portrait face override (src/data/portrait-subjects.json) ------
-// Maps an entry slug to the subject's 1-based position (faces counted
-// left-to-right) so the portrait cropper picks the right person in multi-person
-// photos where the largest detected face isn't the subject. Absent slugs use
-// the default "largest face" pick. Keys starting with "_" (e.g. "_comment")
-// are never slugs, so they're ignored by lookup.
-function loadPortraitSubjectMap(): Record<string, number> {
-  const p = path.resolve("./src/data", "portrait-subjects.json");
-  if (!existsSync(p)) return {};
-  try {
-    const raw = JSON.parse(readFileSync(p, "utf8")) as Record<string, unknown>;
-    const map: Record<string, number> = {};
-    for (const [slug, value] of Object.entries(raw ?? {})) {
-      if (slug.startsWith("_")) continue; // skip _comment / non-slug keys
-      const n = Number(value); // the CMS keyvalue widget stores values as strings
-      if (Number.isFinite(n) && n >= 1) map[slug] = n;
-    }
-    return map;
-  } catch {
-    return {};
-  }
+// --- Per-entry override (src/data/entry-overrides/<slug>.json) ----------------
+// One CMS-editable JSON file per entry (a folder collection), reconciled 1:1
+// with the .docx in src/content/bios by scripts/sync-entry-overrides.ts. Shape:
+//   { slug, name, rolesOverride, roles[], portraitImage, facePosition }
+//   - rolesOverride:true  -> `roles` REPLACES the Word-parsed roles.
+//   - rolesOverride:false -> roles are read live from the Word file (`roles` is
+//     only the CMS's WYSIWYG mirror; the build ignores it).
+//   - portraitImage       -> override portrait path (empty = docx-embedded).
+//   - facePosition        -> 1-based face index for the crop (empty = largest).
+// Keyed by githubSlug(basename) — the store id — so lookups match every consumer.
+interface EntryOverride {
+  rolesOverride: boolean;
+  roles: Role[];
+  portraitImage: string;
+  facePosition?: number;
 }
-const PORTRAIT_SUBJECT_MAP = loadPortraitSubjectMap();
-
-// --- Organisation acronym map (src/data/org-abbreviations.json) --------------
-// Canonical organisation full-name → acronym, editable in the CMS (Settings →
-// Organization acronyms). FILLS a role's abbreviation when the docx named the
-// organisation but not its "(ACRONYM)". Fill-only: an abbreviation already parsed
-// from the docx always wins. Matching ignores case + extra spaces. Keys starting
-// with "_" (e.g. "_comment") are never org names, so they're skipped.
-function normalizeOrgKey(s: string): string {
-  return s.toLowerCase().replace(/\s+/g, " ").trim();
-}
-function loadOrgAbbrMap(): Record<string, string> {
-  const p = path.resolve("./src/data", "org-abbreviations.json");
-  if (!existsSync(p)) return {};
-  try {
-    const raw = JSON.parse(readFileSync(p, "utf8")) as Record<string, unknown>;
-    const map: Record<string, string> = {};
-    for (const [name, value] of Object.entries(raw ?? {})) {
-      if (name.startsWith("_")) continue;
-      const abbr = String(value ?? "").trim();
-      if (abbr) map[normalizeOrgKey(name)] = abbr;
-    }
-    return map;
-  } catch {
-    return {};
-  }
-}
-const ORG_ABBR_MAP = loadOrgAbbrMap();
-
-/** Fill a role's missing abbreviation from the canonical org→acronym map. */
-function fillRoleAbbr<T extends { organisation?: string; abbreviation?: string }>(
-  role: T,
-): T {
-  if (role.abbreviation || !role.organisation) return role;
-  const abbr = ORG_ABBR_MAP[normalizeOrgKey(role.organisation)];
-  return abbr ? { ...role, abbreviation: abbr } : role;
-}
-
-// --- Per-entry ROLES override (src/data/roles-override.json) ------------------
-// One CMS-editable file shaped { overrides: [ { slug, roles[] } ] }. A NON-EMPTY
-// roles array REPLACES that entry's auto-parsed roles; an empty/absent one keeps
-// the Word-file roles (see the apply site in getEntryInfo). Keyed by
-// githubSlug(basename) — the same key as the store id / DOI key — so a lookup
-// matches every consumer. Only non-empty overrides become map keys, so empty
-// rows naturally fall through to the auto behaviour. Keys starting with "_" and
-// rows without a title are skipped; years are coerced to numbers.
-function loadRolesOverrideMap(): Record<string, Role[]> {
-  const p = path.resolve("./src/data", "roles-override.json");
-  if (!existsSync(p)) return {};
-  try {
-    const raw = JSON.parse(readFileSync(p, "utf8")) as {
-      overrides?: Array<{ slug?: string; roles?: unknown[] }>;
-    };
-    const map: Record<string, Role[]> = {};
-    for (const item of raw?.overrides ?? []) {
-      const slug = String(item?.slug ?? "").trim();
+function loadEntryOverrideMap(): Record<string, EntryOverride> {
+  const dir = path.resolve("./src/data/entry-overrides");
+  if (!existsSync(dir)) return {};
+  const map: Record<string, EntryOverride> = {};
+  for (const f of readdirSync(dir)) {
+    if (!f.toLowerCase().endsWith(".json")) continue;
+    try {
+      const raw = JSON.parse(readFileSync(path.join(dir, f), "utf8")) as {
+        slug?: string;
+        rolesOverride?: boolean;
+        roles?: unknown[];
+        portraitImage?: string;
+        facePosition?: unknown;
+      };
+      const slug = String(raw?.slug ?? path.basename(f, ".json")).trim();
       if (!slug || slug.startsWith("_")) continue;
-      const rows = Array.isArray(item?.roles) ? item.roles : [];
-      const cleaned: Role[] = [];
-      for (const r of rows as Array<Record<string, unknown>>) {
+      const roles: Role[] = [];
+      for (const r of (Array.isArray(raw?.roles) ? raw.roles : []) as Array<
+        Record<string, unknown>
+      >) {
         const title = String(r?.title ?? "").trim();
         if (!title) continue; // title is required — skip empty rows
         const role: Role = { title };
@@ -158,52 +113,22 @@ function loadRolesOverrideMap(): Record<string, Role[]> {
         if (Number.isFinite(sy) && sy) role.startYear = sy;
         const ey = Number(r.endYear);
         if (Number.isFinite(ey) && ey) role.endYear = ey;
-        cleaned.push(role);
+        roles.push(role);
       }
-      if (cleaned.length) map[slug] = cleaned; // only non-empty overrides count
-    }
-    return map;
-  } catch {
-    return {};
-  }
-}
-const ROLES_OVERRIDE_MAP = loadRolesOverrideMap();
-
-// Authors naturally spell an organisation out on first mention — "Secretary of
-// the European Commission of the Danube (ECD)" — then use only the acronym after
-// — "Secretary-General of the ECD". The parser then leaves the later role with
-// `organisation: "ECD"` and no full name, so the org column shows a bare "ECD".
-// Backfill that later role's full name from the EARLIER role in the SAME entry
-// that already defined the acronym. This touches only the roles array (the org
-// column + search index); the summary prose at the top of the bio is untouched,
-// so we never force the author to repeat the full name and read clumsily.
-function expandAcronymOrgs<
-  T extends { organisation?: string; abbreviation?: string },
->(roles: T[]): T[] {
-  // Map each acronym to the full name a role spelled out. If the SAME acronym
-  // maps to two DIFFERENT full names within one entry (e.g. "EC" used for two
-  // bodies), it is ambiguous — skip it rather than silently pick one.
-  const fullByAbbr: Record<string, string> = {};
-  const ambiguous = new Set<string>();
-  for (const r of roles) {
-    if (r.abbreviation && r.organisation && r.organisation !== r.abbreviation) {
-      const prev = fullByAbbr[r.abbreviation];
-      if (prev && prev !== r.organisation) ambiguous.add(r.abbreviation);
-      else fullByAbbr[r.abbreviation] = r.organisation;
+      const fp = Number(raw?.facePosition);
+      map[slug] = {
+        rolesOverride: raw?.rolesOverride === true,
+        roles,
+        portraitImage: String(raw?.portraitImage ?? "").trim(),
+        facePosition: Number.isFinite(fp) && fp >= 1 ? fp : undefined,
+      };
+    } catch {
+      // skip malformed override file — falls back to Word behaviour
     }
   }
-  if (!Object.keys(fullByAbbr).length) return roles;
-  return roles.map((r) => {
-    if (!r.organisation || ambiguous.has(r.organisation)) return r;
-    const full = fullByAbbr[r.organisation];
-    if (!full || full === r.organisation) return r;
-    return {
-      ...r,
-      organisation: full,
-      abbreviation: r.abbreviation || r.organisation,
-    };
-  });
+  return map;
 }
+const ENTRY_OVERRIDE_MAP = loadEntryOverrideMap();
 
 /**
  * Write a docx image attachment to `outputDir` as `<stem>.<ext>`.
@@ -418,9 +343,13 @@ const docxEntryType: ContentEntryType = {
     const slug = basename(filePath, path.extname(filePath))
       .replaceAll(" ", "-")
       .toLowerCase();
+    // Per-entry override (roles / portrait image / face position), keyed by the
+    // github-slug (= the store id), which may differ from the asset `slug` above
+    // for punctuation (e.g. M'Bow, Sweetser).
+    const ov =
+      ENTRY_OVERRIDE_MAP[githubSlug(basename(filePath, path.extname(filePath)))];
     const activeDir = path.resolve("./src/assets/bios");
     const extractedDir = path.resolve("./src/assets/bios-extracted");
-    const overrideDir = path.resolve("./src/content/bios-images");
 
     // 1) Always extract the docx attachment to bios-extracted/ (regenerable
     //    reference; gitignored). LibreOffice-converted PNGs land here too.
@@ -434,17 +363,21 @@ const docxEntryType: ContentEntryType = {
       if (written) extractedPath = path.join(extractedDir, written);
     }
 
-    // 2) Pick the active source: override if it exists, else the extracted
-    //    original.
+    // 2) Pick the active source: the per-entry portraitImage override if set,
+    //    else the extracted docx original. portraitImage is a repo path stored by
+    //    the CMS image widget (e.g. "/src/content/bios-images/<slug>.jpg").
     let activeSrc: string | null = null;
-    for (const ext of [".jpg", ".jpeg", ".png", ".webp", ".gif"]) {
-      const candidate = path.join(overrideDir, slug + ext);
+    if (ov?.portraitImage) {
+      const candidate = path.resolve(ov.portraitImage.replace(/^\/+/, ""));
       if (existsSync(candidate)) {
         activeSrc = candidate;
         console.warn(
           `[docx] ${basename(filePath)}: using override → ${basename(candidate)}`,
         );
-        break;
+      } else {
+        console.warn(
+          `[docx] ${basename(filePath)}: portraitImage not found → ${ov.portraitImage}`,
+        );
       }
     }
     if (!activeSrc && extractedPath) activeSrc = extractedPath;
@@ -479,7 +412,7 @@ const docxEntryType: ContentEntryType = {
       const CROP_CACHE_VERSION = "2";
       const sig =
         createHash("sha256").update(readFileSync(activePath)).digest("hex") +
-        `:${PORTRAIT_SUBJECT_MAP[slug] ?? ""}:v${CROP_CACHE_VERSION}`;
+        `:${ov?.facePosition ?? ""}:v${CROP_CACHE_VERSION}`;
       const cacheFresh =
         existsSync(portraitPath) &&
         existsSync(sigPath) &&
@@ -494,7 +427,7 @@ const docxEntryType: ContentEntryType = {
           const { usedFace } = await cropToPortrait(
             activePath,
             portraitPath,
-            PORTRAIT_SUBJECT_MAP[slug],
+            ov?.facePosition,
           );
           await fs.writeFile(sigPath, sig);
           imagePortraitFn = portraitFn;
@@ -532,14 +465,12 @@ const docxEntryType: ContentEntryType = {
       imageSource: extracted?.imageSource ?? "",
       life: extracted?.life ?? "",
       introNotes: extracted?.introNotes ?? [],
-      // Per-entry roles override (src/data/roles-override.json): a non-empty
-      // override REPLACES the auto-parsed roles; empty/absent falls back to the
-      // docx roles (expandAcronymOrgs backfills acronym-only orgs). Either way we
-      // run fillRoleAbbr so a missing "(ACRONYM)" is filled from the org map.
+      // Per-entry roles override (src/data/entry-overrides/<slug>.json): when
+      // rolesOverride is ON, `roles` REPLACES the auto-parsed roles; otherwise
+      // the docx roles are used (expandAcronymOrgs backfills acronym-only orgs).
+      // Either way fillRoleAbbr fills a missing "(ACRONYM)" from the org map.
       roles: (
-        ROLES_OVERRIDE_MAP[
-          githubSlug(basename(filePath, path.extname(filePath)))
-        ] ?? expandAcronymOrgs(extracted?.roles ?? [])
+        ov?.rolesOverride ? ov.roles : expandAcronymOrgs(extracted?.roles ?? [])
       ).map(fillRoleAbbr),
 
       archives: extracted?.archives ?? { items: [] },
@@ -691,8 +622,17 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
         // Fold this entry's roles-override into the digest so a CMS override edit
         // (which never touches the .docx) still invalidates the incremental cache
         // and re-processes the entry. Same github-slug key as the store id.
-        const overrideKey = githubSlug(basename(filePath, path.extname(filePath)));
-        const overrideJson = JSON.stringify(ROLES_OVERRIDE_MAP[overrideKey] ?? null);
+        const ovKey = githubSlug(basename(filePath, path.extname(filePath)));
+        const ovEntry = ENTRY_OVERRIDE_MAP[ovKey];
+        const overrideJson = JSON.stringify(
+          ovEntry
+            ? {
+                roles: ovEntry.rolesOverride ? ovEntry.roles : null,
+                portraitImage: ovEntry.portraitImage || null,
+                facePosition: ovEntry.facePosition ?? null,
+              }
+            : null,
+        );
         const digest = generateDigest(
           Buffer.concat([fileBuffer, Buffer.from(" " + overrideJson, "utf8")]),
         );

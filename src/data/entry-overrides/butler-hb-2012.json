@@ -1,0 +1,17 @@
+{
+  "slug": "butler-hb-2012",
+  "name": "BUTLER, Harold Beresford",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director",
+      "organisation": "International Labour Office of the International Labour Organization",
+      "abbreviation": "ILO",
+      "startYear": 1932,
+      "endYear": 1938,
+      "ordinalText": "second"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

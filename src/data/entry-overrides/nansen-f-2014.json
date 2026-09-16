@@ -1,0 +1,15 @@
+{
+  "slug": "nansen-f-2014",
+  "name": "NANSEN, Fridtjof",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "High Commissioner for Refugees",
+      "organisation": "League of Nations",
+      "startYear": 1921,
+      "endYear": 1930
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/nansen-f-2014.jpg",
+  "facePosition": null
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "avenol-j-2015",
+  "name": "AVENOL, Joseph Louis Anne Marie Charles",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "League of Nations",
+      "startYear": 1933,
+      "endYear": 1940,
+      "ordinalText": "second"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

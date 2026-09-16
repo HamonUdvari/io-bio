@@ -1,0 +1,17 @@
+{
+  "slug": "goad-ecv-2015",
+  "name": "GOAD, Edward Colin Viner",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "Inter-Governmental Maritime Consultative Organization",
+      "abbreviation": "IMCO",
+      "startYear": 1968,
+      "endYear": 1973,
+      "ordinalText": "fourth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "evans-l-2013",
+  "name": "EVANS, Luther Harris",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "United Nations Educational, Scientific and Cultural Organization",
+      "abbreviation": "UNESCO",
+      "startYear": 1953,
+      "endYear": 1958,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

@@ -1,0 +1,33 @@
+{
+  "slug": "bodenhausen-ghc-2023",
+  "name": "BODENHAUSEN, Georg Hendrik Christiaan",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director",
+      "organisation": "United International Bureaux for the Protection of Intellectual Property",
+      "abbreviation": "BIRPI",
+      "startYear": 1963,
+      "endYear": 1970,
+      "ordinalText": "seventh"
+    },
+    {
+      "title": "Director-General",
+      "organisation": "World Intellectual Property Organization",
+      "abbreviation": "WIPO",
+      "startYear": 1970,
+      "endYear": 1973,
+      "ordinalText": "first"
+    },
+    {
+      "title": "Secretary-General",
+      "organisation": "International Union for the Protection of New Varieties of Plants",
+      "abbreviation": "UPOV",
+      "startYear": 1969,
+      "endYear": 1973,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

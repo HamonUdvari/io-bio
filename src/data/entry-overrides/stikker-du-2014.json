@@ -1,0 +1,17 @@
+{
+  "slug": "stikker-du-2014",
+  "name": "STIKKER, Dirk Uipko",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary General",
+      "organisation": "North Atlantic Treaty Organization",
+      "abbreviation": "NATO",
+      "startYear": 1961,
+      "endYear": 1964,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

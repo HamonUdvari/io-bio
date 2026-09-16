@@ -1,0 +1,16 @@
+{
+  "slug": "drummond-je-2017",
+  "name": "DRUMMOND, James Eric",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "League of Nations",
+      "startYear": 1919,
+      "endYear": 1933,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/drummond-je-2017.png",
+  "facePosition": null
+}

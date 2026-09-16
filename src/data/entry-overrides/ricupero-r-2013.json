@@ -1,0 +1,17 @@
+{
+  "slug": "ricupero-r-2013",
+  "name": "RICUPERO, Rubens",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "United Nations Conference on Trade and Development",
+      "abbreviation": "UNCTAD",
+      "startYear": 1995,
+      "endYear": 2004,
+      "ordinalText": "fifth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

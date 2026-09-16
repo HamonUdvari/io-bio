@@ -1,0 +1,17 @@
+{
+  "slug": "orr-jb-2021",
+  "name": "ORR, John Boyd",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "Food and Agriculture Organization of the United Nations",
+      "abbreviation": "FAO",
+      "startYear": 1945,
+      "endYear": 1948,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/orr-jb-2021.png",
+  "facePosition": null
+}

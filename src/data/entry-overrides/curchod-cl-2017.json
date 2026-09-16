@@ -1,0 +1,17 @@
+{
+  "slug": "curchod-cl-2017",
+  "name": "CURCHOD, Charles Louis",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director",
+      "organisation": "International Telegraph Union",
+      "abbreviation": "ITU",
+      "startYear": 1869,
+      "endYear": 1869,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/curchod-cl-2017.jpg",
+  "facePosition": null
+}

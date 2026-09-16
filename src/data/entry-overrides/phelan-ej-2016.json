@@ -1,0 +1,24 @@
+{
+  "slug": "phelan-ej-2016",
+  "name": "PHELAN, Edward Joseph",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director",
+      "organisation": "International Labour Office of the International Labour Organization",
+      "abbreviation": "ILO",
+      "startYear": 1941,
+      "endYear": 1946,
+      "ordinalText": "fourth"
+    },
+    {
+      "title": "Director-General",
+      "organisation": "International Labour Organization",
+      "abbreviation": "ILO",
+      "startYear": 1941,
+      "endYear": 1948
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/phelan-ej-2016.png",
+  "facePosition": null
+}

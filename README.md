@@ -79,19 +79,18 @@ The rest are occasional fixes:
 
 The portrait comes from inside the Word file and is often small. To use a sharper/larger one:
 
-- Add your image at **`src/content/bios-images/<slug>.jpg`** — `<slug>` is the entry's URL name (e.g.
-  `annan-ka-2019`). It replaces the embedded photo on the next build. Don't put `-portrait` in the name
-  (that's the auto-generated crop).
-- **Formats:** JPG or PNG best; WebP, GIF, SVG also work. Bigger / higher-resolution = sharper (the grid
-  thumbnail is auto-cropped to 800×1000). You must have the right to use the image.
+- In the CMS open **Roles & portraits (per entry)**, search the person, and upload a file into
+  **Portrait override**. Leave it empty to keep the Word photo. It replaces the embedded photo on the
+  next build. **Formats:** JPG or PNG best; WebP/GIF/SVG also work. Bigger = sharper (the grid thumbnail
+  is auto-cropped to 800×1000). You must have the right to use the image.
 
 ### 5. Change which face is cropped (group photos)
 
 If the auto-crop picks the wrong person in a group photo:
 
-- Open **`src/data/portrait-subjects.json`** and add a line `"<slug>": N`, where **N is the person's
-  position counting from the left** (1 = leftmost). Example: `"mcdonald-jg-2016": 1`.
-- Commit — the crop is redone on the next build.
+- In the same **Roles & portraits (per entry)** card, set **Face position** to the person's position
+  counting from the left (1 = leftmost). Leave empty for the main face. The crop is redone on the next
+  build.
 
 ## Publishing (how changes go live)
 

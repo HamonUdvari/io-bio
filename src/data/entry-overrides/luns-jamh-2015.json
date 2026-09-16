@@ -1,0 +1,17 @@
+{
+  "slug": "luns-jamh-2015",
+  "name": "LUNS, Joseph Antoine Marie Hubert",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary General",
+      "organisation": "North Atlantic Treaty Organisation",
+      "abbreviation": "NATO",
+      "startYear": 1971,
+      "endYear": 1984,
+      "ordinalText": "fifth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

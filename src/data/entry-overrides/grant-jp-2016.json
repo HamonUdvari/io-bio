@@ -1,0 +1,17 @@
+{
+  "slug": "grant-jp-2016",
+  "name": "GRANT, James Pineo",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Executive Director",
+      "organisation": "United Nations Children’s Fund",
+      "abbreviation": "UNICEF",
+      "startYear": 1980,
+      "endYear": 1995,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

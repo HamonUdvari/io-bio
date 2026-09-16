@@ -1,0 +1,17 @@
+{
+  "slug": "piot-pk-2021",
+  "name": "PIOT, Peter Karel",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Executive Director",
+      "organisation": "Joint United Nations Programme on HIV/AIDS",
+      "abbreviation": "UNAIDS",
+      "startYear": 1994,
+      "endYear": 2008,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/piot-pk-2021.jpg",
+  "facePosition": null
+}

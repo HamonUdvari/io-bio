@@ -1,0 +1,23 @@
+{
+  "slug": "rey-f-2025",
+  "name": "REY, Francis Paul Marie Joseph François Xavier",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary",
+      "organisation": "European Commission of the Danube",
+      "abbreviation": "ECD",
+      "startYear": 1911,
+      "endYear": 1913
+    },
+    {
+      "title": "Secretary-General",
+      "organisation": "European Commission of the Danube",
+      "abbreviation": "ECD",
+      "startYear": 1913,
+      "endYear": 1935
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/rey-f-2025.jpg",
+  "facePosition": null
+}

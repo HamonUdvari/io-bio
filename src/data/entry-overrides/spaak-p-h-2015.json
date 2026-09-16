@@ -1,0 +1,17 @@
+{
+  "slug": "spaak-p-h-2015",
+  "name": "SPAAK, Paul-Henri Charles",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary General",
+      "organisation": "North Atlantic Treaty Organization",
+      "abbreviation": "NATO",
+      "startYear": 1957,
+      "endYear": 1961,
+      "ordinalText": "second"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

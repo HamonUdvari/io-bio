@@ -1,0 +1,24 @@
+{
+  "slug": "wyndham-white-e-2012",
+  "name": "WYNDHAM WHITE, Eric Henry",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Executive Secretary",
+      "organisation": "General Agreement on Tariffs and Trade",
+      "abbreviation": "GATT",
+      "startYear": 1948,
+      "endYear": 1965,
+      "ordinalText": "first"
+    },
+    {
+      "title": "Director-General",
+      "organisation": "General Agreement on Tariffs and Trade",
+      "abbreviation": "GATT",
+      "startYear": 1965,
+      "endYear": 1968
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/wyndham-white-e-2012.jpg",
+  "facePosition": null
+}

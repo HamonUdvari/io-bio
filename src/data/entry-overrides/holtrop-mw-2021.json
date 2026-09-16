@@ -1,0 +1,16 @@
+{
+  "slug": "holtrop-mw-2021",
+  "name": "HOLTROP, Marius Wilhelm",
+  "rolesOverride": true,
+  "roles": [
+    {
+      "title": "President and Chairman of the Board of Directors",
+      "organisation": "Bank for International Settlements",
+      "abbreviation": "BIS",
+      "startYear": 1958,
+      "endYear": 1967
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/holtrop-mw-2021.jpg",
+  "facePosition": null
+}

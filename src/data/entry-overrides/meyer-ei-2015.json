@@ -1,0 +1,17 @@
+{
+  "slug": "meyer-ei-2015",
+  "name": "MEYER, Eugene Isaac",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "President",
+      "organisation": "International Bank for Reconstruction and Development",
+      "abbreviation": "IBRD",
+      "startYear": 1946,
+      "endYear": 1946,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

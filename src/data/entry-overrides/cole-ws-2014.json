@@ -1,0 +1,17 @@
+{
+  "slug": "cole-ws-2014",
+  "name": "COLE, William Sterling",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director General",
+      "organisation": "International Atomic Energy Agency",
+      "abbreviation": "IAEA",
+      "startYear": 1957,
+      "endYear": 1961,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/cole-ws-2014.jpg",
+  "facePosition": null
+}

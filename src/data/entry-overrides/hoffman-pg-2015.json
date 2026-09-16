@@ -1,0 +1,23 @@
+{
+  "slug": "hoffman-pg-2015",
+  "name": "HOFFMAN, Paul Gray",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Managing Director",
+      "organisation": "United Nations Special Fund",
+      "startYear": 1959,
+      "endYear": 1965
+    },
+    {
+      "title": "Administrator",
+      "organisation": "United Nations Development Programme",
+      "abbreviation": "UNDP",
+      "startYear": 1966,
+      "endYear": 1972,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

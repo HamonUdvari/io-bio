@@ -1,0 +1,21 @@
+{
+  "slug": "eichhoff-jj-2024",
+  "name": "EICHHOFF, Johann Joseph",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "Rhine Shipping Octroi",
+      "startYear": 1806,
+      "endYear": 1813
+    },
+    {
+      "title": "charged with preparing the regulatory framework",
+      "organisation": "Central Commission for the Navigation of the Rhine",
+      "startYear": 1815,
+      "endYear": 1819
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

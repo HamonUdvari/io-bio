@@ -1,0 +1,17 @@
+{
+  "slug": "salim-sa-2016",
+  "name": "SALIM, Salim Ahmed",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "Organization of African Unity",
+      "abbreviation": "OAU",
+      "startYear": 1989,
+      "endYear": 2001,
+      "ordinalText": "sixth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

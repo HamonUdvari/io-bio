@@ -1,0 +1,17 @@
+{
+  "slug": "stoltenberg-th-2014",
+  "name": "STOLTENBERG, Thorvald",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "United Nations High Commissioner for Refugees",
+      "organisation": "United Nations High Commissioner for Refugees",
+      "abbreviation": "UNHCR",
+      "startYear": 1990,
+      "endYear": 1990,
+      "ordinalText": "seventh"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

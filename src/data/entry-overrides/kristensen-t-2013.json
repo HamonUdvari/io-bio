@@ -1,0 +1,25 @@
+{
+  "slug": "kristensen-t-2013",
+  "name": "KRISTENSEN, Thorkil",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "Organization for European Economic Cooperation",
+      "abbreviation": "OEEC",
+      "startYear": 1960,
+      "endYear": 1961,
+      "ordinalText": "third"
+    },
+    {
+      "title": "Secretary-General",
+      "organisation": "Organization for Economic Cooperation and Development",
+      "abbreviation": "OECD",
+      "startYear": 1961,
+      "endYear": 1969,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/kristensen-t-2013.jpg",
+  "facePosition": null
+}

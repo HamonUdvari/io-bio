@@ -1,0 +1,17 @@
+{
+  "slug": "myrdal-g-2014",
+  "name": "MYRDAL, Gunnar",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Executive Secretary",
+      "organisation": "United Nations Economic Commission for Europe",
+      "abbreviation": "UN ECE",
+      "startYear": 1947,
+      "endYear": 1957,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

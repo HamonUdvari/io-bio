@@ -1,0 +1,17 @@
+{
+  "slug": "ogata-s-2014",
+  "name": "OGATA, Sadako",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "United Nations High Commissioner for Refugees",
+      "organisation": "United Nations High Commissioner for Refugees",
+      "abbreviation": "UNHCR",
+      "startYear": 1991,
+      "endYear": 2000,
+      "ordinalText": "eighth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

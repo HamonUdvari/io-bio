@@ -1,0 +1,17 @@
+{
+  "slug": "annan-ka-2019",
+  "name": "ANNAN, Kofi Atta",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "United Nations",
+      "abbreviation": "UN",
+      "startYear": 1997,
+      "endYear": 2006,
+      "ordinalText": "seventh"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

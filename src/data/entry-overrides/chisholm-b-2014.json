@@ -1,0 +1,17 @@
+{
+  "slug": "chisholm-b-2014",
+  "name": "CHISHOLM, George Brock",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "World Health Organization",
+      "abbreviation": "WHO",
+      "startYear": 1948,
+      "endYear": 1953,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

@@ -1,0 +1,24 @@
+{
+  "slug": "boutros-ghali-2019",
+  "name": "BOUTROS-GHALI, Boutros Youssef",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "United Nations",
+      "abbreviation": "UN",
+      "startYear": 1992,
+      "endYear": 1996,
+      "ordinalText": "sixth"
+    },
+    {
+      "title": "Secretary-General",
+      "organisation": "International Organization of La Francophonie",
+      "startYear": 1997,
+      "endYear": 2002,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

@@ -1,0 +1,23 @@
+{
+  "slug": "van-der-stoel-m-2024",
+  "name": "VAN DER STOEL, Maximilianus",
+  "rolesOverride": true,
+  "roles": [
+    {
+      "title": "High Commissioner on National Minorities",
+      "organisation": "Conference on Security and Cooperation in Europe",
+      "abbreviation": "CSCE",
+      "startYear": 1993,
+      "endYear": 1994
+    },
+    {
+      "title": "High Commissioner on National Minorities",
+      "organisation": "Organization for Security and Cooperation in Europe",
+      "abbreviation": "OSCE",
+      "startYear": 1995,
+      "endYear": 2001
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

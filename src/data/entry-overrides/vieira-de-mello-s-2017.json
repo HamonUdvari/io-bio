@@ -1,0 +1,17 @@
+{
+  "slug": "vieira-de-mello-s-2017",
+  "name": "VIEIRA DE MELLO, Sérgio",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "United Nations High Commissioner for Human Rights",
+      "organisation": "United Nations High Commissioner for Human Rights",
+      "abbreviation": "OHCHR",
+      "startYear": 2002,
+      "endYear": 2003,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

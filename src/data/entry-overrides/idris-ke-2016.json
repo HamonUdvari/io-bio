@@ -1,0 +1,25 @@
+{
+  "slug": "idris-ke-2016",
+  "name": "IDRIS, Kamil Eltayeb",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director General",
+      "organisation": "World Intellectual Property Organization",
+      "abbreviation": "WIPO",
+      "startYear": 1997,
+      "endYear": 2008,
+      "ordinalText": "third"
+    },
+    {
+      "title": "Secretary-General",
+      "organisation": "International Union for the Protection of New Varieties of Plants",
+      "abbreviation": "UPOV",
+      "startYear": 1997,
+      "endYear": 2008,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/idris-ke-2016.jpg",
+  "facePosition": null
+}

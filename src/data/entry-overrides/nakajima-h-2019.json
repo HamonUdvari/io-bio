@@ -1,0 +1,17 @@
+{
+  "slug": "nakajima-h-2019",
+  "name": "NAKAJIMA, Hiroshi",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "World Health Organization",
+      "abbreviation": "WHO",
+      "startYear": 1988,
+      "endYear": 1998,
+      "ordinalText": "fourth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

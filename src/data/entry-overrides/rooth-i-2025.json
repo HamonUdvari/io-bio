@@ -1,0 +1,17 @@
+{
+  "slug": "rooth-i-2025",
+  "name": "ROOTH, Ivar",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Managing Director",
+      "organisation": "International Monetary Fund",
+      "abbreviation": "IMF",
+      "startYear": 1951,
+      "endYear": 1956,
+      "ordinalText": "second"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/rooth-i-2025.jpg",
+  "facePosition": null
+}

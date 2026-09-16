@@ -1,0 +1,17 @@
+{
+  "slug": "chan-m-2021",
+  "name": "CHAN, Margaret",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "World Health Organization",
+      "abbreviation": "WHO",
+      "startYear": 2007,
+      "endYear": 2017,
+      "ordinalText": "seventh"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

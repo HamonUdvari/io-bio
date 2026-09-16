@@ -1,0 +1,17 @@
+{
+  "slug": "davies-da-2016",
+  "name": "DAVIES, David Arthur",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "World Meteorological Organization",
+      "abbreviation": "WMO",
+      "startYear": 1956,
+      "endYear": 1979,
+      "ordinalText": "second"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/davies-da-2016.jpg",
+  "facePosition": null
+}

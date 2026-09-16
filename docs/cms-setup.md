@@ -56,7 +56,11 @@ and `src/pages/[...slug].astro` renders whichever form a page uses.
   **upload (add) and re-upload (replace)** work as expected.
 - **Downloads (PDFs)** — Pages `media_folder: public`; confirm a real PDF upload lands in `public/`
   and the `/io-bio` base path resolves.
-- **Face-crop overrides** (`src/data/portrait-subjects.json`) — an arbitrary-key JSON map; needs a
-  `keyvalue`-style widget (verify it exists in this Sveltia version) or leave as a direct-edit file.
+- **Roles & portraits (per entry)** — a folder collection over `src/data/entry-overrides/*.json`
+  (one card per bio, auto-synced from the Word files). Confirm the searchable list opens a card that
+  shows the roles pre-filled from the Word file, the "Manual override" toggle replaces them, the
+  Portrait override `image` widget uploads to `src/content/bios-images`, and Face position saves. The
+  cards are created/removed by `pnpm overrides:sync` (and the entry-overrides-sync CI job), not by the
+  editor.
 - **Live login** — verify the "Sign in with Token" flow once with a real GitHub fine-grained token.
 - Do **not** merge to `main` / deploy until the live token login + a real edit are confirmed.

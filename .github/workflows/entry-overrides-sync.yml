@@ -1,0 +1,76 @@
+# Keeps the CMS "Roles & portraits (per entry)" cards (src/data/entry-overrides/
+# <slug>.json) in sync with the Word files: mirrors each entry's parsed roles +
+# display name so the CMS shows real data (WYSIWYG), creates a card for a new
+# .docx, and DELETES a card whose .docx was removed. Manual fields (the override
+# toggle, override roles, portrait image, face position) are always preserved.
+#
+# The shipped SITE is always correct regardless of this job — the build reads the
+# live Word roles for non-override entries — so this only refreshes what the
+# editor SEES. Hence the commit is [skip ci] and does NOT dispatch a deploy.
+name: Entry overrides sync (auto)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/content/bios/**" # a .docx added / edited / removed
+      - "src/loaders/**" # parser + roleTransforms + docxLoader changes
+      - "src/content.config.ts"
+      - "src/pages/entry-roles.json.ts" # the endpoint the sync reads
+      - "src/data/org-abbreviations.json" # affects the mirrored acronyms
+      - "scripts/sync-entry-overrides.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: write # to commit the refreshed entry-overrides files
+
+concurrency:
+  group: entry-overrides-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # full history so the push isn't rejected by a shallow clone
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.5.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Build emits dist/entry-roles.json (roles + display name via the real
+      # content loader). No LibreOffice/Chrome needed — we only read the roles,
+      # not images/PDFs.
+      - name: Build (emits dist/entry-roles.json)
+        run: pnpm run build
+      - name: Sync + commit entry-overrides
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Re-sync on top of the LATEST main each attempt so a concurrent CMS
+          # edit to an override card is preserved (sync keeps manual fields).
+          # dist/entry-roles.json is gitignored, so reset --hard keeps it.
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            node scripts/sync-entry-overrides.ts
+            git add -A src/data/entry-overrides
+            if git diff --cached --quiet; then
+              echo "entry-overrides already current"
+              exit 0
+            fi
+            git commit -m "chore(overrides): sync entry overrides [skip ci]"
+            if git push origin HEAD:main; then
+              echo "pushed entry-overrides (attempt $attempt)"
+              exit 0
+            fi
+            echo "push rejected (main advanced); retrying ($attempt/5)"
+            sleep 5
+          done
+          echo "::error::could not push entry-overrides after 5 attempts"
+          exit 1

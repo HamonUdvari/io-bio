@@ -1,0 +1,17 @@
+{
+  "slug": "diallo-bt-2022",
+  "name": "DIALLO, Boubacar Telli",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Administrative Secretary-General",
+      "organisation": "Organization of African Unity",
+      "abbreviation": "OAU",
+      "startYear": 1964,
+      "endYear": 1972,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/diallo-bt-2022.jpg",
+  "facePosition": null
+}

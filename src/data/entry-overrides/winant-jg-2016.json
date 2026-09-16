@@ -1,0 +1,17 @@
+{
+  "slug": "winant-jg-2016",
+  "name": "WINANT, John Gilbert",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director",
+      "organisation": "International Labour Office of the International Labour Organization",
+      "abbreviation": "ILO",
+      "startYear": 1939,
+      "endYear": 1941,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

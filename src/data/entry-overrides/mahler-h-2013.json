@@ -1,0 +1,17 @@
+{
+  "slug": "mahler-h-2013",
+  "name": "MAHLER, Halfdan Theodor",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "World Health Organization",
+      "abbreviation": "WHO",
+      "startYear": 1973,
+      "endYear": 1988,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

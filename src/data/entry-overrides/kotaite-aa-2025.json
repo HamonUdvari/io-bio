@@ -1,0 +1,23 @@
+{
+  "slug": "kotaite-aa-2025",
+  "name": "KOTAITE, Assad Adib",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary General",
+      "organisation": "International Civil Aviation Organization",
+      "abbreviation": "ICAO",
+      "startYear": 1970,
+      "endYear": 1976
+    },
+    {
+      "title": "Council President",
+      "organisation": "International Civil Aviation Organization",
+      "abbreviation": "ICAO",
+      "startYear": 1976,
+      "endYear": 2006
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

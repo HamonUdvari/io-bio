@@ -1,0 +1,17 @@
+{
+  "slug": "candau-mg-2015",
+  "name": "CANDAU, Marcolino Gomes",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "World Health Organization",
+      "abbreviation": "WHO",
+      "startYear": 1953,
+      "endYear": 1973,
+      "ordinalText": "second"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

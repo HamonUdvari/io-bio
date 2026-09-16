@@ -1,0 +1,17 @@
+{
+  "slug": "maheu-rge-2012",
+  "name": "MAHEU, René Gabriel Eugène",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "United Nations Educational, Scientific and Cultural Organization",
+      "abbreviation": "UNESCO",
+      "startYear": 1961,
+      "endYear": 1974,
+      "ordinalText": "sixth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

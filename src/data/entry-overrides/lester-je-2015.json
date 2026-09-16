@@ -1,0 +1,16 @@
+{
+  "slug": "lester-je-2015",
+  "name": "LESTER, John Ernest",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "League of Nations",
+      "startYear": 1940,
+      "endYear": 1946,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/lester-je-2015.jpg",
+  "facePosition": null
+}

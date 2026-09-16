@@ -1,0 +1,16 @@
+{
+  "slug": "keenleyside-hl-2016",
+  "name": "KEENLEYSIDE, Hugh Llewellyn",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "United Nations Technical Assistance Administration",
+      "abbreviation": "TAA",
+      "startYear": 1950,
+      "endYear": 1958
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/keenleyside-hl-2016.jpg",
+  "facePosition": null
+}

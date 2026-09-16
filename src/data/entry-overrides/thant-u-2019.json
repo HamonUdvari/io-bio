@@ -1,0 +1,23 @@
+{
+  "slug": "thant-u-2019",
+  "name": "THANT, U",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Acting Secretary-General",
+      "organisation": "United Nations",
+      "abbreviation": "UN",
+      "startYear": 1961,
+      "endYear": 1962,
+      "ordinalText": "second"
+    },
+    {
+      "title": "Secretary-General",
+      "startYear": 1962,
+      "endYear": 1971,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

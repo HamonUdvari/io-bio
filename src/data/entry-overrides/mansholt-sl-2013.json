@@ -1,0 +1,17 @@
+{
+  "slug": "mansholt-sl-2013",
+  "name": "MANSHOLT, Sicco Leendert",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "President",
+      "organisation": "Commission of the European Community",
+      "abbreviation": "EC",
+      "startYear": 1972,
+      "endYear": 1973,
+      "ordinalText": "fourth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

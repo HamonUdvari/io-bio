@@ -1,0 +1,25 @@
+{
+  "slug": "prebisch-rf-2014",
+  "name": "PREBISCH LINARES, Raúl Federico",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Executive Secretary",
+      "organisation": "United Nations Economic Commission for Latin America",
+      "abbreviation": "ECLA",
+      "startYear": 1950,
+      "endYear": 1963,
+      "ordinalText": "second"
+    },
+    {
+      "title": "Secretary-General",
+      "organisation": "United Nations Conference on Trade and Development",
+      "abbreviation": "UNCTAD",
+      "startYear": 1964,
+      "endYear": 1969,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

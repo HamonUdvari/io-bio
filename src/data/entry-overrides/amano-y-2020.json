@@ -1,0 +1,17 @@
+{
+  "slug": "amano-y-2020",
+  "name": "AMANO, Yukiya",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director General",
+      "organisation": "International Atomic Energy Agency",
+      "abbreviation": "IAEA",
+      "startYear": 2009,
+      "endYear": 2019,
+      "ordinalText": "fifth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "lie-th-2017",
+  "name": "LIE, Trygve Halvdan",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "United Nations",
+      "abbreviation": "UN",
+      "startYear": 1946,
+      "endYear": 1953,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

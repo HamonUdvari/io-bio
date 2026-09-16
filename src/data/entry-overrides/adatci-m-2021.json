@@ -1,0 +1,17 @@
+{
+  "slug": "adatci-m-2021",
+  "name": "ADATCI, Mineitciro",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "President",
+      "organisation": "Permanent Court of International Justice",
+      "abbreviation": "PCIJ",
+      "startYear": 1931,
+      "endYear": 1933,
+      "ordinalText": "fourth"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/adatci-m-2021.png",
+  "facePosition": null
+}

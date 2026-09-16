@@ -1,0 +1,17 @@
+{
+  "slug": "beyen-jw-2018",
+  "name": "BEYEN, Johan Willem",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "President",
+      "organisation": "Bank for International Settlements",
+      "abbreviation": "BIS",
+      "startYear": 1937,
+      "endYear": 1939,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "michelmore-lv-2015",
+  "name": "MICHELMORE, Laurence Victor",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Commissioner-General",
+      "organisation": "United Nations Relief and Works Agency for Palestine Refugees in the Near East",
+      "abbreviation": "UNRWA",
+      "startYear": 1964,
+      "endYear": 1971,
+      "ordinalText": "second"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

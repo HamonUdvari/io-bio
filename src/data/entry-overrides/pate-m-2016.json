@@ -1,0 +1,17 @@
+{
+  "slug": "pate-m-2016",
+  "name": "PATE, Maurice",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Executive Director",
+      "organisation": "United Nations International Children’s Emergency Fund, in 1953 renamed United Nations Children’s Fund",
+      "abbreviation": "UNICEF",
+      "startYear": 1947,
+      "endYear": 1965,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "mcnamara-rs-2013",
+  "name": "MCNAMARA, Robert Strange",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "President",
+      "organisation": "International Bank for Reconstruction and Development and World Bank Group",
+      "abbreviation": "IBRD",
+      "startYear": 1968,
+      "endYear": 1981,
+      "ordinalText": "fifth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

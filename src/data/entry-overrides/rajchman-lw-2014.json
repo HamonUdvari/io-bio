@@ -1,0 +1,15 @@
+{
+  "slug": "rajchman-lw-2014",
+  "name": "RAJCHMAN, Ludwik Witold",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director",
+      "organisation": "League of Nations Health Organization",
+      "startYear": 1921,
+      "endYear": 1939
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/rajchman-lw-2014.jpg",
+  "facePosition": null
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "huxley-js-2012",
+  "name": "HUXLEY, Julian Sorell",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "United Nations Educational, Scientific and Cultural Organization",
+      "abbreviation": "UNESCO",
+      "startYear": 1946,
+      "endYear": 1948,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

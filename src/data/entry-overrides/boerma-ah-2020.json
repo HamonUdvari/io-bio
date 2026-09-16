@@ -1,0 +1,25 @@
+{
+  "slug": "boerma-ah-2020",
+  "name": "BOERMA, Addeke Hendrik",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Executive Director",
+      "organisation": "World Food Programme",
+      "abbreviation": "WFP",
+      "startYear": 1962,
+      "endYear": 1967,
+      "ordinalText": "first"
+    },
+    {
+      "title": "Director-General",
+      "organisation": "Food and Agriculture Organization of the United Nations",
+      "abbreviation": "FAO",
+      "startYear": 1968,
+      "endYear": 1975,
+      "ordinalText": "fifth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

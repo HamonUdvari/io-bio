@@ -1,0 +1,17 @@
+{
+  "slug": "michiels-van-verduynen-lpmh-2019",
+  "name": "MICHIELS VAN VERDUYNEN, Louis Paul Marie Hubert",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "Permanent Court of Arbitration",
+      "abbreviation": "PCA",
+      "startYear": 1905,
+      "endYear": 1929,
+      "ordinalText": "third"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/michiels-van-verduynen-lpmh-2019.jpg",
+  "facePosition": null
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "gaviria-ca-2015",
+  "name": "GAVIRIA TRUJILLO, César Augusto",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary General",
+      "organisation": "Organization of American States",
+      "abbreviation": "OAS",
+      "startYear": 1994,
+      "endYear": 2004,
+      "ordinalText": "seventh"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

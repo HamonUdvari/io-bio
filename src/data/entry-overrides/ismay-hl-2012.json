@@ -1,0 +1,17 @@
+{
+  "slug": "ismay-hl-2012",
+  "name": "ISMAY, Hastings Lionel",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "North Atlantic Treaty Organization",
+      "abbreviation": "NATO",
+      "startYear": 1952,
+      "endYear": 1957,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

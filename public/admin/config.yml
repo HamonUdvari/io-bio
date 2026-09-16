@@ -128,40 +128,70 @@ collections:
     fields:
       - { label: Name, name: title, widget: string }
 
-  # ---------- Bio photos (higher-res overrides) ----------
-  # A labeled folder for the optional higher-resolution portrait overrides. Drop
-  # an image named after the entry slug (e.g. annan-ka-2019.jpg) here and it
-  # replaces the small photo from the Word file on the next build. Same idea as
-  # "Bio Word files", but for images.
-  - name: bio-photos
-    label: Bio photos (overrides)
-    folder: src/content/bios-images
+  # ---------- Roles & portraits (per entry) ----------
+  # One editable card per bio, auto-synced 1:1 with the Word files. Search a
+  # person, open the card, and you SEE that person's roles as read from the Word
+  # file (WYSIWYG). Leave "Manual override of roles" OFF to keep them auto
+  # (recommended); turn it ON to replace them by hand. The card also carries an
+  # optional higher-res portrait (empty = use the Word photo) and a group-photo
+  # face position. Cards are created/removed automatically to match the Word
+  # files, so the flow is: drop the .docx first, then tweak overrides here.
+  - name: entry-overrides
+    label: Roles & portraits (per entry)
+    label_singular: Entry
+    folder: src/data/entry-overrides
     extension: json
+    format: json
     create: false
+    delete: false
+    identifier_field: name
+    summary: "{{fields.name}}"
+    sortable_fields: [name, rolesOverride]
     media_folder: /src/content/bios-images
     public_folder: /src/content/bios-images
     fields:
-      - { label: Name, name: title, widget: string }
+      - { label: Entry slug, name: slug, widget: hidden }
+      - label: Person
+        name: name
+        widget: string
+        hint: "Auto-filled from the Word file — don't edit; it only labels this list."
+      - label: Manual override of roles
+        name: rolesOverride
+        widget: boolean
+        default: false
+        hint: "OFF = roles auto-read from the Word file (recommended). ON = the roles below REPLACE them."
+      - label: Roles
+        name: roles
+        widget: list
+        required: false
+        summary: "{{fields.title}} — {{fields.organisation}} ({{fields.abbreviation}})"
+        fields:
+          - { label: Title, name: title, widget: string, hint: "e.g. Secretary-General" }
+          - { label: Organisation, name: organisation, widget: string, required: false }
+          - { label: Abbreviation, name: abbreviation, widget: string, required: false, hint: "leave blank to auto-fill from the acronym table" }
+          - { label: Start year, name: startYear, widget: number, required: false, value_type: int, min: 1000, max: 2100 }
+          - { label: End year, name: endYear, widget: number, required: false, value_type: int, min: 1000, max: 2100 }
+          - { label: Ordinal text (optional), name: ordinalText, widget: string, required: false }
+      - label: Portrait override (optional)
+        name: portraitImage
+        widget: image
+        required: false
+        media_folder: /src/content/bios-images
+        public_folder: /src/content/bios-images
+        hint: "Higher-res portrait. Leave empty to use the photo from the Word file."
+      - label: Face position (group photos only)
+        name: facePosition
+        widget: number
+        required: false
+        value_type: int
+        min: 1
+        hint: "If a group photo crops the wrong person, set which face from the LEFT (1 = leftmost). Empty = the main face."
 
   # ---------- Settings ----------
-  # Portrait face-crop overrides: when a multi-person photo crops the wrong person,
-  # add the entry's slug and the subject's position counting faces from the LEFT
-  # (1 = leftmost). Edited as a simple key → value table (portrait-subjects.json).
   - name: settings
     label: Settings
     delete: false
     files:
-      - name: face-crops
-        label: Portrait face crops
-        file: src/data/portrait-subjects.json
-        fields:
-          - label: Face crops
-            name: overrides
-            widget: keyvalue
-            root: true
-            required: false
-            key_label: Entry slug (e.g. annan-ka-2019)
-            value_label: Face position from the left (1 = leftmost)
       # Organization acronyms: fills the "(ACRONYM)" in the entries "Organization"
       # column when a Word file named the organization but not its acronym. An
       # acronym already written in the Word file always wins. Match is on the full
@@ -177,34 +207,3 @@ collections:
             required: false
             key_label: Organization full name (e.g. World Health Organization)
             value_label: Acronym (e.g. WHO)
-      # Roles override: REPLACE an entry's auto-read roles (the Title /
-      # Organization / Years columns) for the few tricky cases the Word file
-      # can't express cleanly. Find the entry by its slug, open it, and add rows.
-      # LEAVE an entry's Roles list EMPTY to keep the roles auto-read from the
-      # Word file. Only "Title" is required per row; leave Abbreviation blank to
-      # auto-fill it from the Organization acronyms table above.
-      - name: roles-override
-        label: Roles override
-        file: src/data/roles-override.json
-        fields:
-          - label: Overrides
-            name: overrides
-            widget: list
-            required: false
-            collapsed: true
-            summary: "{{fields.slug}}"
-            fields:
-              - { label: Entry slug, name: slug, widget: string, hint: "e.g. holtrop-mw-2021 — do not change" }
-              - label: Roles (leave empty to auto-read from the Word file)
-                name: roles
-                widget: list
-                required: false
-                collapsed: true
-                summary: "{{fields.title}}"
-                fields:
-                  - { label: Title, name: title, widget: string, hint: "Required, e.g. Secretary-General" }
-                  - { label: Organisation, name: organisation, widget: string, required: false }
-                  - { label: Abbreviation, name: abbreviation, widget: string, required: false, hint: "leave blank to auto-fill from the acronym table" }
-                  - { label: Start year, name: startYear, widget: number, required: false, value_type: int, min: 1000, max: 2100 }
-                  - { label: End year, name: endYear, widget: number, required: false, value_type: int, min: 1000, max: 2100 }
-                  - { label: Ordinal text (optional), name: ordinalText, widget: string, required: false }

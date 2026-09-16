@@ -1,0 +1,17 @@
+{
+  "slug": "van-lennep-e-2017",
+  "name": "VAN LENNEP, Emile",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Secretary-General",
+      "organisation": "Organization for Economic Cooperation and Development",
+      "abbreviation": "OECD",
+      "startYear": 1969,
+      "endYear": 1984,
+      "ordinalText": "second"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

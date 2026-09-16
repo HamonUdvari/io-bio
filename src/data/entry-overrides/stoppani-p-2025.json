@@ -1,0 +1,15 @@
+{
+  "slug": "stoppani-p-2025",
+  "name": "STOPPANI, Pietro Angelo",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director",
+      "organisation": "League of Nations Economic Relations Organization",
+      "startYear": 1931,
+      "endYear": 1939
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/stoppani-p-2025.jpg",
+  "facePosition": null
+}

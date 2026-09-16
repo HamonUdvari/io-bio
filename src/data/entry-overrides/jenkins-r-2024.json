@@ -1,0 +1,16 @@
+{
+  "slug": "jenkins-r-2024",
+  "name": "JENKINS, Roy Harris",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "President",
+      "organisation": "European Commission",
+      "startYear": 1977,
+      "endYear": 1981,
+      "ordinalText": "sixth"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/jenkins-r-2024.jpg",
+  "facePosition": null
+}

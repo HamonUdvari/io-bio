@@ -1,0 +1,17 @@
+{
+  "slug": "gutt-c-2025",
+  "name": "GUTTENSTEIN, Camille Adolphe",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Managing Director",
+      "organisation": "International Monetary Fund",
+      "abbreviation": "IMF",
+      "startYear": 1946,
+      "endYear": 1951,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/gutt-c-2025.jpg",
+  "facePosition": null
+}

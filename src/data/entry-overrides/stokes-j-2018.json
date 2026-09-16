@@ -1,0 +1,17 @@
+{
+  "slug": "stokes-j-2018",
+  "name": "STOKES, John",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "British Delegate",
+      "organisation": "European Commission of the Danube",
+      "abbreviation": "ECD",
+      "startYear": 1856,
+      "endYear": 1871,
+      "ordinalText": "first"
+    }
+  ],
+  "portraitImage": "/src/content/bios-images/stokes-j-2018.jpg",
+  "facePosition": null
+}

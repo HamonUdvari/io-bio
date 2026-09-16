@@ -1,0 +1,17 @@
+{
+  "slug": "woods-gd-2012",
+  "name": "WOODS, George David",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "President",
+      "organisation": "International Bank for Reconstruction and Development and World Bank Group",
+      "abbreviation": "IBRD",
+      "startYear": 1963,
+      "endYear": 1968,
+      "ordinalText": "fourth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

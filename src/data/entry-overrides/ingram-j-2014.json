@@ -1,0 +1,17 @@
+{
+  "slug": "ingram-j-2014",
+  "name": "INGRAM, James Charles",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Executive Director",
+      "organisation": "World Food Programme",
+      "abbreviation": "WFP",
+      "startYear": 1982,
+      "endYear": 1992,
+      "ordinalText": "eighth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}

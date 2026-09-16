@@ -1,0 +1,17 @@
+{
+  "slug": "brundtland-gh-2014",
+  "name": "BRUNDTLAND, Gro",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "World Health Organization",
+      "abbreviation": "WHO",
+      "startYear": 1998,
+      "endYear": 2003,
+      "ordinalText": "fifth"
+    }
+  ],
+  "portraitImage": "",
+  "facePosition": null
+}
