@@ -462,14 +462,14 @@
     "env": "sandbox"
   },
   "holtrop-mw-2021": {
-    "recordId": 604730,
+    "recordId": 604841,
     "conceptRecId": 506493,
     "conceptDoi": "10.5072/zenodo.506493",
-    "versionDoi": "10.5072/zenodo.604730",
-    "contentHash": "sha256:a94d18fb0d2edca81a55505cabf14d3849359ff8c6f1b09a70bff1fb2b5e1df4",
+    "versionDoi": "10.5072/zenodo.604841",
+    "contentHash": "sha256:8bab2097c9603dc9f8b3e223a0390d450e5bb93ca1ad5a4d26ce475adae7d81e",
     "status": "published",
     "version": "15 February 2021",
-    "mintedAt": "2026-09-16T15:12:51.297Z",
+    "mintedAt": "2026-09-16T16:10:15.865Z",
     "env": "sandbox"
   },
   "huxley-js-2012": {
@@ -1188,14 +1188,14 @@
     "env": "sandbox"
   },
   "van-der-stoel-m-2024": {
-    "recordId": 604794,
+    "recordId": 604842,
     "conceptRecId": 506611,
     "conceptDoi": "10.5072/zenodo.506611",
-    "versionDoi": "10.5072/zenodo.604794",
-    "contentHash": "sha256:c9ce355b30e59189a6ebedc6eeddf711ecd065b062de6e56a2606b845fc14d39",
+    "versionDoi": "10.5072/zenodo.604842",
+    "contentHash": "sha256:abb29e81b54b490545d3f12b4dc199cca953edadfb04d637886a66a66131f618",
     "status": "published",
     "version": "11 January 2024",
-    "mintedAt": "2026-09-16T15:17:41.406Z",
+    "mintedAt": "2026-09-16T16:10:19.824Z",
     "env": "sandbox"
   },
   "van-heuven-goedhart-gj-2012": {
