@@ -1122,14 +1122,14 @@
     "env": "sandbox"
   },
   "stoppani-p-2025": {
-    "recordId": 603585,
+    "recordId": 604380,
     "conceptRecId": 506601,
     "conceptDoi": "10.5072/zenodo.506601",
-    "versionDoi": "10.5072/zenodo.603585",
-    "contentHash": "sha256:de9d2aa85722ed8be9612f88b4dc6e3b833816decd141402939bba08336d6c89",
+    "versionDoi": "10.5072/zenodo.604380",
+    "contentHash": "sha256:f2e383050517cab2ea774fc26918ae77b0f3bb30787e0ac9797ba0c083b0e4f1",
     "status": "published",
     "version": "16 April 2025",
-    "mintedAt": "2026-09-15T17:00:31.272Z",
+    "mintedAt": "2026-09-16T08:06:18.394Z",
     "env": "sandbox"
   },
   "sweetser-a-2026": {
