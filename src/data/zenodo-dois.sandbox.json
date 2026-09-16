@@ -979,14 +979,14 @@
     "env": "sandbox"
   },
   "rey-f-2025": {
-    "recordId": 603571,
+    "recordId": 604379,
     "conceptRecId": 506577,
     "conceptDoi": "10.5072/zenodo.506577",
-    "versionDoi": "10.5072/zenodo.603571",
-    "contentHash": "sha256:e15af5c46432fa466eb3b1e93e86e268b18bd653ae03e900299deae35ff7cf14",
+    "versionDoi": "10.5072/zenodo.604379",
+    "contentHash": "sha256:5beb2d3be32a554c275d692f2f81fc717dafbcf25ea74e6414beb199593f3b3e",
     "status": "published",
     "version": "14 April 2025",
-    "mintedAt": "2026-09-15T16:59:35.050Z",
+    "mintedAt": "2026-09-16T08:02:37.349Z",
     "env": "sandbox"
   },
   "ricupero-r-2013": {
