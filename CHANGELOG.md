@@ -1,3 +1,11 @@
+# [1.20.0](https://github.com/HamonUdvari/io-bio/compare/v1.19.0...v1.20.0) (2026-09-16)
+
+
+### Website Features
+
+* **bios:** backfill acronym-only org names from an earlier role in the same entry ([](https://github.com/HamonUdvari/io-bio/commit/5b95c686f7ad814a52f234af97a0ac56aa0fd5aa))
+* **entries:** add clear (x) button to the filter box, matching the search overlay ([](https://github.com/HamonUdvari/io-bio/commit/04905a447230fedfd1f4522928fbf6e26acbe645))
+
 # [1.19.0](https://github.com/HamonUdvari/io-bio/compare/v1.18.0...v1.19.0) (2026-09-15)
 
 
