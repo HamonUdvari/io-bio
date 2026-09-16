@@ -125,6 +125,42 @@ function fillRoleAbbr<T extends { organisation?: string; abbreviation?: string }
   return abbr ? { ...role, abbreviation: abbr } : role;
 }
 
+// Authors naturally spell an organisation out on first mention — "Secretary of
+// the European Commission of the Danube (ECD)" — then use only the acronym after
+// — "Secretary-General of the ECD". The parser then leaves the later role with
+// `organisation: "ECD"` and no full name, so the org column shows a bare "ECD".
+// Backfill that later role's full name from the EARLIER role in the SAME entry
+// that already defined the acronym. This touches only the roles array (the org
+// column + search index); the summary prose at the top of the bio is untouched,
+// so we never force the author to repeat the full name and read clumsily.
+function expandAcronymOrgs<
+  T extends { organisation?: string; abbreviation?: string },
+>(roles: T[]): T[] {
+  // Map each acronym to the full name a role spelled out. If the SAME acronym
+  // maps to two DIFFERENT full names within one entry (e.g. "EC" used for two
+  // bodies), it is ambiguous — skip it rather than silently pick one.
+  const fullByAbbr: Record<string, string> = {};
+  const ambiguous = new Set<string>();
+  for (const r of roles) {
+    if (r.abbreviation && r.organisation && r.organisation !== r.abbreviation) {
+      const prev = fullByAbbr[r.abbreviation];
+      if (prev && prev !== r.organisation) ambiguous.add(r.abbreviation);
+      else fullByAbbr[r.abbreviation] = r.organisation;
+    }
+  }
+  if (!Object.keys(fullByAbbr).length) return roles;
+  return roles.map((r) => {
+    if (!r.organisation || ambiguous.has(r.organisation)) return r;
+    const full = fullByAbbr[r.organisation];
+    if (!full || full === r.organisation) return r;
+    return {
+      ...r,
+      organisation: full,
+      abbreviation: r.abbreviation || r.organisation,
+    };
+  });
+}
+
 /**
  * Write a docx image attachment to `outputDir` as `<stem>.<ext>`.
  *
@@ -452,9 +488,11 @@ const docxEntryType: ContentEntryType = {
       imageSource: extracted?.imageSource ?? "",
       life: extracted?.life ?? "",
       introNotes: extracted?.introNotes ?? [],
-      // Fill any missing "(ACRONYM)" from the CMS-editable org→acronym map
-      // (docx-parsed abbreviations always win — see fillRoleAbbr).
-      roles: (extracted?.roles ?? []).map(fillRoleAbbr),
+      // First expand any "acronym-only" later role from an earlier role in the
+      // same entry (expandAcronymOrgs), then fill any still-missing "(ACRONYM)"
+      // from the CMS-editable org→acronym map (docx-parsed abbreviations always
+      // win — see fillRoleAbbr).
+      roles: expandAcronymOrgs(extracted?.roles ?? []).map(fillRoleAbbr),
 
       archives: extracted?.archives ?? { items: [] },
       publications: extracted?.publications ?? { items: [] },
