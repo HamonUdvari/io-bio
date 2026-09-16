@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/HamonUdvari/io-bio/compare/v1.21.0...v1.22.0) (2026-09-16)
+
+
+### Website Features
+
+* **cms:** consolidated per-entry override (roles + portrait + face) as a WYSIWYG folder collection ([](https://github.com/HamonUdvari/io-bio/commit/fad2e3b58f4504fc67bae22c6395afabf2fd0668))
+
 # [1.21.0](https://github.com/HamonUdvari/io-bio/compare/v1.20.0...v1.21.0) (2026-09-16)
 
 
