@@ -18,7 +18,7 @@ import {
   type FilterFn,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import clsx from "clsx";
 
 declare module "@tanstack/react-table" {
@@ -45,6 +45,7 @@ function DebouncedInput({
   debounce?: number;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
   const [value, setValue] = useState(initialValue);
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
@@ -57,12 +58,35 @@ function DebouncedInput({
     return () => clearTimeout(timeout);
   }, [value]);
 
+  // Clear (✕) button — mirrors the global search overlay's clear control: empties
+  // the field, pushes the empty value through immediately, and refocuses the input.
+  const hasValue = String(value).length > 0;
+  const clear = () => {
+    setValue("");
+    onChange("");
+    inputRef.current?.focus();
+  };
+
   return (
-    <input
-      {...props}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-    />
+    <div class="entries__search-field">
+      <input
+        {...props}
+        ref={inputRef}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <button
+        type="button"
+        class="entries__clear"
+        aria-label="Clear filter"
+        hidden={!hasValue}
+        onClick={clear}
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">
+          close
+        </span>
+      </button>
+    </div>
   );
 }
 

@@ -639,13 +639,40 @@
       @apply gap-(--gap-controls);
     }
 
-    & .entries__search {
-      @apply w-full;
-      @apply px-4 py-(--btn-py);
-      @apply shadow ring ring-inset;
-      
+    /* Wraps the filter input + its clear (✕) button so the button can sit inside
+       the field, mirroring the global search overlay (.search__form). */
+    & .entries__search-field {
+      @apply relative flex items-center w-full;
+
       @variant desktop {
         @apply flex-1;
+      }
+    }
+
+    & .entries__search {
+      @apply w-full;
+      /* extra right padding leaves room for the clear (✕) button */
+      @apply pl-4 pr-10 py-(--btn-py);
+      @apply shadow ring ring-inset;
+    }
+
+    /* Clear (✕) button — identical to the search overlay's .search__clear. */
+    & .entries__clear {
+      @apply absolute inline-flex items-center justify-center;
+      @apply p-1;
+      right: 0.5rem;
+      color: inherit;
+      opacity: 0.7;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+
+      &[hidden] {
+        @apply hidden;
+      }
+
+      & .material-symbols-outlined {
+        font-size: 18px;
       }
     }
 
