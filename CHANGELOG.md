@@ -1,3 +1,10 @@
+# [1.21.0](https://github.com/HamonUdvari/io-bio/compare/v1.20.0...v1.21.0) (2026-09-16)
+
+
+### Website Features
+
+* **bios:** CMS-editable per-entry roles override ([](https://github.com/HamonUdvari/io-bio/commit/2a4189b3e8283cb29567272ab58dc31d5970f668))
+
 # [1.20.0](https://github.com/HamonUdvari/io-bio/compare/v1.19.0...v1.20.0) (2026-09-16)
 
 
