@@ -968,14 +968,14 @@
     "env": "sandbox"
   },
   "rajchman-lw-2014": {
-    "recordId": 603569,
+    "recordId": 604378,
     "conceptRecId": 506575,
     "conceptDoi": "10.5072/zenodo.506575",
-    "versionDoi": "10.5072/zenodo.603569",
-    "contentHash": "sha256:811a5a52ae06db1fcc20ceb5a4617e21e1029967b3652198428803625aa0e52f",
+    "versionDoi": "10.5072/zenodo.604378",
+    "contentHash": "sha256:5ac80a1cd767528fbffba4e7dfb3b6517945360fb4fb26fe5063baf101fed9f4",
     "status": "published",
     "version": "19 November 2014",
-    "mintedAt": "2026-09-15T16:59:30.500Z",
+    "mintedAt": "2026-09-16T07:48:04.583Z",
     "env": "sandbox"
   },
   "rey-f-2025": {
