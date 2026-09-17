@@ -1,3 +1,10 @@
+# [1.23.0](https://github.com/HamonUdvari/io-bio/compare/v1.22.0...v1.23.0) (2026-09-17)
+
+
+### Website Features
+
+* **cms:** override all preview detail fields; rename collection to Bios; hide bio-files ([](https://github.com/HamonUdvari/io-bio/commit/c35c9532225b2554448678a307a6cf7e9be604e3))
+
 # [1.22.0](https://github.com/HamonUdvari/io-bio/compare/v1.21.0...v1.22.0) (2026-09-16)
 
 
