@@ -33,7 +33,6 @@ const DETAIL_FIELDS = [
   "summary",
   "life",
   "nationality",
-  "country",
   "version",
   "authors",
   "editors",

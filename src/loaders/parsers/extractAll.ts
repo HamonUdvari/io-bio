@@ -112,7 +112,6 @@ export function extractAll(ast: any): ParserResult<ExtractedBio> {
     introNotes,
     roles: roles.value,
     nationality: nationality.value.nationality,
-    country: nationality.value.country,
     imageSource: image.value.imageSource,
     imageAttachment: image.value.attachment,
     version: version.value.version,

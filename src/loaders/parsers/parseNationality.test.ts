@@ -2,25 +2,22 @@ import { describe, expect, it } from "vitest";
 import { parseNationality } from "./parseNationality";
 
 describe("parseNationality", () => {
-  it("extracts country and male demonym", () => {
+  it("extracts the male demonym", () => {
     const { value } = parseNationality(
       "Ghanaian international civil servant and seventh Secretary-General",
     );
-    expect(value.country).toBe("Ghana");
     expect(value.nationality).toBe("Ghanaian");
   });
 
-  it("extracts another country", () => {
+  it("extracts another demonym", () => {
     const { value } = parseNationality(
       "Egyptian politician, sixth Secretary-General of the United Nations",
     );
-    expect(value.country).toBe("Egypt");
     expect(value.nationality).toBe("Egyptian");
   });
 
   it("warns when no demonym matches", () => {
     const { value, warnings } = parseNationality("just some random text");
-    expect(value.country).toBeNull();
     expect(value.nationality).toBeNull();
     expect(warnings.find((w) => w.code === "nationality_unknown")).toBeTruthy();
   });
@@ -32,7 +29,6 @@ describe("parseNationality", () => {
     const { value } = parseNationality(
       "American foreign policy expert and League of Nations High Commissioner for Refugees Coming from Germany",
     );
-    expect(value.country).toBe("United States");
     expect(value.nationality).toBe("American");
   });
 
@@ -44,7 +40,6 @@ describe("parseNationality", () => {
     const { value } = parseNationality(
       "Argentinean politician and first Secretary-General of the Union of South American Nations",
     );
-    expect(value.country).toBe("Argentina");
     expect(value.nationality).toBe("Argentinean");
   });
 
@@ -54,7 +49,6 @@ describe("parseNationality", () => {
     const { value } = parseNationality(
       "Argentine diplomat and fifth Secretary General of the Organization of American States",
     );
-    expect(value.country).toBe("Argentina");
     expect(value.nationality).toBe("Argentine");
   });
 });

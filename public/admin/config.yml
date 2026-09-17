@@ -214,8 +214,6 @@ collections:
           - { label: "↳ Override life", name: lifeOverride, widget: boolean, default: false }
           - { label: Nationality, name: nationality, widget: string, required: false }
           - { label: "↳ Override nationality", name: nationalityOverride, widget: boolean, default: false }
-          - { label: Country, name: country, widget: string, required: false }
-          - { label: "↳ Override country", name: countryOverride, widget: boolean, default: false }
           - { label: Version, name: version, widget: string, required: false }
           - { label: "↳ Override version", name: versionOverride, widget: boolean, default: false }
           - { label: Author(s), name: authors, widget: string, required: false }

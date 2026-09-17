@@ -66,7 +66,6 @@ export type ExtractedBio = {
   introNotes: string[];
   roles: Role[];
   nationality: string | null;
-  country: string | null;
   imageSource: string | null;
   imageAttachment: ImageAttachment | null;
   version: string | null;

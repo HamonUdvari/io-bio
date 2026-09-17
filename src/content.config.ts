@@ -80,7 +80,6 @@ export const bioDataSchema = z.object({
   // docxLoader / parseCitation) — shown in "How to cite", mirrored to Zenodo.
   editors: z.string().optional(),
   nationality: z.string().optional(),
-  country: z.string().optional(),
   html: z.string().optional(),
   // Cleaned biography prose (no citation/APL/intro) — feeds the search index.
   body: z.string().optional(),

@@ -91,7 +91,6 @@ const DETAIL_FIELDS = [
   "summary",
   "life",
   "nationality",
-  "country",
   "version",
   "authors",
   "editors",
@@ -527,7 +526,6 @@ const docxEntryType: ContentEntryType = {
       authors: detailVal("authors") ?? "",
       editors: detailVal("editors") ?? "",
       nationality: detailVal("nationality") ?? undefined,
-      country: detailVal("country") ?? "",
       html: extracted?.html ?? "",
       // Cleaned biography prose (citation/APL/intro already removed) — used by
       // the full-text search index endpoint (src/pages/search-index.json.ts).

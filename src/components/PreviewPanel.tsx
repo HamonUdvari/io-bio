@@ -223,9 +223,7 @@ function ResultPanel({
         <Field label="Née">{bio.nee}</Field>
         <Field label="Summary">{bio.summary}</Field>
         <Field label="Life">{bio.life}</Field>
-        <Field label="Nationality / country">
-          {[bio.nationality, bio.country].filter(Boolean).join(" / ") || "—"}
-        </Field>
+        <Field label="Nationality">{bio.nationality || "—"}</Field>
         <Field label="Version">{bio.version}</Field>
         <Field label="Author(s)">{bio.authors}</Field>
         {/* Per-entry editors from the "How to cite" line. "—" means the docx had

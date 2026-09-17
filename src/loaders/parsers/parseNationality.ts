@@ -2,12 +2,11 @@ import countries from "world-countries/countries.json";
 import type { ParserResult, Warning } from "./types";
 
 export type NationalityFields = {
-  country: string | null;
   nationality: string | null;
 };
 
 /**
- * Extract { country, nationality } from a text snippet by matching English
+ * Extract { nationality } from a text snippet by matching English
  * demonyms against world-countries. Only UN member states are considered, to
  * avoid spurious matches on historical/dependent entities.
  *
@@ -15,7 +14,7 @@ export type NationalityFields = {
  */
 export function parseNationality(text: string): ParserResult<NationalityFields> {
   const warnings: Warning[] = [];
-  const value: NationalityFields = { country: null, nationality: null };
+  const value: NationalityFields = { nationality: null };
 
   if (!text) {
     warnings.push({
@@ -37,7 +36,7 @@ export function parseNationality(text: string): ParserResult<NationalityFields> 
   // a longer one at the same offset resolves to the more specific match
   // (defensive — no such prefix collision exists among world-countries' current
   // UN-member demonyms).
-  let best: { country: any; demonym: string; index: number } | null = null;
+  let best: { demonym: string; index: number } | null = null;
   for (const c of countries as any[]) {
     if (!c.unMember) continue;
     for (const dem of [c.demonyms?.eng?.f, c.demonyms?.eng?.m]) {
@@ -49,7 +48,7 @@ export function parseNationality(text: string): ParserResult<NationalityFields> 
         index < best.index ||
         (index === best.index && dem.length > best.demonym.length)
       ) {
-        best = { country: c, demonym: dem, index };
+        best = { demonym: dem, index };
       }
     }
   }
@@ -64,7 +63,6 @@ export function parseNationality(text: string): ParserResult<NationalityFields> 
     return { value, warnings };
   }
 
-  value.country = best.country.name.common;
   // Render the demonym AS WRITTEN in the source: the matched world-countries
   // demonym can be a prefix of the author's spelling (DB "Argentine" vs written
   // "Argentinean"). When the match sits at a word boundary, extend over trailing
