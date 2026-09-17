@@ -11,5 +11,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/stoppani-p-2025.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Pietro Angelo",
+    "lastName": "Stoppani",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Italian linguist and Director of the League of Nations Economic Relations Organization 1931-1939",
+    "life": "Was born 6 March 1879 in Milan, Italy and died 21 November 1968, probably in Rome, Italy. He was the son of Giovanni Maria Stoppani, pharmacist, and Barbarina Resinelli. On 14 July 1923 he married Hélène [Stoppani], with whom he had two daughters (one died early).",
+    "nationality": "Italian",
+    "country": "Italy",
+    "version": "Version 16 April 2025",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Stoppani, n.d., United Nations Archives at Geneva, P070_01_060"
+  }
 }

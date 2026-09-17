@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Halfdan Theodor",
+    "lastName": "Mahler",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Danish specialist in tuberculosis and third Director-General of the World Health Organization (WHO) 1973-1988",
+    "life": "Was born 21 April 1923 in Vivild, Denmark and passed away 14 December 2016 in Geneva, Switzerland. He was the son of Magnus Theodor Mahler, preacher, and Benedicte Olinka Ferdinande Marie Suadicani. On 31 August 1957 he married Ebba Fischer-Simonsen, psychiatrist. They had two sons.",
+    "nationality": "Danish",
+    "country": "Denmark",
+    "version": "Version 28 June 2013",
+    "authors": "Tine Hanrieder",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Mahler, n.d., Wikimedia Commons, photographer Erling Mandelmann"
+  }
 }

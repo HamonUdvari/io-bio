@@ -30,9 +30,11 @@ with GitHub" would need a small auth backend** (deliberately avoided here). Inst
 - **Pages** — About & Author Instructions via a **section block editor**: add / reorder /
   delete section blocks, each with a heading, style (primary/secondary), width (base/wide)
   and rich-text content. No `::::section` syntax for editors.
-- **Bio Word files** — managed via the **Asset Library** (the "media" view): the global
-  `media_folder` points at `src/content/bios/`, so editors browse, **add and replace the `.docx`
-  files** there directly — nothing else, no metadata entries. `docxLoader` reads them on build.
+- **Bio Word files** — managed via the **Asset Library** (the "media" view): the `bio-files`
+  collection's `media_folder` points at `src/content/bios/`, so editors browse, **add and replace
+  the `.docx` files** there directly — nothing else, no metadata entries. `docxLoader` reads them on
+  build. The collection itself is `hidden: true` (it only ever showed "0 entries"); verify in the
+  running CMS that .docx upload via the media library still works.
   (Page downloads/PDFs use the Pages collection's own `media_folder: public`, which also appears
   as a second folder in the Asset Library.)
 
@@ -56,11 +58,11 @@ and `src/pages/[...slug].astro` renders whichever form a page uses.
   **upload (add) and re-upload (replace)** work as expected.
 - **Downloads (PDFs)** — Pages `media_folder: public`; confirm a real PDF upload lands in `public/`
   and the `/io-bio` base path resolves.
-- **Roles & portraits (per entry)** — a folder collection over `src/data/entry-overrides/*.json`
-  (one card per bio, auto-synced from the Word files). Confirm the searchable list opens a card that
-  shows the roles pre-filled from the Word file, the "Manual override" toggle replaces them, the
-  Portrait override `image` widget uploads to `src/content/bios-images`, and Face position saves. The
-  cards are created/removed by `pnpm overrides:sync` (and the entry-overrides-sync CI job), not by the
-  editor.
+- **Bios** — a folder collection over `src/data/entry-overrides/*.json` (one card per bio, auto-synced
+  from the Word files). Confirm the searchable list opens a card that shows the roles + details
+  pre-filled from the Word file; the "Manual override of roles" and "Override details" toggles replace
+  them; the Portrait override `image` widget uploads to `src/content/bios-images`; and Face position
+  saves. The cards are created/removed by `pnpm overrides:sync` (and the entry-overrides-sync CI job),
+  not by the editor.
 - **Live login** — verify the "Sign in with Token" flow once with a real GitHub fine-grained token.
 - Do **not** merge to `main` / deploy until the live token login + a real edit are confirmed.

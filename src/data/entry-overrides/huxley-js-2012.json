@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Julian Sorell",
+    "lastName": "Huxley",
+    "knownAs": "",
+    "nee": "",
+    "summary": "British scientist and first Director-General of the United Nations Educational, Scientific and Cultural Organization (UNESCO) 1946-1948",
+    "life": "Was born 22 June 1887 in London, United Kingdom, and passed away 14 February 1975 in London. He was the son of Leonard Huxley, schoolmaster and biographer, and Julia Frances Arnold, schoolteacher. On 29 March 1919 he married Marie Juliette Baillot, teacher of French and sculptor. They had two sons.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 29 June 2012",
+    "authors": "Chloé Maurel",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Huxley, 1922, public domain, photographer unknown"
+  }
 }

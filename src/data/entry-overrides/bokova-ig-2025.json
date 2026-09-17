@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Irina Georgieva",
+    "lastName": "Bokova",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Bulgarian politician and tenth Director-General of the United Nations Educational, Scientific and Cultural Organization (UNESCO) 2009-2017",
+    "life": "Was born 12 July 1952 in Sofia, Bulgaria. She is the daughter of Georgi Filipov Bokov, journalist, and Nadezhda Karadzhova, radiobiologist. She married Lubomir Kolarov, journalist, with whom she had one daughter and one son. After her divorce, she married Kalin Mitrev, banker.",
+    "nationality": "Bulgarian",
+    "country": "Bulgaria",
+    "version": "Version 10 February 2025",
+    "authors": "Valentine M. Moghadam and Jessica Walker",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Bokova, 23 October 2009, UNESCO, photographer Michel Ravassard"
+  }
 }

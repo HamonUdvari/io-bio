@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Amadou Mahtar",
+    "lastName": "M’bow",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Senegalese politician and seventh Director-General of the United Nations Educational, Scientific and Cultural Organization (UNESCO) 1974-1987",
+    "life": "Was born 20 March 1921 in Dakar, French West Africa and died 24 September 2024 in Dakar, Senegal. He was the son of Fara N’Diaye M’Bow, farmer, and NGoné Casset. On 27 July 1951 he married Raymonde Sylvain, educator, with whom he had two daughters and one son.",
+    "nationality": "Senegalese",
+    "country": "Senegal",
+    "version": "Version 23 November 2018 ",
+    "authors": "Roger A. Coate",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "M’Bow, November 1974, UNESCO, photographer Dominique Roger"
+  }
 }

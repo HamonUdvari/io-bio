@@ -12,5 +12,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Hubert Miles Gladwyn",
+    "lastName": "Jebb",
+    "knownAs": "Gladwyn Jebb",
+    "nee": "",
+    "summary": "British diplomat and Acting Secretary-General of the United Nations 1946",
+    "life": "Was born in Firbeck, Yorkshire on 25 April 1900 and passed away in Halesworth, Suffolk, England on 24 October 1996. He was the son of Sydney Gladwyn Jebb, landowner, and Rose Eleanor Chicester. On 22 January 1929 he married Cynthia Noble, with whom he had two daughters and one son.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 17 December 2024",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Jebb, 1 September 1950, President of the UN Security Council, Photo, UN7725183"
+  }
 }

@@ -118,8 +118,14 @@ collections:
   # view), via this collection's media_folder. Manage the Word files THERE — add a
   # new one, or replace an existing one. (No editable entries: .docx can't be
   # text-edited; this collection only exists to give the files a labeled home.)
+  # `hidden: true` keeps this collection out of the sidebar (it only ever shows
+  # "0 entries" — there are no .md files, just the .docx media). Sveltia honours
+  # `hidden`; the media_folder still works, so .docx upload via the media library
+  # is unaffected. If a CMS version ignores it, the collection simply reappears
+  # (harmless). Manage the Word files via the media library / this folder.
   - name: bio-files
     label: Bio Word files
+    hidden: true
     folder: src/content/bios
     extension: md
     create: false
@@ -128,17 +134,17 @@ collections:
     fields:
       - { label: Name, name: title, widget: string }
 
-  # ---------- Roles & portraits (per entry) ----------
+  # ---------- Bios (per entry) ----------
   # One editable card per bio, auto-synced 1:1 with the Word files. Search a
-  # person, open the card, and you SEE that person's roles as read from the Word
-  # file (WYSIWYG). Leave "Manual override of roles" OFF to keep them auto
-  # (recommended); turn it ON to replace them by hand. The card also carries an
-  # optional higher-res portrait (empty = use the Word photo) and a group-photo
-  # face position. Cards are created/removed automatically to match the Word
-  # files, so the flow is: drop the .docx first, then tweak overrides here.
+  # person, open the card, and you SEE that person's details + roles as read from
+  # the Word file (WYSIWYG). Each override toggle is OFF by default (values stay
+  # auto-read from the Word file); turn a toggle ON to replace those values by
+  # hand. The card also carries an optional higher-res portrait (empty = use the
+  # Word photo) and a group-photo face position. Cards are created/removed
+  # automatically to match the Word files: drop the .docx first, then tweak here.
   - name: entry-overrides
-    label: Roles & portraits (per entry)
-    label_singular: Entry
+    label: Bios
+    label_singular: Bio
     folder: src/data/entry-overrides
     extension: json
     format: json
@@ -146,7 +152,7 @@ collections:
     delete: false
     identifier_field: name
     summary: "{{fields.name}}"
-    sortable_fields: [name, rolesOverride]
+    sortable_fields: [name, rolesOverride, detailsOverride]
     media_folder: /src/content/bios-images
     public_folder: /src/content/bios-images
     fields:
@@ -186,6 +192,30 @@ collections:
         value_type: int
         min: 1
         hint: "If a group photo crops the wrong person, set which face from the LEFT (1 = leftmost). Empty = the main face."
+      - label: Override details
+        name: detailsOverride
+        widget: boolean
+        default: false
+        hint: "OFF = the fields below are auto-read from the Word file (recommended). ON = they REPLACE what the Word file says."
+      - label: Details
+        name: details
+        widget: object
+        collapsed: true
+        summary: "{{fields.lastName}}, {{fields.firstName}}"
+        hint: "Shown from the Word file for reference. Turn ON \"Override details\" above before changing these."
+        fields:
+          - { label: First name, name: firstName, widget: string, required: false }
+          - { label: Last name, name: lastName, widget: string, required: false }
+          - { label: Known as, name: knownAs, widget: string, required: false }
+          - { label: Née, name: nee, widget: string, required: false }
+          - { label: Summary (one-line role summary), name: summary, widget: text, required: false }
+          - { label: Life (birth / death / family), name: life, widget: text, required: false }
+          - { label: Nationality, name: nationality, widget: string, required: false }
+          - { label: Country, name: country, widget: string, required: false }
+          - { label: Version, name: version, widget: string, required: false }
+          - { label: Author(s), name: authors, widget: string, required: false }
+          - { label: Editors (How to cite), name: editors, widget: text, required: false }
+          - { label: Image source / credit, name: imageSource, widget: text, required: false }
 
   # ---------- Settings ----------
   - name: settings

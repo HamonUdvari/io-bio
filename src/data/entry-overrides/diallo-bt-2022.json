@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/diallo-bt-2022.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Boubacar Telli",
+    "lastName": "Diallo",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Guinean diplomat and first Administrative Secretary-General of the Organization of African Unity (OAU) 1964-1972",
+    "life": "Was born in Porédaka, Guinea in 1925 and died in the Boiro concentration camp in Conakry, Guinea on 1 March 1977. He was the son of Mamadou Kindy Diallo, herder, and Kadidiatou Djioba Diallo. On 1 August 1951 he married Kadiatou Diallo, elementary school teacher, with whom he had one daughter and two sons.",
+    "nationality": "Guinean",
+    "country": "Guinea",
+    "version": "Version 4 May 2022",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Diallo, n.d., photographer Housseyni Alou, Montreal, Canada provided the picture to be published by IO BIO, 3 March 2022"
+  }
 }

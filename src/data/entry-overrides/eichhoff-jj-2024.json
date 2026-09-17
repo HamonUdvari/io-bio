@@ -17,5 +17,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Johann Joseph",
+    "lastName": "Eichhoff",
+    "knownAs": "",
+    "nee": "",
+    "summary": "German intellectual and Director-General of the Rhine Shipping Octroi 1806-1813 and charged with preparing the regulatory framework of the Central Commission for the Navigation of the Rhine 1815-1819",
+    "life": "Was born 18 May 1762 in Bonn, Electorate of Cologne, the Holy Roman Empire and passed away 2 December 1827 in Bonn Kessenich, Prussia. He was the son of Johann August Eichhoff, cook, and Maria Magdalena Farber. On 9 November 1782 he married Eva Franziska Grau, court singer, with whom he had three sons.",
+    "nationality": "German",
+    "country": "Germany",
+    "version": "Version 15 July 2024 ",
+    "authors": "Joep Schenk",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Eichhoff, c.1790, Stadtarchiv und Stadthistorische Bibliothek, Bonn, Germany, Portal Rheinische Geschichte, based on Neue Deutsche Biographie, Volume 4, 1959, p. 375"
+  }
 }

@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Yvo",
+    "lastName": "de Boer",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Dutch civil servant and third Executive Secretary of the United Nations Framework Convention on Climate Change (UNFCCC) Secretariat, 2006-2010",
+    "life": "Was born 12 June 1954 in Vienna, Austria. He is the son of Willem Pieter Lambertus Gerardus de Boer, diplomat and ambassador, and Hedwig Maria Yvonne Licini. In 1981 he married Sophie Welsing. He has two daughters and one son.",
+    "nationality": "Dutch",
+    "country": "Netherlands",
+    "version": "Version 19 November 2016",
+    "authors": "Thomas Hickmann and Sebastian Breuer",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "De Boer, 20 March 2007, New York, Photo UN7717555, Photographer Mark Garten"
+  }
 }

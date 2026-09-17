@@ -19,5 +19,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/rey-f-2025.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Francis Paul Marie Joseph François Xavier",
+    "lastName": "Rey",
+    "knownAs": "",
+    "nee": "",
+    "summary": "French international lawyer and Secretary of the European Commission of the Danube (ECD) 1911-1913 and Secretary-General of the ECD 1913-1935",
+    "life": "Was born 9 January 1870 in Paris, France and died 17 March 1952 in Paris. He was the son of Georges Rey, merchant, and Marie Elisa Paris. He married Marthe [Rey], with whom he had two daughters.",
+    "nationality": "French",
+    "country": "France",
+    "version": "Version 14 April 2025 ",
+    "authors": "Constantin Ardeleanu",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "The National Archives of Romania, Galați Branch, European Commission of the Danube, Secretariate General Fund, File 445/1931"
+  }
 }

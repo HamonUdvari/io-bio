@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Peter Alexander Rupert",
+    "lastName": "Carrington",
+    "knownAs": "",
+    "nee": "",
+    "summary": "British Conservative politician and sixth Secretary General of the North Atlantic Treaty Organization (NATO) 1984-1988",
+    "life": "Was born 6 June 1919 in London and passed away 9 July 2018 in Bledlow, Buckinghamshire, England. He was the son of Rupert Victor John Carington, Captain in the Grenadier Guards, and Sybil Marion Colville, lady-in-waiting to Mary, Princess Royal and Countess of Harewood. On 25 April 1942 Carrington married Iona Ellen McClean. They had two daughters and one son.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 10 October 2016 ",
+    "authors": "Hendrik W. Ohnesorge",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Carrington, 17 September 1984, Nationaal Archief, The Hague, Netherlands"
+  }
 }

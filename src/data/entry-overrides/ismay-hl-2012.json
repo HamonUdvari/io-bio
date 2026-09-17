@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Hastings Lionel",
+    "lastName": "Ismay",
+    "knownAs": "Pug",
+    "nee": "",
+    "summary": "British military and first Secretary-General of the North Atlantic Treaty Organization (NATO) 1952-1957",
+    "life": "Was born 21 June 1887 in Naini Tal, Uttar Pradesh, India, and passed away on 17 December 1965 at Wormington Grange, Broadway, Worcestershire, England. He was the younger son of Sir Stanley Ismay, a member of the viceroy’s Legislative Council and later chief justice of the court in Mysore in the state of Kamataka, India, and Beatrice Ellen Read. On 4 August 1921 he married Laura Kathleen Clegg. They had three daughters.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 29 July 2012",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Ismay, 1953, Palais de Chaillot, NATO"
+  }
 }

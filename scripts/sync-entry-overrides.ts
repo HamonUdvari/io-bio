@@ -22,10 +22,26 @@ import {
 } from "node:fs";
 import path from "node:path";
 
-const distFile = path.resolve("dist/entry-roles.json");
+// Keep in sync with DETAIL_FIELDS in src/loaders/docxLoader.ts.
+const DETAIL_FIELDS = [
+  "firstName",
+  "lastName",
+  "knownAs",
+  "nee",
+  "summary",
+  "life",
+  "nationality",
+  "country",
+  "version",
+  "authors",
+  "editors",
+  "imageSource",
+] as const;
+
+const distFile = path.resolve("dist/entry-data.json");
 if (!existsSync(distFile)) {
   console.error(
-    "sync-entry-overrides: dist/entry-roles.json not found — run `pnpm build` first.",
+    "sync-entry-overrides: dist/entry-data.json not found — run `pnpm build` first.",
   );
   process.exit(1);
 }
@@ -36,6 +52,7 @@ const source = JSON.parse(readFileSync(distFile, "utf8")) as Array<{
   slug?: string;
   name?: string;
   roles?: unknown[];
+  details?: Record<string, string>;
 }>;
 
 const wantSlugs = new Set<string>();
@@ -58,7 +75,23 @@ for (const e of source) {
     }
   }
   const rolesOverride = prev.rolesOverride === true;
+  const detailsOverride = prev.detailsOverride === true;
   const fp = Number(prev.facePosition);
+
+  // details: mirror the live values when the toggle is OFF; preserve the manual
+  // edits when ON. Always emit all keys so the CMS card shows every field.
+  const prevDetails =
+    prev.details && typeof prev.details === "object"
+      ? (prev.details as Record<string, unknown>)
+      : {};
+  const details: Record<string, string> = {};
+  for (const k of DETAIL_FIELDS) {
+    if (detailsOverride) {
+      details[k] = typeof prevDetails[k] === "string" ? prevDetails[k] : "";
+    } else {
+      details[k] = e?.details?.[k] ?? "";
+    }
+  }
 
   const next = {
     slug,
@@ -75,6 +108,8 @@ for (const e of source) {
     portraitImage:
       typeof prev.portraitImage === "string" ? prev.portraitImage : "",
     facePosition: Number.isFinite(fp) && fp >= 1 ? fp : null,
+    detailsOverride,
+    details,
   };
 
   const serialized = JSON.stringify(next, null, 2) + "\n";

@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/curchod-cl-2017.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Charles Louis",
+    "lastName": "Curchod",
+    "knownAs": "Louis",
+    "nee": "",
+    "summary": "Swiss engineer and first and third Director of the International Telegraph Union (ITU) 1869 and 1873-1889",
+    "life": "Was born 7 October 1826 in Crissier, Canton Vaud, Switzerland and died 18 October 1889 in Berne, Canton Berne, Switzerland. He was the son of Jean Jacques Ferdinand Curchod, pastor, and Frédérique Élisabeth Henriette Chavannes. On 8 September 1853 he married Élise Dufournet. They had two daughters.",
+    "nationality": "Swiss",
+    "country": "Switzerland",
+    "version": "Version 25 September 2017",
+    "authors": "Simone Fari and Gabriele Balbi",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Curchod, n.d., ITU website and Flickr Commons"
+  }
 }

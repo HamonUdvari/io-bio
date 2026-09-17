@@ -12,5 +12,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Per Carl Gustav",
+    "lastName": "Unckel",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Swedish Conservative politician and eighth Secretary-General of the Nordic Council of Ministers 2003-2006",
+    "life": "Was born 24 February 1948 in Finspång, Östergötland, and passed away 20 September 2011 in Stockholm, Sweden. He was the son of Herman Unckel, professor of technology, and Willy Vinell, senior post office clerk. On 16 June 1978 he married Christina Maria Lagerkvist, secretary. They had two sons.",
+    "nationality": "Swedish",
+    "country": "Sweden",
+    "version": "Version 13 April 2012",
+    "authors": "Tobias Etzold",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Uncle, 2 November 2004, Wikimedia Commons, photographer Magnus Fröderberg, Norden.org"
+  }
 }

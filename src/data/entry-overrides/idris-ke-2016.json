@@ -21,5 +21,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/idris-ke-2016.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Kamil Eltayeb",
+    "lastName": "Idris",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Sudanese diplomat and third Director General of the World Intellectual Property Organization (WIPO) 1997-2008 and third Secretary-General of the International Union for the Protection of New Varieties of Plants (UPOV) 1997-2008",
+    "life": "Was born 26 August 1954 in Sudan. He is the son of Eltayeb Idris and Amouna Haj Hussein. He married Azza Mohyeldin Ahmed. They have five children.",
+    "nationality": "Sudanese",
+    "country": "Sudan",
+    "version": "Version 7 March 2016 ",
+    "authors": "Joan van Heijster and Thomas R. Eimer",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Idris, n.d., WIPO and Flickr"
+  }
 }

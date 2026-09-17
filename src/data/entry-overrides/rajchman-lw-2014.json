@@ -11,5 +11,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/rajchman-lw-2014.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Ludwik Witold",
+    "lastName": "Rajchman",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Polish microbiologist, Director of the League of Nations Health Organization 1921-1939 and initiator of the United Nations International Children’s Emergency Fund (UNICEF)",
+    "life": "Was born 1 November 1881 in Warsaw, Poland and passed away 13 July 1965 in Chenu, France. He was the son of Aleksander Rajchman, editor of a musical and literary magazine, and Melania Amalia Hirszfeld, journalist. On 8 September 1904 he married Maria Klotylda Bojanczyk, medical student, with whom he had two daughters and one son.",
+    "nationality": "Polish",
+    "country": "Poland",
+    "version": "Version 19 November 2014",
+    "authors": "Marta A. Balinska",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Rajchman, n.d., United Nations Archives at Geneva, P069_01_003"
+  }
 }

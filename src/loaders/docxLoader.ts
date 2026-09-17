@@ -77,11 +77,32 @@ const SANDBOX_MAP = loadSandboxMap();
 //   - portraitImage       -> override portrait path (empty = docx-embedded).
 //   - facePosition        -> 1-based face index for the crop (empty = largest).
 // Keyed by githubSlug(basename) — the store id — so lookups match every consumer.
+// The scalar "detail" fields an entry can override (everything visible on the
+// preview page except Biography/Archives/Publications/Literature and derived
+// values). Mirrored from Word when detailsOverride is OFF; used as-is when ON.
+const DETAIL_FIELDS = [
+  "firstName",
+  "lastName",
+  "knownAs",
+  "nee",
+  "summary",
+  "life",
+  "nationality",
+  "country",
+  "version",
+  "authors",
+  "editors",
+  "imageSource",
+] as const;
+type DetailField = (typeof DETAIL_FIELDS)[number];
+
 interface EntryOverride {
   rolesOverride: boolean;
   roles: Role[];
   portraitImage: string;
   facePosition?: number;
+  detailsOverride: boolean;
+  details: Partial<Record<DetailField, string>>;
 }
 function loadEntryOverrideMap(): Record<string, EntryOverride> {
   const dir = path.resolve("./src/data/entry-overrides");
@@ -96,6 +117,8 @@ function loadEntryOverrideMap(): Record<string, EntryOverride> {
         roles?: unknown[];
         portraitImage?: string;
         facePosition?: unknown;
+        detailsOverride?: boolean;
+        details?: Record<string, unknown>;
       };
       const slug = String(raw?.slug ?? path.basename(f, ".json")).trim();
       if (!slug || slug.startsWith("_")) continue;
@@ -116,11 +139,20 @@ function loadEntryOverrideMap(): Record<string, EntryOverride> {
         roles.push(role);
       }
       const fp = Number(raw?.facePosition);
+      const details: Partial<Record<DetailField, string>> = {};
+      const rawDetails =
+        raw?.details && typeof raw.details === "object" ? raw.details : {};
+      for (const k of DETAIL_FIELDS) {
+        const v = (rawDetails as Record<string, unknown>)[k];
+        if (typeof v === "string") details[k] = v;
+      }
       map[slug] = {
         rolesOverride: raw?.rolesOverride === true,
         roles,
         portraitImage: String(raw?.portraitImage ?? "").trim(),
         facePosition: Number.isFinite(fp) && fp >= 1 ? fp : undefined,
+        detailsOverride: raw?.detailsOverride === true,
+        details,
       };
     } catch {
       // skip malformed override file — falls back to Word behaviour
@@ -452,18 +484,28 @@ const docxEntryType: ContentEntryType = {
       }
     }
 
+    // Per-entry "details" override: when detailsOverride is ON, a details field
+    // REPLACES the Word value (an absent key falls back to Word; an explicit ""
+    // sticks). When OFF, the Word value is used (details is just the CMS mirror).
+    const detailVal = (k: DetailField): string | undefined => {
+      if (ov?.detailsOverride && ov.details?.[k] !== undefined)
+        return ov.details[k];
+      const w = (extracted as Record<string, unknown> | null | undefined)?.[k];
+      return typeof w === "string" ? w : undefined;
+    };
+
     const data = {
       title: path.basename(filePath, path.extname(filePath)),
-      firstName: extracted?.firstName ?? "",
-      lastName: extracted?.lastName ?? "",
-      knownAs: extracted?.knownAs,
-      nee: extracted?.nee,
-      summary: extracted?.summary ?? "",
+      firstName: detailVal("firstName") ?? "",
+      lastName: detailVal("lastName") ?? "",
+      knownAs: detailVal("knownAs"),
+      nee: detailVal("nee"),
+      summary: detailVal("summary") ?? "",
       image: {},
       imageFn,
       imagePortraitFn,
-      imageSource: extracted?.imageSource ?? "",
-      life: extracted?.life ?? "",
+      imageSource: detailVal("imageSource") ?? "",
+      life: detailVal("life") ?? "",
       introNotes: extracted?.introNotes ?? [],
       // Per-entry roles override (src/data/entry-overrides/<slug>.json): when
       // rolesOverride is ON, `roles` REPLACES the auto-parsed roles; otherwise
@@ -476,11 +518,11 @@ const docxEntryType: ContentEntryType = {
       archives: extracted?.archives ?? { items: [] },
       publications: extracted?.publications ?? { items: [] },
       literature: extracted?.literature ?? { items: [] },
-      version: extracted?.version ?? "",
-      authors: extracted?.authors ?? "",
-      editors: extracted?.editors ?? "",
-      nationality: extracted?.nationality ?? undefined,
-      country: extracted?.country ?? "",
+      version: detailVal("version") ?? "",
+      authors: detailVal("authors") ?? "",
+      editors: detailVal("editors") ?? "",
+      nationality: detailVal("nationality") ?? undefined,
+      country: detailVal("country") ?? "",
       html: extracted?.html ?? "",
       // Cleaned biography prose (citation/APL/intro already removed) — used by
       // the full-text search index endpoint (src/pages/search-index.json.ts).
@@ -630,6 +672,7 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
                 roles: ovEntry.rolesOverride ? ovEntry.roles : null,
                 portraitImage: ovEntry.portraitImage || null,
                 facePosition: ovEntry.facePosition ?? null,
+                details: ovEntry.detailsOverride ? ovEntry.details : null,
               }
             : null,
         );

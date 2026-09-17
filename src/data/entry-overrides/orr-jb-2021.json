@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/orr-jb-2021.png",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "John Boyd",
+    "lastName": "Orr",
+    "knownAs": "",
+    "nee": "",
+    "summary": "British nutritional scientist and first Director-General of the Food and Agriculture Organization of the United Nations (FAO) 1945-1948",
+    "life": "Was born 23 September 1880 in Kilmaurs, Ayrshire, Scotland, United Kingdom and passed away 25 June 1971 in Brechin, Angus, Scotland. He was the son of Robert Clark Orr, house painter and quarry owner, and Annie Boyd. On 21 February 1915 he married Elizabeth Pearson Callum. They had two daughters and one son.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 1 June 2021 ",
+    "authors": "Amy L. Sayward",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Orr, 1949, Nobel Peace Prize Laureate, Nobel Foundation Archive, public domain"
+  }
 }

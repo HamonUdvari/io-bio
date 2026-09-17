@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Salim Ahmed",
+    "lastName": "Salim",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Tanzanian diplomat and sixth Secretary-General of the Organization of African Unity (OAU) 1989-2001",
+    "life": "Was born 23 January 1942 on Unguja Island in the Sultanate of Zanzibar, now Tanzania. He was the son of Ahmed Salim Ali, writer employed by farmers, and Maryam Ali Ahmed. On 17 April 1964 he married Amne Ali Rifai. They have one daughter, two sons and an adopted daughter.",
+    "nationality": "Tanzanian",
+    "country": "Tanzania",
+    "version": "Version 24 January 2016",
+    "authors": "Ulf Engel",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Salim, 24 June 2008, New York, Photo UN7679392, Photographer Evan Schneider"
+  }
 }

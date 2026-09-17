@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Paul-Henri Charles",
+    "lastName": "Spaak",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Belgian politician and second Secretary General of the North Atlantic Treaty Organization (NATO) 1957-1961",
+    "life": "Was born 25 January 1899 in Schaerbeek, Belgium, and passed away on 31 July 1972 in Brussels, Belgium. He was the son of Paul Spaak, a lawyer who turned to poetry and drama and became director of the Théâtre Royal de la Monnaie in Brussels, and Marie-Ann Janson, a socialist who in 1921 became the first woman member of the Belgian parliament. On 31 August 1922 he married Marguerite Malevez. They had two daughters and one son. After Malevez’s death on 14 August 1964 he married Simonne Rikkers Hottlet Dear on 23 April 1965.",
+    "nationality": "Belgian",
+    "country": "Belgium",
+    "version": "Version 19 January 2015 ",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Spaak, 4 November 1946, UN General Assembly New York, Photo UN7557650"
+  }
 }

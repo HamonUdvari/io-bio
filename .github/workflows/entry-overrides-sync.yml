@@ -16,7 +16,7 @@ on:
       - "src/content/bios/**" # a .docx added / edited / removed
       - "src/loaders/**" # parser + roleTransforms + docxLoader changes
       - "src/content.config.ts"
-      - "src/pages/entry-roles.json.ts" # the endpoint the sync reads
+      - "src/pages/entry-data.json.ts" # the endpoint the sync reads
       - "src/data/org-abbreviations.json" # affects the mirrored acronyms
       - "scripts/sync-entry-overrides.ts"
   workflow_dispatch:

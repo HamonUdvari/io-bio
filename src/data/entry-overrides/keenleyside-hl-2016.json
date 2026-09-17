@@ -12,5 +12,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/keenleyside-hl-2016.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Hugh Llewellyn",
+    "lastName": "Keenleyside",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Canadian diplomat and Director-General of the United Nations Technical Assistance Administration (TAA) 1950-1958",
+    "life": "Was born 7 July 1898 in Toronto, Ontario, Canada and passed away 27 September 1992 in Victoria, British Columbia. He was the son of Ellis William Keenleyside, insurance underwriter, and Margaret Louise Irvine. On 11 August 1924 he married Katherine Hall Pillsbury. They had three daughters and one son.",
+    "nationality": "Canadian",
+    "country": "Canada",
+    "version": "Version 29 January 2016",
+    "authors": "David Webster",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Keenleyside, 1984, photographer Henry Palmer"
+  }
 }

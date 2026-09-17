@@ -1,6 +1,6 @@
 # bios-images — portrait override uploads
 
-This folder is the **media folder** for the CMS **"Roles & portraits (per entry)"**
+This folder is the **media folder** for the CMS **"Bios"**
 collection. When you upload a **Portrait override** on an entry's card, the image
 lands here and its path is stored in that entry's
 `src/data/entry-overrides/<slug>.json` (`portraitImage`). The build then uses it

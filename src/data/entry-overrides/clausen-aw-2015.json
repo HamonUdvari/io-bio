@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Alden Winship",
+    "lastName": "Clausen",
+    "knownAs": "Tom",
+    "nee": "",
+    "summary": "American Banker, President of Bank of America and sixth President of the International Bank for Reconstruction and Development (IBRD) and World Bank Group 1981-1986",
+    "life": "Was born 17 February 1923 in Hamilton, Illinois, United States and passed away 21 January 2013 in Hillsborough, California. He was the son of Morton Clausen, newspaper publisher, and Elsie Kroll. On 11 February 1950 he married Mary Margaret (Peggy) Crassweller, with whom he had two sons. After her death on 15 March 2001 he married Helen Higgins, his secretary at the Bank of America and the World Bank, on 29 September 2002.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 17 April 2015",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Clausen, 24 September 1984, Annual Meeting World Bank Group, World Bank Group Archives, photographer Michele Iannacci"
+  }
 }

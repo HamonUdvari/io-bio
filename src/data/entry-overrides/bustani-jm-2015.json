@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "José Maurício de Figueiredo",
+    "lastName": "Bustani",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Brazilian diplomat and first Director-General of the Organization for the Prohibition of Chemical Weapons (OPCW) 1997-2002",
+    "life": "Was born in Porto Velho, Brazil on 5 June 1945. He is the son of Mauricio José Bustani, medical doctor, and Guajá de Figueiredo. On 1 June 1971 he married Janine-Monique Lazaro, diplomat. They have one daughter and two sons.",
+    "nationality": "Brazilian",
+    "country": "Brazil",
+    "version": "Version 19 January 2015 ",
+    "authors": "Dawisson Belém Lopes",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Bustani, 13 June 2003, Agência Senado, photographer Márcia Kalume"
+  }
 }

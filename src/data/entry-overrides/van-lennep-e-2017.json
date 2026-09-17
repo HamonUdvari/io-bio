@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Emile",
+    "lastName": "van Lennep",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Dutch civil servant and second Secretary-General of the Organization for Economic Cooperation and Development (OECD) 1969-1984",
+    "life": "Was born 20 January 1915 in Amsterdam and passed away 2 October 1996 in The Hague, The Netherlands. He was the son of Louis Henri van Lennep, banker, and Catharina Hillegonda Enschedé. On 5 June 1941 he married Alexa Alison Labberton. They had two daughters and two sons.",
+    "nationality": "Dutch",
+    "country": "Netherlands",
+    "version": "Version 28 December 2017",
+    "authors": "Matthieu Leimgruber and Samuel Beroud",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Van Lennep, n.d., OECD, Flickr, C79-30-18"
+  }
 }

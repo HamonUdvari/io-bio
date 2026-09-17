@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Edward Colin Viner",
+    "lastName": "Goad",
+    "knownAs": "",
+    "nee": "",
+    "summary": "British civil servant and fourth Secretary-General of the Inter-Governmental Maritime Consultative Organization (IMCO) 1968-1973",
+    "life": "Was born 21 December 1914 in Cirencester, Gloucestershire, England and passed away 15 March 1998 in Cirencester. He was the son of Maurice George Viner Goad, caterer, and Caroline Masters, caterer. On 2 September 1939 he married Joan Oliver Bradley, civil servant. They had one son.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 4 March 2015 ",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Goad, 15 September 1975, Nationaal Archief, The Hague, photographer Joost Evers"
+  }
 }

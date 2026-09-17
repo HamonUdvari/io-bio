@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Néstor Carlos",
+    "lastName": "Kirchner",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Argentinean politician and first Secretary-General of the Union of South American Nations (UNASUR) in 2010",
+    "life": "Was born 25 February 1950 in Río Gallegos, Santa Cruz, Argentina, and passed away 27 October 2010. He was the son of Néstor Kirchner, post office official, and María Juana Ostoić Dragnic. On 9 May 1975 he married Cristina Elisabet Fernández, politician and Argentina’s first elected female President. They had a daughter and a son.",
+    "nationality": "Argentinean",
+    "country": "Argentina",
+    "version": "Version 12 March 2012",
+    "authors": "Andrea Ribeiro Hoffmann",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Kirchner, 2 April 2005, Presidencia de la Nación Argentina"
+  }
 }

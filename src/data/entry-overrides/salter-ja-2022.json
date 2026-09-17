@@ -11,5 +11,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "James Arthur",
+    "lastName": "Salter",
+    "knownAs": "Arthur",
+    "nee": "",
+    "summary": "British civil servant and Director of the Economic and Financial Section of the League of Nations Secretariat 1919-1920 and 1922-1931",
+    "life": "Was born 15 March 1881 in Oxford, United Kingdom and passed away 27 June 1975 in London, United Kingdom. He was the son of James Edward Salter, boatbuilder and mayor of Oxford, and Julia Maria Millin. On 15 June 1940 he married Ethel Mather Bagg.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 27 January 2022",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Salter, 1900, United Nations Archives at Geneva, LN/119 (Library of Congress, LC-B2-6220-2)"
+  }
 }

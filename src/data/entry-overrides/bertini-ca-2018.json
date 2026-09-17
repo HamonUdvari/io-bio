@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Catherine Ann",
+    "lastName": "Bertini",
+    "knownAs": "",
+    "nee": "",
+    "summary": "American public servant and ninth Executive Director of the World Food Programme (WFP) 1992-2002",
+    "life": "Was born 30 March 1950 in Syracuse, New York, United States. She is the daughter of Fulvio Bertini, engineer and city councilman, and Ann Vino, nurse. In 1988 she married Thomas E. Haskell, photographer. They divorced in 2007 and in 2011 she married Thomas Milton Knobel, managing consultant.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 19 January 2018 ",
+    "authors": "Kirsten Haack",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Bertini, 19 March 2004, New York, Photo UN7778217, Photographer Eskinder Debebe"
+  }
 }

@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Kōichirō",
+    "lastName": "Matsuura",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Japanese diplomat and ninth Director-General of the United Nations Educational, Scientific and Cultural Organization (UNESCO) 1999-2009",
+    "life": "Was born 29 September 1937 in Ebara Ward, Tokyo, Japan. He is the son of Seiichi Matsuura, office employee, and Kiyoko Matsuya. On 24 March 1967 he married Takako Kirikae, with whom he had two sons.",
+    "nationality": "Japanese",
+    "country": "Japan",
+    "version": "Version 28 June 2026",
+    "authors": "Mariko Shoji",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Presidencia de la Nación Argentina, CC BY 2.0"
+  }
 }

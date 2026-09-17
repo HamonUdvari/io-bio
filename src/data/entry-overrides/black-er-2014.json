@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Eugene Robert",
+    "lastName": "Black",
+    "knownAs": "",
+    "nee": "",
+    "summary": "American Banker and third President of the International Bank for Reconstruction and Development (IBRD) or World Bank (since 1956 World Bank Group) 1949-1962",
+    "life": "Was born 1 May 1898 in Atlanta, Georgia, and passed away 20 February 1992 in Southampton, Long Island, New York, United States. He was the son of Eugene Robert Black, lawyer and banker, and Gussie King Grady, homemaker. On 8 June 1918 he married Elizabeth ‘Dolly’ Blalock. They had one daughter and one son (also named Eugene Robert). After her death on 2 April 1928 he married Susette Heath on 25 January 1930. They had one son.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 1 October 2014",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Black, 17-21 September 1962, speaking at Annual Meetings World Bank and its two affiliates, World Bank Group Archives"
+  }
 }

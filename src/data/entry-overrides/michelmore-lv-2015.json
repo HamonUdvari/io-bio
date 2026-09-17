@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Laurence Victor",
+    "lastName": "Michelmore",
+    "knownAs": "",
+    "nee": "",
+    "summary": "American and international civil servant and second Commissioner-General of the United Nations Relief and Works Agency for Palestine Refugees in the Near East (UNRWA) 1964-1971",
+    "life": "Was born 25 March 1909 in Philadelphia, Pennsylvania, United States and passed away 10 April 1997 in Bethesda, Maryland. He was the son of John Coombes Michelmore, carpenter, and Lillian Eliza Elwert. On 25 November 1936 he married Janet Hunter, assistant to the director of the Detroit Bureau of Governmental Affairs, with whom he had two daughters. After her death on 27 July 1987 he married Jean Richardson on 17 March 1990. She had a son by her previous marriage to George Friedrich Hughes-Caley.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 2 July 2015 ",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Michelmore, 10 September 1963, UN Photo UN7717111, photographer Teddy Chen"
+  }
 }

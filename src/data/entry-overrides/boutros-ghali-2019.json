@@ -20,5 +20,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Boutros Youssef",
+    "lastName": "Boutros-Ghali",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Egyptian politician, sixth Secretary-General of the United Nations (UN) 1992-1996 and first Secretary-General of the International Organization of La Francophonie 1997-2002",
+    "life": "Was born 14 November 1922 in Cairo, Egypt and passed away 16 February 2016 in Cairo, Egypt. He was the son of Raghib Youssef Boutros-Ghali, manager of the family estate and farmer, and Safeya Sharoubim, philanthropist. In the early 1950s he married Lilly Louise Kahil, archaeologist, whom he divorced after a few years and he was remarried to Leia Nadler. He had no children.",
+    "nationality": "Egyptian",
+    "country": "Egypt",
+    "version": "Version 23 September 2019",
+    "authors": "Flora Pidoux",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Boutros-Ghali visits the European Commission, 23 April 1993, copyright European Commission, 2026"
+  }
 }

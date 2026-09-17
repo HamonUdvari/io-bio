@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "George David",
+    "lastName": "Woods",
+    "knownAs": "",
+    "nee": "",
+    "summary": "American banker and fourth President of the International Bank for Reconstruction and Development (IBRD) and World Bank Group 1963-1968",
+    "life": "Was born 27 July 1901 in Boston, Massachusetts, and passed away 20 August 1982 near Lisbon, Portugal. He was the son of John Woods, a Boston Navy Yard worker, and Laura Rhodes, who earned money sewing and mending clothes. On 29 April 1935 he married Louise Taraldson, who worked for the Red Cross during the Second World War and served as a trustee of the Institute of International Education. They had no children.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 26 February 2012",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Woods, 1963, World Bank Group Archives"
+  }
 }

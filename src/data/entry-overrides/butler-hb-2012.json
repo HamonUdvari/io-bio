@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Harold Beresford",
+    "lastName": "Butler",
+    "knownAs": "",
+    "nee": "",
+    "summary": "British civil servant and second Director of the International Labour Office of the International Labour Organization (ILO) 1932-1938",
+    "life": "Was born 6 October 1883 in Saint Clement, Headington, Oxfordshire, and passed away 26 March 1951 in Reading, Berkshire, United Kingdom. He was the son of Alfred Joshua Butler, bursar and fellow of Brasenose College, Oxford, and Constance Mary Heywood. On 14 April 1910 he married Olive Augusta Newenham Walker Waters, Assistant Inspector-General of the Royal Irish Constabulary. They had one daughter and two sons.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 21 August 2012",
+    "authors": "Jaci Leigh Eisenberg",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Butler, n.d., ILO, Flickr"
+  }
 }

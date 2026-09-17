@@ -12,5 +12,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Geraldo Egídio",
+    "lastName": "da Costa Holanda Cavalcanti",
+    "knownAs": "Geraldo Holanda Cavalcanti",
+    "nee": "",
+    "summary": "Brazilian diplomat and fourth Secretary-General of the Latin Union 1997-2000",
+    "life": "Was born 6 February 1929 in Recife, Brazil. He is the son of Egydio de Sá Cavalcanti, a small business owner, and Nativa da Costa Holanda. On 20 October 1951 he married Stella Teixeira, philosopher, with whom he had one daughter and two sons. After their separation in 1964, he married Dirce de Assis, sculptor and writer, on 17 February 1965.  She brought two daughters and one son. Because legal divorce did not exist at the time, the Ministry of Foreign Affairs issued passports, which declared them a couple. The divorce and marriage became legal in 1978.",
+    "nationality": "Brazilian",
+    "country": "Brazil",
+    "version": "Version 1 September 2015 ",
+    "authors": "Dawisson Belém Lopes and Diego Vasconcelos Neto",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Cavalcanti, 13 December 2013, Agência Brasil, photographer Tomaz Silva"
+  }
 }

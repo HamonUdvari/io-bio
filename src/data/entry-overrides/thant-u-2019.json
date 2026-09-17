@@ -19,5 +19,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "U",
+    "lastName": "Thant",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Burmese diplomat, second Acting Secretary-General of the United Nations (UN) 1961-1962 and third Secretary-General 1962-1971",
+    "life": "Was born 28 January 1909 in Pantanaw, Burma (now Myanmar) and died 25 November 1974 in New York City, United States. He was the son of U Po Hnit, landowner and rice merchant, and Daw Nan Thaung. On 14 November 1934 he married Daw Thein Tin, with whom he had a daughter, two sons and a foster son.",
+    "nationality": "Burmese",
+    "country": "Myanmar",
+    "version": "Version 21 October 2019 ",
+    "authors": "Bernard J. Firestone",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Thant, 1 July 1963, Nationaal Archief, The Hague, Netherlands, photographer Jacques de Nijs / Anefo"
+  }
 }

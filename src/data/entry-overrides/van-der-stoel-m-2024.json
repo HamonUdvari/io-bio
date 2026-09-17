@@ -19,5 +19,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Maximilianus",
+    "lastName": "van der Stoel",
+    "knownAs": "Max",
+    "nee": "",
+    "summary": "Dutch politician and first High Commissioner on National Minorities of the Conference on Security and Cooperation in Europe (CSCE) and the Organization for Security and Cooperation in Europe (OSCE) 1993-2001",
+    "life": "Was born 3 August 1924 in Voorschoten, the Netherlands and passed away 23 April 2011 in The Hague, the Netherlands. He was the son of Martinus van der Stoel, general medical practitioner, and Anneke Anna Hendrika Veldhuizen van Zanten. On 11 July 1953 he married Maria Johanna Aritia de Kanter, with whom he had four daughters and one son. The marriage was dissolved 14 February 1979.",
+    "nationality": "Dutch",
+    "country": "Netherlands",
+    "version": "Version 11 January 2024",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Van der Stoel, 3 November 1983, Wikimedia Commons, photographer Frank Hall"
+  }
 }

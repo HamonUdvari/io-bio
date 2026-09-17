@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "George Islay McNeill",
+    "lastName": "Robertson",
+    "knownAs": "",
+    "nee": "",
+    "summary": "British politician and tenth Secretary General of the North Atlantic Treaty Organization (NATO) 1999-2003",
+    "life": "Was born 12 April 1946 in Port Ellen, Isle of Islay, Scotland. He is the son of George Philip Robertson, policeman, and Marion MacNeill, teacher. On 1 June 1970 he married Sandra Wallace, with whom he has one daughter and two sons.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 7 May 2018 ",
+    "authors": "Delphine Deschaux-Dutard",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Robertson, 14 October1999, NATO"
+  }
 }

@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/cole-ws-2014.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "William Sterling",
+    "lastName": "Cole",
+    "knownAs": "W. Sterling Cole",
+    "nee": "",
+    "summary": "American politician and first Director General of the International Atomic Energy Agency (IAEA) 1957-1961",
+    "life": "Was born 18 April 1904 in Painted Post, New York and passed away 15 March 1987 in Washington DC. He was the son of Ernest Ethelbert Cole, lawyer, educator and politician, and Minnie M. Pierce. On 3 July 1929 he married Mary Elizabeth (Betty) Thomas. They had three sons.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 20 January 2014",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Cole, 4 October 1958, Vienna, IAEA"
+  }
 }

@@ -21,5 +21,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Raúl Federico",
+    "lastName": "Prebisch Linares",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Argentinean economist and second Executive Secretary of the United Nations Economic Commission for Latin America (ECLA), 1950-1963, and first Secretary-General of the United Nations Conference on Trade and Development (UNCTAD), 1964-1969",
+    "life": "Was born 17 April 1901 in San Miguel de Tucumán, Argentina and passed away 29 April 1986 in Santiago, Chile. He was the son of Albin Teodoro Prebisch Jaeguer, a small business owner, and Rosa Faustina Linares Uriburu. On 25 October 1932 he married Adela Maria Moll, musician. They divorced in 1969 and on 27 February 1969 he married Eliana Diaz, librarian at the International Monetary Fund, with whom he had one son.",
+    "nationality": "Argentinean",
+    "country": "Argentina",
+    "version": "Version 7 July 2014",
+    "authors": "Edgar J. Dosman",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Prebisch, 31 August 1966, UNCTAD, Geneva, Photo UN7745134"
+  }
 }

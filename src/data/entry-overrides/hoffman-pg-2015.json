@@ -19,5 +19,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Paul Gray",
+    "lastName": "Hoffman",
+    "knownAs": "",
+    "nee": "",
+    "summary": "American businessman and Managing Director of the United Nations Special Fund 1959-1965 and first Administrator of the United Nations Development Programme (UNDP) 1966-1972",
+    "life": "Was born 26 April 1891 in Chicago, Illinois, United States and passed away 8 October 1974 in New York City. He was the son of George Delos Hoffman, inventor and businessman, and Eleanor Lott. On 18 December 1915 he married Dorothy Brown, with whom he had two daughters and five sons. After her death on 17 May 1961 he married Anna Marie Rosenberg (née Lederer), personnel and public relations executive and United States Assistant Secretary of Defense, on 19 July 1962.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 19 January 2015",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Hoffman, 16 July 1968, New York, Photo UN7779859, Photographer Yutaka Nagata"
+  }
 }

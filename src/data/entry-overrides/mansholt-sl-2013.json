@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Sicco Leendert",
+    "lastName": "Mansholt",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Dutch politician and fourth President of the Commission of the European Community (EC) 1972-1973",
+    "life": "Was born 13 September 1908 in Ulrum and passed away 29 June 1995 in Wapserveen, the Netherlands. He was the son of Lambertus Helbrig Mansholt, farmer and member of the Provincial Executive, and Wabina Andreae, teacher and political activist. On 17 January 1938 he married Hendrika Johanna Postel (called Henny), teacher. They had two daughters and two sons.",
+    "nationality": "Dutch",
+    "country": "Netherlands",
+    "version": "Version 5 June 2013",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Mansholt, 23 October 2012, European Union, 2026, photographer Marcelle Jamar"
+  }
 }

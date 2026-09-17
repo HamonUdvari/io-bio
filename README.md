@@ -79,7 +79,7 @@ The rest are occasional fixes:
 
 The portrait comes from inside the Word file and is often small. To use a sharper/larger one:
 
-- In the CMS open **Roles & portraits (per entry)**, search the person, and upload a file into
+- In the CMS open **Bios**, search the person, and upload a file into
   **Portrait override**. Leave it empty to keep the Word photo. It replaces the embedded photo on the
   next build. **Formats:** JPG or PNG best; WebP/GIF/SVG also work. Bigger = sharper (the grid thumbnail
   is auto-cropped to 800×1000). You must have the right to use the image.
@@ -88,7 +88,7 @@ The portrait comes from inside the Word file and is often small. To use a sharpe
 
 If the auto-crop picks the wrong person in a group photo:
 
-- In the same **Roles & portraits (per entry)** card, set **Face position** to the person's position
+- In the same **Bios** card, set **Face position** to the person's position
   counting from the left (1 = leftmost). Leave empty for the main face. The crop is redone on the next
   build.
 

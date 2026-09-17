@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Bastiaan Wouter",
+    "lastName": "Haveman",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Dutch Government Commissioner for Emigration and fourth Director of the Intergovernmental Committee for European Migration (ICEM) 1962-1969",
+    "life": "Was born 25 November 1908 in Wijnjeterp and died 3 December 1979 in Leiden, The Netherlands. He was the son of Meindert Haveman, pastor, and Elisabeth Amelia Mary Philippine van Veen, nurse. On 20 July 1951 he married Louise Hendrika (known as Ies) van Loon. They had an adopted daughter.",
+    "nationality": "Dutch",
+    "country": "Netherlands",
+    "version": "Version 18 February 2017",
+    "authors": "Marijke van Faassen",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Ir. Haveman Emigration Commissioner 1950-1970, n.d., published by Dutch Australian Cultural Centre, 6 August 2023"
+  }
 }

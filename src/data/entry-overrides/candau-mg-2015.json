@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Marcolino Gomes",
+    "lastName": "Candau",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Brazilian physician and second Director-General of the World Health Organization (WHO) 1953-1973",
+    "life": "Was born 30 May 1911 in Rio de Janeiro, Brazil and died 23 January 1983 in Geneva, Switzerland. He was the son of Julio Candau and Augusta Gomes Pereira. On 30 May 1936 he married Ena de Carvalho, with whom he had two sons. After their divorce he married Sîtâ Reelfs, WHO employee, in 1973.",
+    "nationality": "Brazilian",
+    "country": "Brazil",
+    "version": "Version 18 October 2015",
+    "authors": "Marcos Cueto and Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Candau, 21 February 1972, Nationaal Archief, The Hague, Netherlands, photographer Hans Peters"
+  }
 }

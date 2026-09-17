@@ -12,5 +12,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/jenkins-r-2024.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Roy Harris",
+    "lastName": "Jenkins",
+    "knownAs": "",
+    "nee": "",
+    "summary": "British politician and sixth President of the European Commission 1977-1981",
+    "life": "Was born 11 November 1920 in Abersychan, Monmouthshire, Wales and died 5 January 2003 in East Hendred, Oxfordshire, England. He was the son of Arthur Jenkins, coal miner, trade union official and parliamentarian, and Harriet Harris, music shop assistant and magistrate and county councillor. On 20 January 1945 he married Marie Jennifer Morris, public servant and teacher, with whom he had one daughter and two sons.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 11 January 2024",
+    "authors": "N. Piers Ludlow",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Jenkins, 1977, European Commission, photographer Jean-Louis Debaize"
+  }
 }

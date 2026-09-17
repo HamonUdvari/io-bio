@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/rooth-i-2025.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Ivar",
+    "lastName": "Rooth",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Swedish central banker and second Managing Director of the International Monetary Fund (IMF) 1951-1956",
+    "life": "Was born 2 November 1888 in Stockholm, Sweden and passed away 27 February 1972 in Lidingö, Sweden. He was the son of Otto Daniel Rooth, director of lotteries, and Ellen Hertzman. On 1 September 1914 he married Ingrid Maria Lundgren, gymnastics teacher, with whom he had one daughter and two sons. After their divorce in 1931 he married Ingrid Margareta Söderlind, agency manager, with whom he had one son, on 19 July 1931.",
+    "nationality": "Swedish",
+    "country": "Sweden",
+    "version": "Version 14 October 2025",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Rooth, n.d., IMF, Flickr"
+  }
 }

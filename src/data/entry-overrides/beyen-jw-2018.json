@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Johan Willem",
+    "lastName": "Beyen",
+    "knownAs": "Wim",
+    "nee": "",
+    "summary": "Dutch banker and politician and third President of the Bank for International Settlements (BIS) 1937-1939",
+    "life": "Was born 2 May 1897 in Utrecht and passed away 29 April 1976 in The Hague, The Netherlands. He was the son of Karel Hendrik Beijen, secretary of the Dutch railway company, and Louisa Maria Coenen, musician. On 28 March 1922 he married Petronella Jeanne Geertruida Hijmans van Anrooij, with whom he had one daughter and two sons. They divorced on 9 October 1945. On 14 November 1945 he married Margaretha Antonia Lubinka.",
+    "nationality": "Dutch",
+    "country": "Netherlands",
+    "version": "Version 20 March 2018",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Beyen, 1955, Nationaal Archief, The Hague, Netherlands, Anefo, Public"
+  }
 }

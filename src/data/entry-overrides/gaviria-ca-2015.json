@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "César Augusto",
+    "lastName": "Gaviria Trujillo",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Colombian politician and seventh Secretary General of the Organization of American States (OAS) 1994-2004",
+    "life": "Was born 31 March 1947 in Pereira, Risaralda, Colombia. He is the son of Byron Gaviria Londoño, coffee grower, and Mélida Trujillo Trujillo. On 28 June 1978 he married Ana Milena Muñoz Gómez, economist, with whom he has one daughter and one son.",
+    "nationality": "Colombian",
+    "country": "Colombia",
+    "version": "Version 29 July 2015",
+    "authors": "Carolyn M. Shaw",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Gaviria, 6 February 2004, Wikimedia, photographer Marcello Casal Jr."
+  }
 }

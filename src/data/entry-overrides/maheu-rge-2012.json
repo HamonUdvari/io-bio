@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "René Gabriel Eugène",
+    "lastName": "Maheu",
+    "knownAs": "",
+    "nee": "",
+    "summary": "French philosophy professor and sixth Director-General of the United Nations Educational, Scientific and Cultural Organization (UNESCO) 1961-1974",
+    "life": "Was born 28 March 1905 in Saint-Gaudens, Haute-Garonne, and passed away 19 December 1975 in Paris, France. He was the son of Joseph Maheu, schoolteacher, and Madeleine Roucoule, schoolteacher. In 1928 he married Inès Allafort du Verger. They had one son.",
+    "nationality": "French",
+    "country": "France",
+    "version": "Version 14 March 2012 ",
+    "authors": "Chloé Maurel",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Maheu, 1962, UNESO, photographer Dominique Roger"
+  }
 }

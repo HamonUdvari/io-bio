@@ -19,5 +19,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Assad Adib",
+    "lastName": "Kotaite",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Lebanese diplomat and Secretary General of the International Civil Aviation Organization (ICAO) 1970-1976 and Council President of ICAO 1976-2006",
+    "life": "Was born 6 November 1924 in Hasbaya, Lebanon and passed away 27 February 2014 in Montreal, Canada. He was the son of Adib Kotaite, landowner and civil servant, and Kamlé Abu-Samra, humanitarian worker. On 11 February 1983 he married Monique Ayoub.",
+    "nationality": "Lebanese",
+    "country": "Lebanon",
+    "version": "Version 24 July 2026 ",
+    "authors": "Alejandra Gentil",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Kotaite, 4 May 1979, ICAO Press Conference, Photo UN7720513"
+  }
 }

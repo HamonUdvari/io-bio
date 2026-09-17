@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Federico",
+    "lastName": "Mayor Zaragoza",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Spanish politician and eighth Director-General of the United Nations Educational, Scientific and Cultural Organization (UNESCO) 1987-1999",
+    "life": "Was born 27 January 1934 in Barcelona and died 19 December 2024 in Madrid, Spain. He was the son of Federico Mayor, entrepreneur, and Juana Zaragoza. On 9 November 1956 he married María Ángeles Menéndez, pharmacist, with whom he had one daughter and two sons.",
+    "nationality": "Spanish",
+    "country": "Spain",
+    "version": "Version 28 June 2019 ",
+    "authors": "Chloé Maurel",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Mayor Zaragoza, 16 March 1999, Wikimedia, photographer Alexandre Devil"
+  }
 }

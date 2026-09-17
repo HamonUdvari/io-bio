@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "/src/content/bios-images/davies-da-2016.jpg",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "David Arthur",
+    "lastName": "Davies",
+    "knownAs": "",
+    "nee": "",
+    "summary": "British meteorologist and second Secretary-General of the World Meteorological Organization (WMO) 1956-1979",
+    "life": "Was born 11 November 1913 in Barry, South Glamorgan, Wales and died on 13 November 1990 in Brighton, England. He was the son of Garfield Brynmor Davies, schoolmaster, and Mary Jane Michael. On 5 March 1938 he married Mary Shapland. They had two daughters and one son.",
+    "nationality": "British",
+    "country": "United Kingdom",
+    "version": "Version 7 June 2016",
+    "authors": "Daniel Gorman",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Davies, 20 March 1962, UN Committee on Peaceful Uses of Outer Space, Photo UN7697363"
+  }
 }

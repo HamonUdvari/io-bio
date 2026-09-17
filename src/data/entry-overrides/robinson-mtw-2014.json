@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Mary Therese Winifred",
+    "lastName": "Robinson",
+    "knownAs": "",
+    "nee": "Bourke",
+    "summary": "Irish politician and seventh President of Ireland and second United Nations High Commissioner for Human Rights 1997-2002",
+    "life": "Was born 21 May 1944 in Ballina, County Mayo, Ireland. She is the daughter of Aubrey Bourke and Tessa O’Donnell, both medical doctors. On 12 December 1970 she married Nicholas K. Robinson, solicitor and cartoonist. They have one daughter and two sons.",
+    "nationality": "Irish",
+    "country": "Ireland",
+    "version": "Version 4 March 2014 ",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Robinson, 1994, Universitätsarchiv St. Gallen, HSGH 022/000751/07, photographer Regina Kühne"
+  }
 }

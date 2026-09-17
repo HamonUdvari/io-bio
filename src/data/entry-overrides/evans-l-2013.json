@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Luther Harris",
+    "lastName": "Evans",
+    "knownAs": "",
+    "nee": "",
+    "summary": "American librarian and third Director-General of the United Nations Educational, Scientific and Cultural Organization (UNESCO) 1953-1958",
+    "life": "Was born 13 October 1902 in Sayerville, Texas, United States, and passed away 23 December 1981 in San Antonio, Texas. He was the son of George Washington Evans, railroad foreman, and Lillie Johnson. On 12 September 1925 he married Helen Murphy. They had one son.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 11 March 2013",
+    "authors": "Chloé Maurel",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Evans, 12 October 1954, UN New York, Photo UN7659387"
+  }
 }

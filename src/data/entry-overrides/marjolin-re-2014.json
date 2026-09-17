@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Robert Ernest",
+    "lastName": "Marjolin",
+    "knownAs": "",
+    "nee": "",
+    "summary": "French civil servant and first Secretary-General of the Organisation for European Economic Cooperation (OEEC) 1948-1955",
+    "life": "Was born 27 July 1911 in Paris, France and passed away 15 April 1986 in Paris. He was the son of Ernest Octave Marjolin, salesman, and Elise Vacher, laundress. On 2 September 1944 he married Dorothy Thayer Smith. They had one daughter and one son.",
+    "nationality": "French",
+    "country": "France",
+    "version": "Version 2 June 2014 ",
+    "authors": "Alix Heiniger",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Marjolin, 1 December 1960, European Union, photographer Marcelle Jamar"
+  }
 }

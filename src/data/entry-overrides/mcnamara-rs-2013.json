@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Robert Strange",
+    "lastName": "McNAMARA",
+    "knownAs": "",
+    "nee": "",
+    "summary": "American politician and fifth President of the International Bank for Reconstruction and Development (IBRD) and World Bank Group 1968-1981",
+    "life": "Was born 9 June 1916 in San Francisco, California, and passed away on 6 July 2009 in Washington DC, United States. He was the son of Robert McNamara, firm manager, and Clara Nell Strange. On 13 August 1940 he married Margaret McKinstry Craig, teacher. They had two daughters and one son. After his first wife’s death on 3 February 1981 he married Diana Masieri Byfield on 16 September 2004.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 8 August 2013",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "McNamara, 25 September 1978, World Bank Group, photographer Giuseppe Franchini"
+  }
 }

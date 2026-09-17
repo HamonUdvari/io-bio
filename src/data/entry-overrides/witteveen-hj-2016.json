@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Hendrikus Johannes",
+    "lastName": "Witteveen",
+    "knownAs": "Johan or Johannes",
+    "nee": "",
+    "summary": "Dutch politician and fifth Managing Director of the International Monetary Fund (IMF) 1973-1978",
+    "life": "Was born 12 June 1921 in Den Dolder and passed away 23 April 2019 in Wassenaar, the Netherlands. He was the son of Willem Gerrit Witteveen, civil engineer and Rotterdam city planner, and Anna Maria Wibaut, leader of a local Sufi centre. On 3 March 1949 he married Liesbeth Ratan de Vries Feijens, piano teacher, with whom he had one daughter and three sons.",
+    "nationality": "Dutch",
+    "country": "Netherlands",
+    "version": "Version 10 May 2016",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Witteveen, 22 March 1984, Nationaal Archief, The Hague, Netherlands, photographer Rob Bogaerts"
+  }
 }

@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "John Gilbert",
+    "lastName": "Winant",
+    "knownAs": "Gil",
+    "nee": "",
+    "summary": "American politician and third Director of the International Labour Office of the International Labour Organization (ILO) 1939-1941",
+    "life": "Was born 23 February 1889 in New York City and passed away 3 November 1947 in Concord, New Hampshire, United States. He was the son of Frederick Winant, real estate broker, and Jeannette Laura Gilbert. On 20 December 1919 he married Constance Rivington Russell. They had one daughter and two sons.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 19 September 2016",
+    "authors": "Alexandru Grigorescu",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Winant, 13 September 1935, Chairman of Social Security Board, New Hampshire, Photographer Harris & Ewing"
+  }
 }

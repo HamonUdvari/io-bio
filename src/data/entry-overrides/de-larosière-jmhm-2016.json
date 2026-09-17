@@ -21,5 +21,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Jacques Martin Henri Marie",
+    "lastName": "de Larosière",
+    "knownAs": "",
+    "nee": "",
+    "summary": "French civil servant and sixth Managing Director of the International Monetary Fund (IMF) 1978-1987 and second President of the European Bank for Reconstruction and Development (EBRD) 1993-1998",
+    "life": "Was born 12 November 1929 in Paris, France. He is the son of Robert Louis Marie de Larosière, captain in the French Navy, and Hugayte de Champfeu. In 1960 he married France du Bos. They have one daughter and one son.",
+    "nationality": "French",
+    "country": "France",
+    "version": "Version 10 May 2016 ",
+    "authors": "Kendall W. Stiles",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "De Larosière at the IMF, n.d., Flickr"
+  }
 }

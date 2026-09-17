@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Gunnar",
+    "lastName": "Myrdal",
+    "knownAs": "",
+    "nee": "",
+    "summary": "Swedish economist and first Executive Secretary of the United Nations Economic Commission for Europe (UN ECE) 1947-1957",
+    "life": "Was born 6 December 1898 in Gustafs, Sweden and passed away in Danderyd near Stockholm, Sweden 17 May 1987. He was the son of Karl Adolf Pettersson, farmer and railroad employee, and Anna Sofia Karlsson. On 8 October 1924 he married Alva Reimer, social reformer and politician. They had two daughters and one son.",
+    "nationality": "Swedish",
+    "country": "Sweden",
+    "version": "Version 10 March 2014 ",
+    "authors": "Chloé Maurel",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Myrdal, 2 May 1949, Geneva, Photo UN7504111, Photographer Eric Schwab"
+  }
 }

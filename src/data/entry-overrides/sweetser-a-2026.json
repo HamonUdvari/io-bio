@@ -11,5 +11,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Arthur",
+    "lastName": "Sweetser",
+    "knownAs": "",
+    "nee": "",
+    "summary": "American reporter and Acting Director of the League of Nations Information Section in 1933",
+    "life": "Was born 16 July 1888 in Boston, Massachusetts, United States and passed away 20 January 1968 in Washington DC. He was a son of Edward Mumford Fowler Sweetser, newspaper editor and publisher, and Edith Ashton Balch. On 19 June 1915 he married Ruth Gregory, with whom he had two daughters and three sons.",
+    "nationality": "American",
+    "country": "United States",
+    "version": "Version 13 July 2026",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Sweetser, 1922, National Photo Company Collection, Library of Congress, Washington DC, US."
+  }
 }

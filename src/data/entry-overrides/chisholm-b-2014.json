@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "George Brock",
+    "lastName": "Chisholm",
+    "knownAs": "Brock",
+    "nee": "",
+    "summary": "Canadian Deputy Minister of Health and first Director-General of the World Health Organization, 1948-1953",
+    "life": "Was born 18 May 1896 in Oakville, Ontario, and passed away 4 February 1971 in Victoria, British Columbia, Canada. He was the son of Frank Hubert Chisholm, Canadian militia officer, and Lizzie Annett McCraney. On 21 June 1924 he married Grace MacLean Ryrie. They had one daughter and one son.",
+    "nationality": "Canadian",
+    "country": "Canada",
+    "version": "Version 21 August 2014",
+    "authors": "Auriane Guilbaud",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Chisholm, 1 January 1950, WHO Headquarters Geneva, Switzerland, WHO U27MS4"
+  }
 }

@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Basile Louis Joseph Henri",
+    "lastName": "Bonnet",
+    "knownAs": "Henri Bonnet",
+    "nee": "",
+    "summary": "French diplomat and second Director of the International Institute of Intellectual Cooperation (IIIC) 1931-1940",
+    "life": "Was born 26 May 1888 in Châteauponsac and passed away 25 October 1978 in Paris, France. He was the son of Jules Theobald Bonnet, collector of indirect taxes, and Marie Thérèse Lascoux. On 27 August 1932 he married Hellé Zervoudaki.",
+    "nationality": "French",
+    "country": "France",
+    "version": "Version 7 October 2024",
+    "authors": "Bob Reinalda",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Bonnet, 1945, signing UN Charter, Nationaal Archief, The Hague, Netherlands"
+  }
 }

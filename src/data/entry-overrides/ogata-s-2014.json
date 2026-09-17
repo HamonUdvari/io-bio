@@ -13,5 +13,20 @@
     }
   ],
   "portraitImage": "",
-  "facePosition": null
+  "facePosition": null,
+  "detailsOverride": false,
+  "details": {
+    "firstName": "Sadako",
+    "lastName": "Ogata",
+    "knownAs": "",
+    "nee": "Nakamura",
+    "summary": "Japanese diplomat and eighth United Nations High Commissioner for Refugees (UNHCR) 1991-2000",
+    "life": "Was born 16 September 1927 in Tokyo, Japan and died 22 October 2019 in Tokyo, Japan. She was the daughter of Toyoichi Nakamura, diplomat, and Tsuneko Yoshizawa. On 21 January 1961 she married Shijuro Ogata, banker. They had one daughter and one son.",
+    "nationality": "Japanese",
+    "country": "Japan",
+    "version": "Version 4 November 2019 ",
+    "authors": "Michael G. Schechter",
+    "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
+    "imageSource": "Ogata, 16 October 1991, New York, Photo UN7720525, Photographer John Isaac"
+  }
 }
