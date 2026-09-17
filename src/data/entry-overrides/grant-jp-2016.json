@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "James Pineo",
+    "imageSource": "Grant, 27 July 1987, New York, Photo UN7720520",
+    "imageSourceOverride": false,
     "lastName": "Grant",
+    "lastNameOverride": false,
+    "firstName": "James Pineo",
+    "firstNameOverride": false,
     "knownAs": "Jim",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "American development professional and third Executive Director of the United Nations Children’s Fund (UNICEF) 1980-1995",
+    "summaryOverride": false,
     "life": "Was born 12 May 1922 in Peking, China and died 28 January 1995 in Mount Kisco, New York, United States. He was the son of John Black Grant, public health academic, and Charlotte Hill. On 30 December 1943 he married Ethel Henck, social worker, with whom he had three sons. After her death on 1 April 1988 he married Ellan Windsor Young, photographer and journalist, on 27 July 1989.",
+    "lifeOverride": false,
     "nationality": "American",
+    "nationalityOverride": false,
     "country": "United States",
+    "countryOverride": false,
     "version": "Version 29 May 2016 ",
+    "versionOverride": false,
     "authors": "Joel E. Oestreich",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Grant, 27 July 1987, New York, Photo UN7720520"
+    "editorsOverride": false
   }
 }

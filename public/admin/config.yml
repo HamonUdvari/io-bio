@@ -152,15 +152,63 @@ collections:
     delete: false
     identifier_field: name
     summary: "{{fields.name}}"
-    sortable_fields: [name, rolesOverride, detailsOverride]
+    sortable_fields: [name, rolesOverride]
     media_folder: /src/content/bios-images
     public_folder: /src/content/bios-images
+    # Card order mirrors the preview page: image → details → roles. Each detail
+    # field shows the value from the Word file with an "Override" checkbox right
+    # below it — tick it to replace just that field (light touch); leave it
+    # unticked to keep tracking the Word file.
     fields:
       - { label: Entry slug, name: slug, widget: hidden }
       - label: Person
         name: name
         widget: string
         hint: "Auto-filled from the Word file — don't edit; it only labels this list."
+      - label: Portrait override (optional)
+        name: portraitImage
+        widget: image
+        required: false
+        media_folder: /src/content/bios-images
+        public_folder: /src/content/bios-images
+        hint: "Higher-res portrait. Leave empty to use the photo from the Word file."
+      - label: Face position (group photos only)
+        name: facePosition
+        widget: number
+        required: false
+        value_type: int
+        min: 1
+        hint: "If a group photo crops the wrong person, set which face from the LEFT (1 = leftmost). Empty = the main face."
+      - label: Details
+        name: details
+        widget: object
+        summary: "{{fields.lastName}}, {{fields.firstName}}"
+        hint: "Values are shown from the Word file. Tick a field's Override box to replace just that field; leave it unticked to keep the Word value."
+        fields:
+          - { label: Image source / credit, name: imageSource, widget: text, required: false }
+          - { label: "↳ Override image source", name: imageSourceOverride, widget: boolean, default: false }
+          - { label: Last name, name: lastName, widget: string, required: false }
+          - { label: "↳ Override last name", name: lastNameOverride, widget: boolean, default: false }
+          - { label: First name, name: firstName, widget: string, required: false }
+          - { label: "↳ Override first name", name: firstNameOverride, widget: boolean, default: false }
+          - { label: Known as, name: knownAs, widget: string, required: false }
+          - { label: "↳ Override known as", name: knownAsOverride, widget: boolean, default: false }
+          - { label: Née, name: nee, widget: string, required: false }
+          - { label: "↳ Override née", name: neeOverride, widget: boolean, default: false }
+          - { label: Summary (one-line role summary), name: summary, widget: text, required: false }
+          - { label: "↳ Override summary", name: summaryOverride, widget: boolean, default: false }
+          - { label: Life (birth / death / family), name: life, widget: text, required: false }
+          - { label: "↳ Override life", name: lifeOverride, widget: boolean, default: false }
+          - { label: Nationality, name: nationality, widget: string, required: false }
+          - { label: "↳ Override nationality", name: nationalityOverride, widget: boolean, default: false }
+          - { label: Country, name: country, widget: string, required: false }
+          - { label: "↳ Override country", name: countryOverride, widget: boolean, default: false }
+          - { label: Version, name: version, widget: string, required: false }
+          - { label: "↳ Override version", name: versionOverride, widget: boolean, default: false }
+          - { label: Author(s), name: authors, widget: string, required: false }
+          - { label: "↳ Override author(s)", name: authorsOverride, widget: boolean, default: false }
+          - { label: Editors (How to cite), name: editors, widget: text, required: false }
+          - { label: "↳ Override editors", name: editorsOverride, widget: boolean, default: false }
       - label: Manual override of roles
         name: rolesOverride
         widget: boolean
@@ -178,44 +226,6 @@ collections:
           - { label: Start year, name: startYear, widget: number, required: false, value_type: int, min: 1000, max: 2100 }
           - { label: End year, name: endYear, widget: number, required: false, value_type: int, min: 1000, max: 2100 }
           - { label: Ordinal text (optional), name: ordinalText, widget: string, required: false }
-      - label: Portrait override (optional)
-        name: portraitImage
-        widget: image
-        required: false
-        media_folder: /src/content/bios-images
-        public_folder: /src/content/bios-images
-        hint: "Higher-res portrait. Leave empty to use the photo from the Word file."
-      - label: Face position (group photos only)
-        name: facePosition
-        widget: number
-        required: false
-        value_type: int
-        min: 1
-        hint: "If a group photo crops the wrong person, set which face from the LEFT (1 = leftmost). Empty = the main face."
-      - label: Override details
-        name: detailsOverride
-        widget: boolean
-        default: false
-        hint: "OFF = the fields below are auto-read from the Word file (recommended). ON = they REPLACE what the Word file says."
-      - label: Details
-        name: details
-        widget: object
-        collapsed: true
-        summary: "{{fields.lastName}}, {{fields.firstName}}"
-        hint: "Shown from the Word file for reference. Turn ON \"Override details\" above before changing these."
-        fields:
-          - { label: First name, name: firstName, widget: string, required: false }
-          - { label: Last name, name: lastName, widget: string, required: false }
-          - { label: Known as, name: knownAs, widget: string, required: false }
-          - { label: Née, name: nee, widget: string, required: false }
-          - { label: Summary (one-line role summary), name: summary, widget: text, required: false }
-          - { label: Life (birth / death / family), name: life, widget: text, required: false }
-          - { label: Nationality, name: nationality, widget: string, required: false }
-          - { label: Country, name: country, widget: string, required: false }
-          - { label: Version, name: version, widget: string, required: false }
-          - { label: Author(s), name: authors, widget: string, required: false }
-          - { label: Editors (How to cite), name: editors, widget: text, required: false }
-          - { label: Image source / credit, name: imageSource, widget: text, required: false }
 
   # ---------- Settings ----------
   - name: settings

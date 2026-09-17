@@ -13,19 +13,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Marcelino",
+    "imageSource": "Oreja, 10 May 1994, European Union 2026, photographer Christian Lambiotte",
+    "imageSourceOverride": false,
     "lastName": "Oreja Aguirre",
+    "lastNameOverride": false,
+    "firstName": "Marcelino",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Spanish politician and sixth Secretary General of the Council of Europe 1984-1989",
+    "summaryOverride": false,
     "life": "Was born 13 February 1935 in Madrid, Spain. He is the son of Marcelino Oreja Elósegui, industrialist and politician, and María Pureza Aguirre Isasi. On 4 July 1967 he married Silvia Arburúa Aspiunza. They have two sons.",
+    "lifeOverride": false,
     "nationality": "Spanish",
+    "nationalityOverride": false,
     "country": "Spain",
+    "countryOverride": false,
     "version": "Version 23 April 2017 ",
+    "versionOverride": false,
     "authors": "Marina Pérez de Arcos",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Oreja, 10 May 1994, European Union 2026, photographer Christian Lambiotte"
+    "editorsOverride": false
   }
 }

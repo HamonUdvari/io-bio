@@ -22,10 +22,11 @@ import {
 } from "node:fs";
 import path from "node:path";
 
-// Keep in sync with DETAIL_FIELDS in src/loaders/docxLoader.ts.
+// Keep in sync with DETAIL_FIELDS in src/loaders/docxLoader.ts (preview order).
 const DETAIL_FIELDS = [
-  "firstName",
+  "imageSource",
   "lastName",
+  "firstName",
   "knownAs",
   "nee",
   "summary",
@@ -35,7 +36,6 @@ const DETAIL_FIELDS = [
   "version",
   "authors",
   "editors",
-  "imageSource",
 ] as const;
 
 const distFile = path.resolve("dist/entry-data.json");
@@ -75,22 +75,25 @@ for (const e of source) {
     }
   }
   const rolesOverride = prev.rolesOverride === true;
-  const detailsOverride = prev.detailsOverride === true;
   const fp = Number(prev.facePosition);
 
-  // details: mirror the live values when the toggle is OFF; preserve the manual
-  // edits when ON. Always emit all keys so the CMS card shows every field.
+  // details: PER FIELD — mirror the live value when its <field>Override flag is
+  // OFF; preserve the manual value when ON. Flags are always preserved. Emit
+  // value + flag interleaved (in preview order) so the CMS card shows each field
+  // next to its Override checkbox.
   const prevDetails =
     prev.details && typeof prev.details === "object"
       ? (prev.details as Record<string, unknown>)
       : {};
-  const details: Record<string, string> = {};
+  const details: Record<string, string | boolean> = {};
   for (const k of DETAIL_FIELDS) {
-    if (detailsOverride) {
-      details[k] = typeof prevDetails[k] === "string" ? prevDetails[k] : "";
-    } else {
-      details[k] = e?.details?.[k] ?? "";
-    }
+    const overridden = prevDetails[`${k}Override`] === true;
+    details[k] = overridden
+      ? typeof prevDetails[k] === "string"
+        ? (prevDetails[k] as string)
+        : ""
+      : (e?.details?.[k] ?? "");
+    details[`${k}Override`] = overridden;
   }
 
   const next = {
@@ -108,7 +111,6 @@ for (const e of source) {
     portraitImage:
       typeof prev.portraitImage === "string" ? prev.portraitImage : "",
     facePosition: Number.isFinite(fp) && fp >= 1 ? fp : null,
-    detailsOverride,
     details,
   };
 

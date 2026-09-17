@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Margaret",
+    "imageSource": "Chan, 2 September 2014, Press Conference New York, Photo UN7227617, Photographer Eskinder Debebe",
+    "imageSourceOverride": false,
     "lastName": "Chan",
+    "lastNameOverride": false,
+    "firstName": "Margaret",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "Fung Fu-chun",
+    "neeOverride": false,
     "summary": "Hong Kong medical officer and seventh Director-General of the World Health Organization (WHO) 2007-2017",
+    "summaryOverride": false,
     "life": "Was born 21 August 1947 in Hong Kong. Her parents’ names and professions are not currently publicly available. She married David Chan, ophthalmologist, with whom she has one son.",
+    "lifeOverride": false,
     "nationality": "",
+    "nationalityOverride": false,
     "country": "",
+    "countryOverride": false,
     "version": "Version 1 June 2021",
+    "versionOverride": false,
     "authors": "Bob Reinalda",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Chan, 2 September 2014, Press Conference New York, Photo UN7227617, Photographer Eskinder Debebe"
+    "editorsOverride": false
   }
 }

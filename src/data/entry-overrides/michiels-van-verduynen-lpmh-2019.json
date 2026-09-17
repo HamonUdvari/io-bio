@@ -14,19 +14,30 @@
   ],
   "portraitImage": "/src/content/bios-images/michiels-van-verduynen-lpmh-2019.jpg",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Louis Paul Marie Hubert",
+    "imageSource": "Prins der Geïllustreerde Bladen, 1 January 1907, in front of the PCA at Prinsegracht 71, The Hague",
+    "imageSourceOverride": false,
     "lastName": "Michiels van Verduynen",
+    "lastNameOverride": false,
+    "firstName": "Louis Paul Marie Hubert",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Dutch politician and third Secretary-General of the Permanent Court of Arbitration (PCA) 1905-1929",
+    "summaryOverride": false,
     "life": "Was born 23 August 1855 in Roermond, Netherlands and died 4 February 1929 in Monte Carlo, Monaco. He was the son of Ferdinand Gerard Huber Hilaire Arnold Michiels van Verduynen, judge and District Court President, and Josephina Regina Hendrika de Schaetzen. On 12 May 1881 he married Ida Cornelia Maria Adriana van Brienen van de Groote Lindt.",
+    "lifeOverride": false,
     "nationality": "Dutch",
+    "nationalityOverride": false,
     "country": "Netherlands",
+    "countryOverride": false,
     "version": "Version 2 June 2019 ",
+    "versionOverride": false,
     "authors": "Arthur Eyffinger",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Prins der Geïllustreerde Bladen, 1 January 1907, in front of the PCA at Prinsegracht 71, The Hague"
+    "editorsOverride": false
   }
 }

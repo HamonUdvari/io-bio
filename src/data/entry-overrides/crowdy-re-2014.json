@@ -12,19 +12,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Rachel Eleanor",
+    "imageSource": "Crowdy, n.d., United Nations Archives at Geneva, P054_01_063",
+    "imageSourceOverride": false,
     "lastName": "Crowdy",
+    "lastNameOverride": false,
+    "firstName": "Rachel Eleanor",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "British nurse and Head of the Social Affairs Section of the League of Nations 1919-1931",
+    "summaryOverride": false,
     "life": "Was born 3 March 1884 at Craven Hill Gardens, Paddington, London and passed away 10 October 1964 in Outwood, Surrey, England. She was the daughter of James Crowdy, solicitor, and Mary Isabel Anne Fuidge. On 13 December 1939 she married Cudbert John Massy Thornhill, army colonel.",
+    "lifeOverride": false,
     "nationality": "British",
+    "nationalityOverride": false,
     "country": "United Kingdom",
+    "countryOverride": false,
     "version": "Version 4 February 2014",
+    "versionOverride": false,
     "authors": "Martyn Housden",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Crowdy, n.d., United Nations Archives at Geneva, P054_01_063"
+    "editorsOverride": false
   }
 }

@@ -79,10 +79,13 @@ const SANDBOX_MAP = loadSandboxMap();
 // Keyed by githubSlug(basename) — the store id — so lookups match every consumer.
 // The scalar "detail" fields an entry can override (everything visible on the
 // preview page except Biography/Archives/Publications/Literature and derived
-// values). Mirrored from Word when detailsOverride is OFF; used as-is when ON.
+// values), in preview-page order. Each field carries a mirrored value plus a
+// per-field "<field>Override" flag: mirrored from Word when the flag is OFF,
+// used as-is when the flag is ON (light-touch, one field at a time).
 const DETAIL_FIELDS = [
-  "firstName",
+  "imageSource",
   "lastName",
+  "firstName",
   "knownAs",
   "nee",
   "summary",
@@ -92,7 +95,6 @@ const DETAIL_FIELDS = [
   "version",
   "authors",
   "editors",
-  "imageSource",
 ] as const;
 type DetailField = (typeof DETAIL_FIELDS)[number];
 
@@ -101,8 +103,8 @@ interface EntryOverride {
   roles: Role[];
   portraitImage: string;
   facePosition?: number;
-  detailsOverride: boolean;
   details: Partial<Record<DetailField, string>>;
+  detailOverrides: Partial<Record<DetailField, boolean>>;
 }
 function loadEntryOverrideMap(): Record<string, EntryOverride> {
   const dir = path.resolve("./src/data/entry-overrides");
@@ -117,7 +119,6 @@ function loadEntryOverrideMap(): Record<string, EntryOverride> {
         roles?: unknown[];
         portraitImage?: string;
         facePosition?: unknown;
-        detailsOverride?: boolean;
         details?: Record<string, unknown>;
       };
       const slug = String(raw?.slug ?? path.basename(f, ".json")).trim();
@@ -140,19 +141,22 @@ function loadEntryOverrideMap(): Record<string, EntryOverride> {
       }
       const fp = Number(raw?.facePosition);
       const details: Partial<Record<DetailField, string>> = {};
-      const rawDetails =
-        raw?.details && typeof raw.details === "object" ? raw.details : {};
+      const detailOverrides: Partial<Record<DetailField, boolean>> = {};
+      const rawDetails = (
+        raw?.details && typeof raw.details === "object" ? raw.details : {}
+      ) as Record<string, unknown>;
       for (const k of DETAIL_FIELDS) {
-        const v = (rawDetails as Record<string, unknown>)[k];
+        const v = rawDetails[k];
         if (typeof v === "string") details[k] = v;
+        if (rawDetails[`${k}Override`] === true) detailOverrides[k] = true;
       }
       map[slug] = {
         rolesOverride: raw?.rolesOverride === true,
         roles,
         portraitImage: String(raw?.portraitImage ?? "").trim(),
         facePosition: Number.isFinite(fp) && fp >= 1 ? fp : undefined,
-        detailsOverride: raw?.detailsOverride === true,
         details,
+        detailOverrides,
       };
     } catch {
       // skip malformed override file — falls back to Word behaviour
@@ -484,11 +488,12 @@ const docxEntryType: ContentEntryType = {
       }
     }
 
-    // Per-entry "details" override: when detailsOverride is ON, a details field
-    // REPLACES the Word value (an absent key falls back to Word; an explicit ""
-    // sticks). When OFF, the Word value is used (details is just the CMS mirror).
+    // Per-entry, per-field "details" override: when a field's <field>Override
+    // flag is ON, its stored value REPLACES the Word value (an absent value
+    // falls back to Word; an explicit "" sticks). When OFF, the Word value is
+    // used (the stored value is just the CMS mirror).
     const detailVal = (k: DetailField): string | undefined => {
-      if (ov?.detailsOverride && ov.details?.[k] !== undefined)
+      if (ov?.detailOverrides?.[k] && ov.details?.[k] !== undefined)
         return ov.details[k];
       const w = (extracted as Record<string, unknown> | null | undefined)?.[k];
       return typeof w === "string" ? w : undefined;
@@ -672,7 +677,11 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
                 roles: ovEntry.rolesOverride ? ovEntry.roles : null,
                 portraitImage: ovEntry.portraitImage || null,
                 facePosition: ovEntry.facePosition ?? null,
-                details: ovEntry.detailsOverride ? ovEntry.details : null,
+                details: Object.fromEntries(
+                  DETAIL_FIELDS.filter((k) => ovEntry.detailOverrides[k]).map(
+                    (k) => [k, ovEntry.details[k] ?? null],
+                  ),
+                ),
               }
             : null,
         );

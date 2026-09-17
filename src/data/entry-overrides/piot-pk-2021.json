@@ -14,19 +14,30 @@
   ],
   "portraitImage": "/src/content/bios-images/piot-pk-2021.jpg",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Peter Karel",
+    "imageSource": "Piot, around 2020, picture provided by photographer Heidi Larsen",
+    "imageSourceOverride": false,
     "lastName": "Piot",
+    "lastNameOverride": false,
+    "firstName": "Peter Karel",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Belgian microbiologist and first Executive Director of the Joint United Nations Programme on HIV/AIDS (UNAIDS) 1994-2008",
+    "summaryOverride": false,
     "life": "Was born 17 February 1949 in Leuven, Belgium. He is the son of René Alfons Piot, civil servant, and Joanna Pardon, construction company leader. In 1975 he married Margareta Kimzeke, psychologist, with whom he has one daughter and one son. In 2012 they divorced and Piot married Heidi Jane Larson, medical anthropologist.",
+    "lifeOverride": false,
     "nationality": "Belgian",
+    "nationalityOverride": false,
     "country": "Belgium",
+    "countryOverride": false,
     "version": "Version 26 October 2021",
+    "versionOverride": false,
     "authors": "Yves Beigbeder",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Piot, around 2020, picture provided by photographer Heidi Larsen"
+    "editorsOverride": false
   }
 }

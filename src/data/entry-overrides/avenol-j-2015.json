@@ -13,19 +13,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Joseph Louis Anne Marie Charles",
+    "imageSource": "Avenol, n.d., United Nations Archives at Geneva, P052_01_091",
+    "imageSourceOverride": false,
     "lastName": "Avenol",
+    "lastNameOverride": false,
+    "firstName": "Joseph Louis Anne Marie Charles",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "French international financial expert and second Secretary-General of the League of Nations 1933-1940",
+    "summaryOverride": false,
     "life": "Was born 9 June 1879 in Melle, Deux-Sèvres, France, and passed away 2 September 1952 in Duillier, Vaud, Switzerland. He was the son of Ernest Joseph Marie Avenol, Swiss Guard member and solicitor, and Marie Françoise Renée Dehansy. On 4 September 1901 he married Marie Louise Jeanne Catherine Bernadette Emma (known as Jeanne) Maurel.",
+    "lifeOverride": false,
     "nationality": "French",
+    "nationalityOverride": false,
     "country": "France",
+    "countryOverride": false,
     "version": "Version 21 August 2012",
+    "versionOverride": false,
     "authors": "Bob Reinalda",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Avenol, n.d., United Nations Archives at Geneva, P052_01_091"
+    "editorsOverride": false
   }
 }

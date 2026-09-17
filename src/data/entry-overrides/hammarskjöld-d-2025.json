@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Dag Hjalmar Agne Carl",
+    "imageSource": "Hammarskjöld, 18 September 1961, Nationaal Archief, The Hague, Fotocollectie Anefo",
+    "imageSourceOverride": false,
     "lastName": "Hammarskjöld",
+    "lastNameOverride": false,
+    "firstName": "Dag Hjalmar Agne Carl",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Swedish civil servant and second Secretary-General of the United Nations (UN) 1953-1961",
+    "summaryOverride": false,
     "life": "Was born 29 July 1905 in Jönköping, Sweden and died 18 September 1961 near Ndola, Northern Rhodesia (now Zambia). He was the son of Knut Hjalmar Leonard Hammarskjöld, lawyer and politician, and Agnes Almqvist.",
+    "lifeOverride": false,
     "nationality": "Swedish",
+    "nationalityOverride": false,
     "country": "Sweden",
+    "countryOverride": false,
     "version": "Version 14 October 2025",
+    "versionOverride": false,
     "authors": "Bob Reinalda",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Hammarskjöld, 18 September 1961, Nationaal Archief, The Hague, Fotocollectie Anefo"
+    "editorsOverride": false
   }
 }

@@ -22,19 +22,30 @@
   ],
   "portraitImage": "/src/content/bios-images/kristensen-t-2013.jpg",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Thorkil",
+    "imageSource": "Kristensen, n.d., OECD",
+    "imageSourceOverride": false,
     "lastName": "Kristensen",
+    "lastNameOverride": false,
+    "firstName": "Thorkil",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Danish politician, third Secretary-General of the Organization for European Economic Cooperation (OEEC) 1960-1961 and first Secretary-General of the Organization for Economic Cooperation and Development (OECD) 1961-1969",
+    "summaryOverride": false,
     "life": "Was born 9 October 1899 in Fløjstrup, close to Vejle, Denmark, and passed away 26 June 1989 in Birkerød, Denmark. He was the son of Niels Kristensen, farmer, and Anne Kirstine Thorkilsen, farmer. On 17 July 1931 he married Ellen Christine Nielsen, teacher. They had one daughter and one son.",
+    "lifeOverride": false,
     "nationality": "Danish",
+    "nationalityOverride": false,
     "country": "Denmark",
+    "countryOverride": false,
     "version": "Version 10 December 2013 ",
+    "versionOverride": false,
     "authors": "Matthias Schmelzer",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Kristensen, n.d., OECD"
+    "editorsOverride": false
   }
 }

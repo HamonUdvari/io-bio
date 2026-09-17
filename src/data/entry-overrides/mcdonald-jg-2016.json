@@ -12,19 +12,30 @@
   ],
   "portraitImage": "",
   "facePosition": 1,
-  "detailsOverride": false,
   "details": {
-    "firstName": "James Grover",
+    "imageSource": "McDonald, 1951, Wikimedia Commons",
+    "imageSourceOverride": false,
     "lastName": "McDONALD",
+    "lastNameOverride": false,
+    "firstName": "James Grover",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "American foreign policy expert and High Commissioner for Refugees Coming from Germany of the League of Nations 1933-1935",
+    "summaryOverride": false,
     "life": "Was born 29 November 1886 in Coldwater, Ohio and died 26 September 1964 in White Plains, New York, United States. He was the son of Kenneth McDonald, hotel manager, and Hannah Diederick. On 25 October 1915 he married Ruth Jane Stafford, teacher. They had two daughters.",
+    "lifeOverride": false,
     "nationality": "American",
+    "nationalityOverride": false,
     "country": "United States",
+    "countryOverride": false,
     "version": "Version 26 January 2016",
+    "versionOverride": false,
     "authors": "Bob Reinalda",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "McDonald, 1951, Wikimedia Commons"
+    "editorsOverride": false
   }
 }

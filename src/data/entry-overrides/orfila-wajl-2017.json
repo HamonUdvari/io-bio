@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Washington Alejandro José Luis",
+    "imageSource": "Orfila, 7 September 1977, during the signing of the Panama Canal Treaty, Wikimedia Commons, National Archives and Records Administration 176081",
+    "imageSourceOverride": false,
     "lastName": "Orfila",
+    "lastNameOverride": false,
+    "firstName": "Washington Alejandro José Luis",
+    "firstNameOverride": false,
     "knownAs": "Alejandro or Alex",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Argentine diplomat and fifth Secretary General of the Organization of American States (OAS) 1975-1984",
+    "summaryOverride": false,
     "life": "Washington Alejandro José Luis (known as Alejandro or Alex), Argentine diplomat and fifth Secretary General of the Organization of American States (OAS) 1975-1984, was born 9 March 1925 in Mendoza, Argentina. He is the son of Alejandro Orfila, lawyer and regional governor, and Angélica De Benito. In 1951 he married Jean d’Aprile. They have one daughter and three sons. The marriage was dissolved in 1975. On 12 March 1977 he married Helga Leifeld, model.",
+    "lifeOverride": false,
     "nationality": "Argentine",
+    "nationalityOverride": false,
     "country": "Argentina",
+    "countryOverride": false,
     "version": "Version 10 February 2017 ",
+    "versionOverride": false,
     "authors": "Klaas Dykmann",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Orfila, 7 September 1977, during the signing of the Panama Canal Treaty, Wikimedia Commons, National Archives and Records Administration 176081"
+    "editorsOverride": false
   }
 }

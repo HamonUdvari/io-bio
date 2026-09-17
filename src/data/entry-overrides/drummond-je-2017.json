@@ -13,19 +13,30 @@
   ],
   "portraitImage": "/src/content/bios-images/drummond-je-2017.png",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "James Eric",
+    "imageSource": "Drummond, n.d., United Nations Archives at Geneva, P0112",
+    "imageSourceOverride": false,
     "lastName": "Drummond",
+    "lastNameOverride": false,
+    "firstName": "James Eric",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "British diplomat and first Secretary-General of the League of Nations 1919-1933",
+    "summaryOverride": false,
     "life": "Was born 17 August 1876 in Fulford, North Yorkshire and passed away 15 December 1951 in Rogate, West Sussex, United Kingdom. He was the son of James David Drummond, army officer, and Margaret Smythe. On 20 April 1904 he married Angela Mary Constable Maxwell. They had three daughters and one son.",
+    "lifeOverride": false,
     "nationality": "British",
+    "nationalityOverride": false,
     "country": "United Kingdom",
+    "countryOverride": false,
     "version": "Version 25 January 2017",
+    "versionOverride": false,
     "authors": "Karen Gram-Skjoldager",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Drummond, n.d., United Nations Archives at Geneva, P0112"
+    "editorsOverride": false
   }
 }

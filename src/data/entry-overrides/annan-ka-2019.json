@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Kofi Atta",
+    "imageSource": "Annan, September 2003, Public, Flickr",
+    "imageSourceOverride": false,
     "lastName": "Annan",
+    "lastNameOverride": false,
+    "firstName": "Kofi Atta",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Ghanaian international civil servant and seventh Secretary-General of the United Nations (UN) 1997-2006",
+    "summaryOverride": false,
     "life": "Was born 8 April 1938 in Kumasi, Gold Coast (now Ghana) and passed away 18 August 2018 in Bern, Switzerland. He was the son of Henry Reginald Annan, export manager, and Rose Victoria Eshu. In May 1965 he married Titi Alakija, a self-employed woman, with whom he had a daughter and a son. They were divorced in 1983. On 10 September 1984 he married Nane Maria Lagergren, lawyer and artist, who had one daughter from a previous relationship.",
+    "lifeOverride": false,
     "nationality": "Ghanaian",
+    "nationalityOverride": false,
     "country": "Ghana",
+    "countryOverride": false,
     "version": "Version 4 November 2019",
+    "versionOverride": false,
     "authors": "Chloé Maurel",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Annan, September 2003, Public, Flickr"
+    "editorsOverride": false
   }
 }

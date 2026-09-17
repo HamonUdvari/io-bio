@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Sérgio",
+    "imageSource": "Viera de Mello, 6 February 1998, New York, Photo UN7768909, photographer Ky Chung",
+    "imageSourceOverride": false,
     "lastName": "Vieira de Mello",
+    "lastNameOverride": false,
+    "firstName": "Sérgio",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Brazilian international civil servant and third United Nations High Commissioner for Human Rights 2002-2003",
+    "summaryOverride": false,
     "life": "Was born 15 March 1948 in Rio de Janeiro, Brazil and was killed 19 August 2003 in an attack in Baghdad, Iraq. He was the son of Arnaldo Vieira de Mello, diplomat, and Gilda dos Santos. On 2 June 1973 he married Annie Personnaz, secretary, with whom he had two sons.",
+    "lifeOverride": false,
     "nationality": "Brazilian",
+    "nationalityOverride": false,
     "country": "Brazil",
+    "countryOverride": false,
     "version": "Version 7 April 2017 ",
+    "versionOverride": false,
     "authors": "Dawisson Belém Lopes and Matheus de Carvalho Hernandez",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Viera de Mello, 6 February 1998, New York, Photo UN7768909, photographer Ky Chung"
+    "editorsOverride": false
   }
 }

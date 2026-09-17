@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Paul-Henri Charles",
+    "imageSource": "Spaak, 4 November 1946, UN General Assembly New York, Photo UN7557650",
+    "imageSourceOverride": false,
     "lastName": "Spaak",
+    "lastNameOverride": false,
+    "firstName": "Paul-Henri Charles",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Belgian politician and second Secretary General of the North Atlantic Treaty Organization (NATO) 1957-1961",
+    "summaryOverride": false,
     "life": "Was born 25 January 1899 in Schaerbeek, Belgium, and passed away on 31 July 1972 in Brussels, Belgium. He was the son of Paul Spaak, a lawyer who turned to poetry and drama and became director of the Théâtre Royal de la Monnaie in Brussels, and Marie-Ann Janson, a socialist who in 1921 became the first woman member of the Belgian parliament. On 31 August 1922 he married Marguerite Malevez. They had two daughters and one son. After Malevez’s death on 14 August 1964 he married Simonne Rikkers Hottlet Dear on 23 April 1965.",
+    "lifeOverride": false,
     "nationality": "Belgian",
+    "nationalityOverride": false,
     "country": "Belgium",
+    "countryOverride": false,
     "version": "Version 19 January 2015 ",
+    "versionOverride": false,
     "authors": "Michael G. Schechter",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Spaak, 4 November 1946, UN General Assembly New York, Photo UN7557650"
+    "editorsOverride": false
   }
 }

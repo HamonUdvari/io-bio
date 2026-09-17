@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Eugene Isaac",
+    "imageSource": "Meyer, 25 June 1946, World Bank Group Archives",
+    "imageSourceOverride": false,
     "lastName": "Meyer",
+    "lastNameOverride": false,
+    "firstName": "Eugene Isaac",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "American financier and first President of the International Bank for Reconstruction and Development (IBRD) 1946",
+    "summaryOverride": false,
     "life": "Was born 31 October 1875 in Los Angeles, California, United States and passed away 17 July 1959 in Washington DC. He was the son of Marc Eugene Meyer, financier, and Harriet Newmark. On 12 February 1910 he married Agnes Elizabeth Ernst, journalist, with whom he had four daughters and one son.",
+    "lifeOverride": false,
     "nationality": "American",
+    "nationalityOverride": false,
     "country": "United States",
+    "countryOverride": false,
     "version": "Version 9 February 2015 ",
+    "versionOverride": false,
     "authors": "Michael G. Schechter",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Meyer, 25 June 1946, World Bank Group Archives"
+    "editorsOverride": false
   }
 }

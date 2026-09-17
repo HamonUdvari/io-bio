@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Thorvald",
+    "imageSource": "Stoltenberg, 1990, UNHCR",
+    "imageSourceOverride": false,
     "lastName": "Stoltenberg",
+    "lastNameOverride": false,
+    "firstName": "Thorvald",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Norwegian politician and seventh United Nations High Commissioner for Refugees (UNHCR) January-November 1990",
+    "summaryOverride": false,
     "life": "Was born 8 July 1931 in Oslo, Norway and died 13 July 2018 in Oslo. He was the son of Theodor Emil Stoltenberg, Lieutenant Colonel, and Ingeborg Andresen. On 6 April 1957 he married Karin Heiberg, geneticist and women’s rights advocate, with whom he had two daughters and one son.",
+    "lifeOverride": false,
     "nationality": "Norwegian",
+    "nationalityOverride": false,
     "country": "Norway",
+    "countryOverride": false,
     "version": "Version 14 November 2014 ",
+    "versionOverride": false,
     "authors": "Michael G. Schechter",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Stoltenberg, 1990, UNHCR"
+    "editorsOverride": false
   }
 }

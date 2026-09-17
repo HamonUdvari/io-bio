@@ -13,19 +13,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Adrianus",
+    "imageSource": "Pelt, c.1940, Photo Collection ANEFO, Nationaal Archief, The Hague, Netherlands.",
+    "imageSourceOverride": false,
     "lastName": "Pelt",
+    "lastNameOverride": false,
+    "firstName": "Adrianus",
+    "firstNameOverride": false,
     "knownAs": "Adrian",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Dutch journalist and third Director of the Information Section of the League of Nations Secretariat 1934-1940",
+    "summaryOverride": false,
     "life": "Was born on 8 May 1892 in Koog aan de Zaan, the Netherlands and died 11 April 1981 in Hermance, Switzerland. He was the son of Marinus Adrianus Pelt, mechanical engineer, and Dorothea Johanna Endt. On 3 February 1919 he married Andrée Elvire Léonide Bernard, with whom he had three daughters.",
+    "lifeOverride": false,
     "nationality": "Dutch",
+    "nationalityOverride": false,
     "country": "Netherlands",
+    "countryOverride": false,
     "version": "Version 25 June 2026",
+    "versionOverride": false,
     "authors": "Bob Reinalda",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Pelt, c.1940, Photo Collection ANEFO, Nationaal Archief, The Hague, Netherlands."
+    "editorsOverride": false
   }
 }

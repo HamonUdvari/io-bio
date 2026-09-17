@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "José Maurício de Figueiredo",
+    "imageSource": "Bustani, 13 June 2003, Agência Senado, photographer Márcia Kalume",
+    "imageSourceOverride": false,
     "lastName": "Bustani",
+    "lastNameOverride": false,
+    "firstName": "José Maurício de Figueiredo",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Brazilian diplomat and first Director-General of the Organization for the Prohibition of Chemical Weapons (OPCW) 1997-2002",
+    "summaryOverride": false,
     "life": "Was born in Porto Velho, Brazil on 5 June 1945. He is the son of Mauricio José Bustani, medical doctor, and Guajá de Figueiredo. On 1 June 1971 he married Janine-Monique Lazaro, diplomat. They have one daughter and two sons.",
+    "lifeOverride": false,
     "nationality": "Brazilian",
+    "nationalityOverride": false,
     "country": "Brazil",
+    "countryOverride": false,
     "version": "Version 19 January 2015 ",
+    "versionOverride": false,
     "authors": "Dawisson Belém Lopes",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Bustani, 13 June 2003, Agência Senado, photographer Márcia Kalume"
+    "editorsOverride": false
   }
 }

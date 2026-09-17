@@ -14,19 +14,30 @@
   ],
   "portraitImage": "/src/content/bios-images/stokes-j-2018.jpg",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "John",
+    "imageSource": "Stokes, c.1890, Wikimedia Commons",
+    "imageSourceOverride": false,
     "lastName": "Stokes",
+    "lastNameOverride": false,
+    "firstName": "John",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "military engineer and the first British Delegate to the European Commission of the Danube 1856-1871",
+    "summaryOverride": false,
     "life": "Was born 17 June 1825 in Cobham, Kent and passed away 17 November 1902 in Ewell, Surrey, United Kingdom. He was the son of John Stokes, vicar of Cobham, and Elizabeth Arabella Franks. On 6 February 1849 he married Henrietta Georgina de Villiers Maynard. They had four daughters and four sons.",
+    "lifeOverride": false,
     "nationality": "British",
+    "nationalityOverride": false,
     "country": "United Kingdom",
+    "countryOverride": false,
     "version": "Version 20 April 2018 ",
+    "versionOverride": false,
     "authors": "Constantin Ardeleanu",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Stokes, c.1890, Wikimedia Commons"
+    "editorsOverride": false
   }
 }

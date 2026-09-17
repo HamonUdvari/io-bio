@@ -14,19 +14,30 @@
   ],
   "portraitImage": "/src/content/bios-images/adatci-m-2021.png",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Mineitciro",
+    "imageSource": "Adatci, n.d., United Nations Archives at Geneva, P052_01_003",
+    "imageSourceOverride": false,
     "lastName": "Adatci",
+    "lastNameOverride": false,
+    "firstName": "Mineitciro",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Japanese diplomat and fourth President of the Permanent Court of International Justice (PCIJ) 1931-1933",
+    "summaryOverride": false,
     "life": "Was born 27 July 1869 in Yamanobe, Japan and died 28 December 1934 in Amsterdam, The Netherlands. He was the son of Hisashi Adatci, school teacher and mayor, and Shiu Tōkairin. On 1 August 1892 he married Kane Takazawa, teacher, with whom he had two daughters and one son.",
+    "lifeOverride": false,
     "nationality": "Japanese",
+    "nationalityOverride": false,
     "country": "Japan",
+    "countryOverride": false,
     "version": "Version 10 December 2020",
+    "versionOverride": false,
     "authors": "Seiko Mimaki",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Adatci, n.d., United Nations Archives at Geneva, P052_01_003"
+    "editorsOverride": false
   }
 }

@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Joseph Antoine Marie Hubert",
+    "imageSource": "Luns, 1 October 1971, NATO, Flickr",
+    "imageSourceOverride": false,
     "lastName": "Luns",
+    "lastNameOverride": false,
+    "firstName": "Joseph Antoine Marie Hubert",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Dutch Minister for Foreign Affairs and fifth Secretary General of the North Atlantic Treaty Organisation (NATO) 1971-1984",
+    "summaryOverride": false,
     "life": "Was born 28 August 1911 in Rotterdam, The Netherlands and passed away 17 July 2002 in Brussels, Belgium. He was the son of Hubert Marie Luns, painter-sculptor and professor in drawing, and Harriet Anna Paula Marie Louvrier. On 10 January 1939 he married Elisabeth Cornelia Baroness van Heemstra. They had a daughter and a son.",
+    "lifeOverride": false,
     "nationality": "Dutch",
+    "nationalityOverride": false,
     "country": "Netherlands",
+    "countryOverride": false,
     "version": "Version 19 May 2015 ",
+    "versionOverride": false,
     "authors": "Jan-Willem Brouwer and Ine (C.M.) Megens",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Luns, 1 October 1971, NATO, Flickr"
+    "editorsOverride": false
   }
 }

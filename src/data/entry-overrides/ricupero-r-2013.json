@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Rubens",
+    "imageSource": "Ricupero, 14 June 2004, Inaugural Ceremony UNCTAD in Sao Paulo, Photo UN721446, Photographer Marcos Issa",
+    "imageSourceOverride": false,
     "lastName": "Ricupero",
+    "lastNameOverride": false,
+    "firstName": "Rubens",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Brazilian diplomat and fifth Secretary-General of the United Nations Conference on Trade and Development (UNCTAD) 1995-2004",
+    "summaryOverride": false,
     "life": "Was born on 1 March 1937 in São Paulo, Brazil. He is the son of João Ricupero, a locksmith and small business owner, and Assumpta Jovine. On 2 September 1961 he married Marisa Parolari, a specialist in Brazilian artistic patrimony at the Ministry of Culture. They have three daughters and one son.",
+    "lifeOverride": false,
     "nationality": "Brazilian",
+    "nationalityOverride": false,
     "country": "Brazil",
+    "countryOverride": false,
     "version": "Version 28 February 2013",
+    "versionOverride": false,
     "authors": "Dawisson Belém Lopes",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Ricupero, 14 June 2004, Inaugural Ceremony UNCTAD in Sao Paulo, Photo UN721446, Photographer Marcos Issa"
+    "editorsOverride": false
   }
 }

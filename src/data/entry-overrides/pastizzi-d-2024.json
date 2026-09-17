@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Dunja",
+    "imageSource": "Pastizzi, 4 July 1987, UN Photo UN7474774, photographer M. Grant",
+    "imageSourceOverride": false,
     "lastName": "Pastizzi",
+    "lastNameOverride": false,
+    "firstName": "Dunja",
+    "firstNameOverride": false,
     "knownAs": "Pastizzi-Ferenčić",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Yugoslavian economist and first Director of the United Nations International Research and Training Institute for the Advancement of Women (INSTRAW) 1981-1990",
+    "summaryOverride": false,
     "life": "Was born 13 October 1936 in Zagreb, Yugoslavia and passed away 23 December 2003 in Zagreb, Croatia. She was the daughter of Gjuro Pastizzi, watchmaker, and Marija Vodnica, administrator at a food production factory. On 20 November 1960 she married Ante Ferenčić, geology engineer, with whom she had two daughters.",
+    "lifeOverride": false,
     "nationality": "",
+    "nationalityOverride": false,
     "country": "",
+    "countryOverride": false,
     "version": "Version 8 March 2024",
+    "versionOverride": false,
     "authors": "Valentine M. Moghadam",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Pastizzi, 4 July 1987, UN Photo UN7474774, photographer M. Grant"
+    "editorsOverride": false
   }
 }

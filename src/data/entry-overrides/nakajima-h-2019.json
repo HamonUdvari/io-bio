@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Hiroshi",
+    "imageSource": "Nakajima, 14 August 1995, Rimini, Italy",
+    "imageSourceOverride": false,
     "lastName": "Nakajima",
+    "lastNameOverride": false,
+    "firstName": "Hiroshi",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Japanese neurophysiologist and fourth Director-General of the World Health Organization (WHO) 1988-1998",
+    "summaryOverride": false,
     "life": "Was born 16 May 1928 in Chiba City, Japan and died 26 January 2013 in Poitiers, France. He was the son of Ryosuke Nakajima, practitioner of traditional herbal medicine and paediatrician, and Junko Takanuki, nurse. In 1962 he married Andrée Mary-Josette Guillien, doctor, with whom he had two sons. After her death in 1981 he married Martha Ann DeWitt, foreign service officer, on 30 March 1984.",
+    "lifeOverride": false,
     "nationality": "Japanese",
+    "nationalityOverride": false,
     "country": "Japan",
+    "countryOverride": false,
     "version": "Version 16 February 2019 ",
+    "versionOverride": false,
     "authors": "Kayo Takuma",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Nakajima, 14 August 1995, Rimini, Italy"
+    "editorsOverride": false
   }
 }

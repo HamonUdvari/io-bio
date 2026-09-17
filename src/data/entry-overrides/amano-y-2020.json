@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Yukiya",
+    "imageSource": "Amano, Seminar for Diplomats, 25 August 2017, Public Flickr, Photo Credit V. Alic/IAEA.",
+    "imageSourceOverride": false,
     "lastName": "Amano",
+    "lastNameOverride": false,
+    "firstName": "Yukiya",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Japanese diplomat and fifth Director General of the International Atomic Energy Agency (IAEA) 2009-2019",
+    "summaryOverride": false,
     "life": "Was born 9 May 1947 in Yugawara, Kanagawa Prefecture, Japan and passed away 18 July 2019 in Vienna, Austria. Family relations and vital data have not been made public. He married Yukika, a medical foreign service officer. They had no children.",
+    "lifeOverride": false,
     "nationality": "Japanese",
+    "nationalityOverride": false,
     "country": "Japan",
+    "countryOverride": false,
     "version": "Version 2 September 2020 ",
+    "versionOverride": false,
     "authors": "Yasuhito Fukui",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Amano, Seminar for Diplomats, 25 August 2017, Public Flickr, Photo Credit V. Alic/IAEA."
+    "editorsOverride": false
   }
 }

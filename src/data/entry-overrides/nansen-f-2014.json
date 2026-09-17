@@ -12,19 +12,30 @@
   ],
   "portraitImage": "/src/content/bios-images/nansen-f-2014.jpg",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Fridtjof",
+    "imageSource": "Nansen, n.d., United Nations Archives at Geneva, P0261a",
+    "imageSourceOverride": false,
     "lastName": "Nansen",
+    "lastNameOverride": false,
+    "firstName": "Fridtjof",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Norwegian scientist and High Commissioner for Refugees of the League of Nations 1921-1930",
+    "summaryOverride": false,
     "life": "Was born 10 October 1861 in Store Frøen, Norway, and passed away 13 May 1930 in Lysaker, Norway. He was the son of Baldur Nansen, lawyer, and Baroness Adelaide Wedel Jarlsberg. On 6 September 1889 he married Eva Helene Sars, classical singer. They had two daughters and three sons. After Sars’ death on 9 December 1907 he married Sigrun Sandberg, who had divorced from Gerhard Munthe, on 17 January 1919.",
+    "lifeOverride": false,
     "nationality": "Norwegian",
+    "nationalityOverride": false,
     "country": "Norway",
+    "countryOverride": false,
     "version": "Version 17 March 2014",
+    "versionOverride": false,
     "authors": "Francesca Piana",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Nansen, n.d., United Nations Archives at Geneva, P0261a"
+    "editorsOverride": false
   }
 }

@@ -12,10 +12,11 @@ import { getCollection } from "astro:content";
 // Mirrors the pattern in src/pages/search-index.json.ts.
 export const prerender = true;
 
-// Keep in sync with DETAIL_FIELDS in src/loaders/docxLoader.ts.
+// Keep in sync with DETAIL_FIELDS in src/loaders/docxLoader.ts (preview order).
 const DETAIL_FIELDS = [
-  "firstName",
+  "imageSource",
   "lastName",
+  "firstName",
   "knownAs",
   "nee",
   "summary",
@@ -25,7 +26,6 @@ const DETAIL_FIELDS = [
   "version",
   "authors",
   "editors",
-  "imageSource",
 ] as const;
 
 export const GET: APIRoute = async () => {

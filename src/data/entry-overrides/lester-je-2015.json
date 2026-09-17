@@ -13,19 +13,30 @@
   ],
   "portraitImage": "/src/content/bios-images/lester-je-2015.jpg",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "John Ernest",
+    "imageSource": "Lester, n.d., United Nations Archives at Geneva, P063_01_010",
+    "imageSourceOverride": false,
     "lastName": "Lester",
+    "lastNameOverride": false,
+    "firstName": "John Ernest",
+    "firstNameOverride": false,
     "knownAs": "Seán; also called Jack",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Irish diplomat and third Secretary-General of the League of Nations 1940-1946",
+    "summaryOverride": false,
     "life": "Was born 27 September 1888 at Woodburn, Carrickfergus, County Antrim, Ireland (now Northern Ireland) and died at Clifden, County Galway, Ireland on 13 June 1959. He was the son of Robert John Lester, grocer, and Henrietta Mary Ritchie. On 18 November 1920 he married Elizabeth Ruth (Elsie) Tyrell. They had three daughters.",
+    "lifeOverride": false,
     "nationality": "Irish",
+    "nationalityOverride": false,
     "country": "Ireland",
+    "countryOverride": false,
     "version": "Version 21 January 2015 ",
+    "versionOverride": false,
     "authors": "Michael Kennedy",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Lester, n.d., United Nations Archives at Geneva, P063_01_010"
+    "editorsOverride": false
   }
 }

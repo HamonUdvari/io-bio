@@ -14,19 +14,30 @@
   ],
   "portraitImage": "/src/content/bios-images/gutt-c-2025.jpg",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Camille Adolphe",
+    "imageSource": "Gutt, 1 January 1949, Photo, UN7742881",
+    "imageSourceOverride": false,
     "lastName": "Guttenstein",
+    "lastNameOverride": false,
+    "firstName": "Camille Adolphe",
+    "firstNameOverride": false,
     "knownAs": "Camille Gutt",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Belgian Minister of Finance and first Managing Director of the International Monetary Fund (IMF) 1946-1951",
+    "summaryOverride": false,
     "life": "Was born 14 November 1884 in Brussels, Belgium and died 7 June 1971 in Brussels. He was the son of Max Guttenstein, journalist, and Marie-Pauline Schweitzer. On 28 August 1906 he married Claire Marie Frick, Olympic swimmer, with whom he had three sons.",
+    "lifeOverride": false,
     "nationality": "Belgian",
+    "nationalityOverride": false,
     "country": "Belgium",
+    "countryOverride": false,
     "version": "Version 10 February 2025 ",
+    "versionOverride": false,
     "authors": "Jean F. Crombois",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Gutt, 1 January 1949, Photo, UN7742881"
+    "editorsOverride": false
   }
 }

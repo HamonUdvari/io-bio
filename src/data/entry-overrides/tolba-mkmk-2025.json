@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Mostafa Kamal Mohammed Kamel",
+    "imageSource": "Tolba, n.d., UNEP, Flickr",
+    "imageSourceOverride": false,
     "lastName": "Tolba",
+    "lastNameOverride": false,
+    "firstName": "Mostafa Kamal Mohammed Kamel",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Egyptian scientist and second Executive Director of the United Nations Environment Programme (UNEP) 1975-1992",
+    "summaryOverride": false,
     "life": "Was born 8 December 1922 in Zifta (also Zefta), Egypt and passed away 28 March 2016 in Geneva, Switzerland. He was the son of Kamel Tolba, teacher of Arabic, and Shafika Abu Samra. He married Saneyah Zaki Labib, from whom he later divorced. He subsequently married Manal El-Batran, urban planner and academic, with whom he had twin sons.",
+    "lifeOverride": false,
     "nationality": "Egyptian",
+    "nationalityOverride": false,
     "country": "Egypt",
+    "countryOverride": false,
     "version": "Version 24 July 2025 ",
+    "versionOverride": false,
     "authors": "Maria Ivanova",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Tolba, n.d., UNEP, Flickr"
+    "editorsOverride": false
   }
 }

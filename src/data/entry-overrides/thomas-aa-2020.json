@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Aristide Albert",
+    "imageSource": "Thomas, 1923, ILO Historical Archives",
+    "imageSourceOverride": false,
     "lastName": "Thomas",
+    "lastNameOverride": false,
+    "firstName": "Aristide Albert",
+    "firstNameOverride": false,
     "knownAs": "Albert Thomas",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "French politician and first Director of the International Labour Office of the International Labour Organization (ILO) 1919-1932",
+    "summaryOverride": false,
     "life": "Was born 16 June 1878 in Champigny-sur-Marne, France and passed away 7 May 1932 in Paris, France. He was the son of Aristide Hilaire Thomas, baker, and Marie Louise Clémence Malloire, baker. On 17 January 1905 he married Madeleine Chaufaille, teacher. They had three daughters.",
+    "lifeOverride": false,
     "nationality": "French",
+    "nationalityOverride": false,
     "country": "France",
+    "countryOverride": false,
     "version": "Version 10 December 2020 ",
+    "versionOverride": false,
     "authors": "Adeline Blaszkiewicz",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Thomas, 1923, ILO Historical Archives"
+    "editorsOverride": false
   }
 }

@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Maurice",
+    "imageSource": "Pate, 24 August 1964, New York, Photo UN7698874, photographer Yutaka Nagata",
+    "imageSourceOverride": false,
     "lastName": "Pate",
+    "lastNameOverride": false,
+    "firstName": "Maurice",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "American businessman and first Executive Director of the United Nations International Children’s Emergency Fund, in 1953 renamed United Nations Children’s Fund (UNICEF) 1947-1965",
+    "summaryOverride": false,
     "life": "Was born 14 October 1894 in Pender, Nebraska, United States and passed away 19 January 1965 in New York City. He was the son of Richard Ellsworth Pate, banker and businessman, and Rachel Mabel Davis. On 29 November 1926 he married Jadwiga Monkowska. They divorced in 1937. On 31 October 1961 he married Martha B. Lucas, administrator of women’s colleges and institutions dedicated to education. Pate had no children.",
+    "lifeOverride": false,
     "nationality": "American",
+    "nationalityOverride": false,
     "country": "United States",
+    "countryOverride": false,
     "version": "Version 9 February 2016 ",
+    "versionOverride": false,
     "authors": "Michael G. Schechter",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Pate, 24 August 1964, New York, Photo UN7698874, photographer Yutaka Nagata"
+    "editorsOverride": false
   }
 }

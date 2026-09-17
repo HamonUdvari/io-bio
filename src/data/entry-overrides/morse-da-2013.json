@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "David Abner",
+    "imageSource": "Morse, n.d., ILO, Flickr",
+    "imageSourceOverride": false,
     "lastName": "Morse",
+    "lastNameOverride": false,
+    "firstName": "David Abner",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "American attorney for the National Labor Relations Board and fifth Director-General of the International Labour Office of the International Labour Organization (ILO) 1948-1970",
+    "summaryOverride": false,
     "life": "Was born 31 May 1907 in New York City, United States, and passed away 1 December 1990 in New York City. He was the son of Morris Moscovitz, cabinetmaker, and Sara Werblin. On 13 May 1937 he married Mildred Edna Hockstader. They had no children.",
+    "lifeOverride": false,
     "nationality": "American",
+    "nationalityOverride": false,
     "country": "United States",
+    "countryOverride": false,
     "version": "Version 15 January 2013",
+    "versionOverride": false,
     "authors": "Daniel Maul",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Morse, n.d., ILO, Flickr"
+    "editorsOverride": false
   }
 }

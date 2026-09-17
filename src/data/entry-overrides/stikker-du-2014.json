@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Dirk Uipko",
+    "imageSource": "Stikker, 8 July 1964, Press Conference at Schiphol Airport, Nationaal Archief, The Hague, Netherlands and Spaarnestad Photo SFA002019718, Photographer Harry Pot",
+    "imageSourceOverride": false,
     "lastName": "Stikker",
+    "lastNameOverride": false,
+    "firstName": "Dirk Uipko",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Dutch politician and third Secretary General of the North Atlantic Treaty Organization (NATO), 1961-1964",
+    "summaryOverride": false,
     "life": "Was born 5 February 1897 in Winschoten, Netherlands and died 24 December 1979 in Wassenaar. He was the son of Uipko Obbo Stikker, stockbroker, and Ida Meursing. On 2 May 1922 he married Catharina Paulina van der Scheer. After the early death of one daughter and one son, they had two sons.",
+    "lifeOverride": false,
     "nationality": "Dutch",
+    "nationalityOverride": false,
     "country": "Netherlands",
+    "countryOverride": false,
     "version": "Version 13 June 2014",
+    "versionOverride": false,
     "authors": "Bob Reinalda",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Stikker, 8 July 1964, Press Conference at Schiphol Airport, Nationaal Archief, The Hague, Netherlands and Spaarnestad Photo SFA002019718, Photographer Harry Pot"
+    "editorsOverride": false
   }
 }

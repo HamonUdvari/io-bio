@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Gro",
+    "imageSource": "Brundtland, 9 May 2007, UN Commission on Sustainable Development, New York, Photo UN7697600, Photographer Paulo Filgueiras",
+    "imageSourceOverride": false,
     "lastName": "Brundtland",
+    "lastNameOverride": false,
+    "firstName": "Gro",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "Harlem",
+    "neeOverride": false,
     "summary": "Norwegian politician and fifth Director-General of the World Health Organization (WHO) 1998-2003",
+    "summaryOverride": false,
     "life": "Was born 20 April 1939 in Bærum near Oslo, Norway. She is the daughter of Gudmund Harlem, physician and politician, and Inga Margareta Elisabet Brynolf, political party employee. On 9 December 1960 she married Arne Olav Brundtland, political scientist. They have one daughter and three sons.",
+    "lifeOverride": false,
     "nationality": "Norwegian",
+    "nationalityOverride": false,
     "country": "Norway",
+    "countryOverride": false,
     "version": "Version 9 June 2014",
+    "versionOverride": false,
     "authors": "Auriane Guilbaud",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Brundtland, 9 May 2007, UN Commission on Sustainable Development, New York, Photo UN7697600, Photographer Paulo Filgueiras"
+    "editorsOverride": false
   }
 }

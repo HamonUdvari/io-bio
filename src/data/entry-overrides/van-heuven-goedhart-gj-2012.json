@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Gerrit Jan",
+    "imageSource": "Van Heuven Goedhart, 31 August 1944, Nationaal Archief, The Hague, Netherlands, Wikimedia Commons",
+    "imageSourceOverride": false,
     "lastName": "van Heuven Goedhart",
+    "lastNameOverride": false,
+    "firstName": "Gerrit Jan",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Dutch journalist and first United Nations High Commissioner for Refugees (UNHCR) 1951-1956",
+    "summaryOverride": false,
     "life": "Was born 19 March 1901 in Bussum, the Netherlands, and passed away 8 July 1956 in Geneva, Switzerland. He was the son of Gijsbert Willem Goedhart, bookseller and vicar, and Francina Dingena Helena van Heuven. On 28 October 1924 he married Francis Becht, lady help and domestic help. They divorced on 10 October 1931. On 19 April 1932 he married Erna Hauan. They had two daughters.",
+    "lifeOverride": false,
     "nationality": "Dutch",
+    "nationalityOverride": false,
     "country": "Netherlands",
+    "countryOverride": false,
     "version": "Version 20 June 2012",
+    "versionOverride": false,
     "authors": "Jeroen Corduwener and Bob Reinalda",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Van Heuven Goedhart, 31 August 1944, Nationaal Archief, The Hague, Netherlands, Wikimedia Commons"
+    "editorsOverride": false
   }
 }

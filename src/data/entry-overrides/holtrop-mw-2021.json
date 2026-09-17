@@ -13,19 +13,30 @@
   ],
   "portraitImage": "/src/content/bios-images/holtrop-mw-2021.jpg",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Marius Wilhelm",
+    "imageSource": "Holtrop, 26 April 1967, Nationaal Archief, The Hague, photographer J. Evers / Anefo",
+    "imageSourceOverride": false,
     "lastName": "Holtrop",
+    "lastNameOverride": false,
+    "firstName": "Marius Wilhelm",
+    "firstNameOverride": false,
     "knownAs": "Bob",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Dutch central banker and ninth President and Chairman of the Board of Directors of the Bank for International Settlements (BIS) 1958-1967",
+    "summaryOverride": false,
     "life": "Was born 2 November 1902 in Amsterdam, The Netherlands and passed away 1 April 1988 in Haarlem, The Netherlands. He was the son of Jan August Holtrop, actor, and Elisabeth Philippina van Gelder, actress. On 30 August 1926 he married Josina Juchter, with whom he had one daughter and two sons. After his wife passed away on 4 August 1965, he married Catharina Francisca Maria Peltenburg on 4 October 1966.",
+    "lifeOverride": false,
     "nationality": "Dutch",
+    "nationalityOverride": false,
     "country": "Netherlands",
+    "countryOverride": false,
     "version": "Version 15 February 2021",
+    "versionOverride": false,
     "authors": "Bob Reinalda",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Holtrop, 26 April 1967, Nationaal Archief, The Hague, photographer J. Evers / Anefo"
+    "editorsOverride": false
   }
 }

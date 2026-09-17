@@ -22,19 +22,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Addeke Hendrik",
+    "imageSource": "Boerma, The Hague, 17 June 1970, Nationaal Archief, The Hague, ANEFO, photographer Rob Mieremet",
+    "imageSourceOverride": false,
     "lastName": "Boerma",
+    "lastNameOverride": false,
+    "firstName": "Addeke Hendrik",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Dutch agronomist and first Executive Director of the World Food Programme (WFP) 1962-1967 and fifth Director-General of the Food and Agriculture Organization of the United Nations (FAO) 1968-1975",
+    "summaryOverride": false,
     "life": "Was born 3 April 1912 in Anlo, The Netherlands and passed away 8 May 1992 in Vienna, Austria. He was the son of Harm Boerma, farmer, and Janke Wilkens. On 1 August 1935 he married Maretta Gerardina Hendrica Postuma, correspondent, with whom he had three daughters. After their divorce on 10 January 1953 he married Dinah Johnston, FAO employee, on 13 April 1953.",
+    "lifeOverride": false,
     "nationality": "Dutch",
+    "nationalityOverride": false,
     "country": "Netherlands",
+    "countryOverride": false,
     "version": "Version 10 December 2020",
+    "versionOverride": false,
     "authors": "Bob Reinalda",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Boerma, The Hague, 17 June 1970, Nationaal Archief, The Hague, ANEFO, photographer Rob Mieremet"
+    "editorsOverride": false
   }
 }

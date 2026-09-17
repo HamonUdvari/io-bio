@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Clarence Wilfred",
+    "imageSource": "Jenks, n.d., ILO Historical Archives",
+    "imageSourceOverride": false,
     "lastName": "Jenks",
+    "lastNameOverride": false,
+    "firstName": "Clarence Wilfred",
+    "firstNameOverride": false,
     "knownAs": "Wilfred",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "British international lawyer and sixth Director-General of the International Labour Office of the International Labour Organization (ILO) 1970-1973",
+    "summaryOverride": false,
     "life": "Was born 7 March 1909 in Liverpool, England and passed away 9 October 1973 in Rome, Italy. He was the son of Richard Jenks, marine engineer, and Alice Sophia Craig, dressmaker. On 19 October 1949 he married Jane Louise Broverman. They had two sons.",
+    "lifeOverride": false,
     "nationality": "British",
+    "nationalityOverride": false,
     "country": "United Kingdom",
+    "countryOverride": false,
     "version": "Version 8 February 2016 ",
+    "versionOverride": false,
     "authors": "Jaci L. Eisenberg",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Jenks, n.d., ILO Historical Archives"
+    "editorsOverride": false
   }
 }

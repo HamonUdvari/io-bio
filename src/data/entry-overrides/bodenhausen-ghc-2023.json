@@ -30,19 +30,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Georg Hendrik Christiaan",
+    "imageSource": "Bodenhausen, Svenska Dagbladet, 26 May 1958, WIPO, Flickr, photographer unknown",
+    "imageSourceOverride": false,
     "lastName": "Bodenhausen",
+    "lastNameOverride": false,
+    "firstName": "Georg Hendrik Christiaan",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Dutch lawyer and seventh Director of the United International Bureaux for the Protection of Intellectual Property (BIRPI) 1963-1970, first Director-General of the World Intellectual Property Organization (WIPO) 1970-1973 and first Secretary-General of the International Union for the Protection of New Varieties of Plants (UPOV) 1969-1973",
+    "summaryOverride": false,
     "life": "Was born 11 July 1905 in Utrecht, The Netherlands, and passed away 1 October 1997 in Lausanne, Switzerland. He was the son of Thijs Bodenhausen, military officer and director of the Academy of Visual Arts and Technical Sciences in Rotterdam, and Cornelia Johanna Gast, library assistant. On 15 September 1931 he married Maria Eleonora Dutilh. They divorced on 10 March 1937. On 26 August 1937 he married Dorothea Wilhelmina Rueb, with whom he had a daughter. They divorced on 24 June 1959. On 24 August 1959 he married Patricia Lambe in Scarborough, England.",
+    "lifeOverride": false,
     "nationality": "Dutch",
+    "nationalityOverride": false,
     "country": "Netherlands",
+    "countryOverride": false,
     "version": "Version 10 June 2023",
+    "versionOverride": false,
     "authors": "Bob Reinalda",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Bodenhausen, Svenska Dagbladet, 26 May 1958, WIPO, Flickr, photographer unknown"
+    "editorsOverride": false
   }
 }

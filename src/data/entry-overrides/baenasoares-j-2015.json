@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "João Clemente",
+    "imageSource": "Baena Soares, n.d., OAS, Wikipedia, Public",
+    "imageSourceOverride": false,
     "lastName": "Baena Soares",
+    "lastNameOverride": false,
+    "firstName": "João Clemente",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Brazilian diplomat and sixth Secretary-General of the Organization of American States (OAS) 1984-1994",
+    "summaryOverride": false,
     "life": "Was born 14 May 1931 in Belém, Brazil and passed away 7 June 2023 in Rio de Janeiro, Brazil. He was the son of Altevir Soares, military officer, and Alice de Macedo Baena. On 15 November 1955 he married Gláucia de Lima, public servant, with whom he had one daughter and two sons.",
+    "lifeOverride": false,
     "nationality": "Brazilian",
+    "nationalityOverride": false,
     "country": "Brazil",
+    "countryOverride": false,
     "version": "Version 18 November 2013",
+    "versionOverride": false,
     "authors": "Guilherme Casarões",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Baena Soares, n.d., OAS, Wikipedia, Public"
+    "editorsOverride": false
   }
 }

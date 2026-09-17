@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Edouard Victor",
+    "imageSource": "Saouma, 8 May 1980, photographer Hans van Dijk / Anefo",
+    "imageSourceOverride": false,
     "lastName": "Saouma",
+    "lastNameOverride": false,
+    "firstName": "Edouard Victor",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Lebanese agronomist and sixth Director-General of the Food and Agriculture Organization of the United Nations (FAO) 1976-1993",
+    "summaryOverride": false,
     "life": "Was born 6 November 1926 in Beirut, Lebanon, and died there on 1 December 2012. He was the son of Victor Youssef Saouma, trader in nutritive products, and Evelyne Tyan. In 1951 he married Ines Forero-Ramos. They had two daughters and one son.",
+    "lifeOverride": false,
     "nationality": "Lebanese",
+    "nationalityOverride": false,
     "country": "Lebanon",
+    "countryOverride": false,
     "version": "Version 15 January 2013",
+    "versionOverride": false,
     "authors": "Michael D.V. Davies",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Saouma, 8 May 1980, photographer Hans van Dijk / Anefo"
+    "editorsOverride": false
   }
 }

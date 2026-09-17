@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "James Charles",
+    "imageSource": "Ingram, 31 May 2021, Australian National University Media, photographer Stuart Hay",
+    "imageSourceOverride": false,
     "lastName": "Ingram",
+    "lastNameOverride": false,
+    "firstName": "James Charles",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Australian diplomat and eighth Executive Director of the World Food Programme (WFP) 1982-1992",
+    "summaryOverride": false,
     "life": "Was born in Warragul, Victoria, Australia on 27 February 1928 and died 15 February 2023 in Canberra, Australia. He is the son of James Edward Ingram, government clerk, and Gladys May Ingram. On 16 October 1950 he married Odette Koven, French diplomatic staff member, with whom he has two daughters and one son.",
+    "lifeOverride": false,
     "nationality": "Australian",
+    "nationalityOverride": false,
     "country": "Australia",
+    "countryOverride": false,
     "version": "Version 22 April 2014",
+    "versionOverride": false,
     "authors": "Sebastian Schindler",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Ingram, 31 May 2021, Australian National University Media, photographer Stuart Hay"
+    "editorsOverride": false
   }
 }

@@ -21,19 +21,30 @@
   ],
   "portraitImage": "/src/content/bios-images/wyndham-white-e-2012.jpg",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Eric Henry",
+    "imageSource": "Wyndham White, n.d., WTO",
+    "imageSourceOverride": false,
     "lastName": "Wyndham White",
+    "lastNameOverride": false,
+    "firstName": "Eric Henry",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "British civil servant, first Executive Secretary of the General Agreement on Tariffs and Trade (GATT) 1948-1965 and Director-General of the General Agreement on Tariffs and Trade (GATT) 1965-1968",
+    "summaryOverride": false,
     "life": "Was born 26 January 1913 in London, United Kingdom and died 27 January 1980 in Ferney-Voltaire, France. He was the son of Henry Wyndham White, barrister-at-law, and Helen Peppiatt. On 12 November 1947 he married Tina Gibson, American actress (professional name Tina Thayer), in New York City. They had two daughters and divorced after 1964.",
+    "lifeOverride": false,
     "nationality": "British",
+    "nationalityOverride": false,
     "country": "United Kingdom",
+    "countryOverride": false,
     "version": "Version 13 March 2012",
+    "versionOverride": false,
     "authors": "Francine McKenzie",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Wyndham White, n.d., WTO"
+    "editorsOverride": false
   }
 }

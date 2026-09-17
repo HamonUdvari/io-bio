@@ -14,19 +14,30 @@
   ],
   "portraitImage": "/src/content/bios-images/johnston-dj-2013.jpg",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Donald James",
+    "imageSource": "Johnston, n.d., at OECD, Flickr",
+    "imageSourceOverride": false,
     "lastName": "Johnston",
+    "lastNameOverride": false,
+    "firstName": "Donald James",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Canadian politician and fourth Secretary-General of the Organisation for Economic Co-operation and Development (OECD) 1996-2006",
+    "summaryOverride": false,
     "life": "Was born 26 June 1936 in Ottawa, Canada. He is the son of Wilbur Austin Johnston, farmer and labourer, and Florence Jean Moffat Tucker. On 11 December 1965 he married Heather Bell Maclaren. They have four daughters.",
+    "lifeOverride": false,
     "nationality": "Canadian",
+    "nationalityOverride": false,
     "country": "Canada",
+    "countryOverride": false,
     "version": "Version 23 May 2013",
+    "versionOverride": false,
     "authors": "Aynsley Kellow and Peter Carroll",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Johnston, n.d., at OECD, Flickr"
+    "editorsOverride": false
   }
 }

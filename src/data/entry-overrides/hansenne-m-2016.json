@@ -14,19 +14,30 @@
   ],
   "portraitImage": "",
   "facePosition": null,
-  "detailsOverride": false,
   "details": {
-    "firstName": "Michel",
+    "imageSource": "Hansenne, 1 March 1989, ILO Historical Archives, photographer J. Maillard",
+    "imageSourceOverride": false,
     "lastName": "Hansenne",
+    "lastNameOverride": false,
+    "firstName": "Michel",
+    "firstNameOverride": false,
     "knownAs": "",
+    "knownAsOverride": false,
     "nee": "",
+    "neeOverride": false,
     "summary": "Belgian politician and eighth Director-General of the International Labour Office of the International Labour Organization (ILO) 1989-1999",
+    "summaryOverride": false,
     "life": "Was born on 23 March 1940 in Rotheux-Rimière, Belgium. He is the son of Edgard Hansenne, metalworker, and Georgette Charlier, secretary. In 1978 he married Gabrielle van Landschoot. They have one daughter and one son.",
+    "lifeOverride": false,
     "nationality": "Belgian",
+    "nationalityOverride": false,
     "country": "Belgium",
+    "countryOverride": false,
     "version": "Version 13 June 2016",
+    "versionOverride": false,
     "authors": "Marieke Louis",
+    "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
-    "imageSource": "Hansenne, 1 March 1989, ILO Historical Archives, photographer J. Maillard"
+    "editorsOverride": false
   }
 }
