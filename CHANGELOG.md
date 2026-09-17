@@ -1,3 +1,10 @@
+# [1.24.0](https://github.com/HamonUdvari/io-bio/compare/v1.23.0...v1.24.0) (2026-09-17)
+
+
+### Website Features
+
+* **cms:** per-field detail overrides + reorder Bios card to preview order ([](https://github.com/HamonUdvari/io-bio/commit/fbe33516338bd52006652e2d3ae49406f3449178))
+
 # [1.23.0](https://github.com/HamonUdvari/io-bio/compare/v1.22.0...v1.23.0) (2026-09-17)
 
 
