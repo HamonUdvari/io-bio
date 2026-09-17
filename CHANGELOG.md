@@ -1,3 +1,15 @@
+# [1.25.0](https://github.com/HamonUdvari/io-bio/compare/v1.24.0...v1.25.0) (2026-09-17)
+
+
+### Bug Fixes
+
+* **cms:** resolve the read-only portrait thumbnail (set media/public_folder) ([](https://github.com/HamonUdvari/io-bio/commit/b968818b83093454b5eb3c8cc3a1419ff5f0703d))
+
+
+### Website Features
+
+* **cms:** read-only 'current portrait' preview in the Bios card ([](https://github.com/HamonUdvari/io-bio/commit/a26f65b9c76cfacb1d0ef5ced92702d681005d3d))
+
 # [1.24.0](https://github.com/HamonUdvari/io-bio/compare/v1.23.0...v1.24.0) (2026-09-17)
 
 
