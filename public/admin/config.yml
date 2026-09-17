@@ -170,6 +170,13 @@ collections:
         widget: image
         required: false
         readonly: true
+        # media_folder/public_folder MUST be set so the stored value
+        # (/src/content/bios-portraits/<slug>.webp) resolves to an asset and the
+        # thumbnail renders — otherwise Sveltia shows a placeholder icon. The
+        # value's public_folder prefix is rewritten to media_folder to find the
+        # file on disk (getAssetByAbsolutePath, Sveltia v0.170.8).
+        media_folder: /src/content/bios-portraits
+        public_folder: /src/content/bios-portraits
         hint: "The photo currently shown on the site (from the Word file, or your override below). Read-only preview."
       - label: Portrait override (optional)
         name: portraitImage
