@@ -53,7 +53,9 @@ export const GET: APIRoute = async () => {
     const details: Record<string, string> = {};
     for (const k of DETAIL_FIELDS) details[k] = d[k] == null ? "" : String(d[k]);
 
-    return { slug: b.id, name, roles, details };
+    // imageFn = the active portrait filename (Word photo or override) under
+    // src/assets/bios/. The sync reads it to build the read-only CMS preview.
+    return { slug: b.id, name, roles, details, imageFn: d.imageFn ?? "" };
   });
 
   return new Response(JSON.stringify(entries), {

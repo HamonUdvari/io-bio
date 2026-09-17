@@ -59,7 +59,7 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             node scripts/sync-entry-overrides.ts
-            git add -A src/data/entry-overrides
+            git add -A src/data/entry-overrides src/content/bios-portraits
             if git diff --cached --quiet; then
               echo "entry-overrides already current"
               exit 0

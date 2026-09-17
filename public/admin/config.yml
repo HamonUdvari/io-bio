@@ -165,6 +165,12 @@ collections:
         name: name
         widget: string
         hint: "Auto-filled from the Word file — don't edit; it only labels this list."
+      - label: Current portrait (read-only)
+        name: wordPortrait
+        widget: image
+        required: false
+        readonly: true
+        hint: "The photo currently shown on the site (from the Word file, or your override below). Read-only preview."
       - label: Portrait override (optional)
         name: portraitImage
         widget: image
