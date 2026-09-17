@@ -1,3 +1,10 @@
+## [1.25.2](https://github.com/HamonUdvari/io-bio/compare/v1.25.1...v1.25.2) (2026-09-17)
+
+
+### Bug Fixes
+
+* **bios:** apply Bob's Organization-column changes as overrides (13 entries) ([](https://github.com/HamonUdvari/io-bio/commit/ac1e7b40af4f5199cb96d7f5c4a3917a18fe8054))
+
 ## [1.25.1](https://github.com/HamonUdvari/io-bio/compare/v1.25.0...v1.25.1) (2026-09-17)
 
 
