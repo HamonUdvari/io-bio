@@ -1,12 +1,12 @@
 {
   "slug": "prebisch-rf-2014",
   "name": "PREBISCH LINARES, Raúl Federico",
-  "rolesOverride": false,
+  "rolesOverride": true,
   "roles": [
     {
       "title": "Executive Secretary",
       "organisation": "United Nations Economic Commission for Latin America",
-      "abbreviation": "ECLA",
+      "abbreviation": "UN ECLA",
       "startYear": 1950,
       "endYear": 1963,
       "ordinalText": "second"

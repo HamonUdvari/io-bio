@@ -1,13 +1,14 @@
 {
   "slug": "salter-ja-2022",
   "name": "SALTER, James Arthur",
-  "rolesOverride": false,
+  "rolesOverride": true,
   "roles": [
     {
       "title": "Director",
-      "organisation": "Economic and Financial Section of the League of Nations Secretariat",
+      "organisation": "League of Nations Economic and Financial Commission",
       "startYear": 1919,
-      "endYear": 1920
+      "endYear": 1920,
+      "abbreviation": ""
     }
   ],
   "wordPortrait": "/src/content/bios-portraits/salter-ja-2022.webp",

@@ -1,11 +1,11 @@
 {
   "slug": "marjolin-re-2014",
   "name": "MARJOLIN, Robert Ernest",
-  "rolesOverride": false,
+  "rolesOverride": true,
   "roles": [
     {
       "title": "Secretary-General",
-      "organisation": "Organisation for European Economic Cooperation",
+      "organisation": "Organization for European Economic Cooperation",
       "abbreviation": "OEEC",
       "startYear": 1948,
       "endYear": 1955,

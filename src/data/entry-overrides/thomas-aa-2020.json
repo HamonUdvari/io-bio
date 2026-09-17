@@ -1,11 +1,11 @@
 {
   "slug": "thomas-aa-2020",
   "name": "THOMAS, Aristide Albert",
-  "rolesOverride": false,
+  "rolesOverride": true,
   "roles": [
     {
       "title": "Director",
-      "organisation": "International Labour Office of the International Labour Organization",
+      "organisation": "International Labour Organization",
       "abbreviation": "ILO",
       "startYear": 1919,
       "endYear": 1932,

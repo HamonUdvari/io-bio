@@ -1,11 +1,11 @@
 {
   "slug": "hansenne-m-2016",
   "name": "HANSENNE, Michel",
-  "rolesOverride": false,
+  "rolesOverride": true,
   "roles": [
     {
       "title": "Director-General",
-      "organisation": "International Labour Office of the International Labour Organization",
+      "organisation": "International Labour Organization",
       "abbreviation": "ILO",
       "startYear": 1989,
       "endYear": 1999,

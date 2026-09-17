@@ -1,11 +1,11 @@
 {
   "slug": "morse-da-2013",
   "name": "MORSE, David Abner",
-  "rolesOverride": false,
+  "rolesOverride": true,
   "roles": [
     {
       "title": "Director-General",
-      "organisation": "International Labour Office of the International Labour Organization",
+      "organisation": "International Labour Organization",
       "abbreviation": "ILO",
       "startYear": 1948,
       "endYear": 1970,

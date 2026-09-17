@@ -1,11 +1,11 @@
 {
   "slug": "jenks-cw-2016",
   "name": "JENKS, Clarence Wilfred",
-  "rolesOverride": false,
+  "rolesOverride": true,
   "roles": [
     {
       "title": "Director-General",
-      "organisation": "International Labour Office of the International Labour Organization",
+      "organisation": "International Labour Organization",
       "abbreviation": "ILO",
       "startYear": 1970,
       "endYear": 1973,

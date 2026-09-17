@@ -1,13 +1,14 @@
 {
   "slug": "crowdy-re-2014",
   "name": "CROWDY, Rachel Eleanor",
-  "rolesOverride": false,
+  "rolesOverride": true,
   "roles": [
     {
       "title": "Head",
-      "organisation": "Social Affairs Section of the League of Nations",
+      "organisation": "League of Nations Social Affairs Section",
       "startYear": 1919,
-      "endYear": 1931
+      "endYear": 1931,
+      "abbreviation": ""
     }
   ],
   "wordPortrait": "/src/content/bios-portraits/crowdy-re-2014.webp",
