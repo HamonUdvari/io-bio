@@ -1,3 +1,10 @@
+## [1.25.1](https://github.com/HamonUdvari/io-bio/compare/v1.25.0...v1.25.1) (2026-09-17)
+
+
+### Bug Fixes
+
+* **bios:** Van der Stoel — one faithful roles row, no invented years ([](https://github.com/HamonUdvari/io-bio/commit/6e9807a306cb73d1ee5b7c8c3d284872ff947738))
+
 # [1.25.0](https://github.com/HamonUdvari/io-bio/compare/v1.24.0...v1.25.0) (2026-09-17)
 
 
