@@ -1133,14 +1133,14 @@
     "env": "sandbox"
   },
   "sweetser-a-2026": {
-    "recordId": 604789,
+    "recordId": 605080,
     "conceptRecId": 604358,
     "conceptDoi": "10.5072/zenodo.604358",
-    "versionDoi": "10.5072/zenodo.604789",
-    "contentHash": "sha256:62f10e320af11b2d1afaf14a8e0c4750a805a64df53122e536de5eaabbe16612",
+    "versionDoi": "10.5072/zenodo.605080",
+    "contentHash": "sha256:d9b189e8538edbbc5564681f6fc1ed6b8e0fe73391a645d7fad40dd8b6490f5d",
     "status": "published",
     "version": "13 July 2026",
-    "mintedAt": "2026-09-16T15:17:17.692Z",
+    "mintedAt": "2026-09-17T08:00:41.065Z",
     "env": "sandbox"
   },
   "thant-u-2019": {
