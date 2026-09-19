@@ -1,17 +1,6 @@
 {
   "slug": "pastizzi-d-2024",
   "name": "PASTIZZI, Dunja",
-  "rolesOverride": false,
-  "roles": [
-    {
-      "title": "Director",
-      "organisation": "United Nations International Research and Training Institute for the Advancement of Women",
-      "abbreviation": "INSTRAW",
-      "startYear": 1981,
-      "endYear": 1990,
-      "ordinalText": "first"
-    }
-  ],
   "wordPortrait": "/src/content/bios-portraits/pastizzi-d-2024.webp",
   "portraitImage": "",
   "facePosition": null,
@@ -30,13 +19,24 @@
     "summaryOverride": false,
     "life": "Was born 13 October 1936 in Zagreb, Yugoslavia and passed away 23 December 2003 in Zagreb, Croatia. She was the daughter of Gjuro Pastizzi, watchmaker, and Marija Vodnica, administrator at a food production factory. On 20 November 1960 she married Ante Ferenčić, geology engineer, with whom she had two daughters.",
     "lifeOverride": false,
-    "nationality": "",
-    "nationalityOverride": false,
+    "nationality": "Yugoslav",
+    "nationalityOverride": true,
     "version": "Version 8 March 2024",
     "versionOverride": false,
     "authors": "Valentine M. Moghadam",
     "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
     "editorsOverride": false
-  }
+  },
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director",
+      "organisation": "United Nations International Research and Training Institute for the Advancement of Women",
+      "abbreviation": "INSTRAW",
+      "startYear": 1981,
+      "endYear": 1990,
+      "ordinalText": "first"
+    }
+  ]
 }
