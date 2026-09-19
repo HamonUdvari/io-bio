@@ -1,17 +1,6 @@
 {
   "slug": "chan-m-2021",
   "name": "CHAN, Margaret",
-  "rolesOverride": false,
-  "roles": [
-    {
-      "title": "Director-General",
-      "organisation": "World Health Organization",
-      "abbreviation": "WHO",
-      "startYear": 2007,
-      "endYear": 2017,
-      "ordinalText": "seventh"
-    }
-  ],
   "wordPortrait": "/src/content/bios-portraits/chan-m-2021.webp",
   "portraitImage": "",
   "facePosition": null,
@@ -30,13 +19,24 @@
     "summaryOverride": false,
     "life": "Was born 21 August 1947 in Hong Kong. Her parents’ names and professions are not currently publicly available. She married David Chan, ophthalmologist, with whom she has one son.",
     "lifeOverride": false,
-    "nationality": "",
-    "nationalityOverride": false,
+    "nationality": "Hong Kong",
+    "nationalityOverride": true,
     "version": "Version 1 June 2021",
     "versionOverride": false,
     "authors": "Bob Reinalda",
     "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
     "editorsOverride": false
-  }
+  },
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "World Health Organization",
+      "abbreviation": "WHO",
+      "startYear": 2007,
+      "endYear": 2017,
+      "ordinalText": "seventh"
+    }
+  ]
 }
