@@ -17,7 +17,7 @@ sections:
     content: |-
       ## Author Instructions
 
-      - [Author Instructions (PDF, version April 2025)](/io-bio-author-instructions-2025.pdf)
+      [Author Instructions (PDF, version April 2025)](/io-bio-author-instructions-2025.pdf)
 
       ## Databases
 
@@ -29,9 +29,12 @@ sections:
 
       ## Connected Publications
 
-      - [Publications Connected to IO BIO (PDF)](/io-bio-connected-publications.pdf)
+      [Publications Connected to IO BIO (PDF)](/io-bio-connected-publications.pdf)
 
       ## Entries Under Construction
 
-      * [IO BIO Entries under Construction (PDF)](/IO%20BIO%20entries%20under%20construction.pdf)
+      [IO BIO Entries under Construction (PDF)](/IO%20BIO%20entries%20under%20construction.pdf)
+
+
+    
 ---
