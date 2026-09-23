@@ -498,6 +498,7 @@
       & .section__title {
         @apply px-0;
         @apply pb-0;
+        @apply text-center;
       }
     }
 
