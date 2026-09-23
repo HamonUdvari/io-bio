@@ -1,3 +1,10 @@
+# [1.26.0](https://github.com/HamonUdvari/io-bio/compare/v1.25.2...v1.26.0) (2026-09-23)
+
+
+### Website Features
+
+* **deploy:** serve at custom domain www.io-bio.ch + add sitemap ([](https://github.com/HamonUdvari/io-bio/commit/44ad2091c3569ccc0f63f4a551d9d23870f3b735))
+
 ## [1.25.2](https://github.com/HamonUdvari/io-bio/compare/v1.25.1...v1.25.2) (2026-09-17)
 
 
