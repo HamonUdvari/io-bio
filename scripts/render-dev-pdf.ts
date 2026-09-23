@@ -11,7 +11,7 @@
 // hot-reloaded by astro dev, so a fresh navigation re-paginates). macOS Preview
 // reloads the file in place, so the open PDF refreshes on each render.
 //
-// For the fast in-browser DESIGN loop, open /io-bio/print/<slug> directly in a
+// For the fast in-browser DESIGN loop, open /print/<slug> directly in a
 // browser — that's the live, inspectable Paged.js preview that auto-reloads on
 // CSS save. This script is for eyeballing the actual rendered PDF.
 // Set PDF_NO_OPEN=1 to skip launching the viewer.
@@ -29,7 +29,7 @@ if (!slug) {
   console.error("usage: pnpm pdf:dev <slug> [devOrigin] [--watch]");
   process.exit(1);
 }
-const origin = (positional[1] ?? "http://localhost:4322/io-bio").replace(
+const origin = (positional[1] ?? "http://localhost:4322").replace(
   /\/$/,
   "",
 );

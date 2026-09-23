@@ -25,8 +25,8 @@ import { loadState, saveState } from "./lib/zenodo-state.ts";
 import type { DoiRecord } from "./lib/zenodo-state.ts";
 import { renderPdfs } from "./zenodo-render-pdfs.ts";
 
-const SITE = (process.env.SITE_URL ?? "https://HamonUdvari.github.io").replace(/\/$/, "");
-const BASE = (process.env.SITE_BASE ?? "/io-bio").replace(/\/$/, "");
+const SITE = (process.env.SITE_URL ?? "https://www.io-bio.ch").replace(/\/$/, "");
+const BASE = (process.env.SITE_BASE ?? "").replace(/\/$/, "");
 // Closest STANDARD license to the current IO BIO terms (all-rights-reserved,
 // NC-educational by permission). Editors sign off before the production mint.
 const LICENSE = process.env.ZENODO_LICENSE ?? "cc-by-nc-nd-4.0";

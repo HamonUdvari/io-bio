@@ -6,7 +6,7 @@ import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-const BASE = (process.env.SITE_BASE ?? "/io-bio").replace(/\/$/, "");
+const BASE = (process.env.SITE_BASE ?? "").replace(/\/$/, "");
 const PORT = Number(process.env.ZENODO_PREVIEW_PORT ?? 4399);
 const OUT_DIR = path.resolve("dist-pdf");
 

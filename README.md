@@ -2,9 +2,9 @@
 
 ## Quick links
 
-- **Live site** — https://hamonudvari.github.io/io-bio
-- **Preview a `.docx`** (check how a Word file parses before committing — nothing is uploaded) — https://hamonudvari.github.io/io-bio/preview
-- **Visual CMS** (easiest way to edit; sign in with a GitHub token) — https://hamonudvari.github.io/io-bio/admin/
+- **Live site** — https://www.io-bio.ch
+- **Preview a `.docx`** (check how a Word file parses before committing — nothing is uploaded) — https://www.io-bio.ch/preview
+- **Visual CMS** (easiest way to edit; sign in with a GitHub token) — https://www.io-bio.ch/admin/
 
 ## Video Explanation
 
@@ -26,8 +26,8 @@ changes"**. Committing *is* publishing — the site updates itself a few minutes
 
 > **First, always check your change on the preview page.** A few minutes after you commit (changes
 > aren't instant), open what you edited to make sure it's right. For a biography, open its **Print
-> preview** page — `…/io-bio/print/<slug>` — which shows the whole entry exactly as it renders and
-> downloads as a PDF; you can also open the live entry at `…/io-bio/entries/<slug>`. There's no
+> preview** page — `…/print/<slug>` — which shows the whole entry exactly as it renders and
+> downloads as a PDF; you can also open the live entry at `…/entries/<slug>`. There's no
 > preview of *un-committed* edits — you check once it's live.
 
 The tasks below are ordered from most to least common:
@@ -35,7 +35,7 @@ The tasks below are ordered from most to least common:
 ### 1. Add or update a biography entry
 
 Each biography is a Word (`.docx`) file whose **name is the entry**: `Surname-Initial Year.docx` — e.g.
-`Annan-KA 2019.docx` becomes the page `…/io-bio/entries/annan-ka-2019`. The heading, life dates,
+`Annan-KA 2019.docx` becomes the page `…/entries/annan-ka-2019`. The heading, life dates,
 biography text, Archives/Publications/Literature, portrait and citation are all read from the file
 automatically.
 
@@ -60,13 +60,13 @@ Edit the matching file:
 
 Writing tips: normal Markdown — `**bold**`, `*italic*`, `## Heading`, `- bullet`. Coloured section
 boxes use `::::section{title="…" variant="primary"}` … `::::`. To link to another page write
-`[text](/author-instructions)` — **don't** add `/io-bio`, it's added for you.
+`[text](/author-instructions)` — a leading slash from the site root (no domain, no base prefix).
 
 ### 3. Add or update a downloadable file (PDF, etc.)
 
 1. Put the file in the **`public/`** folder (GitHub → open `public` → **"Add file → Upload files"**). To
    replace one, upload a file with the same name.
-2. Link to it with a leading slash and the filename only — **no `/io-bio`**:
+2. Link to it with a leading slash and the filename only:
    `[Databases Introduction (PDF)](/io-bio-databases-introduction.pdf)`
 3. The existing download links in `src/content/pages/author-instructions.md` are the template — copy one
    and change the label + filename.

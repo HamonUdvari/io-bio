@@ -1,17 +1,17 @@
 # Sveltia CMS — setup & status (branch `feat/sveltia-cms`)
 
 A friendly editing UI for non-technical editors, on top of the same Git repo.
-Lives at `public/admin/` (`index.html` + `config.yml`), deployed to `/io-bio/admin/`.
+Lives at `public/admin/` (`index.html` + `config.yml`), deployed to `/admin/`.
 
 ## Test it locally (recommended before going live)
 
 Sveltia's local mode needs **no server/proxy** — just a Chromium browser:
 
 1. `pnpm dev`
-2. Open **`http://localhost:<port>/io-bio/admin/index.html`** in **Chrome / Edge / Brave**
+2. Open **`http://localhost:<port>/admin/index.html`** in **Chrome / Edge / Brave**
    (not Firefox/Safari — it uses the File System Access API).
 3. Click **"Work with Local Repository"** and pick the `io-bio` repo root.
-4. Edit → it writes the real files; preview at `http://localhost:<port>/io-bio/`.
+4. Edit → it writes the real files; preview at `http://localhost:<port>/`.
 
 ## Live login — no Cloudflare, works directly with GitHub
 
@@ -57,7 +57,7 @@ and `src/pages/[...slug].astro` renders whichever form a page uses.
   running CMS (local backend), confirm the Asset Library **lists the existing `.docx`** and that
   **upload (add) and re-upload (replace)** work as expected.
 - **Downloads (PDFs)** — Pages `media_folder: public`; confirm a real PDF upload lands in `public/`
-  and the `/io-bio` base path resolves.
+  and the download link resolves from the site root.
 - **Bios** — a folder collection over `src/data/entry-overrides/*.json` (one card per bio, auto-synced
   from the Word files). Confirm the searchable list opens a card that shows the roles + details
   pre-filled from the Word file; the "Manual override of roles" and "Override details" toggles replace

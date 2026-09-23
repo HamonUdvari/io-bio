@@ -78,8 +78,9 @@ const locale = Astro.currentLocale ?? "en";
     <link rel="shortcut icon" href={`${BASE}favicon.ico`} type="image/x-icon" />
     <script is:inline define:vars={{ base: BASE }}>
       (function () {
-        // `base` ends in "/" (e.g. "/io-bio/" or "/"). The homepage is served at
-        // exactly `base`, optionally with a trailing slash, so compare both forms.
+        // `base` ends in "/" (e.g. "/" at the root, or "/sub/" under a base path).
+        // The homepage is served at exactly `base`, optionally with a trailing
+        // slash, so compare both forms.
         var home = base;
         var homeNoSlash = base.length > 1 ? base.replace(/\/$/, "") : base;
         if (location.pathname !== home && location.pathname !== homeNoSlash)

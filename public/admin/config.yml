@@ -2,7 +2,7 @@
 # Docs: https://sveltiacms.app/en/docs/intro
 #
 # LOCAL editing (no login needed): run `pnpm dev`, open
-#   http://localhost:4321/io-bio/admin/index.html
+#   http://localhost:4321/admin/index.html
 # in Chrome/Edge/Brave, click "Work with Local Repository", pick the repo root.
 #
 # LIVE login (no extra hosting): editors click "Sign in with Token" on the login
@@ -21,7 +21,7 @@ backend:
   branch: main
   auth_methods: [token]
 
-site_url: https://hamonudvari.github.io/io-bio
+site_url: https://www.io-bio.ch
 
 # Global media (page images, downloadable PDFs) live in public/ — this is the
 # general "All assets". The bio Word files get their OWN labeled folder in the

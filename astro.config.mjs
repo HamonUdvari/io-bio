@@ -22,6 +22,7 @@ import { remarkPrefixRawLinks } from "./src/remarkPlugins/remarkPrefixRawLinks";
 import { unified } from "@astrojs/markdown-remark";
 
 import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 
 import { devPdfRenderer } from "./scripts/dev-pdf-renderer.ts";
 
@@ -88,14 +89,13 @@ function mediaRangeToLegacy() {
 }
 
 // --- Deployment target — SINGLE SOURCE OF TRUTH for the base path ---
-// TESTING (current): GitHub Pages project page → https://hamonudvari.github.io/io-bio
-//   BASE = "/io-bio", site = "https://HamonUdvari.github.io".
-// PRODUCTION (custom domain, once DNS is ready): switch in ONE place ↓
-//   1. set `const BASE = "/";`
-//   2. swap the `site` line to `site: "https://io-bio.graduateinstitute.ch"`
-//   3. add a `public/CNAME` file containing `io-bio.graduateinstitute.ch`.
-// Everything else (links, assets, the rehype prefixer) derives from BASE.
-const BASE = "/io-bio";
+// PRODUCTION: custom domain https://www.io-bio.ch (served at the root), with the
+// apex io-bio.ch redirecting to www. A custom domain serves from "/", so BASE is
+// "/" and `public/CNAME` holds `www.io-bio.ch`. Everything else (links, assets,
+// the rehype/remark prefixers, canonical + OG via `site`) derives from BASE/site.
+// To revert to the GitHub Pages project page for testing: set BASE = "/io-bio",
+// site = "https://HamonUdvari.github.io", and remove public/CNAME.
+const BASE = "/";
 
 // One source of truth for the markdown/MDX plugin pipeline. Applied to `.md` via
 // the unified() processor (markdown.processor) AND to `.mdx` via the mdx()
@@ -116,8 +116,7 @@ const rehypePlugins = [[rehypeAddLinkClasses, { base: BASE }]];
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://HamonUdvari.github.io",
-  // site: "https://io-bio.graduateinstitute.ch",
+  site: "https://www.io-bio.ch",
   base: BASE,
   markdown: {
     // gfm + smartypants stay at unified()'s defaults (both true — Astro's
@@ -131,6 +130,23 @@ export default defineConfig({
     preact({ compat: true }),
     // Feed the same plugins to MDX explicitly (it can't read markdown.processor).
     mdx({ remarkPlugins, rehypePlugins }),
+    // XML sitemap (dist/sitemap-index.xml) built from `site`. Exclude non-public
+    // routes: the Paged.js print design pages (/print/*), the .docx preview tool,
+    // the dev-only PDF viewer, the CMS, and the JSON data endpoints (search index
+    // / CMS mirror / Zenodo metadata).
+    sitemap({
+      filter: (page) => {
+        const p = new URL(page).pathname;
+        return (
+          !p.startsWith("/print/") &&
+          p !== "/preview" &&
+          p !== "/preview/" &&
+          !p.startsWith("/pdf-preview/") &&
+          !p.startsWith("/admin") &&
+          !p.endsWith(".json")
+        );
+      },
+    }),
     devPdfRenderer(BASE),
     // Full-text search is client-side Fuse.js over a static JSON index
     // (src/pages/search-index.json.ts + src/components/SearchOverlay.astro) —

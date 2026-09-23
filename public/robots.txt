@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /print/
+
+Sitemap: https://www.io-bio.ch/sitemap-index.xml
