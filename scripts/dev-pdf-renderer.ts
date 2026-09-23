@@ -23,7 +23,7 @@ const CHROME =
     ? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
     : "google-chrome");
 
-export function devPdfRenderer(base = "/io-bio"): AstroIntegration {
+export function devPdfRenderer(base = "/"): AstroIntegration {
   const b = base.replace(/\/$/, "");
   let command = "dev";
   let chrome: ChildProcess | undefined;

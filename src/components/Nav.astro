@@ -11,8 +11,8 @@ let links = pages
   }));
 links = links.toSorted((a, b) => a.order - b.order);
 
-// Normalise BASE_URL to exactly one trailing slash (it may be "/io-bio",
-// "/io-bio/", or "/") so `${BASE}${slug}` always joins with a single slash.
+// Normalise BASE_URL to exactly one trailing slash (now "/", or defensively
+// "/sub" / "/sub/") so `${BASE}${slug}` always joins with a single slash.
 const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 

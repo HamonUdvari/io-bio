@@ -35,10 +35,10 @@ const PUBLICATION_TYPE = process.env.ZENODO_PUBLICATION_TYPE ?? "section";
 
 // The dictionary each entry belongs to. Expressed as bibliographic "Book section"
 // metadata (partof_title + imprint + editors) rather than a whole-work/software
-// DOI, plus an isPartOf link to the dictionary's home URL. io-bio.ch is the
-// intended permanent home (env-overridable until the domain is live).
+// DOI, plus an isPartOf link to the dictionary's home URL. www.io-bio.ch is the
+// canonical home (the apex io-bio.ch 301-redirects to it); env-overridable.
 const DICTIONARY_HOME_URL = (
-  process.env.DICTIONARY_HOME_URL ?? "https://io-bio.ch"
+  process.env.DICTIONARY_HOME_URL ?? "https://www.io-bio.ch"
 ).replace(/\/$/, "");
 const PARTOF_TITLE =
   process.env.ZENODO_PARTOF_TITLE ??

@@ -137,8 +137,8 @@ function formatOrg(role?: Role): string {
 
 export default function ListView({ data }: ListViewProps) {
   // Vite inlines this at build time, so it's the same on server + client and
-  // tracks the configured base. Normalise to exactly one trailing slash (it may
-  // be "/io-bio", "/io-bio/", or "/") so `${base}entries/${slug}` joins cleanly.
+  // tracks the configured base. Normalise to exactly one trailing slash (now "/",
+  // or defensively "/sub" / "/sub/") so `${base}entries/${slug}` joins cleanly.
   const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 
   // Flatten bios × roles into one row per role. People with no roles still get

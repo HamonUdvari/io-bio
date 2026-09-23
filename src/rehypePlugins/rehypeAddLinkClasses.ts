@@ -3,8 +3,8 @@ import type { Root, Element } from "hast";
 
 export interface RehypeAddLinkClassesOptions {
   /**
-   * Site base path (e.g. "/io-bio"). Internal root-absolute hrefs are prefixed
-   * with this so they resolve correctly under a GitHub Pages project page.
+   * Site base path (e.g. "/" for the custom domain, or "/sub" under a base path).
+   * Internal root-absolute hrefs are prefixed with this so they resolve correctly.
    * A base of "/" or "" is treated as a no-op (root custom-domain deploy).
    */
   base?: string;
@@ -34,7 +34,7 @@ export function rehypeAddLinkClasses(options: RehypeAddLinkClassesOptions = {}) 
   // const classesToAdd = ["button", "button--secondary"];
 
   // Normalise the base: strip a trailing slash so joins are predictable.
-  // "/io-bio/" → "/io-bio"; "/" or "" → "" (no-op).
+  // "/sub/" → "/sub"; "/" or "" → "" (no-op).
   const rawBase = options.base ?? "";
   const base = rawBase === "/" ? "" : rawBase.replace(/\/$/, "");
 

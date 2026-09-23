@@ -4,7 +4,7 @@ import { visit } from "unist-util-visit";
 
 export interface RemarkPrefixRawLinksOptions {
   /**
-   * Site base path (e.g. "/io-bio"). Internal root-absolute hrefs found in
+   * Site base path (e.g. "/", or "/sub" under a base). Internal root-absolute hrefs found in
    * literal HTML are prefixed with this. A base of "/" or "" is a no-op.
    */
   base?: string;

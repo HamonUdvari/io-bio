@@ -8,7 +8,7 @@ import type { MetaEntry, MetadataConfig } from "./zenodo-metadata.ts";
 
 const cfg: MetadataConfig = {
   license: "cc-by-nc-nd-4.0",
-  dictionaryHomeUrl: "https://io-bio.ch",
+  dictionaryHomeUrl: "https://www.io-bio.ch",
   partofTitle:
     "IO BIO, Biographical Dictionary of Secretaries-General of International Organizations",
   imprintPublisher: "IO BIO Project, Radboud University Nijmegen",
@@ -18,7 +18,7 @@ const cfg: MetadataConfig = {
     { name: "Kille, Kent J.", type: "Editor" },
     { name: "Eisenberg, Jaci L.", type: "Editor" },
   ],
-  entryUrl: (slug) => `https://hamonudvari.github.io/io-bio/entries/${slug}`,
+  entryUrl: (slug) => `https://www.io-bio.ch/entries/${slug}`,
   rightsNote:
     "Text © the author(s) and IO BIO, licensed under CC BY-NC-ND 4.0. The portrait is excluded and remains under the rights of its credited source. We have tried to trace the rights holder to obtain permission for the use of the portrait, but contact us in case we have failed.",
 };
@@ -76,7 +76,7 @@ describe("buildMetadata — belongs-to-the-dictionary shape", () => {
 
     const partOf = rels.find((r) => r.relation === "isPartOf");
     expect(partOf).toEqual({
-      identifier: "https://io-bio.ch",
+      identifier: "https://www.io-bio.ch",
       relation: "isPartOf",
       scheme: "url",
     });

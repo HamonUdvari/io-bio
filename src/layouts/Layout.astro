@@ -7,7 +7,7 @@ import { frontmatter as globals } from "@content/globals/global.md";
 
 const SITE = import.meta.env.SITE;
 // Normalise BASE_URL to exactly one trailing slash. Astro's BASE_URL mirrors
-// the configured `base`, so it may be "/io-bio" (no slash), "/io-bio/", or "/".
+// the configured `base` — now "/" (root), but defensively also "/sub" or "/sub/".
 // Forcing one trailing slash lets us join `${BASE}path` (path without a leading
 // slash) safely in every case.
 const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
@@ -46,36 +46,13 @@ const locale = Astro.currentLocale ?? "en";
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
 
-    <link rel="manifest" href={`${BASE}site.webmanifest`} />
-
-    <link
-      rel="icon"
-      href={`${BASE}android-chrome-192x192.png`}
-      sizes="192x192"
-      type="image/png"
-    />
-    <link
-      rel="icon"
-      href={`${BASE}android-chrome-512x512.png`}
-      sizes="512x512"
-      type="image/png"
-    />
-
+    <!-- Modern favicon set: SVG primary (scalable), .ico fallback for old
+         browsers, apple-touch-icon for iOS, and the manifest icons (192/512)
+         for Android / PWA install. -->
+    <link rel="icon" href={`${BASE}favicon.ico`} sizes="32x32" />
+    <link rel="icon" href={`${BASE}favicon.svg`} type="image/svg+xml" />
     <link rel="apple-touch-icon" href={`${BASE}apple-touch-icon.png`} />
-    <link rel="icon" href={`${BASE}fav.jpg`} type="image/jpeg" />
-    <link
-      rel="icon"
-      href={`${BASE}favicon-16x16.png`}
-      sizes="16x16"
-      type="image/png"
-    />
-    <link
-      rel="icon"
-      href={`${BASE}favicon-32x32.png`}
-      sizes="32x32"
-      type="image/png"
-    />
-    <link rel="shortcut icon" href={`${BASE}favicon.ico`} type="image/x-icon" />
+    <link rel="manifest" href={`${BASE}site.webmanifest`} />
     <script is:inline define:vars={{ base: BASE }}>
       (function () {
         // `base` ends in "/" (e.g. "/" at the root, or "/sub/" under a base path).
