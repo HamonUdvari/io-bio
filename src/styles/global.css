@@ -498,7 +498,6 @@
       & .section__title {
         @apply px-0;
         @apply pb-0;
-        @apply text-center;
       }
     }
 
@@ -519,6 +518,7 @@
       @apply px-(--px);
       @apply pb-(--gap-y);
       @apply max-w-[1900px];
+      @apply text-center;
     }
 
     &.section--nav {
