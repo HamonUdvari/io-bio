@@ -1,3 +1,10 @@
+## [1.26.1](https://github.com/HamonUdvari/io-bio/compare/v1.26.0...v1.26.1) (2026-09-23)
+
+
+### Bug Fixes
+
+* **site:** add missing favicon/OG/manifest assets + modern favicon head; align Zenodo to www ([](https://github.com/HamonUdvari/io-bio/commit/e86020fe472d86b26bac195bcbf1dec32ac01b36))
+
 # [1.26.0](https://github.com/HamonUdvari/io-bio/compare/v1.25.2...v1.26.0) (2026-09-23)
 
 
