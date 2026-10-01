@@ -34,7 +34,4 @@ sections:
       ## Entries Under Construction
 
       [IO BIO Entries under Construction (PDF)](/IO%20BIO%20entries%20under%20construction.pdf)
-
-
-    
 ---
