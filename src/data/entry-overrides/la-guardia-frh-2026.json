@@ -1,0 +1,42 @@
+{
+  "slug": "la-guardia-frh-2026",
+  "name": "LA GUARDIA, Fiorello Raffaele Enrico",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "United Nations Relief and Rehabilitation Administration",
+      "abbreviation": "UNRRA",
+      "startYear": 1946,
+      "endYear": 1946,
+      "ordinalText": "second"
+    }
+  ],
+  "wordPortrait": "/src/content/bios-portraits/la-guardia-frh-2026.webp",
+  "portraitImage": "",
+  "facePosition": null,
+  "details": {
+    "imageSource": "La Guardia, 23 March 1940, World-Telegram, photographer Fred Palumbo",
+    "imageSourceOverride": false,
+    "lastName": "la Guardia",
+    "lastNameOverride": false,
+    "firstName": "Fiorello Raffaele Enrico",
+    "firstNameOverride": false,
+    "knownAs": "‘Raffaele’ was removed later and ‘Enrico’ Americanized to ‘Henry’",
+    "knownAsOverride": false,
+    "nee": "",
+    "neeOverride": false,
+    "summary": "American politician and second Director-General of the United Nations Relief and Rehabilitation Administration (UNRRA) 1946",
+    "summaryOverride": false,
+    "life": "Was removed later and ‘Enrico’ Americanized to ‘Henry’), American politician and second Director-General of the United Nations Relief and Rehabilitation Administration (UNRRA) 1946, was born 11 December 1882 in New York City and died 20 September 1947 in New York City. He was the son of Achille Luigi Carlo La Guardia, musician and army bandmaster, and Irene Luzatto-Coen. On 8 March 1919 he married Thea Almerigotti (who died in November 1921), with whom he had a daughter (who died in May 1921). On 28 February 1929 he married Marie Fischer, secretary and office manager, with whom he adopted a girl and a boy.",
+    "lifeOverride": false,
+    "nationality": "American",
+    "nationalityOverride": false,
+    "version": "Version 29 September 2026",
+    "versionOverride": false,
+    "authors": "Chloé Maurel",
+    "authorsOverride": false,
+    "editors": "Bob Reinalda, Kent J. Kille, Jaci L. Eisenberg, Ellen Ravndal and Dawisson Belém Lopes",
+    "editorsOverride": false
+  }
+}
