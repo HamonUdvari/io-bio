@@ -1,0 +1,42 @@
+{
+  "slug": "sadik-in-2026",
+  "name": "SADIK, Iffat Nafis",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Executive Director",
+      "organisation": "United Nations Population Fund",
+      "abbreviation": "UNFPA",
+      "startYear": 1987,
+      "endYear": 2000,
+      "ordinalText": "second"
+    }
+  ],
+  "wordPortrait": "/src/content/bios-portraits/sadik-in-2026.webp",
+  "portraitImage": "",
+  "facePosition": null,
+  "details": {
+    "imageSource": "UNFPA, August 2022, photographer unknown",
+    "imageSourceOverride": false,
+    "lastName": "Sadik",
+    "lastNameOverride": false,
+    "firstName": "Iffat Nafis",
+    "firstNameOverride": false,
+    "knownAs": "Nafis Sadik",
+    "knownAsOverride": false,
+    "nee": "",
+    "neeOverride": false,
+    "summary": "Pakistani obstetrician and second Executive Director of the United Nations Population Fund (UNFPA) 1987-2000",
+    "summaryOverride": false,
+    "life": "Was born 18 August 1929 in Jaunpur, British India and died 14 August 2022 in New York City. She was the daughter of Mohamed Shoaib, Pakistani Minister of Finance and representative in the World Bank, and Iffat Ara. On 11 May 1954 she married Azhar Sadik, army officer and businessman, with whom she had two daughters and one son as well as two adopted daughters.",
+    "lifeOverride": false,
+    "nationality": "Pakistani",
+    "nationalityOverride": false,
+    "version": "Version 1 October 2026",
+    "versionOverride": false,
+    "authors": "Chloé Maurel",
+    "authorsOverride": false,
+    "editors": "Bob Reinalda, Kent J. Kille, Jaci L. Eisenberg, Ellen Ravndal and Dawisson Belém Lopes",
+    "editorsOverride": false
+  }
+}

@@ -1,6 +1,17 @@
 {
   "slug": "pastizzi-d-2024",
   "name": "PASTIZZI, Dunja",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director",
+      "organisation": "United Nations International Research and Training Institute for the Advancement of Women",
+      "abbreviation": "INSTRAW",
+      "startYear": 1981,
+      "endYear": 1990,
+      "ordinalText": "first"
+    }
+  ],
   "wordPortrait": "/src/content/bios-portraits/pastizzi-d-2024.webp",
   "portraitImage": "",
   "facePosition": null,
@@ -27,16 +38,5 @@
     "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
     "editorsOverride": false
-  },
-  "rolesOverride": false,
-  "roles": [
-    {
-      "title": "Director",
-      "organisation": "United Nations International Research and Training Institute for the Advancement of Women",
-      "abbreviation": "INSTRAW",
-      "startYear": 1981,
-      "endYear": 1990,
-      "ordinalText": "first"
-    }
-  ]
+  }
 }
