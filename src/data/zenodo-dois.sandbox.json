@@ -1033,6 +1033,17 @@
     "mintedAt": "2026-09-23T11:52:31.354Z",
     "env": "sandbox"
   },
+  "sadik-in-2026": {
+    "recordId": 611855,
+    "conceptRecId": 611854,
+    "conceptDoi": "10.5072/zenodo.611854",
+    "versionDoi": "10.5072/zenodo.611855",
+    "contentHash": "sha256:9e53f1d19d2e6e4a380246bfb853f4d6a7a29345ed0db871b4958056578a63e9",
+    "status": "published",
+    "version": "1 October 2026",
+    "mintedAt": "2026-10-01T07:19:56.809Z",
+    "env": "sandbox"
+  },
   "salim-sa-2016": {
     "recordId": 607896,
     "conceptRecId": 506587,
