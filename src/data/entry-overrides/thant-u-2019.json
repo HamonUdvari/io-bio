@@ -28,7 +28,7 @@
     "editors": "Bob Reinalda, Kent J. Kille and Jaci L. Eisenberg",
     "editorsOverride": false
   },
-  "rolesOverride": false,
+  "rolesOverride": true,
   "roles": [
     {
       "title": "Acting Secretary-General",
