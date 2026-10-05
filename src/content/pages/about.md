@@ -22,6 +22,8 @@ sections:
     variant: secondary
     stretch: base
     content: |-
+      The IO BIO Project is an independent research project with the following editors
+
       :::people
       * Bob Reinalda :muted[Radboud University, Nijmegen, Netherlands]
       * Kent J. Kille :muted[The College of Wooster, United States]
