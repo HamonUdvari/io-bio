@@ -12,7 +12,12 @@ sections:
 
       The short biographies (up to 3,600 words) present an accurate and coherent description of the entire life and career of each Executive Head. Entries provide biographical data, a balanced account of life and work, as well as references and a picture. To allow for group analyses (another IO BIO objective) authors are encouraged to pay attention to the social and professional connections of Executive Heads.
 
-      Scholars and practitioners are carrying out the IO BIO Project on a voluntary basis. If you want to contribute a new entry, please, look at the [Author Instructions](/author-instructions) and contact the IO BIO Editors via [this e-mail address](mailto:bob.reinalda@ru.nl).
+      Scholars and practitioners are carrying out the IO BIO Project on a voluntary basis. If you want to contribute a new entry, please, look at the [Author Instructions](/author-instructions) and contact the IO BIO Editors via [this e-mail address](mailto:io-bio@graduateinstitute.ch).
+
+      The IO BIO Project is supported by the [Centre for Digital Humanities and Multilateralism (CDHM)](https://www.graduateinstitute.ch/cdhm) of the Geneva Graduate Institute, which facilitated the development of its webpage. The webpage content is managed independently by IO BIO editors.  
+
+      <a href="https://www.graduateinstitute.ch/cdhm" target="_blank">
+      <img src="/logo.png" alt="logo" style="width: 180px;" /></a>
   - title: The Editorial Team
     variant: secondary
     stretch: base
