@@ -1,3 +1,10 @@
+## [1.26.2](https://github.com/HamonUdvari/io-bio/compare/v1.26.1...v1.26.2) (2026-10-05)
+
+
+### Bug Fixes
+
+* add logo to about page ([](https://github.com/HamonUdvari/io-bio/commit/05bddaee203cd4157cb2da322f6cb472bcfc9d98))
+
 ## [1.26.1](https://github.com/HamonUdvari/io-bio/compare/v1.26.0...v1.26.1) (2026-09-23)
 
 
