@@ -1,3 +1,10 @@
+## [1.26.3](https://github.com/HamonUdvari/io-bio/compare/v1.26.2...v1.26.3) (2026-10-05)
+
+
+### Bug Fixes
+
+* override flag for thant U ([](https://github.com/HamonUdvari/io-bio/commit/823a473dd64f9f435cab8b9cbc44fa0d0427145d))
+
 ## [1.26.2](https://github.com/HamonUdvari/io-bio/compare/v1.26.1...v1.26.2) (2026-10-05)
 
 
