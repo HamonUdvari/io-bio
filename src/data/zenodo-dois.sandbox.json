@@ -120,6 +120,17 @@
     "mintedAt": "2026-09-23T11:46:36.994Z",
     "env": "sandbox"
   },
+  "bogsch-a-2026": {
+    "recordId": 616220,
+    "conceptRecId": 616219,
+    "conceptDoi": "10.5072/zenodo.616219",
+    "versionDoi": "10.5072/zenodo.616220",
+    "contentHash": "sha256:4042cc933d869eb2c08a1cac33afa6694db61211159de67efadd254b6dbe6d4a",
+    "status": "published",
+    "version": "6 October 2026",
+    "mintedAt": "2026-10-06T15:27:05.431Z",
+    "env": "sandbox"
+  },
   "bokova-ig-2025": {
     "recordId": 607812,
     "conceptRecId": 506431,
@@ -1166,14 +1177,14 @@
     "env": "sandbox"
   },
   "thant-u-2019": {
-    "recordId": 607905,
+    "recordId": 616221,
     "conceptRecId": 506603,
     "conceptDoi": "10.5072/zenodo.506603",
-    "versionDoi": "10.5072/zenodo.607905",
-    "contentHash": "sha256:11a4ae042881c71a0fd0809b1e962a3aa470c09cd8e895b24c57645bf40cdc0c",
+    "versionDoi": "10.5072/zenodo.616221",
+    "contentHash": "sha256:6bcb462ca09db640e1b0bbbd10c673dc7cc14a35dfad892c2393b7a42508776f",
     "status": "published",
     "version": "21 October 2019",
-    "mintedAt": "2026-09-23T11:53:15.666Z",
+    "mintedAt": "2026-10-06T15:27:09.724Z",
     "env": "sandbox"
   },
   "thomas-aa-2020": {
