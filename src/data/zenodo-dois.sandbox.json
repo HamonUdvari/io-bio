@@ -121,14 +121,14 @@
     "env": "sandbox"
   },
   "bogsch-a-2026": {
-    "recordId": 616220,
+    "recordId": 616250,
     "conceptRecId": 616219,
     "conceptDoi": "10.5072/zenodo.616219",
-    "versionDoi": "10.5072/zenodo.616220",
-    "contentHash": "sha256:4042cc933d869eb2c08a1cac33afa6694db61211159de67efadd254b6dbe6d4a",
+    "versionDoi": "10.5072/zenodo.616250",
+    "contentHash": "sha256:0b01ae08d4550bc03b5ac27ca36404338f818b10c975b5dabc20aa0bc8dfcd73",
     "status": "published",
     "version": "6 October 2026",
-    "mintedAt": "2026-10-06T15:27:05.431Z",
+    "mintedAt": "2026-10-06T16:17:18.864Z",
     "env": "sandbox"
   },
   "bokova-ig-2025": {
