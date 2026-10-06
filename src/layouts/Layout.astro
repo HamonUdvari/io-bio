@@ -16,6 +16,8 @@ const {
   title = globalTitle,
   description = globalDescription,
   hideFooter = false,
+  // Keep the page out of search engines (e.g. a withdrawn-entry tombstone).
+  noindex = false,
 } = Astro.props;
 
 const image = new URL(`${BASE}og.jpg`, SITE).toString();
@@ -32,6 +34,7 @@ const locale = Astro.currentLocale ?? "en";
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={currentUrl} />
 
     <meta property="og:url" content={currentUrl} />

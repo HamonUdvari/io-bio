@@ -25,6 +25,19 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 
 import { devPdfRenderer } from "./scripts/dev-pdf-renderer.ts";
+import {
+  currentEntrySlugs,
+  readProductionDoiMap,
+  retiredEntries,
+} from "./src/utils/retiredEntries.ts";
+
+// Withdrawn-entry tombstones (src/utils/retiredEntries.ts) are noindex pages —
+// keep them out of the sitemap too.
+const RETIRED_ENTRY_PATHS = new Set(
+  retiredEntries(readProductionDoiMap(), currentEntrySlugs()).map(
+    (r) => `/entries/${r.slug}/`,
+  ),
+);
 
 // Force `font-display: block` on every @font-face. Fontsource bakes in
 // `font-display: swap`, which briefly paints Roboto / Roboto Condensed text in a
@@ -132,8 +145,8 @@ export default defineConfig({
     mdx({ remarkPlugins, rehypePlugins }),
     // XML sitemap (dist/sitemap-index.xml) built from `site`. Exclude non-public
     // routes: the Paged.js print design pages (/print/*), the .docx preview tool,
-    // the dev-only PDF viewer, the CMS, and the JSON data endpoints (search index
-    // / CMS mirror / Zenodo metadata).
+    // the dev-only PDF viewer, the CMS, the JSON data endpoints (search index /
+    // CMS mirror / Zenodo metadata), and withdrawn-entry tombstones.
     sitemap({
       filter: (page) => {
         const p = new URL(page).pathname;
@@ -143,7 +156,8 @@ export default defineConfig({
           p !== "/preview/" &&
           !p.startsWith("/pdf-preview/") &&
           !p.startsWith("/admin") &&
-          !p.endsWith(".json")
+          !p.endsWith(".json") &&
+          !RETIRED_ENTRY_PATHS.has(p.endsWith("/") ? p : `${p}/`)
         );
       },
     }),

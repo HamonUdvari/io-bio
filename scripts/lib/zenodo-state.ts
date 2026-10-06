@@ -19,6 +19,11 @@ export interface DoiRecord {
   version: string; // versionLabel that was minted
   mintedAt: string; // ISO timestamp
   env: string; // "sandbox" | "production"
+  // Display data for a withdrawn entry's tombstone page (src/utils/
+  // retiredEntries.ts): once the .docx is gone, the map is the only place left
+  // that knows the entry's name. Optional: records minted earlier lack them.
+  title?: string; // "LASTNAME, Firstname", as deposited
+  authors?: string;
 }
 
 export type DoiMap = Record<string, DoiRecord>;

@@ -1,0 +1,34 @@
+---
+// Tombstone for an entry withdrawn after it received a permanent Zenodo DOI
+// (see src/utils/retiredEntries.ts). The DOI record names this URL as the
+// canonical entry, so the page keeps that link alive and points to the archived
+// version on Zenodo.
+import type { RetiredEntry } from "@utils/retiredEntries";
+
+interface Props {
+  entry: RetiredEntry;
+}
+
+const { entry } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+// The concept DOI resolves to the latest archived version of the entry.
+const doiUrl = `https://doi.org/${entry.conceptDoi}`;
+---
+
+<section class="bio-header">
+  <div class="flex flex-col gap-y-2 leading-none">
+    <h1 class="text-h2 leading-none">{entry.title ?? "Withdrawn entry"}</h1>
+  </div>
+  {entry.authors && <p class="text-balance">By {entry.authors}</p>}
+  <p class="text-balance">
+    This entry has been withdrawn from IO BIO, Biographical Dictionary of
+    Secretaries-General of International Organizations.
+  </p>
+  <p class="text-balance">
+    The archived version remains available on Zenodo:
+    <a class="underline" href={doiUrl}>{doiUrl}</a>
+  </p>
+  <p class="text-balance">
+    <a class="underline" href={base}>Browse all entries</a>
+  </p>
+</section>

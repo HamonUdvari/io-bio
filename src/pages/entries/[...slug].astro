@@ -1,13 +1,19 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import EntryArticle from "@components/EntryArticle.astro";
+import RetiredEntryPage from "@components/RetiredEntry.astro";
 import { render } from "astro:content";
 import { getCollection } from "astro:content";
+import {
+  readProductionDoiMap,
+  retiredEntries,
+  type RetiredEntry,
+} from "@utils/retiredEntries";
 
 export async function getStaticPaths() {
   const bios = await getCollection("bios");
 
-  return bios.map((page) => {
+  const entryPaths = bios.map((page) => {
     const { id } = page;
 
     return {
@@ -15,14 +21,30 @@ export async function getStaticPaths() {
       props: { ...page },
     };
   });
+
+  // An entry withdrawn after it received a permanent (production) Zenodo DOI
+  // keeps a "withdrawn" tombstone at its old URL — the DOI record links here as
+  // the canonical entry (see src/utils/retiredEntries.ts). Matched against the
+  // real collection ids, so a tombstone never takes over a live entry's URL.
+  const ids = new Set(bios.map((page) => page.id));
+  const retiredPaths = retiredEntries(readProductionDoiMap(), ids).map(
+    (retired) => ({ params: { slug: retired.slug }, props: { retired } }),
+  );
+
+  return [...entryPaths, ...retiredPaths];
 }
 
+// Set only on a withdrawn entry's tombstone; undefined for a live entry.
+const retired = (Astro.props as { retired?: RetiredEntry }).retired;
 const { data } = Astro.props;
-const { lastName, firstName, summary } = data;
 
-const title = `${lastName.toUpperCase()}, ${firstName}`;
-const description = summary;
-const { Content } = await render(Astro.props);
+const title = retired
+  ? `${retired.title ?? "Withdrawn entry"} (withdrawn)`
+  : `${data.lastName.toUpperCase()}, ${data.firstName}`;
+const description = retired
+  ? "This entry has been withdrawn from IO BIO."
+  : data.summary;
+const { Content } = retired ? { Content: null } : await render(Astro.props);
 
 const slug = Astro.params.slug ?? Astro.props.id;
 
@@ -56,40 +78,45 @@ const sandboxUrl = sandboxRecordId
   : null;
 ---
 
-<Layout title={title} description={description}>
-  <EntryArticle data={data} Content={Content}>
-    <div
-      slot="controls"
-      class="flex flex-col items-center gap-y-3 print:hidden"
-    >
-      <a
-        class="button button--primary button--download"
-        href={pdfHref}
-        download={`${slug}-iobio.pdf`}
-        >Download (PDF)</a
-      >
-      {
-        /* Debug links (screen only): the live browser-print view for iterating
-          on print styles, and the per-entry Zenodo sandbox deposit if minted. */
-      }
-      <div class="flex flex-row gap-x-4 text-small">
-        <!-- <a -->
-        <!--   class="cursor-pointer underline opacity-70 hover:opacity-100" -->
-        <!--   href={printHref}>Print preview</a -->
-        <!-- > -->
-        {
-          sandboxUrl && (
-            <a
-              class="underline opacity-70 hover:opacity-100"
-              href={sandboxUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Zenodo
-            </a>
-          )
-        }
-      </div>
-    </div>
-  </EntryArticle>
-</Layout>
+{
+  retired && (
+    <Layout title={title} description={description} noindex>
+      <RetiredEntryPage entry={retired} />
+    </Layout>
+  )
+}
+{
+  !retired && (
+    <Layout title={title} description={description}>
+      <EntryArticle data={data} Content={Content}>
+        <div
+          slot="controls"
+          class="flex flex-col items-center gap-y-3 print:hidden"
+        >
+          <a
+            class="button button--primary button--download"
+            href={pdfHref}
+            download={`${slug}-iobio.pdf`}
+            >Download (PDF)</a
+          >
+          {/* Debug links (screen only): the live browser-print view for iterating
+              on print styles, and the per-entry Zenodo sandbox deposit if minted. */}
+          <div class="flex flex-row gap-x-4 text-small">
+            {/* <a class="cursor-pointer underline opacity-70 hover:opacity-100"
+                   href={printHref}>Print preview</a> */}
+            {sandboxUrl && (
+              <a
+                class="underline opacity-70 hover:opacity-100"
+                href={sandboxUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Zenodo
+              </a>
+            )}
+          </div>
+        </div>
+      </EntryArticle>
+    </Layout>
+  )
+}

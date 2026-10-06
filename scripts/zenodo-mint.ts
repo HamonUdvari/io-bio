@@ -420,6 +420,8 @@ async function main() {
         version: versionLabel(e.version),
         mintedAt: new Date().toISOString(),
         env: args.env,
+        title: String(metadata.title),
+        ...(e.authors ? { authors: e.authors } : {}),
       };
       state[e.slug] = record;
       saveState(args.env, state); // persist after every successful entry
