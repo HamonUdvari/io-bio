@@ -1,0 +1,42 @@
+{
+  "slug": "bogsch-a-2026",
+  "name": "BOGSCH, Árpád",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director General",
+      "organisation": "World Intellectual Property Organization",
+      "abbreviation": "WIPO",
+      "startYear": 1973,
+      "endYear": 1997,
+      "ordinalText": "second"
+    }
+  ],
+  "wordPortrait": "/src/content/bios-portraits/bogsch-a-2026.webp",
+  "portraitImage": "",
+  "facePosition": null,
+  "details": {
+    "imageSource": "UN 7720514, photographer Milton Grant",
+    "imageSourceOverride": false,
+    "lastName": "Bogsch",
+    "lastNameOverride": false,
+    "firstName": "Árpád",
+    "firstNameOverride": false,
+    "knownAs": "",
+    "knownAsOverride": false,
+    "nee": "",
+    "neeOverride": false,
+    "summary": "Hungarian-born American lawyer and second Director General of the World Intellectual Property Organization (WIPO) 1973-1997",
+    "summaryOverride": false,
+    "life": "Was born 24 February 1919 in Budapest, Hungary and died 19 September 2004 in Geneva, Switzerland. He was the son of Árpád Bogsch, lawyer, and Emília Taborsky. On 11 April 1942 he married Paula Takáts, with whom he had one daughter and one son. After her death in 1987 he married Adèle Fankhauser, his former secretary, on 8 January 1994.",
+    "lifeOverride": false,
+    "nationality": "Hungarian",
+    "nationalityOverride": false,
+    "version": "Version 6 October 2026",
+    "versionOverride": false,
+    "authors": "LITERATURE: G.H.C. Bodenhausen, ‘The Evolution of the United International Bureaux’ in Industrial Property, 1963/4, 85-92; ‘Dr. Arpad Bogsch Elected Director General of WIPO’ in Copyright Society of the U.S.A. Bulletin, 21/3, 1975, 197; J. Phillips, ‘Obituary: Dr Árpád Bogsch’ in The IPKat, 21 September 2004; ‘Bogsch, Arpad’ in Who Was Who 2001-2005, London 2006: 54; P. Claus, ‘Tribute to Dr. Arpad Bogsch’ in World Patent Information, 2004, 5; M.J. Bartkowski, Seeing the Unseen: Leadership and Professional Culture in the UN Organizations, n.pl. 2005, 22-23; C. May, The World Intellectual Property Organization: Resurgence and the Development Agenda, London 2007; C. May, ‘The Pre-History and Establishment of the WIPO’ in The WIPO Journal, 2009/1, 16-26; C. Deere Birkbeck, The Governance of the World Intellectual Property Organization: A Reference Guide, Oxford 2014; J. van Heijster and T.R. Eimer",
+    "authorsOverride": false,
+    "editors": "",
+    "editorsOverride": false
+  }
+}
