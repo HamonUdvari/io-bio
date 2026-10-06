@@ -1,8 +1,10 @@
 # Keeps the CMS "Roles & portraits (per entry)" cards (src/data/entry-overrides/
 # <slug>.json) in sync with the Word files: mirrors each entry's parsed roles +
 # display name so the CMS shows real data (WYSIWYG), creates a card for a new
-# .docx, and DELETES a card whose .docx was removed. Manual fields (the override
-# toggle, override roles, portrait image, face position) are always preserved.
+# .docx, and ARCHIVES the card of a removed .docx (with its portrait upload,
+# unless another card uses it) to src/data/entry-overrides-archive — restoring
+# both if the same .docx is uploaded again. Manual fields (the override toggle,
+# override roles, portrait image, face position) are always preserved.
 #
 # The shipped SITE is always correct regardless of this job — the build reads the
 # live Word roles for non-override entries — so this only refreshes what the
@@ -59,7 +61,7 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             node scripts/sync-entry-overrides.ts
-            git add -A src/data/entry-overrides src/content/bios-portraits
+            git add -A src/data/entry-overrides src/data/entry-overrides-archive src/content/bios-portraits src/content/bios-images
             if git diff --cached --quiet; then
               echo "entry-overrides already current"
               exit 0

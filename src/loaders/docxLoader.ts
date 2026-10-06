@@ -106,9 +106,16 @@ interface EntryOverride {
   detailOverrides: Partial<Record<DetailField, boolean>>;
 }
 function loadEntryOverrideMap(): Record<string, EntryOverride> {
-  const dir = path.resolve("./src/data/entry-overrides");
-  if (!existsSync(dir)) return {};
   const map: Record<string, EntryOverride> = {};
+  // Active cards first, then the archive (src/data/entry-overrides-archive, where
+  // the sync parks a deleted entry's card) as a fallback: when a deleted .docx is
+  // uploaded again, even the first deploy — which runs before the sync restores
+  // the card — keeps the entry's overrides. An active card always wins.
+  for (const dir of [
+    path.resolve("./src/data/entry-overrides"),
+    path.resolve("./src/data/entry-overrides-archive"),
+  ]) {
+  if (!existsSync(dir)) continue;
   for (const f of readdirSync(dir)) {
     if (!f.toLowerCase().endsWith(".json")) continue;
     try {
@@ -121,7 +128,7 @@ function loadEntryOverrideMap(): Record<string, EntryOverride> {
         details?: Record<string, unknown>;
       };
       const slug = String(raw?.slug ?? path.basename(f, ".json")).trim();
-      if (!slug || slug.startsWith("_")) continue;
+      if (!slug || slug.startsWith("_") || map[slug]) continue;
       const roles: Role[] = [];
       for (const r of (Array.isArray(raw?.roles) ? raw.roles : []) as Array<
         Record<string, unknown>
@@ -160,6 +167,7 @@ function loadEntryOverrideMap(): Record<string, EntryOverride> {
     } catch {
       // skip malformed override file — falls back to Word behaviour
     }
+  }
   }
   return map;
 }
