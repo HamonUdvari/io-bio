@@ -1,3 +1,10 @@
+## [1.26.4](https://github.com/HamonUdvari/io-bio/compare/v1.26.3...v1.26.4) (2026-10-06)
+
+
+### Bug Fixes
+
+* **parser:** take the entry's own (last) citation, not an IO BIO ref in Literature ([](https://github.com/HamonUdvari/io-bio/commit/7c0476a38388dd718ce73490fc79cd44df2880ca))
+
 ## [1.26.3](https://github.com/HamonUdvari/io-bio/compare/v1.26.2...v1.26.3) (2026-10-05)
 
 
