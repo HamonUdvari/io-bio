@@ -1,3 +1,11 @@
+# [1.27.0](https://github.com/HamonUdvari/io-bio/compare/v1.26.4...v1.27.0) (2026-10-06)
+
+
+### Website Features
+
+* **entries:** keep a "withdrawn" tombstone for deleted entries with a DOI ([](https://github.com/HamonUdvari/io-bio/commit/d88461cfc195215bbb53e63cc5a88b35ca375666))
+* **overrides:** archive a deleted entry's card + upload; restore on re-add ([](https://github.com/HamonUdvari/io-bio/commit/40ea8eedb7ae13e2cf300f6d31019c725cd980ed))
+
 ## [1.26.4](https://github.com/HamonUdvari/io-bio/compare/v1.26.3...v1.26.4) (2026-10-06)
 
 
