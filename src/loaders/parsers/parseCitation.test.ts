@@ -72,3 +72,43 @@ describe("parseCitation — editors", () => {
     expect(value.authors).toBe("Daniel Maul");
   });
 });
+
+// Bogsch: the Literature cites other IO BIO entries in the citation format, ahead
+// of the entry's own citation. The parser must use the LAST match (the real one).
+describe("parseCitation — Literature that cites other IO BIO entries", () => {
+  const literature = {
+    type: "paragraph",
+    text:
+      "LITERATURE: C. May, The World Intellectual Property Organization, London " +
+      "2007; J. van Heijster and T.R. Eimer, ‘Idris, Kamil Eltayeb’ in IO BIO, " +
+      "Biographical Dictionary of Secretaries-General of International " +
+      "Organizations, 2016; B. Reinalda, ‘Bodenhausen, Georg Hendrik Christiaan’ " +
+      "in IO BIO, Biographical Dictionary of Secretaries-General of " +
+      "International Organizations, 2023.",
+  };
+  const author = { type: "paragraph", text: "Gusztáv D. Kecskés" };
+  const citation = {
+    type: "paragraph",
+    text:
+      "Gusztáv D. Kecskés, ‘Bogsch, Árpád’ in IO BIO, Biographical Dictionary " +
+      "of Secretaries-General of International Organizations, Edited by Bob " +
+      "Reinalda, Kent J. Kille, Jaci L. Eisenberg, Ellen Ravndal and Dawisson " +
+      "Belém Lopes, www.io-bio.ch, Accessed DAY MONTH YEAR",
+  };
+
+  it("takes the author + editors from the entry's own (last) citation", () => {
+    const { value, warnings } = parseCitation([literature, author, citation]);
+    expect(value.authors).toBe("Gusztáv D. Kecskés");
+    expect(value.editors).toBe(
+      "Bob Reinalda, Kent J. Kille, Jaci L. Eisenberg, Ellen Ravndal and Dawisson Belém Lopes",
+    );
+    expect(warnings.some((w) => w.code === "editors_missing")).toBe(false);
+  });
+
+  it("consumes the real citation + author line, not the Literature", () => {
+    const { value } = parseCitation([literature, author, citation]);
+    expect(value.consumed).toContain(2); // the citation no longer leaks into the body
+    expect(value.consumed).toContain(1); // the standalone author line
+    expect(value.consumed).not.toContain(0); // Literature is left to parseAPL
+  });
+});

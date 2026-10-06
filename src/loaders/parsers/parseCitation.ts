@@ -66,7 +66,12 @@ export function parseCitation(content: any[]): ParserResult<{
   let authors: string | null = null;
   let editors: string | null = null;
 
-  const citationIdx = content.findIndex(
+  // Take the LAST matching paragraph: the entry's own citation always closes the
+  // document, whereas a Literature / Publications list may cite OTHER IO BIO
+  // entries in the same "… in IO BIO, Biographical Dictionary …" form (Bogsch
+  // cites Idris and Bodenhausen). The first match would grab that list instead,
+  // turning it into the author and leaking the real citation into the body.
+  const citationIdx = content.findLastIndex(
     (c) => c?.type === "paragraph" && c.text?.includes(CITATION_MARKER),
   );
   if (citationIdx >= 0) {
