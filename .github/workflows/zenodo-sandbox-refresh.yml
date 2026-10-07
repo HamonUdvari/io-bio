@@ -56,7 +56,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0 # full history so the post-mint push isn't rejected by a shallow clone
+          # The LATEST main, not the (possibly older) commit a queued run was
+          # triggered by — so the refresh starts from the current map.
+          ref: main
       - uses: pnpm/action-setup@v6
         with:
           version: 11.5.0
@@ -80,52 +82,73 @@ jobs:
       - name: Build (emits dist/zenodo-meta.json + the /print routes)
         run: pnpm run build
       - name: Refresh sandbox deposits (re-versions changed content/layout only)
+        id: mint
         env:
           ZENODO_TOKEN: ${{ secrets.ZENODO_SANDBOX_TOKEN }}
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: pnpm run zenodo:mint:sandbox
       - name: Commit refreshed sandbox DOI map + trigger deploy
+        # Runs even when the refresh step FAILED or was cancelled: the mint saves
+        # the map after every successful entry, so a partial run still holds new
+        # DOIs. Skipping this commit would lose them, and the next run would mint
+        # those entries again (duplicate deposits). The job still ends as failed.
+        # Skipped only when the refresh never started.
+        if: ${{ always() && steps.mint.outcome != 'skipped' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for `gh workflow run` (Deploy dispatch)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- src/data/zenodo-dois.sandbox.json; then
+          MAP=src/data/zenodo-dois.sandbox.json
+          if [ -z "$(git status --porcelain -- "$MAP")" ]; then
             echo "no sandbox map changes to commit"
             exit 0
           fi
-          # A print-template change re-versions every entry, so the mint rewrites
-          # the WHOLE map. Two overlapping refreshes (queued runs each check out
-          # their own trigger commit) then produce different full maps, and a plain
-          # `git pull --rebase` conflicts irrecoverably. The freshly-minted map is
-          # authoritative (sandbox deposits are disposable), so re-apply it on top
-          # of the latest main and push — retrying if main advances meanwhile.
-          cp src/data/zenodo-dois.sandbox.json "$RUNNER_TEMP/sandbox-map.json"
+          # Same commit logic as zenodo-mint.yml — keep the two in sync.
+          # Keep the map this run started from (base) and the one it minted (ours).
+          git show "HEAD:$MAP" > "$RUNNER_TEMP/base-map.json" 2>/dev/null ||
+            echo "{}" > "$RUNNER_TEMP/base-map.json"
+          cp "$MAP" "$RUNNER_TEMP/doi-map.json"
+          # Whatever fails below before the map lands on main, print this run's
+          # changed records so they can be added by hand.
+          pushed=false
+          trap '[ "$pushed" = true ] || { echo "::error::sandbox map NOT pushed — add (or replace) the records below in $MAP on main by hand, keeping all other records"; cat "$RUNNER_TEMP/doi-delta.json" 2>/dev/null || cat "$RUNNER_TEMP/doi-map.json"; }' EXIT
+          node scripts/zenodo-merge-map.ts "$RUNNER_TEMP/base-map.json" "$RUNNER_TEMP/doi-map.json" "$RUNNER_TEMP/doi-delta.json"
+          # Merge onto the LATEST main and push, retrying if main advances meanwhile.
+          # Only the records this run changed are applied (a print-template change
+          # re-versions — so changes — every record), so a hand fix to the map
+          # committed during the run (e.g. a wedge recovery) is never reverted.
           for attempt in 1 2 3 4 5; do
-            git fetch origin main
-            git reset --hard FETCH_HEAD
-            cp "$RUNNER_TEMP/sandbox-map.json" src/data/zenodo-dois.sandbox.json
-            if git diff --quiet -- src/data/zenodo-dois.sandbox.json; then
-              echo "sandbox map already current on main"
-              exit 0
+            if ! git fetch origin main; then
+              echo "fetch failed; retrying ($attempt/5)"
+              sleep 5
+              continue
             fi
-            git add src/data/zenodo-dois.sandbox.json
+            git reset --hard FETCH_HEAD
+            node scripts/zenodo-merge-map.ts "$RUNNER_TEMP/base-map.json" "$RUNNER_TEMP/doi-map.json" "$MAP"
+            if [ -n "$(git status --porcelain -- "$MAP")" ]; then
+              git add -- "$MAP"
+              git commit -m "chore(zenodo): refresh sandbox deposits [skip ci]"
+              if ! git push origin HEAD:main; then
+                echo "push rejected (main advanced); retrying ($attempt/5)"
+                sleep 5
+                continue
+              fi
+              echo "pushed sandbox map (attempt $attempt)"
+            else
+              echo "sandbox map already current on main"
+            fi
+            pushed=true
             # The DOI map is read at BUILD time, so a freshly-minted DOI only reaches
             # the live entry page when the site rebuilds. This commit does NOT trigger
             # Deploy by itself: a push made with the default GITHUB_TOKEN never starts
             # a new workflow run (GitHub's recursion guard), and `[skip ci]` makes that
-            # explicit. So after pushing we DISPATCH Deploy ourselves — workflow_dispatch
-            # IS exempt from that guard, even via GITHUB_TOKEN (needs `actions: write`).
-            # That rebuilds with the fresh DOIs. No loop: src/data isn't in this
-            # workflow's `paths:`, and Deploy makes no commits.
-            git commit -m "chore(zenodo): refresh sandbox deposits [skip ci]"
-            if git push origin HEAD:main; then
-              echo "pushed sandbox map (attempt $attempt); dispatching Deploy"
-              gh workflow run deploy.yml --ref main
-              exit 0
-            fi
-            echo "push rejected (main advanced); retrying ($attempt/5)"
-            sleep 5
+            # explicit. So we DISPATCH Deploy ourselves — workflow_dispatch IS exempt
+            # from that guard, even via GITHUB_TOKEN (needs `actions: write`). No loop:
+            # src/data isn't in this workflow's `paths:`, and Deploy makes no commits.
+            echo "dispatching Deploy"
+            gh workflow run deploy.yml --ref main
+            exit 0
           done
           echo "::error::could not push refreshed sandbox map after 5 attempts"
           exit 1

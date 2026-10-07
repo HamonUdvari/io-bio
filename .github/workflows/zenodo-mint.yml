@@ -36,6 +36,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Always mint from the LATEST main — not the commit the run was queued
+          # or dispatched on (e.g. dev) — so the run starts from the current map.
+          ref: main
       - uses: pnpm/action-setup@v6
         with:
           version: 11.5.0
@@ -51,6 +55,7 @@ jobs:
       - name: Build (emits dist/zenodo-meta.json + entry pages)
         run: pnpm run build
       - name: Mint
+        id: mint
         # Inputs are passed via env (NOT interpolated into the script body) so
         # free-text workflow_dispatch inputs can't inject shell commands.
         env:
@@ -66,26 +71,75 @@ jobs:
           [ -n "$MINT_ONLY" ] && ARGS="$ARGS --only $MINT_ONLY"
           node scripts/zenodo-mint.ts $ARGS
       - name: Commit DOI map + trigger deploy
-        # The production map is always tracked; the sandbox map is currently also
-        # committed (temporarily, for the client demo — issue #2). Stage both;
-        # only the map that changed for this env actually gets committed.
+        # Runs even when the mint step FAILED or was cancelled: the mint saves the
+        # map after every successful entry, so a partial run still holds DOIs that
+        # now exist on Zenodo. Skipping this commit would lose them with the
+        # runner, and the next run would mint those entries again — duplicate
+        # concept DOIs. (The job still ends as failed.) Skipped only when the mint
+        # never started.
+        if: ${{ always() && steps.mint.outcome != 'skipped' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for `gh workflow run` (Deploy dispatch)
+          ZENODO_ENV: ${{ inputs.env }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/data/zenodo-dois.json src/data/zenodo-dois.sandbox.json
-          if git diff --cached --quiet; then
+          # Only this env's map changes. Same rule as the mint script: anything but
+          # "production" is the sandbox (whose map is committed too — temporarily,
+          # for the client demo, issue #2).
+          MAP=src/data/zenodo-dois.sandbox.json
+          [ "$ZENODO_ENV" = "production" ] && MAP=src/data/zenodo-dois.json
+          # --porcelain also reports a map that is new (untracked).
+          if [ -z "$(git status --porcelain -- "$MAP")" ]; then
             echo "no DOI map changes to commit"
             exit 0
           fi
-          git commit -m "chore(zenodo): update DOI map [skip ci]"
-          git push
-          # The map is read at BUILD time, so new DOIs only reach the live pages on
-          # a rebuild. A push made with the default GITHUB_TOKEN never starts a new
-          # workflow run (GitHub's recursion guard), so dispatch Deploy explicitly —
-          # workflow_dispatch is exempt from the guard even via GITHUB_TOKEN (needs
-          # `actions: write`). Mirrors zenodo-sandbox-refresh.yml so a mint never
-          # leaves fresh DOIs unpublished waiting on a manual deploy.
-          echo "pushed DOI map; dispatching Deploy"
-          gh workflow run deploy.yml --ref main
+          # Keep the map this run started from (base) and the one it minted (ours).
+          git show "HEAD:$MAP" > "$RUNNER_TEMP/base-map.json" 2>/dev/null ||
+            echo "{}" > "$RUNNER_TEMP/base-map.json"
+          cp "$MAP" "$RUNNER_TEMP/doi-map.json"
+          # Whatever fails below before the map lands on main, print this run's
+          # records so its DOIs can be added by hand — the runner is thrown away.
+          # Only the CHANGED records (merged onto an empty map): pasting the whole
+          # map could revert records other runs committed meanwhile.
+          pushed=false
+          trap '[ "$pushed" = true ] || { echo "::error::DOI map NOT pushed — add (or replace) the records below in $MAP on main by hand, keeping all other records"; cat "$RUNNER_TEMP/doi-delta.json" 2>/dev/null || cat "$RUNNER_TEMP/doi-map.json"; }' EXIT
+          node scripts/zenodo-merge-map.ts "$RUNNER_TEMP/base-map.json" "$RUNNER_TEMP/doi-map.json" "$RUNNER_TEMP/doi-delta.json"
+          # Merge onto the LATEST main and push, retrying if main advances meanwhile
+          # (a CMS edit, a sync commit). Only the records this run changed are
+          # applied (scripts/zenodo-merge-map.ts), so DOIs committed by anyone else
+          # since this run started are never overwritten.
+          for attempt in 1 2 3 4 5; do
+            if ! git fetch origin main; then
+              echo "fetch failed; retrying ($attempt/5)"
+              sleep 5
+              continue
+            fi
+            git reset --hard FETCH_HEAD
+            node scripts/zenodo-merge-map.ts "$RUNNER_TEMP/base-map.json" "$RUNNER_TEMP/doi-map.json" "$MAP"
+            if [ -n "$(git status --porcelain -- "$MAP")" ]; then
+              git add -- "$MAP"
+              git commit -m "chore(zenodo): update DOI map [skip ci]"
+              if ! git push origin HEAD:main; then
+                echo "push rejected (main advanced); retrying ($attempt/5)"
+                sleep 5
+                continue
+              fi
+              echo "pushed DOI map (attempt $attempt)"
+            else
+              # E.g. an earlier attempt's push landed although the client saw an
+              # error. Still dispatch Deploy below.
+              echo "DOI map already current on main"
+            fi
+            pushed=true
+            # The map is read at BUILD time, so new DOIs only reach the live pages
+            # on a rebuild. A push made with the default GITHUB_TOKEN never starts a
+            # new workflow run (GitHub's recursion guard), so dispatch Deploy
+            # explicitly — workflow_dispatch is exempt from the guard even via
+            # GITHUB_TOKEN (needs `actions: write`).
+            echo "dispatching Deploy"
+            gh workflow run deploy.yml --ref main
+            exit 0
+          done
+          echo "::error::could not push the DOI map after 5 attempts"
+          exit 1

@@ -37,25 +37,70 @@ export function stateFile(env: string): string {
   );
 }
 
-export function loadState(env: string): DoiMap {
-  const f = stateFile(env);
-  if (!existsSync(f)) return {};
+/** Read a map file. A missing file is an empty map (nothing minted yet). A
+ *  malformed one THROWS — the file or any record in it: read as empty (or a
+ *  record as missing), the mint would treat those entries as new, minting
+ *  duplicate concept DOIs, and then save a map without the old records. */
+export function readDoiMap(file: string): DoiMap {
+  if (!existsSync(file)) return {};
+  const name = path.relative(process.cwd(), file);
+  let parsed: unknown;
   try {
-    const parsed = JSON.parse(readFileSync(f, "utf8"));
-    return parsed && typeof parsed === "object" ? (parsed as DoiMap) : {};
-  } catch {
-    return {};
+    parsed = JSON.parse(readFileSync(file, "utf8"));
+  } catch (err) {
+    throw new Error(`${name} is not valid JSON: ${(err as Error).message}`);
   }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
+    throw new Error(`${name} must be a JSON object (slug → DOI record)`);
+  // Accept anything the mint itself can write — it saves `conceptDoi: ""` when
+  // Zenodo's response lacks one, and the next new version fills it in.
+  for (const [slug, rec] of Object.entries(parsed)) {
+    const r = rec as Partial<DoiRecord> | null;
+    if (
+      !r ||
+      typeof r !== "object" ||
+      Array.isArray(r) ||
+      typeof r.recordId !== "number" ||
+      typeof r.conceptDoi !== "string"
+    )
+      throw new Error(
+        `${name}: "${slug}" is not a DOI record (needs a numeric recordId and a string conceptDoi)`,
+      );
+  }
+  return parsed as DoiMap;
 }
 
-/** Write the whole map back, slug-sorted for stable diffs. Atomic (temp+rename)
- *  so a crash mid-write can't truncate the committed map and lose minted DOIs. */
-export function saveState(env: string, map: DoiMap): void {
-  if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
+/** Write a whole map, slug-sorted for stable diffs. Atomic (temp+rename) so a
+ *  crash mid-write can't truncate the committed map and lose minted DOIs. */
+export function writeDoiMap(file: string, map: DoiMap): void {
+  mkdirSync(path.dirname(file), { recursive: true });
   const sorted: DoiMap = {};
   for (const k of Object.keys(map).sort()) sorted[k] = map[k];
-  const f = stateFile(env);
-  const tmp = `${f}.tmp`;
+  const tmp = `${file}.tmp`;
   writeFileSync(tmp, JSON.stringify(sorted, null, 2) + "\n");
-  renameSync(tmp, f);
+  renameSync(tmp, file);
+}
+
+export function loadState(env: string): DoiMap {
+  return readDoiMap(stateFile(env));
+}
+
+export function saveState(env: string, map: DoiMap): void {
+  writeDoiMap(stateFile(env), map);
+}
+
+/** Slug-level 3-way merge, for committing a mint run's map onto a main that may
+ *  have moved since the run started: start from main's map (`theirs`) and apply
+ *  only the records this run changed (`ours` vs. the map it started from,
+ *  `base`). A record committed by anyone else meanwhile is never overwritten or
+ *  dropped. */
+export function mergeDoiMaps(
+  base: DoiMap,
+  ours: DoiMap,
+  theirs: DoiMap,
+): DoiMap {
+  const merged: DoiMap = { ...theirs };
+  for (const [slug, rec] of Object.entries(ours))
+    if (JSON.stringify(rec) !== JSON.stringify(base[slug])) merged[slug] = rec;
+  return merged;
 }
