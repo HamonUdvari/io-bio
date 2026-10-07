@@ -1,3 +1,10 @@
+## [1.27.1](https://github.com/HamonUdvari/io-bio/compare/v1.27.0...v1.27.1) (2026-10-07)
+
+
+### Bug Fixes
+
+* **overrides:** create the archive + uploads folders so CI `git add` can't fail ([](https://github.com/HamonUdvari/io-bio/commit/a3442232e717a68c5893a475e086a3cede671525))
+
 # [1.27.0](https://github.com/HamonUdvari/io-bio/compare/v1.26.4...v1.27.0) (2026-10-06)
 
 
