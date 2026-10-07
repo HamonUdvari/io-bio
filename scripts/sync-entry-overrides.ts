@@ -68,6 +68,11 @@ const activeDir = path.resolve("src/assets/bios");
 const imagesDir = path.resolve("src/content/bios-images");
 const archiveDir = path.resolve("src/data/entry-overrides-archive");
 const archiveImagesDir = path.join(archiveDir, "images");
+// Always present (even when empty) so the CI step's `git add` of these folders
+// never fails on a missing pathspec — git errors on a path that is neither on
+// disk nor tracked, e.g. the archive before any entry has been deleted.
+mkdirSync(archiveDir, { recursive: true });
+mkdirSync(imagesDir, { recursive: true });
 const resolveUpload = (p: string) => path.resolve(p.replace(/^\/+/, ""));
 const webPath = (abs: string) =>
   "/" + path.relative(process.cwd(), abs).split(path.sep).join("/");
