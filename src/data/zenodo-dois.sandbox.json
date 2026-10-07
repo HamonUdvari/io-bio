@@ -141,14 +141,14 @@
     "authors": "Bob Reinalda"
   },
   "bogsch-a-2026": {
-    "recordId": 616291,
+    "recordId": 616818,
     "conceptRecId": 616219,
     "conceptDoi": "10.5072/zenodo.616219",
-    "versionDoi": "10.5072/zenodo.616291",
-    "contentHash": "sha256:e0cb89a0d55acd6ac41110458e35ea9e69ba4e5feac8698aebc032d4a1ec72da",
+    "versionDoi": "10.5072/zenodo.616818",
+    "contentHash": "sha256:9579fcb272ef47e2d30058802487ddf8ab0649b14df6d6bb4f9a20d1c90b3e8a",
     "status": "published",
     "version": "6 October 2026",
-    "mintedAt": "2026-10-06T17:20:39.115Z",
+    "mintedAt": "2026-10-07T21:29:23.454Z",
     "env": "sandbox",
     "title": "BOGSCH, Árpád",
     "authors": "Gusztáv D. Kecskés"
