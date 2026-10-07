@@ -726,14 +726,14 @@
     "authors": "Matthias Schmelzer"
   },
   "la-guardia-frh-2026": {
-    "recordId": 616336,
+    "recordId": 616816,
     "conceptRecId": 611856,
     "conceptDoi": "10.5072/zenodo.611856",
-    "versionDoi": "10.5072/zenodo.616336",
-    "contentHash": "sha256:567a9e9162d5aca5bea219c12963b4c67da047d0198ac725807c5fd1e5300386",
+    "versionDoi": "10.5072/zenodo.616816",
+    "contentHash": "sha256:55acc44e010b562e522d465d3badd404feb706c40bde41225eba0637bba4720f",
     "status": "published",
     "version": "29 September 2026",
-    "mintedAt": "2026-10-06T17:23:58.379Z",
+    "mintedAt": "2026-10-07T21:09:26.500Z",
     "env": "sandbox",
     "title": "LA GUARDIA, Fiorello Raffaele Enrico",
     "authors": "Chloé Maurel"
@@ -1240,14 +1240,14 @@
     "authors": "Bob Reinalda"
   },
   "sadik-in-2026": {
-    "recordId": 616373,
+    "recordId": 616817,
     "conceptRecId": 611858,
     "conceptDoi": "10.5072/zenodo.611858",
-    "versionDoi": "10.5072/zenodo.616373",
-    "contentHash": "sha256:4b5e87551bbe423b4249a0b2247649b5b863e278280376dbe2b0151ae1de66f2",
+    "versionDoi": "10.5072/zenodo.616817",
+    "contentHash": "sha256:99616651b49f63fff891284a34f8c57b0522f85f4f7feec31ec7484d9a05a13c",
     "status": "published",
     "version": "1 October 2026",
-    "mintedAt": "2026-10-06T17:26:41.260Z",
+    "mintedAt": "2026-10-07T21:09:30.477Z",
     "env": "sandbox",
     "title": "SADIK, Iffat Nafis",
     "authors": "Chloé Maurel"
