@@ -7,12 +7,15 @@
 // Idempotent.
 //
 // Deleted entries are ARCHIVED, never thrown away: when a .docx is removed, its
-// card moves to src/data/entry-overrides-archive/<slug>.json and its portrait
-// upload to src/data/entry-overrides-archive/images/<slug>/ (outside every CMS
-// folder, so editors don't see them). When the same .docx is uploaded again,
-// both move back, so the manual overrides and the upload survive a delete +
-// re-add. (docxLoader also reads the archive as a fallback, so even the first
-// deploy after a re-upload — before this sync runs — keeps the overrides.)
+// card moves to src/data/entry-overrides-archive/<slug>.json (outside the CMS
+// folder, so editors don't see it). When the same .docx is uploaded again, the
+// card moves back, so its manual overrides survive a delete + re-add. (docxLoader
+// also reads the archive as a fallback, so even the first deploy after a
+// re-upload — before this sync runs — keeps the overrides.) Portrait uploads are
+// never moved: they stay in src/content/bios-images, so a restored card still
+// finds its file, and an editor can re-pick the photo for a renamed entry.
+// An archived card is never overwritten: a superseded copy is kept in
+// src/data/entry-overrides-archive/history/.
 //
 //   Run: pnpm build && node scripts/sync-entry-overrides.ts   (npm: pnpm overrides:sync)
 //
@@ -25,7 +28,6 @@ import {
   readdirSync,
   readFileSync,
   renameSync,
-  rmdirSync,
   unlinkSync,
   writeFileSync,
 } from "node:fs";
@@ -64,19 +66,12 @@ const portraitsDir = path.resolve("src/content/bios-portraits");
 mkdirSync(portraitsDir, { recursive: true });
 const activeDir = path.resolve("src/assets/bios");
 
-// Portrait-override uploads, and the archive for deleted entries (see header).
-const imagesDir = path.resolve("src/content/bios-images");
+// Archive for deleted entries' cards (see header). Always created, even empty, so
+// the CI step's `git add` of it never fails on a missing pathspec — git errors on
+// a path that is neither on disk nor tracked (e.g. before any entry is deleted).
 const archiveDir = path.resolve("src/data/entry-overrides-archive");
-const archiveImagesDir = path.join(archiveDir, "images");
-// Always present (even when empty) so the CI step's `git add` of these folders
-// never fails on a missing pathspec — git errors on a path that is neither on
-// disk nor tracked, e.g. the archive before any entry has been deleted.
+const historyDir = path.join(archiveDir, "history");
 mkdirSync(archiveDir, { recursive: true });
-mkdirSync(imagesDir, { recursive: true });
-const resolveUpload = (p: string) => path.resolve(p.replace(/^\/+/, ""));
-const webPath = (abs: string) =>
-  "/" + path.relative(process.cwd(), abs).split(path.sep).join("/");
-const isInside = (abs: string, dir: string) => abs.startsWith(dir + path.sep);
 
 const source = JSON.parse(readFileSync(distFile, "utf8")) as Array<{
   slug?: string;
@@ -88,44 +83,37 @@ const source = JSON.parse(readFileSync(distFile, "utf8")) as Array<{
 
 const wantSlugs = new Set<string>();
 const portraitSlugs = new Set<string>();
-const keptImages = new Set<string>(); // uploads still used by a live card
 let portraitsWritten = 0;
 let created = 0;
 let updated = 0;
 let restored = 0;
 let archived = 0;
-let uploadsArchived = 0;
-let uploadsRestored = 0;
+let superseded = 0;
 
-/** Move a deleted entry's upload into the archive; returns the card's new path.
- *  Only an existing upload inside bios-images that no live card still uses is
- *  moved — the path comes from CMS-edited JSON, so nothing else is ever touched. */
-function archiveUpload(slug: string, p: string): string {
-  const abs = resolveUpload(p);
-  if (!isInside(abs, imagesDir) || keptImages.has(abs) || !existsSync(abs)) return p;
-  const dest = path.join(archiveImagesDir, slug, path.basename(abs));
-  mkdirSync(path.dirname(dest), { recursive: true });
-  renameSync(abs, dest);
-  uploadsArchived++;
-  return webPath(dest);
+/** A card's JSON as a plain object, or null when it can't be read as one (bad
+ *  JSON, null, an array). The caller then keeps the file in history rather than
+ *  silently replacing it — never crash the sync, never lose a hand-edited card. */
+function readCard(file: string): Record<string, unknown> | null {
+  try {
+    const parsed = JSON.parse(readFileSync(file, "utf8"));
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed
+      : null;
+  } catch {
+    return null;
+  }
 }
 
-/** Move an archived upload back into bios-images; returns the card's new path.
- *  If the name was taken in the meantime, keep using the archived copy. */
-function restoreUpload(p: string): string {
-  const abs = resolveUpload(p);
-  if (!isInside(abs, archiveImagesDir) || !existsSync(abs)) return p;
-  const dest = path.join(imagesDir, path.basename(abs));
-  if (existsSync(dest)) return p;
-  mkdirSync(imagesDir, { recursive: true });
-  renameSync(abs, dest);
-  try {
-    rmdirSync(path.dirname(abs)); // drop the now-empty images/<slug>/ folder
-  } catch {
-    /* not empty — keep it */
-  }
-  uploadsRestored++;
-  return webPath(dest);
+/** Keep a superseded or unreadable card in history instead of overwriting or
+ *  deleting it. Names are unique even when one run moves several for a slug. */
+function moveToHistory(file: string, slug: string, kind: string): void {
+  mkdirSync(historyDir, { recursive: true });
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  let dest = path.join(historyDir, `${slug}.${stamp}.${kind}.json`);
+  for (let i = 2; existsSync(dest); i++)
+    dest = path.join(historyDir, `${slug}.${stamp}.${kind}-${i}.json`);
+  renameSync(file, dest);
+  superseded++;
 }
 
 for (const e of source) {
@@ -133,26 +121,30 @@ for (const e of source) {
   if (!slug) continue;
   wantSlugs.add(slug);
   const outPath = path.join(outDir, `${slug}.json`);
+  const archivedPath = path.join(archiveDir, `${slug}.json`);
 
   // Preserve manual fields from the existing card — or, for an entry that is back
-  // after a deletion, from its archived card (moving its upload back too).
+  // after a deletion, from its archived card.
   let prev: Record<string, unknown> = {};
-  let archivedCard = "";
+  let fromArchive = false;
   if (existsSync(outPath)) {
-    try {
-      prev = JSON.parse(readFileSync(outPath, "utf8"));
-    } catch {
-      /* malformed — treat as empty */
+    const live = readCard(outPath);
+    if (live) prev = live;
+    // An unreadable live card is kept in history, then rebuilt from Word below.
+    else moveToHistory(outPath, slug, "live-unreadable");
+    // An archived copy next to a live card is stale (the live card wins) — e.g. a
+    // card re-saved by hand while its .docx was gone. Keep it, out of the way.
+    if (existsSync(archivedPath))
+      moveToHistory(archivedPath, slug, "archived-stale");
+  } else if (existsSync(archivedPath)) {
+    const card = readCard(archivedPath);
+    if (card) {
+      prev = card;
+      fromArchive = true;
+    } else {
+      // Unreadable archived card: keep it in history and start a fresh card.
+      moveToHistory(archivedPath, slug, "archived-unreadable");
     }
-  } else if (existsSync(path.join(archiveDir, `${slug}.json`))) {
-    archivedCard = path.join(archiveDir, `${slug}.json`);
-    try {
-      prev = JSON.parse(readFileSync(archivedCard, "utf8"));
-    } catch {
-      /* malformed — start fresh */
-    }
-    if (typeof prev.portraitImage === "string" && prev.portraitImage)
-      prev.portraitImage = restoreUpload(prev.portraitImage);
   }
   const rolesOverride = prev.rolesOverride === true;
   const fp = Number(prev.facePosition);
@@ -221,42 +213,35 @@ for (const e of source) {
     details,
   };
 
-  if (next.portraitImage) keptImages.add(resolveUpload(next.portraitImage));
-
   const serialized = JSON.stringify(next, null, 2) + "\n";
   const existed = existsSync(outPath);
   if (!existed || readFileSync(outPath, "utf8") !== serialized) {
     writeFileSync(outPath, serialized);
     if (existed) updated++;
-    else if (archivedCard) restored++;
+    else if (fromArchive) restored++;
     else created++;
   }
-  if (archivedCard) unlinkSync(archivedCard);
+  if (fromArchive) unlinkSync(archivedPath);
 }
 
 // Reconcile: ARCHIVE the card of an entry whose .docx is gone (never a plain
-// delete), together with its portrait upload unless a live card still uses it.
+// delete). Its portrait upload stays where it is. If an archived card already
+// exists for that slug, keep the older copy in history rather than overwrite it.
 for (const f of readdirSync(outDir)) {
   if (!f.toLowerCase().endsWith(".json")) continue;
   const slug = path.basename(f, ".json");
   if (wantSlugs.has(slug)) continue;
   const cardPath = path.join(outDir, f);
   const dest = path.join(archiveDir, f);
-  mkdirSync(archiveDir, { recursive: true });
-  let card: Record<string, unknown> | null = null;
-  try {
-    card = JSON.parse(readFileSync(cardPath, "utf8"));
-  } catch {
-    /* malformed — archive the file as-is */
+  if (existsSync(dest)) {
+    if (readFileSync(dest, "utf8") === readFileSync(cardPath, "utf8")) {
+      unlinkSync(cardPath); // identical copy already archived
+      archived++;
+      continue;
+    }
+    moveToHistory(dest, slug, "archived-superseded");
   }
-  if (card) {
-    if (typeof card.portraitImage === "string" && card.portraitImage.trim())
-      card.portraitImage = archiveUpload(slug, card.portraitImage.trim());
-    writeFileSync(dest, JSON.stringify(card, null, 2) + "\n");
-    unlinkSync(cardPath);
-  } else {
-    renameSync(cardPath, dest);
-  }
+  renameSync(cardPath, dest);
   archived++;
 }
 
@@ -273,9 +258,10 @@ for (const f of readdirSync(portraitsDir)) {
 console.log(
   `entry-overrides: ${created} created, ${updated} updated, ${restored} restored, ${archived} archived, ${wantSlugs.size} total.`,
 );
-console.log(
-  `portrait uploads: ${uploadsArchived} archived, ${uploadsRestored} restored.`,
-);
+if (superseded)
+  console.log(
+    `archive: ${superseded} superseded/unreadable card(s) kept in history.`,
+  );
 console.log(
   `portraits: ${portraitsWritten} written, ${portraitsDeleted} deleted, ${portraitSlugs.size} total.`,
 );

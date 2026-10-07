@@ -62,7 +62,8 @@ and `src/pages/[...slug].astro` renders whichever form a page uses.
   from the Word files). Confirm the searchable list opens a card that shows the roles + details
   pre-filled from the Word file; the "Manual override of roles" and "Override details" toggles replace
   them; the Portrait override `image` widget uploads to `src/content/bios-images`; and Face position
-  saves. The cards are created/removed by `pnpm overrides:sync` (and the entry-overrides-sync CI job),
-  not by the editor.
+  saves. The cards are created by `pnpm overrides:sync` (and the entry-overrides-sync CI job), not by
+  the editor. When a `.docx` is deleted, its card is archived to `src/data/entry-overrides-archive/`
+  (portrait uploads stay in `src/content/bios-images`) and restored if the same file is uploaded again.
 - **Live login** — verify the "Sign in with Token" flow once with a real GitHub fine-grained token.
 - Do **not** merge to `main` / deploy until the live token login + a real edit are confirmed.

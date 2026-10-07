@@ -374,9 +374,10 @@ const docxEntryType: ContentEntryType = {
     // Image pipeline:
     //   src/assets/bios-extracted/<slug>.<ext>  — raw docx attachment, kept for
     //       reference so we can compare what the author shipped vs. what renders.
-    //   src/content/bios-images/<slug>.<ext>    — optional high-res override
-    //       (AI-upscaled or manually-sourced). When present, this is what
-    //       gets rendered.
+    //   src/content/bios-images/<file>          — optional high-res override
+    //       (AI-upscaled or manually-sourced), uploaded in the CMS. Used only
+    //       when the entry's card sets `portraitImage` to it (no file-name
+    //       convention); it is then what gets rendered.
     //   src/assets/bios/<slug>.<ext>            — the active image (override
     //       if available, else the extracted original). Site reads from here.
     //   src/assets/bios/<slug>-portrait.jpg     — face-detected portrait crop

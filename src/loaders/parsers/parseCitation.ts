@@ -104,8 +104,13 @@ export function parseCitation(content: any[]): ParserResult<{
   if (howToIdx >= 0 && !consumed.includes(howToIdx)) consumed.push(howToIdx);
 
   if (authors) {
-    const authorIdx = content.findIndex(
-      (c) =>
+    // Search BACKWARD from the citation: the standalone author line sits just
+    // above it, whereas a Literature list further up may also name the author
+    // (a self-citation) — the first match would consume that list instead and
+    // leave the real author line in the body.
+    const authorIdx = content.findLastIndex(
+      (c, i) =>
+        i < citationIdx &&
         c?.type === "paragraph" &&
         typeof c.text === "string" &&
         c.text.toLowerCase().includes(authors!.toLowerCase()),

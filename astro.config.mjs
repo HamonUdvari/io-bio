@@ -25,19 +25,13 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 
 import { devPdfRenderer } from "./scripts/dev-pdf-renderer.ts";
-import {
-  currentEntrySlugs,
-  readProductionDoiMap,
-  retiredEntries,
-} from "./src/utils/retiredEntries.ts";
+import { makeRetiredEntryMatcher } from "./src/utils/retiredEntries.ts";
 
-// Withdrawn-entry tombstones (src/utils/retiredEntries.ts) are noindex pages —
-// keep them out of the sitemap too.
-const RETIRED_ENTRY_PATHS = new Set(
-  retiredEntries(readProductionDoiMap(), currentEntrySlugs()).map(
-    (r) => `/entries/${r.slug}/`,
-  ),
-);
+// Withdrawn-entry tombstones are noindex pages — keep them out of the sitemap
+// too. The matching logic lives in src/utils/retiredEntries.ts on purpose:
+// astro.config.mjs is a sandbox print-template input, so editing it re-versions
+// every sandbox deposit.
+const isRetiredEntryPath = makeRetiredEntryMatcher();
 
 // Force `font-display: block` on every @font-face. Fontsource bakes in
 // `font-display: swap`, which briefly paints Roboto / Roboto Condensed text in a
@@ -157,7 +151,7 @@ export default defineConfig({
           !p.startsWith("/pdf-preview/") &&
           !p.startsWith("/admin") &&
           !p.endsWith(".json") &&
-          !RETIRED_ENTRY_PATHS.has(p.endsWith("/") ? p : `${p}/`)
+          !isRetiredEntryPath(p)
         );
       },
     }),

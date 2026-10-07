@@ -111,4 +111,16 @@ describe("parseCitation — Literature that cites other IO BIO entries", () => {
     expect(value.consumed).toContain(1); // the standalone author line
     expect(value.consumed).not.toContain(0); // Literature is left to parseAPL
   });
+
+  it("finds the author line even when the Literature names the author too", () => {
+    const selfCiting = {
+      type: "paragraph",
+      text:
+        "LITERATURE: Gusztáv D. Kecskés, The Hungarian Patent Office, Budapest " +
+        "2010; C. May, The World Intellectual Property Organization, London 2007.",
+    };
+    const { value } = parseCitation([selfCiting, author, citation]);
+    expect(value.consumed).toContain(1); // the real author line, nearest the citation
+    expect(value.consumed).not.toContain(0); // not the self-citing Literature
+  });
 });

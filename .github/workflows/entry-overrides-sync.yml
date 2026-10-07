@@ -1,10 +1,10 @@
-# Keeps the CMS "Roles & portraits (per entry)" cards (src/data/entry-overrides/
-# <slug>.json) in sync with the Word files: mirrors each entry's parsed roles +
-# display name so the CMS shows real data (WYSIWYG), creates a card for a new
-# .docx, and ARCHIVES the card of a removed .docx (with its portrait upload,
-# unless another card uses it) to src/data/entry-overrides-archive — restoring
-# both if the same .docx is uploaded again. Manual fields (the override toggle,
-# override roles, portrait image, face position) are always preserved.
+# Keeps the CMS "Bios" cards (src/data/entry-overrides/<slug>.json) in sync with
+# the Word files: mirrors each entry's parsed roles + details so the CMS shows
+# real data (WYSIWYG), creates a card for a new .docx, and ARCHIVES the card of a
+# removed .docx to src/data/entry-overrides-archive — restoring it if the same
+# .docx is uploaded again. Portrait uploads are never moved. Manual fields (the
+# override toggles, override roles, portrait image, face position) are always
+# preserved.
 #
 # The shipped SITE is always correct regardless of this job — the build reads the
 # live Word roles for non-override entries — so this only refreshes what the
@@ -45,10 +45,9 @@ jobs:
           node-version: "22"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      # Build emits dist/entry-roles.json (roles + display name via the real
-      # content loader). No LibreOffice/Chrome needed — we only read the roles,
-      # not images/PDFs.
-      - name: Build (emits dist/entry-roles.json)
+      # Build emits dist/entry-data.json (roles + details via the real content
+      # loader). No LibreOffice/Chrome needed — we only read the data, not PDFs.
+      - name: Build (emits dist/entry-data.json)
         run: pnpm run build
       - name: Sync + commit entry-overrides
         run: |
@@ -56,12 +55,12 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           # Re-sync on top of the LATEST main each attempt so a concurrent CMS
           # edit to an override card is preserved (sync keeps manual fields).
-          # dist/entry-roles.json is gitignored, so reset --hard keeps it.
+          # dist/entry-data.json is gitignored, so reset --hard keeps it.
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
             node scripts/sync-entry-overrides.ts
-            git add -A src/data/entry-overrides src/data/entry-overrides-archive src/content/bios-portraits src/content/bios-images
+            git add -A src/data/entry-overrides src/data/entry-overrides-archive src/content/bios-portraits
             if git diff --cached --quiet; then
               echo "entry-overrides already current"
               exit 0
