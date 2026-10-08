@@ -1,3 +1,11 @@
+## [1.27.2](https://github.com/HamonUdvari/io-bio/compare/v1.27.1...v1.27.2) (2026-10-08)
+
+
+### Bug Fixes
+
+* **entries:** review fixes — archive only the card, sitemap encoding, strict DOI map ([](https://github.com/HamonUdvari/io-bio/commit/911e7a135b9b0dde0cd831a57b339fe837624be5))
+* **zenodo:** never lose or overwrite minted DOIs when committing the map ([](https://github.com/HamonUdvari/io-bio/commit/7138f21a33464d1ffbc5d733f540847dfd79970a))
+
 ## [1.27.1](https://github.com/HamonUdvari/io-bio/compare/v1.27.0...v1.27.1) (2026-10-07)
 
 
