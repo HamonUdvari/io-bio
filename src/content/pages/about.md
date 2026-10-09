@@ -75,6 +75,7 @@ sections:
       * Thomas Hickmann :muted[(DE BOER)]
       * Martyn Housden :muted[(CROWDY)]
       * Maria Ivanova :muted[(TOLBA)]
+      * Gusztáv D. Kecskés :muted[(BOGSCH)]
       * Aynsley Kellow :muted[(JOHNSTON)]
       * Michael Kennedy :muted[(LESTER)]
       * Matthieu Leimgruber :muted[(VAN LENNEP)]
