@@ -39,6 +39,7 @@ on:
       # uploaded portraits, and the acronym map (roles → record keywords).
       - "src/content/globals/citation.md"
       - "src/data/entry-overrides/**"
+      - "src/data/entry-overrides-archive/**" # the loader's fallback for a re-added entry
       - "src/content/bios-images/**"
       - "src/data/org-abbreviations.json"
       # Rights note (single source) → folded into the state hash (see
@@ -158,6 +159,13 @@ jobs:
             # workflow's `paths:`, and Deploy makes no commits.
             echo "dispatching Deploy"
             gh workflow run deploy.yml --ref main
+            # A record CREATED in this run has no citation in its first PDF: the
+            # build ran before its DOI existed. One more refresh re-versions just
+            # those records with the citation; it creates nothing, so it stops.
+            if node -e 'const [b, o] = process.argv.slice(1).map((f) => Object.keys(JSON.parse(require("fs").readFileSync(f, "utf8")))); process.exit(o.some((k) => !b.includes(k)) ? 0 : 1)' "$RUNNER_TEMP/base-map.json" "$RUNNER_TEMP/doi-map.json"; then
+              echo "records created; dispatching one more sandbox refresh"
+              gh workflow run zenodo-sandbox-refresh.yml --ref main
+            fi
             exit 0
           done
           echo "::error::could not push refreshed sandbox map after 5 attempts"

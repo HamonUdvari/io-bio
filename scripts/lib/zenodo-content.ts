@@ -59,11 +59,6 @@ export function citeKind(cite: unknown): "none" | "sandbox" | "doi" {
 }
 
 const str = (v: unknown) => (typeof v === "string" ? v : "");
-const list = (x: any) => ({
-  items: (x?.items ?? []).map((i: any) => str(i?.raw)),
-  accessedOn: str(x?.websitesAccessedOn),
-  note: str(x?.websitesNote),
-});
 
 /**
  * What the PDF and the record metadata show for one entry. Raw values where the
@@ -83,13 +78,18 @@ export function pdfContent(d: Data, opts: { citationEditors?: string } = {}) {
     imageSource: str(d.imageSource),
     authors: str(d.authors),
     editors: str(d.editors),
-    // The CMS default the template prints when the entry has no editors.
-    citationEditors: str(opts.citationEditors),
+    // The CMS default, which the template prints only when the entry has no
+    // editors of its own.
+    citationEditors: str(d.editors).trim() ? "" : str(opts.citationEditors),
     version: str(d.version),
-    archives: list(d.archives),
-    publications: list(d.publications),
-    literature: list(d.literature),
-    body: str(d.body).replace(/\s+/g, " ").trim(),
+    // Whole list objects (items + footers), so a new list field is covered too.
+    archives: d.archives ?? null,
+    publications: d.publications ?? null,
+    literature: d.literature ?? null,
+    // Collapse only ASCII whitespace: an NBSP change still counts.
+    body: str(d.body)
+      .replace(/[ \t\n\r\f]+/g, " ")
+      .trim(),
     nationality: str(d.nationality),
     roles: (d.roles ?? []).map((r: any) => ({
       title: str(r?.title),

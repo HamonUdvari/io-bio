@@ -129,7 +129,8 @@ function readRightsNote(): string {
 }
 
 // Files + dirs that determine the rendered PDF's VISUAL output: the Paged.js
-// print route, the article template + its helpers (Image, displayName), the
+// print route, the article template + its helpers (Image, displayName,
+// imageSource), the rights notice it renders, the PDF print options, the
 // stylesheet, the Astro/Vite config, and the remark/rehype plugins that
 // transform the biography-body markdown into the rendered HTML. Hashing them all
 // gives a "render version" that, folded into the SANDBOX idempotency hash, makes
@@ -145,6 +146,8 @@ const PRINT_TEMPLATE_FILES = [
   "src/components/Image.astro",
   "src/utils/displayName.ts",
   "src/utils/imageSource.ts",
+  "src/content/globals/rights.md",
+  "scripts/zenodo-render-pdfs.ts",
   "astro.config.mjs",
 ];
 const PRINT_TEMPLATE_DIRS = ["src/remarkPlugins", "src/rehypePlugins"];

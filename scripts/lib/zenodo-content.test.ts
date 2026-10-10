@@ -34,7 +34,7 @@ function loaderFields(): string[] {
   const start = src.indexOf("const data = {");
   const block = src.slice(start, src.indexOf("\n    };", start));
   const keys = [...block.matchAll(/^ {6}(\w+)[:,]/gm)].map((m) => m[1]);
-  for (const m of src.matchAll(/\(data as Record<string, unknown>\)\.(\w+) =/g))
+  for (const m of src.matchAll(/\(data as [^)]*\)\.(\w+)\s*=/g))
     keys.push(m[1]);
   return keys;
 }
@@ -44,7 +44,7 @@ function schemaFields(): string[] {
   const src = repo("src/content.config.ts");
   const start = src.indexOf("export const bioDataSchema = z.object({");
   const block = src.slice(start, src.indexOf("\n});", start));
-  return [...block.matchAll(/^ {2}(\w+): z\./gm)].map((m) => m[1]);
+  return [...block.matchAll(/^ {2}(\w+):/gm)].map((m) => m[1]);
 }
 
 const base = () => ({
@@ -108,13 +108,26 @@ const CHANGE: Record<(typeof HASHED_FIELDS)[number], (d: Entry) => void> = {
 };
 
 describe("pdfContentHash field coverage", () => {
+  // Sentinels: each extraction must find these, or its regex has broken.
   it.each([
-    ["the loader stores", loaderFields],
-    ["the schema declares", schemaFields],
-    ["the template reads", templateFields],
-  ])("lists every field %s", (_, fields) => {
+    [
+      "the loader stores",
+      loaderFields,
+      ["title", "body", "imageHash", "zenodoCite", "literature"],
+    ],
+    [
+      "the schema declares",
+      schemaFields,
+      ["title", "image", "archives", "zenodoCite", "imageHash"],
+    ],
+    [
+      "the template reads",
+      templateFields,
+      ["lastName", "archives", "imageFn", "zenodoCite"],
+    ],
+  ])("lists every field %s", (_, fields, sentinels) => {
     const found = fields();
-    expect(found.length).toBeGreaterThan(5);
+    expect(found).toEqual(expect.arrayContaining(sentinels));
     expect(found.filter((f) => !LISTED.has(f))).toEqual([]);
   });
 
@@ -172,8 +185,23 @@ describe("pdfContentHash details", () => {
     expect(hash(d)).not.toBe(hash(base()));
   });
 
-  it("re-versions when the CMS default editors change", () => {
-    expect(hash(base(), "edited by Y")).not.toBe(hash(base()));
+  it("hashes the CMS default editors only when the entry has none", () => {
+    expect(hash(base(), "edited by Y")).toBe(hash(base()));
+    const none = base();
+    none.editors = " ";
+    expect(hash(none, "edited by Y")).not.toBe(hash(none));
+  });
+
+  it("counts an NBSP change in the body", () => {
+    const d = base();
+    d.body = d.body.replace("Alpha was", "Alpha\u00a0was");
+    expect(hash(d)).not.toBe(hash(base()));
+  });
+
+  it("covers a new list field", () => {
+    const d = base() as any;
+    d.archives.newField = "x";
+    expect(hash(d)).not.toBe(hash(base()));
   });
 
   it("ignores whitespace-only body changes", () => {
