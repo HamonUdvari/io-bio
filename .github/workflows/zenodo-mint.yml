@@ -53,6 +53,10 @@ jobs:
         with:
           chrome-version: stable
       - name: Build (emits dist/zenodo-meta.json + entry pages)
+        # A production build skips the sandbox citation fallback, so the
+        # production PDFs never cite a sandbox record (see docxLoader.ts).
+        env:
+          ZENODO_MINT_ENV: ${{ inputs.env }}
         run: pnpm run build
       - name: Mint
         id: mint

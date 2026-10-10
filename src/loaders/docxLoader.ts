@@ -65,7 +65,13 @@ function loadSandboxMap(): Record<string, SandboxEntry> {
     return {};
   }
 }
-const SANDBOX_MAP = loadSandboxMap();
+// The production mint builds with ZENODO_MINT_ENV=production
+// (.github/workflows/zenodo-mint.yml): its PDFs must never print the sandbox
+// preview citation, so that build skips this map. An entry then prints no
+// per-entry citation until it has a production DOI; the citation kind is in the
+// content hash, so the next production mint adds the doi.org citation.
+const SANDBOX_MAP =
+  process.env.ZENODO_MINT_ENV === "production" ? {} : loadSandboxMap();
 
 // --- Per-entry override (src/data/entry-overrides/<slug>.json) ----------------
 // One CMS-editable JSON file per entry (a folder collection), reconciled 1:1

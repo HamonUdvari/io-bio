@@ -275,6 +275,29 @@ async function main() {
     meta = meta.slice(0, args.limit);
   }
 
+  // Production PDFs must never cite a sandbox record. The build reads the
+  // sandbox map as a citation preview unless ZENODO_MINT_ENV=production, so
+  // check the built print pages themselves (dry runs too).
+  if (args.env === "production") {
+    const bad = meta
+      .map((e) => e.slug)
+      .filter((slug) => {
+        const f = path.resolve("dist/print", slug, "index.html");
+        return (
+          !existsSync(f) ||
+          readFileSync(f, "utf8").includes("sandbox.zenodo.org")
+        );
+      });
+    if (bad.length) {
+      console.error(
+        `Refusing to mint PRODUCTION DOIs: ${bad.length} print page(s) are missing or cite ` +
+          `a sandbox record (${bad.slice(0, 5).join(", ")}${bad.length > 5 ? ", …" : ""}). ` +
+          "Rebuild with ZENODO_MINT_ENV=production first.",
+      );
+      process.exit(1);
+    }
+  }
+
   const state = loadState(args.env);
 
   // Plan
