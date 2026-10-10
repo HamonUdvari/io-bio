@@ -52,41 +52,50 @@ export function extractSectionNodes(
 // semicolons in path/query — e.g. ".../;search?q=foo").
 const ITEM_SEPARATOR_RE = /;(?:\s+|$)/;
 
+// A "simple" bracketed note: "(…)" or "[…]" with no other bracket inside.
+const SIMPLE_BRACKETS_RE = /\([^()[\]]*\)|\[[^()[\]]*\]/g;
+
 /**
- * Split a section's text at ITEM_SEPARATOR_RE, but only outside round and
- * square brackets, so a `;` inside a bracketed note stays in its item:
+ * Split a section's text at ITEM_SEPARATOR_RE, except for a `;` inside a
+ * simple bracketed note, so the note stays in its item:
  * "Brev, Oslo 1961-1971 (5 volumes: 1882-1895; 1896-1905)" is one item.
  *
- * If the brackets don't pair up (a stray ")" or an unclosed "(", which a few
- * source docs have), the depth can't be trusted, so the whole text falls back
- * to the plain ITEM_SEPARATOR_RE split, i.e. the previous behaviour.
+ * Deliberately conservative, because the brackets come from hand-typed Word
+ * text: a `;` inside nested or mismatched brackets still splits, and if the
+ * section's brackets don't balance (a stray ")" or an unclosed "(", which a few
+ * source docs have) the whole text keeps the plain split, i.e. the previous
+ * behaviour. So a missing "(" plus a stray ")" can never merge two works.
  */
 export function splitAPLText(text: string): string[] {
-  const parts: string[] = [];
   let depth = 0;
+  for (const ch of text) {
+    if (ch === "(" || ch === "[") depth++;
+    else if ((ch === ")" || ch === "]") && --depth < 0) break;
+  }
+  if (depth !== 0) return text.split(ITEM_SEPARATOR_RE);
+
+  const keep = new Set<number>();
+  for (const m of text.matchAll(SIMPLE_BRACKETS_RE))
+    for (let i = m.index; i < m.index + m[0].length; i++)
+      if (text[i] === ";") keep.add(i);
+
+  const parts: string[] = [];
   let start = 0;
   for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (ch === "(" || ch === "[") {
-      depth++;
-    } else if (ch === ")" || ch === "]") {
-      if (depth === 0) return text.split(ITEM_SEPARATOR_RE);
-      depth--;
-    } else if (
-      ch === ";" &&
-      depth === 0 &&
+    if (
+      text[i] === ";" &&
+      !keep.has(i) &&
       (i + 1 === text.length || /\s/.test(text[i + 1]))
     ) {
       parts.push(text.slice(start, i));
       start = i + 1;
     }
   }
-  if (depth !== 0) return text.split(ITEM_SEPARATOR_RE);
   parts.push(text.slice(start));
   return parts;
 }
 
-const WEBSITES_ACCESSED_RE =/\(\s*all\s+websites\s+accessed\s+([^)]+)\)\s*\.?\s*$/i;
+const WEBSITES_ACCESSED_RE = /\(\s*all\s+websites\s+accessed\s+([^)]+)\)\s*\.?\s*$/i;
 
 /**
  * Split a section's raw text into Citation items.

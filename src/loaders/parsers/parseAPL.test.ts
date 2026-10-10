@@ -56,21 +56,43 @@ describe("semicolons inside brackets", () => {
     ).toEqual(["Papers are located at the UN Archives (http://archives.un.org; search term ‘Gardiner’)"]);
   });
 
-  it("handles nested and square brackets", () => {
-    expect(raws("A (vol. 1 (1990; 1991); vol. 2), 1992; B, 1995")).toEqual([
-      "A (vol. 1 (1990; 1991); vol. 2), 1992",
-      "B, 1995",
-    ]);
+  it("handles square brackets", () => {
     expect(raws("A [with notes; more notes], 1990; B, 1995")).toEqual([
       "A [with notes; more notes], 1990",
       "B, 1995",
     ]);
   });
 
-  it("falls back to the plain split when brackets don't pair", () => {
+  it("only keeps a ';' inside a SIMPLE bracketed note (no bracket inside it)", () => {
+    // The inner simple note stays whole; the outer, nested one still splits.
+    expect(raws("A (vol. 1 (1990; 1991); vol. 2), 1992; B, 1995")).toEqual([
+      "A (vol. 1 (1990; 1991)",
+      "vol. 2), 1992",
+      "B, 1995",
+    ]);
+    // A forgotten "(" + a later stray ")" must not merge separate works.
+    expect(raws("A (with X; B, 1995; C (Lecture, 2003) at www.y.org/z); D, 2004")).toEqual([
+      "A (with X",
+      "B, 1995",
+      "C (Lecture, 2003) at www.y.org/z)",
+      "D, 2004",
+    ]);
+    // Mismatched bracket types don't count as a note.
+    expect(raws("A (x; y]; B")).toEqual(["A (x", "y]", "B"]);
+  });
+
+  it("falls back to the plain split when brackets don't balance", () => {
     // A stray ")" (as in a few source docs) or an unclosed "(".
     expect(raws("A, 1990); B (x; y), 1995; C")).toEqual(["A, 1990)", "B (x", "y), 1995", "C"]);
     expect(raws("A (open; B, 1995; C")).toEqual(["A (open", "B, 1995", "C"]);
+    // The real shape: the stray ")" comes after earlier items and notes.
+    expect(raws("A; B (x; y), 1990; C, www.z.org); D")).toEqual([
+      "A",
+      "B (x",
+      "y), 1990",
+      "C, www.z.org)",
+      "D",
+    ]);
   });
 
   it("still keeps a URL that contains ';' whole", () => {
@@ -85,7 +107,7 @@ describe("semicolons inside brackets", () => {
   });
 
   it("matches the previous split on text without brackets", () => {
-    for (const s of ["A; B; C", "A;  B;", "A;\tB", "x;y; z", "", ";", "A; ; B"])
+    for (const s of ["A; B; C", "A;  B;", "A;\tB", "A; B", "A;\nB", "x;y; z", "", ";", "A; ; B"])
       expect(splitAPLText(s).map((p) => p.trim())).toEqual(
         s.split(/;(?:\s+|$)/).map((p) => p.trim()),
       );
