@@ -21,6 +21,7 @@ import {
   versionLabel,
 } from "./lib/zenodo-metadata.ts";
 import type { MetaEntry, MetadataConfig } from "./lib/zenodo-metadata.ts";
+import { pruneDraftFiles } from "./lib/zenodo-files.ts";
 import { loadState, saveState } from "./lib/zenodo-state.ts";
 import type { DoiRecord } from "./lib/zenodo-state.ts";
 import { renderPdfs } from "./zenodo-render-pdfs.ts";
@@ -405,10 +406,26 @@ async function main() {
         const bucket = draft.links.bucket;
         if (!bucket) throw new Error("no bucket link on new-version draft");
         await zen.uploadFile(bucket, filename, bytes); // same filename overwrites
+        // The draft starts with a copy of the previous version's files: drop
+        // everything but the entry PDF (e.g. the legacy "<slug>.pdf").
+        await pruneDraftFiles(
+          zen,
+          draftId,
+          filename,
+          (m) => console.warn(`  ! ${e.slug}: ${m}`),
+          (m) => console.log(`  ${e.slug}: ${m}`),
+        );
         await zen.updateMetadata(draftId, metadata);
         published = await zen.publish(draftId);
         conceptDoi = published.conceptdoi ?? prev.conceptDoi;
       }
+
+      // Warn if the published version doesn't hold exactly the entry PDF.
+      const files = published.files?.map((f: any) => f.filename ?? f.key);
+      if (files && (files.length !== 1 || files[0] !== filename))
+        console.warn(
+          `  ! ${e.slug}: published with files [${files.join(", ")}]`,
+        );
 
       const record: DoiRecord = {
         recordId: published.id,

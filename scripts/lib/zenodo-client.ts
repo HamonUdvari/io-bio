@@ -19,6 +19,15 @@ export interface Deposition {
   [k: string]: any;
 }
 
+/** One file of a deposition, as GET /deposit/depositions/:id/files lists it. */
+export interface DepositionFile {
+  id: string;
+  filename: string;
+  filesize?: number;
+  checksum?: string;
+  links?: { self?: string; download?: string };
+}
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export function createZenodoClient(opts: ZenodoClientOptions) {
@@ -55,12 +64,15 @@ export function createZenodoClient(opts: ZenodoClientOptions) {
       payload = o.body as any;
     }
 
-    // Only GET/PUT are safe to auto-retry on a network error or 5xx: a lost
-    // response to a non-idempotent POST (create/publish/newversion) may mean
-    // the write actually succeeded server-side, so retrying could mint a
-    // DUPLICATE permanent DOI. 429 is a pre-processing rate-limit rejection
-    // (the request wasn't executed), so it's safe to retry for any method.
-    const idempotent = method === "GET" || method === "PUT";
+    // Only GET/PUT/DELETE are safe to auto-retry on a network error or 5xx: a
+    // lost response to a non-idempotent POST (create/publish/newversion) may
+    // mean the write actually succeeded server-side, so retrying could mint a
+    // DUPLICATE permanent DOI. (A retried DELETE that already succeeded gets a
+    // 404, which the caller treats as done.) 429 is a pre-processing rate-limit
+    // rejection (the request wasn't executed), so it's safe to retry for any
+    // method.
+    const idempotent =
+      method === "GET" || method === "PUT" || method === "DELETE";
     let attempt = 0;
     for (;;) {
       await throttle();
@@ -134,6 +146,20 @@ export function createZenodoClient(opts: ZenodoClientOptions) {
     /** Start a new version draft of a published record. */
     newVersion: (id: number): Promise<Deposition> =>
       request("POST", `/deposit/depositions/${id}/actions/newversion`),
+
+    /** List an unpublished draft's files. */
+    listFiles: (id: number): Promise<DepositionFile[]> =>
+      request("GET", `/deposit/depositions/${id}/files`),
+
+    /** Delete one file from an unpublished draft. The token goes only to this
+     *  API: the listing's self link is used only when it points here. */
+    deleteFile: (id: number, f: DepositionFile): Promise<any> =>
+      f.links?.self?.startsWith(`${baseUrl}/deposit/depositions/${id}/files/`)
+        ? request("DELETE", f.links.self, { absolute: true })
+        : request(
+            "DELETE",
+            `/deposit/depositions/${id}/files/${encodeURIComponent(f.id)}`,
+          ),
 
     /** Discard an unpublished draft (clears a dangling new-version draft). */
     discard: (id: number): Promise<any> =>
