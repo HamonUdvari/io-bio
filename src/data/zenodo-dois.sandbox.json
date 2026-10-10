@@ -232,14 +232,14 @@
     "authors": "Jaci Leigh Eisenberg"
   },
   "candau-mg-2015": {
-    "recordId": 618650,
+    "recordId": 618713,
     "conceptRecId": 506443,
     "conceptDoi": "10.5072/zenodo.506443",
-    "versionDoi": "10.5072/zenodo.618650",
-    "contentHash": "sha256:1dfaae98292e94919597b80fed763c9ad82f84afa511cded30d8cb0402a3ceab",
+    "versionDoi": "10.5072/zenodo.618713",
+    "contentHash": "sha256:559e3b70b7443385a93c4c47195e3ef5eb8ecea31e7c2b3b7ce6d867788048ba",
     "status": "published",
     "version": "18 October 2015",
-    "mintedAt": "2026-10-10T19:00:32.479Z",
+    "mintedAt": "2026-10-10T23:24:23.071Z",
     "env": "sandbox",
     "title": "CANDAU, Marcolino Gomes",
     "authors": "Marcos Cueto and Bob Reinalda"
@@ -440,14 +440,14 @@
     "authors": "Chloé Maurel"
   },
   "gardiner-r-2014": {
-    "recordId": 617892,
+    "recordId": 618714,
     "conceptRecId": 506475,
     "conceptDoi": "10.5072/zenodo.506475",
-    "versionDoi": "10.5072/zenodo.617892",
-    "contentHash": "sha256:0ac6850f82112ee2b355a3afa773e257936a4c0b2c0ed33243bbd8faa82936cf",
+    "versionDoi": "10.5072/zenodo.618714",
+    "contentHash": "sha256:1955910baddb25324d79082336bb3d3f619b514b5a71266c0a888fdd4dd624ee",
     "status": "published",
     "version": "28 May 2014",
-    "mintedAt": "2026-10-08T08:00:43.589Z",
+    "mintedAt": "2026-10-10T23:24:28.300Z",
     "env": "sandbox",
     "title": "GARDINER, Robert Kweku Atta",
     "authors": "Samuel Misteli"
