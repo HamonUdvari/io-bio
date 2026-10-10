@@ -439,6 +439,19 @@ const docxEntryType: ContentEntryType = {
       imageFn = fn;
     }
 
+    // sha256 of the portrait's ORIGINAL bytes (the docx attachment before any
+    // LibreOffice conversion, or the CMS override file). Part of the Zenodo
+    // content hash (scripts/lib/zenodo-content.ts), so a new portrait
+    // re-versions the deposit.
+    let imageHash = "";
+    if (activeSrc) {
+      const original =
+        activeSrc === extractedPath && extracted?.imageAttachment
+          ? Buffer.from(extracted.imageAttachment.base64, "base64")
+          : readFileSync(activeSrc);
+      imageHash = createHash("sha256").update(original).digest("hex");
+    }
+
     // 4) Generate the face-detected portrait crop next to the active image.
     // The crop cache is keyed on a signature of the ACTIVE image + the
     // subject-face override, so a changed source (a new override, a re-upload,
@@ -517,6 +530,7 @@ const docxEntryType: ContentEntryType = {
       image: {},
       imageFn,
       imagePortraitFn,
+      imageHash,
       imageSource: detailVal("imageSource") ?? "",
       life: detailVal("life") ?? "",
       introNotes: extracted?.introNotes ?? [],

@@ -143,6 +143,7 @@ const PRINT_TEMPLATE_FILES = [
   "src/components/EntryArticle.astro",
   "src/components/Image.astro",
   "src/utils/displayName.ts",
+  "src/utils/imageSource.ts",
   "astro.config.mjs",
 ];
 const PRINT_TEMPLATE_DIRS = ["src/remarkPlugins", "src/rehypePlugins"];

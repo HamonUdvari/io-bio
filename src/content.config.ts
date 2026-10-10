@@ -55,6 +55,8 @@ export const bioDataSchema = z.object({
   imageSource: z.string().optional(),
   imageFn: z.string().optional(),
   imagePortraitFn: z.string().optional(),
+  // sha256 of the portrait's original bytes (Zenodo content hash input).
+  imageHash: z.string().optional(),
   life: z.string(),
   // Extra intro paragraph(s) shown in the grey header after the vitals (name
   // notes, ennoblements, pseudonyms) — see docxLoader / extractAll.

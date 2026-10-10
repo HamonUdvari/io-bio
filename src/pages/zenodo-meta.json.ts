@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
-import { createHash } from "node:crypto";
+import { frontmatter as citation } from "@content/globals/citation.md";
+import { pdfContentHash } from "../../scripts/lib/zenodo-content.ts";
 
 // Build-time data source for the Zenodo per-entry minting pipeline
 // (`scripts/zenodo-mint.ts`). Emitted as a static `dist/zenodo-meta.json` so the
@@ -8,9 +9,10 @@ import { createHash } from "node:crypto";
 // content collection the pages use) without re-running the DOCX parsers or
 // importing Astro internals. It contains only public entry metadata.
 //
-// `contentHash` is a signature over the biography's *content* (not the site's
-// CSS/chrome), so a real content edit produces a new hash → a new Zenodo
-// version on the next mint, while cosmetic site changes do not churn versions.
+// `contentHash` is a signature over exactly what the entry PDF and the record
+// metadata show (pdfContentHash, scripts/lib/zenodo-content.ts): a change a
+// reader can see produces a new hash → a new Zenodo version on the next mint,
+// while site chrome (CSS, layout) does not churn versions.
 export const prerender = true;
 
 export const GET: APIRoute = async () => {
@@ -24,22 +26,9 @@ export const GET: APIRoute = async () => {
       organisation: r.organisation ?? "",
     }));
 
-    const contentHash =
-      "sha256:" +
-      createHash("sha256")
-        .update(
-          JSON.stringify({
-            html: d.html ?? "",
-            summary: d.summary ?? "",
-            life: d.life ?? "",
-            version: d.version ?? "",
-            authors: d.authors ?? "",
-            editors: d.editors ?? "",
-            nationality: d.nationality ?? "",
-            roles,
-          }),
-        )
-        .digest("hex");
+    const contentHash = pdfContentHash(d, {
+      citationEditors: citation.editors,
+    });
 
     return {
       slug: b.id,

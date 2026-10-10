@@ -24,6 +24,7 @@ on:
       - "src/components/EntryArticle.astro"
       - "src/components/Image.astro"
       - "src/utils/displayName.ts"
+      - "src/utils/imageSource.ts"
       - "src/remarkPlugins/**"
       - "src/rehypePlugins/**"
       - "astro.config.mjs"
@@ -33,6 +34,13 @@ on:
       - "patches/**" # dependency patches, e.g. the officeparser Word-parsing fix
       - "src/content.config.ts"
       - "src/pages/zenodo-meta.json.ts"
+      # Also in the content hash (scripts/lib/zenodo-content.ts): the CMS
+      # default editors, per-entry overrides (details, roles, portrait choice),
+      # uploaded portraits, and the acronym map (roles → record keywords).
+      - "src/content/globals/citation.md"
+      - "src/data/entry-overrides/**"
+      - "src/content/bios-images/**"
+      - "src/data/org-abbreviations.json"
       # Rights note (single source) → folded into the state hash (see
       # computeStateHash), so a CMS edit re-versions the deposits.
       - "src/content/globals/rights.md"
@@ -146,7 +154,8 @@ jobs:
             # a new workflow run (GitHub's recursion guard), and `[skip ci]` makes that
             # explicit. So we DISPATCH Deploy ourselves — workflow_dispatch IS exempt
             # from that guard, even via GITHUB_TOKEN (needs `actions: write`). No loop:
-            # src/data isn't in this workflow's `paths:`, and Deploy makes no commits.
+            # this GITHUB_TOKEN push starts no workflow, the map file isn't in this
+            # workflow's `paths:`, and Deploy makes no commits.
             echo "dispatching Deploy"
             gh workflow run deploy.yml --ref main
             exit 0
