@@ -55,18 +55,58 @@ const ITEM_SEPARATOR_RE = /;(?:\s+|$)/;
 // A "simple" bracketed note: "(…)" or "[…]" with no other bracket inside.
 const SIMPLE_BRACKETS_RE = /\([^()[\]]*\)|\[[^()[\]]*\]/g;
 
+const QUOTE_OPEN = "‘";
+const QUOTE_CLOSE = "’";
+
+/**
+ * Positions of the `;`s inside a quoted title ‘…’, which stay in their item.
+ * A title ends at the first ’ that is not inside a nested “…” and has no
+ * letter or digit after it ("Don’t" and "UNHCR’s" don't end it). Another ‘ or
+ * any bracket before that means no title, so an unclosed ‘ can't swallow the
+ * next works. An unbalanced “” never ends (conservative).
+ */
+function quotedTitleSemicolons(text: string): number[] {
+  const found: number[] = [];
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] !== QUOTE_OPEN) continue;
+    let doubleDepth = 0;
+    const semicolons: number[] = [];
+    for (let j = i + 1; j < text.length; j++) {
+      const ch = text[j];
+      if (ch === QUOTE_OPEN || "()[]".includes(ch)) break;
+      if (ch === "“") doubleDepth++;
+      else if (ch === "”") doubleDepth--;
+      else if (ch === ";") semicolons.push(j);
+      else if (
+        ch === QUOTE_CLOSE &&
+        doubleDepth === 0 &&
+        !/[\p{L}\p{N}]/u.test(text[j + 1] ?? "")
+      ) {
+        found.push(...semicolons);
+        i = j;
+        break;
+      }
+    }
+  }
+  return found;
+}
+
 /**
  * Split a section's text at ITEM_SEPARATOR_RE, except for a `;` inside a
- * simple bracketed note, so the note stays in its item:
- * "Brev, Oslo 1961-1971 (5 volumes: 1882-1895; 1896-1905)" is one item.
+ * simple bracketed note or a quoted title, so it stays in its item:
+ * "Brev, Oslo 1961-1971 (5 volumes: 1882-1895; 1896-1905)" is one item, and so
+ * is "‘Cole of New York Heads Atom Group; 2-Month Deadlock Is Broken …’ in The
+ * New York Times, 2 April 1953, 14" (quotedTitleSemicolons).
  *
  * Deliberately conservative, because the brackets come from hand-typed Word
  * text: a `;` inside nested or mismatched brackets still splits, and if the
  * section's brackets don't balance (a stray ")" or an unclosed "(", which a few
  * source docs have) the whole text keeps the plain split, i.e. the previous
- * behaviour. Known limit: a forgotten ")" followed later in the same section
- * by a stray ")", with no other bracket in between, balances and so reads as
- * one note (the works between them become one item; no text is lost).
+ * behaviour. Known limits (the works between become one item; no text is
+ * lost): a forgotten ")" followed later in the same section by a stray ")",
+ * with no other bracket in between, balances and so reads as one note; and a
+ * forgotten ’ followed later by a plural possessive ("Peoples’ Bank"), with no
+ * other ‘ or bracket in between, reads as the end of the title.
  */
 export function splitAPLText(text: string): string[] {
   let depth = 0;
@@ -80,6 +120,7 @@ export function splitAPLText(text: string): string[] {
   for (const m of text.matchAll(SIMPLE_BRACKETS_RE))
     for (let i = m.index; i < m.index + m[0].length; i++)
       if (text[i] === ";") keep.add(i);
+  for (const i of quotedTitleSemicolons(text)) keep.add(i);
 
   const parts: string[] = [];
   let start = 0;
@@ -104,7 +145,7 @@ const WEBSITES_ACCESSED_RE = /\(\s*all\s+websites\s+accessed\s+([^)]+)\)\s*\.?\s
  *
  *  - Pulls off an "(all websites accessed ...)" trailing footer if present.
  *  - Splits at `;` + whitespace — the format the Author Instructions specify
- *    for citations — but not inside brackets (splitAPLText).
+ *    for citations — but not inside brackets or quoted titles (splitAPLText).
  *  - Trims each piece, discards empties.
  */
 export function parseAPLItems(rawText: string): APLSectionData {

@@ -122,3 +122,110 @@ describe("semicolons inside brackets", () => {
       );
   });
 });
+
+describe("semicolons inside quoted titles", () => {
+  const raws = (text: string) => parseAPLItems(text).items.map((i) => i.raw);
+
+  it("keeps a headline and its subtitle in one item (Cole)", () => {
+    expect(
+      raws(
+        "J.D. Morris, ‘Cole of New York Heads Atom Group; 2-Month Deadlock Is Broken as Chairmanship of Joint Unit Goes to House Member’ in The New York Times, 2 April 1953, 14; B, 1995",
+      ),
+    ).toEqual([
+      "J.D. Morris, ‘Cole of New York Heads Atom Group; 2-Month Deadlock Is Broken as Chairmanship of Joint Unit Goes to House Member’ in The New York Times, 2 April 1953, 14",
+      "B, 1995",
+    ]);
+  });
+
+  it("doesn't end the title at an apostrophe (Orfila)", () => {
+    expect(
+      raws(
+        "D. Langdon, ‘The Orfilas Don’t Have to Look for the Party; If It’s in D.C., They’re Probably Giving It’ in People’s Magazine, 6 August 1976; B, 1995",
+      ),
+    ).toEqual([
+      "D. Langdon, ‘The Orfilas Don’t Have to Look for the Party; If It’s in D.C., They’re Probably Giving It’ in People’s Magazine, 6 August 1976",
+      "B, 1995",
+    ]);
+  });
+
+  it("allows a nested double-quoted name (Spaak)", () => {
+    expect(
+      raws(
+        "W.H. Waggoner, ‘“Mr. Europe” Surveys the Future; Paul-Henri Spaak, the new Secretary General of NATO’ in The New York Times Magazine, 7 April 1957, 14+; B, 1995",
+      ),
+    ).toEqual([
+      "W.H. Waggoner, ‘“Mr. Europe” Surveys the Future; Paul-Henri Spaak, the new Secretary General of NATO’ in The New York Times Magazine, 7 April 1957, 14+",
+      "B, 1995",
+    ]);
+  });
+
+  it("keeps the ';' before a plural possessive that ends the title early (Annan)", () => {
+    // "Nations’ " reads as the title's end; the ';' before it is still inside.
+    expect(
+      raws(
+        "‘Strategies for World Peace: The View of the UN Secretary-General; The United Nations’ Priorities for the Future’ in The Futurist, 36/3, May 2002, 18-21; B, 1995",
+      ),
+    ).toEqual([
+      "‘Strategies for World Peace: The View of the UN Secretary-General; The United Nations’ Priorities for the Future’ in The Futurist, 36/3, May 2002, 18-21",
+      "B, 1995",
+    ]);
+  });
+
+  it("still splits after an unclosed quote followed by another quote (Clausen)", () => {
+    expect(
+      raws(
+        "C.H. Farnsworth, ‘Clausen Soothes Foes, Keeps Backers in The New York Times, 12 April 1982, D1, D8; A. Pine, ‘Clausen Holds World Bank’s Course’ in The Wall Street Journal, 13 May 1982",
+      ),
+    ).toEqual([
+      "C.H. Farnsworth, ‘Clausen Soothes Foes, Keeps Backers in The New York Times, 12 April 1982, D1, D8",
+      "A. Pine, ‘Clausen Holds World Bank’s Course’ in The Wall Street Journal, 13 May 1982",
+    ]);
+  });
+
+  it("still splits after an unclosed quote followed by a bracket (Prebisch)", () => {
+    expect(
+      raws(
+        "M. Vernengo, ‘Portrait of the Economist as a Young Man: Raúl Prebisch’s Evolving Views, 1919-1949; in CEPAL Review, 106, April 2012, 7-21; M.E. Margulis (Ed.), The Global Political Economy of Raúl Prebisch, London 2017",
+      ),
+    ).toEqual([
+      "M. Vernengo, ‘Portrait of the Economist as a Young Man: Raúl Prebisch’s Evolving Views, 1919-1949",
+      "in CEPAL Review, 106, April 2012, 7-21",
+      "M.E. Margulis (Ed.), The Global Political Economy of Raúl Prebisch, London 2017",
+    ]);
+  });
+
+  it("cancels the title at a bracket before its end", () => {
+    expect(raws("‘A; B (x) C’ in D; E")).toEqual(["‘A", "B (x) C’ in D", "E"]);
+  });
+
+  it("doesn't end the title at a ’ before a digit", () => {
+    expect(raws("‘The ’60s; A Decade’ in X; Y")).toEqual(["‘The ’60s; A Decade’ in X", "Y"]);
+  });
+
+  it("doesn't end the title at a ’ inside a nested double quote", () => {
+    expect(raws("‘The “Peoples’ Court”; A Study’ in X; Y")).toEqual([
+      "‘The “Peoples’ Court”; A Study’ in X",
+      "Y",
+    ]);
+  });
+
+  it("known limit: a forgotten ’ plus a later plural possessive reads as one title", () => {
+    // No other ‘ or bracket in between; no current source doc has this.
+    expect(raws("A, ‘Title in X, 1990; B, The Peoples’ Bank, 1991; C")).toEqual([
+      "A, ‘Title in X, 1990; B, The Peoples’ Bank, 1991",
+      "C",
+    ]);
+  });
+
+  it("still splits when a stray closing double quote leaves the nesting unbalanced", () => {
+    expect(raws("‘A ” B; C’ in D; E")).toEqual(["‘A ” B", "C’ in D", "E"]);
+  });
+
+  it("keeps the plain split when the section's brackets don't balance", () => {
+    expect(raws("‘A; B’ in C); D")).toEqual(["‘A", "B’ in C)", "D"]);
+  });
+
+  it("ignores straight quotes", () => {
+    expect(raws("'A; B' in C; D")).toEqual(["'A", "B' in C", "D"]);
+  });
+});
