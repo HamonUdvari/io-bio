@@ -28,6 +28,10 @@ export async function pruneDraftFiles(
     );
     return;
   }
+  if (!Array.isArray(files)) {
+    warn(`unexpected file listing for draft ${draftId}; kept all files`);
+    return;
+  }
   if (!files.some((f) => f.filename === keep)) {
     warn(`draft ${draftId} has no ${keep}; kept all files`);
     return;
@@ -38,9 +42,12 @@ export async function pruneDraftFiles(
       await zen.deleteFile(draftId, f);
       info(`removed legacy file ${f.filename}`);
     } catch (err) {
-      const msg = (err as Error).message;
-      if (/\b404\b/.test(msg)) info(`legacy file ${f.filename} already gone`);
-      else warn(`could not remove ${f.filename} from draft ${draftId}: ${msg}`);
+      if ((err as { status?: number }).status === 404)
+        info(`legacy file ${f.filename} already gone`);
+      else
+        warn(
+          `could not remove ${f.filename} from draft ${draftId}: ${(err as Error).message}`,
+        );
     }
   }
 }

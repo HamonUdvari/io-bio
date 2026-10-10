@@ -20,8 +20,11 @@ function fake(
       return files;
     },
     deleteFile: async (_id: number, f: DepositionFile) => {
-      const err = o.failDelete?.[f.filename];
-      if (err) throw new Error(err);
+      const msg = o.failDelete?.[f.filename];
+      if (msg)
+        throw Object.assign(new Error(msg), {
+          status: Number(msg.match(/→ (\d{3})/)?.[1]),
+        });
       deleted.push(f.filename);
     },
   };
@@ -81,6 +84,14 @@ describe("pruneDraftFiles", () => {
     ]);
   });
 
+  it("only warns when the listing isn't a list", async () => {
+    const f = fake(null as unknown as DepositionFile[]);
+    await expect(f.run()).resolves.toBeUndefined();
+    expect(f.log).toEqual([
+      "warn: unexpected file listing for draft 7; kept all files",
+    ]);
+  });
+
   it("makes no delete call when only the entry PDF is there", async () => {
     const f = fake([file("a-iobio.pdf")]);
     await f.run();
@@ -92,36 +103,32 @@ describe("pruneDraftFiles", () => {
 describe("deleteFile", () => {
   afterEach(() => vi.unstubAllGlobals());
   const BASE = "https://sandbox.zenodo.org/api";
-  /** Records the URL of each request; answers 204. */
-  function capture() {
+  /** Records the URL of each request; answers with `status`. */
+  function capture(status: number) {
     const urls: string[] = [];
     vi.stubGlobal("fetch", async (url: string) => {
       urls.push(url);
-      return new Response(null, { status: 204 });
+      return new Response(null, { status });
     });
     return urls;
   }
   const zen = () =>
     createZenodoClient({ baseUrl: BASE, token: "t", minIntervalMs: 0 });
 
-  it("uses the listing's self link when it points to this API", async () => {
-    const urls = capture();
-    const self = `${BASE}/deposit/depositions/7/files/abc`;
-    await zen().deleteFile(7, {
-      id: "abc",
-      filename: "a.pdf",
-      links: { self },
-    });
-    expect(urls).toEqual([self]);
-  });
-
-  it("never sends the token to another host", async () => {
-    const urls = capture();
+  it("deletes by file id on this API, whatever the listing's links say", async () => {
+    const urls = capture(204);
     await zen().deleteFile(7, {
       id: "a b",
       filename: "a.pdf",
-      links: { self: "https://example.org/deposit/depositions/7/files/abc" },
+      links: { self: "https://example.org/deposit/depositions/9/files/other" },
     });
     expect(urls).toEqual([`${BASE}/deposit/depositions/7/files/a%20b`]);
+  });
+
+  it("puts the HTTP status on the error", async () => {
+    capture(404);
+    await expect(
+      zen().deleteFile(7, { id: "x", filename: "a.pdf" }),
+    ).rejects.toMatchObject({ status: 404 });
   });
 });

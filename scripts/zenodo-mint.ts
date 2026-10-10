@@ -295,7 +295,8 @@ async function main() {
       console.error(
         `Refusing to mint PRODUCTION DOIs: ${bad.length} print page(s) are missing or cite ` +
           `a sandbox record (${bad.slice(0, 5).join(", ")}${bad.length > 5 ? ", …" : ""}). ` +
-          "Rebuild with ZENODO_MINT_ENV=production first.",
+          "Run a COLD production build first: rm -rf .astro node_modules/.astro dist && " +
+          "ZENODO_MINT_ENV=production pnpm build.",
       );
       process.exit(1);
     }
@@ -446,13 +447,6 @@ async function main() {
         conceptDoi = published.conceptdoi ?? prev.conceptDoi;
       }
 
-      // Warn if the published version doesn't hold exactly the entry PDF.
-      const files = published.files?.map((f: any) => f.filename ?? f.key);
-      if (files && (files.length !== 1 || files[0] !== filename))
-        console.warn(
-          `  ! ${e.slug}: published with files [${files.join(", ")}]`,
-        );
-
       const record: DoiRecord = {
         recordId: published.id,
         conceptRecId:
@@ -470,6 +464,15 @@ async function main() {
       state[e.slug] = record;
       saveState(args.env, state); // persist after every successful entry
       ok++;
+      // Warn if the published version doesn't hold exactly the entry PDF
+      // (after saveState, so this can never lose a minted DOI).
+      const files = Array.isArray(published.files)
+        ? published.files.map((f: any) => f.filename ?? f.key)
+        : null;
+      if (files && (files.length !== 1 || files[0] !== filename))
+        console.warn(
+          `  ! ${e.slug}: published with files [${files.join(", ")}]`,
+        );
       console.log(`✓ ${action} ${e.slug} → version ${record.versionDoi} (concept ${record.conceptDoi})`);
     } catch (err) {
       failed++;

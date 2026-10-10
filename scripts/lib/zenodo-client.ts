@@ -102,11 +102,13 @@ export function createZenodoClient(opts: ZenodoClientOptions) {
       const text = await res.text();
       const data = text ? safeJson(text) : null;
       if (!res.ok) {
-        throw new Error(
+        const err = new Error(
           `${method} ${target} → ${res.status} ${res.statusText}: ${
             typeof data === "object" ? JSON.stringify(data) : text
           }`,
-        );
+        ) as Error & { status?: number };
+        err.status = res.status;
+        throw err;
       }
       return data;
     }
@@ -151,15 +153,12 @@ export function createZenodoClient(opts: ZenodoClientOptions) {
     listFiles: (id: number): Promise<DepositionFile[]> =>
       request("GET", `/deposit/depositions/${id}/files`),
 
-    /** Delete one file from an unpublished draft. The token goes only to this
-     *  API: the listing's self link is used only when it points here. */
+    /** Delete one file from an unpublished draft, by its id from listFiles. */
     deleteFile: (id: number, f: DepositionFile): Promise<any> =>
-      f.links?.self?.startsWith(`${baseUrl}/deposit/depositions/${id}/files/`)
-        ? request("DELETE", f.links.self, { absolute: true })
-        : request(
-            "DELETE",
-            `/deposit/depositions/${id}/files/${encodeURIComponent(f.id)}`,
-          ),
+      request(
+        "DELETE",
+        `/deposit/depositions/${id}/files/${encodeURIComponent(f.id)}`,
+      ),
 
     /** Discard an unpublished draft (clears a dangling new-version draft). */
     discard: (id: number): Promise<any> =>
