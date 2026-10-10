@@ -70,7 +70,7 @@ describe("semicolons inside brackets", () => {
       "vol. 2), 1992",
       "B, 1995",
     ]);
-    // A forgotten "(" + a later stray ")" must not merge separate works.
+    // A forgotten ")" + a later stray ")" with another note in between: no merge.
     expect(raws("A (with X; B, 1995; C (Lecture, 2003) at www.y.org/z); D, 2004")).toEqual([
       "A (with X",
       "B, 1995",
@@ -79,6 +79,15 @@ describe("semicolons inside brackets", () => {
     ]);
     // Mismatched bracket types don't count as a note.
     expect(raws("A (x; y]; B")).toEqual(["A (x", "y]", "B"]);
+  });
+
+  it("known limit: a forgotten ')' plus a later stray ')' reads as one note", () => {
+    // No other bracket in between, so the brackets balance; structure alone
+    // can't tell. No current source doc has this; no text is lost.
+    expect(raws("A (with X; B, 1995; C, 2003 at www.y.org/z); D, 2004")).toEqual([
+      "A (with X; B, 1995; C, 2003 at www.y.org/z)",
+      "D, 2004",
+    ]);
   });
 
   it("falls back to the plain split when brackets don't balance", () => {
@@ -107,7 +116,7 @@ describe("semicolons inside brackets", () => {
   });
 
   it("matches the previous split on text without brackets", () => {
-    for (const s of ["A; B; C", "A;  B;", "A;\tB", "A; B", "A;\nB", "x;y; z", "", ";", "A; ; B"])
+    for (const s of ["A; B; C", "A;  B;", "A;\tB", "A;\u00a0B", "A;\nB", "x;y; z", "", ";", "A; ; B"])
       expect(splitAPLText(s).map((p) => p.trim())).toEqual(
         s.split(/;(?:\s+|$)/).map((p) => p.trim()),
       );

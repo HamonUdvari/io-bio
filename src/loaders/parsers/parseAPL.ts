@@ -64,7 +64,9 @@ const SIMPLE_BRACKETS_RE = /\([^()[\]]*\)|\[[^()[\]]*\]/g;
  * text: a `;` inside nested or mismatched brackets still splits, and if the
  * section's brackets don't balance (a stray ")" or an unclosed "(", which a few
  * source docs have) the whole text keeps the plain split, i.e. the previous
- * behaviour. So a missing "(" plus a stray ")" can never merge two works.
+ * behaviour. Known limit: a forgotten ")" followed later in the same section
+ * by a stray ")", with no other bracket in between, balances and so reads as
+ * one note (the works between them become one item; no text is lost).
  */
 export function splitAPLText(text: string): string[] {
   let depth = 0;
