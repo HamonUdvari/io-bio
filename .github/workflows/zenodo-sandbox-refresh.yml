@@ -30,6 +30,7 @@ on:
       # Entry content / extraction → bumps the per-entry content hash:
       - "src/content/bios/**"
       - "src/loaders/**"
+      - "patches/**" # dependency patches, e.g. the officeparser Word-parsing fix
       - "src/content.config.ts"
       - "src/pages/zenodo-meta.json.ts"
       # Rights note (single source) → folded into the state hash (see

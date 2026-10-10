@@ -17,6 +17,7 @@ on:
     paths:
       - "src/content/bios/**" # a .docx added / edited / removed
       - "src/loaders/**" # parser + roleTransforms + docxLoader changes
+      - "patches/**" # dependency patches, e.g. the officeparser Word-parsing fix
       - "src/content.config.ts"
       - "src/pages/entry-data.json.ts" # the endpoint the sync reads
       - "src/data/org-abbreviations.json" # affects the mirrored acronyms
