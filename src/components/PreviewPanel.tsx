@@ -284,7 +284,7 @@ function APLSection({
   section,
 }: {
   title: string;
-  section: { items: { raw: string }[]; websitesAccessedOn?: string };
+  section: { items: { raw: string }[]; websitesAccessedOn?: string; websitesNote?: string };
 }) {
   if (!section?.items?.length) {
     return (
@@ -312,6 +312,9 @@ function APLSection({
         <p class="text-xs opacity-60 pt-1">
           (all websites accessed {section.websitesAccessedOn})
         </p>
+      )}
+      {section.websitesNote && (
+        <p class="text-xs opacity-60 pt-1">{section.websitesNote}</p>
       )}
     </section>
   );

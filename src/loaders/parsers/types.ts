@@ -51,6 +51,9 @@ export type APLSectionData = {
   items: Citation[];
   /** Optional "all websites accessed DD month YYYY" footer text. */
   websitesAccessedOn?: string;
+  /** Another wording of that footer, e.g. "[all accessed 15 June 2011]",
+   *  shown as written (brackets included). Set only without websitesAccessedOn. */
+  websitesNote?: string;
 };
 
 export type ExtractedBio = {

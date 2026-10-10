@@ -147,6 +147,8 @@ const source = parseImageSource(imageSource);
           <p class="text-sm opacity-70">
             (all websites accessed {archives.websitesAccessedOn})
           </p>
+        )}{archives.websitesNote && (
+          <p class="text-sm opacity-70">{archives.websitesNote}</p>
         )}
       </section>
     )
@@ -168,6 +170,8 @@ const source = parseImageSource(imageSource);
           <p class="text-sm opacity-70">
             (all websites accessed {publications.websitesAccessedOn})
           </p>
+        )}{publications.websitesNote && (
+          <p class="text-sm opacity-70">{publications.websitesNote}</p>
         )}
       </section>
     )
@@ -189,6 +193,8 @@ const source = parseImageSource(imageSource);
           <p class="text-sm opacity-70">
             (all websites accessed {literature.websitesAccessedOn})
           </p>
+        )}{literature.websitesNote && (
+          <p class="text-sm opacity-70">{literature.websitesNote}</p>
         )}
       </section>
     )

@@ -262,3 +262,47 @@ describe("extractSectionNodes: where a section ends", () => {
     expect(s.rawText).toBe("A; B C;");
   });
 });
+
+describe("other wordings of the websites footer", () => {
+  const parse = (text: string) => {
+    const r = parseAPLItems(text);
+    return { items: r.items.map((i) => i.raw), accessedOn: r.websitesAccessedOn, note: r.websitesNote };
+  };
+
+  it("keeps the standard footer as websitesAccessedOn only", () => {
+    expect(parse("A, 1990; B, www.x.org (all websites accessed  on 12 September 2017).")).toEqual({
+      items: ["A, 1990", "B, www.x.org"],
+      accessedOn: "on 12 September 2017",
+      note: undefined,
+    });
+  });
+
+  it.each([
+    ["square brackets (Avenol)", "A, 1999; http://rulers.org/indexa5.html [all accessed 15 June 2011].", "[all accessed 15 June 2011]"],
+    ["visited (Rooth)", "A, 2024, https://doi.org/10.1/2 (all websites visited at 29 August 2025).", "(all websites visited at 29 August 2025)"],
+    ["approached (La Guardia)", "A, https://unfoundation.org/blog/, 1 October 2015 (all websites approached on 20 July 2026)", "(all websites approached on 20 July 2026)"],
+    [
+      "a note with a ';' (Curchod)",
+      "A, www.itu.int/x (translations by the authors; all websites, including the ITU Digital Collections, at www.itu.int/en/history, accessed on 7 August 2017).",
+      "(translations by the authors; all websites, including the ITU Digital Collections, at www.itu.int/en/history, accessed on 7 August 2017)",
+    ],
+  ])("shows %s as written", (_, text, note) => {
+    const r = parse(text);
+    expect(r.note).toBe(note);
+    expect(r.accessedOn).toBeUndefined();
+    expect(r.items.join("; ")).not.toContain(note);
+    expect(r.items.at(-1)).not.toMatch(/[([]$/);
+  });
+
+  it.each([
+    ["a note without 'all' (Michiels)", "A, 1990; ‘L.P.M.H. baron Michiels’ available at www.parlement.com/x (website accessed on 18 February 2019)."],
+    ["a closing role note", "A, 1990; B (Editor)"],
+    ["a note with 'all' but no websites verb", "A, 1990; B, Collected Works, Oslo 1930 (all volumes)"],
+    ["'accessed' without 'all'", "A, 1990; B, www.x.org (accessed 12 February 2014)"],
+    ["mismatched brackets", "A, 1990; B (all websites accessed on 1 May 2020]"],
+  ])("leaves %s in its item", (_, text) => {
+    const r = parse(text);
+    expect(r.note).toBeUndefined();
+    expect(r.accessedOn).toBeUndefined();
+  });
+});

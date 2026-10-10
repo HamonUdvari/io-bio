@@ -150,10 +150,20 @@ export function splitAPLText(text: string): string[] {
 
 const WEBSITES_ACCESSED_RE = /\(\s*all\s+websites\s+accessed\s+([^)]+)\)\s*\.?\s*$/i;
 
+// Other wordings of that closing note, e.g. "[all accessed 15 June 2011]",
+// "(all websites visited at 29 August 2025)", "(all websites approached on
+// 20 July 2026)": a final simple bracketed note that names a websites verb and
+// says "all". Shown as written. A note without "all" ("(website accessed on …)")
+// belongs to its own item and stays there.
+const FINAL_NOTE_RE = /(\([^()[\]]*\)|\[[^()[\]]*\])\s*\.?\s*$/;
+const WEBSITES_VERB_RE = /\b(?:accessed|visited|approached)\b/i;
+const ALL_RE = /\ball\b/i;
+
 /**
  * Split a section's raw text into Citation items.
  *
- *  - Pulls off an "(all websites accessed ...)" trailing footer if present.
+ *  - Pulls off an "(all websites accessed ...)" trailing footer if present,
+ *    or another wording of it, kept as written (websitesNote).
  *  - Splits at `;` + whitespace — the format the Author Instructions specify
  *    for citations — but not inside brackets or quoted titles (splitAPLText).
  *  - Trims each piece, discards empties.
@@ -163,11 +173,16 @@ export function parseAPLItems(rawText: string): APLSectionData {
 
   let text = rawText.trim();
   let websitesAccessedOn: string | undefined;
+  let websitesNote: string | undefined;
 
   const websitesMatch = text.match(WEBSITES_ACCESSED_RE);
+  const noteMatch = websitesMatch ? null : text.match(FINAL_NOTE_RE);
   if (websitesMatch) {
     websitesAccessedOn = websitesMatch[1].trim();
     text = text.substring(0, websitesMatch.index ?? text.length).trim();
+  } else if (noteMatch && WEBSITES_VERB_RE.test(noteMatch[1]) && ALL_RE.test(noteMatch[1])) {
+    websitesNote = noteMatch[1];
+    text = text.substring(0, noteMatch.index ?? text.length).trim();
   }
 
   const items: Citation[] = splitAPLText(text)
@@ -177,6 +192,7 @@ export function parseAPLItems(rawText: string): APLSectionData {
 
   const result: APLSectionData = { items };
   if (websitesAccessedOn) result.websitesAccessedOn = websitesAccessedOn;
+  if (websitesNote) result.websitesNote = websitesNote;
   return result;
 }
 

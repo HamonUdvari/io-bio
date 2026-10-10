@@ -38,6 +38,8 @@ export type Citation = z.infer<typeof citationSchema>;
 const aplSchema = z.object({
   items: z.array(citationSchema),
   websitesAccessedOn: z.string().optional(),
+  // Another wording of the footer, shown as written (see parseAPL).
+  websitesNote: z.string().optional(),
 });
 
 export type APLSection = z.infer<typeof aplSchema>;
