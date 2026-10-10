@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseAPLItems, splitAPLText } from "./parseAPL";
+import { extractSectionNodes, parseAPLItems, splitAPLText } from "./parseAPL";
 
 describe("parseAPLItems", () => {
   it("splits a single-paragraph literature section by semicolons", () => {
@@ -227,5 +227,38 @@ describe("semicolons inside quoted titles", () => {
 
   it("ignores straight quotes", () => {
     expect(raws("'A; B' in C; D")).toEqual(["'A", "B' in C", "D"]);
+  });
+});
+
+describe("extractSectionNodes: where a section ends", () => {
+  // Fresh nodes per test: extractSectionNodes strips the label from the head.
+  const text = (t: string, bold = false) => ({ type: "text", text: t, formatting: bold ? { bold: true } : {} });
+  const image = () => ({ type: "image", text: "" });
+  const para = (...children: any[]) => ({
+    type: "paragraph",
+    text: children.map((c) => c.text ?? "").join(""),
+    children,
+  });
+  const head = () => para(text("PUBLICATIONS", true), text(": A; B"));
+
+  it("ends at a bold label that follows image-only runs (Sadik)", () => {
+    const content = [head(), para(image(), image(), image(), text("LITERATURE", true), text(": C; D"))];
+    const s = extractSectionNodes(content, "PUBLICATIONS");
+    expect(s.consumed).toEqual([0]);
+    expect(s.rawText).toBe("A; B");
+  });
+
+  it("continues past a bold whitespace-only run followed by plain text", () => {
+    const content = [head(), para(text(" ", true), text("C; D"))];
+    const s = extractSectionNodes(content, "PUBLICATIONS");
+    expect(s.consumed).toEqual([0, 1]);
+    expect(s.rawText).toBe("A; B C; D");
+  });
+
+  it("continues past plain and empty paragraphs, and ends at the next bold one", () => {
+    const content = [head(), para(text("C;")), para(), para(text("LITERATURE", true), text(": E"))];
+    const s = extractSectionNodes(content, "PUBLICATIONS");
+    expect(s.consumed).toEqual([0, 1, 2]);
+    expect(s.rawText).toBe("A; B C;");
   });
 });

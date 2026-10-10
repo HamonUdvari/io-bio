@@ -1,5 +1,12 @@
 import type { APLSectionData, Citation, ParserResult, Warning } from "./types";
 
+/** A paragraph's first run with visible text (image and blank runs skipped). */
+function firstTextRun(node: any): any {
+  return node?.children?.find(
+    (c: any) => c?.type === "text" && typeof c.text === "string" && c.text.trim() !== "",
+  );
+}
+
 /**
  * Locate a labelled section in the AST content (e.g. "ARCHIVES", "PUBLICATIONS",
  * "LITERATURE") and return:
@@ -27,7 +34,10 @@ export function extractSectionNodes(
   const consumed: number[] = [startIndex];
   for (let i = startIndex + 1; i < content.length; i++) {
     const node = content[i];
-    if (node?.children?.[0]?.formatting?.bold) break;
+    // A paragraph that opens with bold text is the next labelled section. Judge
+    // by its first visible text: Sadik-IN 2026.docx opens LITERATURE with three
+    // ink drawings (image runs).
+    if (firstTextRun(node)?.formatting?.bold) break;
     nodes.push(node);
     consumed.push(i);
   }
