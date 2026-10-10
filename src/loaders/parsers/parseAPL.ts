@@ -47,14 +47,53 @@ export function extractSectionNodes(
   return { nodes, consumed, rawText };
 }
 
-const WEBSITES_ACCESSED_RE = /\(\s*all\s+websites\s+accessed\s+([^)]+)\)\s*\.?\s*$/i;
+// Item separator: `;` followed by whitespace (or end-of-text). The whitespace
+// requirement avoids splitting URLs that contain `;` (RFC 3986 allows
+// semicolons in path/query — e.g. ".../;search?q=foo").
+const ITEM_SEPARATOR_RE = /;(?:\s+|$)/;
+
+/**
+ * Split a section's text at ITEM_SEPARATOR_RE, but only outside round and
+ * square brackets, so a `;` inside a bracketed note stays in its item:
+ * "Brev, Oslo 1961-1971 (5 volumes: 1882-1895; 1896-1905)" is one item.
+ *
+ * If the brackets don't pair up (a stray ")" or an unclosed "(", which a few
+ * source docs have), the depth can't be trusted, so the whole text falls back
+ * to the plain ITEM_SEPARATOR_RE split, i.e. the previous behaviour.
+ */
+export function splitAPLText(text: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === "(" || ch === "[") {
+      depth++;
+    } else if (ch === ")" || ch === "]") {
+      if (depth === 0) return text.split(ITEM_SEPARATOR_RE);
+      depth--;
+    } else if (
+      ch === ";" &&
+      depth === 0 &&
+      (i + 1 === text.length || /\s/.test(text[i + 1]))
+    ) {
+      parts.push(text.slice(start, i));
+      start = i + 1;
+    }
+  }
+  if (depth !== 0) return text.split(ITEM_SEPARATOR_RE);
+  parts.push(text.slice(start));
+  return parts;
+}
+
+const WEBSITES_ACCESSED_RE =/\(\s*all\s+websites\s+accessed\s+([^)]+)\)\s*\.?\s*$/i;
 
 /**
  * Split a section's raw text into Citation items.
  *
  *  - Pulls off an "(all websites accessed ...)" trailing footer if present.
- *  - Splits on ` ; ` (semicolons surrounded by whitespace) — the format the
- *    Author Instructions specify for citations.
+ *  - Splits at `;` + whitespace — the format the Author Instructions specify
+ *    for citations — but not inside brackets (splitAPLText).
  *  - Trims each piece, discards empties.
  */
 export function parseAPLItems(rawText: string): APLSectionData {
@@ -69,11 +108,7 @@ export function parseAPLItems(rawText: string): APLSectionData {
     text = text.substring(0, websitesMatch.index ?? text.length).trim();
   }
 
-  // Items are separated by `;` followed by whitespace (or end-of-text). The
-  // whitespace requirement avoids splitting URLs that contain `;` (RFC 3986
-  // allows semicolons in path/query — e.g. ".../;search?q=foo").
-  const items: Citation[] = text
-    .split(/;(?:\s+|$)/)
+  const items: Citation[] = splitAPLText(text)
     .map((s) => s.trim().replace(/[.,;]+$/, "").trim())
     .filter((s) => s.length > 0)
     .map((raw) => ({ raw }));
