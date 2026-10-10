@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  officeparser@6.1.1: 10ee4d66a542d460d25c5fa982823e44b3f0028c3c9e020b8407ddeeb6d41900
+
 importers:
 
   .:
@@ -104,7 +107,7 @@ importers:
         version: 15.0.12
       officeparser:
         specifier: ^6.0.4
-        version: 6.1.1
+        version: 6.1.1(patch_hash=10ee4d66a542d460d25c5fa982823e44b3f0028c3c9e020b8407ddeeb6d41900)
       p-limit:
         specifier: 7.3.0
         version: 7.3.0
@@ -6947,7 +6950,7 @@ snapshots:
       node-fetch-native: 1.6.7
       ufo: 1.6.4
 
-  officeparser@6.1.1:
+  officeparser@6.1.1(patch_hash=10ee4d66a542d460d25c5fa982823e44b3f0028c3c9e020b8407ddeeb6d41900):
     dependencies:
       '@xmldom/xmldom': 0.9.10
       fflate: 0.8.3

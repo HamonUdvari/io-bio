@@ -15,3 +15,6 @@ allowBuilds:
   esbuild: true
   sharp: true
   tesseract.js: true
+
+patchedDependencies:
+  officeparser@6.1.1: patches/officeparser@6.1.1.patch
