@@ -16,14 +16,16 @@ type ParseState =
   | { kind: "error"; filename: string; message: string };
 
 // officeparser's ES-module browser build (the package's "browser" export),
-// bundled by Vite and loaded lazily on first use. So /preview parses with the
-// SAME version, and the same patches/officeparser@6.1.1.patch, as the site
-// build. (It used to load a pinned 6.0.4 copy from a CDN.)
+// bundled by Vite as a separate chunk, loaded on demand (pre-loaded when the
+// panel mounts). So /preview parses with the SAME version, and the same
+// patches/officeparser@6.1.1.patch, as the site build. (It used to load a
+// pinned 6.0.4 copy from a CDN.)
 let opPromise: Promise<typeof import("officeparser")> | null = null;
 
 function loadOfficeparser() {
   opPromise ??= import("officeparser").catch((err) => {
-    // Reset so the next call can retry.
+    // Reset so a later call tries again. After a network failure, browsers
+    // keep the failed module for the page's lifetime, so a reload is needed.
     opPromise = null;
     throw err;
   });
