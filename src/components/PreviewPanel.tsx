@@ -4,13 +4,6 @@ import { extractAll } from "../loaders/parsers/extractAll";
 import type { ExtractedBio, Warning } from "../loaders/parsers/types";
 import { aliasSuffix } from "@utils/displayName";
 
-// Pinned CDN copy of officeparser's classic-script bundle. We can't bundle
-// it through Vite because the IIFE relies on `var officeParser` binding to
-// window, and Vite would rewrite the file as an ES module. Keep the version
-// here aligned with the devDependency in package.json.
-const OFFICEPARSER_URL =
-  "https://cdn.jsdelivr.net/npm/officeparser@6.0.4/dist/officeparser.browser.js";
-
 type ParseState =
   | { kind: "idle" }
   | { kind: "loading"; filename: string }
@@ -22,29 +15,14 @@ type ParseState =
     }
   | { kind: "error"; filename: string; message: string };
 
-let opPromise: Promise<any> | null = null;
+// officeparser's ES-module browser build (the package's "browser" export),
+// bundled by Vite and loaded lazily on first use. So /preview parses with the
+// SAME version, and the same patches/officeparser@6.1.1.patch, as the site
+// build. (It used to load a pinned 6.0.4 copy from a CDN.)
+let opPromise: Promise<typeof import("officeparser")> | null = null;
 
-function ensureOfficeparser(): Promise<any> {
-  if (opPromise) return opPromise;
-  opPromise = new Promise((resolve, reject) => {
-    if (typeof document === "undefined") {
-      return reject(new Error("No document"));
-    }
-    const g = globalThis as any;
-    if (g.officeParser) return resolve(g.officeParser);
-
-    const script = document.createElement("script");
-    script.src = OFFICEPARSER_URL;
-    script.async = true;
-    script.onload = () => {
-      const op = (globalThis as any).officeParser;
-      if (op) resolve(op);
-      else reject(new Error("Bundle loaded but window.officeParser missing"));
-    };
-    script.onerror = () =>
-      reject(new Error("Failed to load officeparser browser bundle"));
-    document.head.appendChild(script);
-  }).catch((err) => {
+function loadOfficeparser() {
+  opPromise ??= import("officeparser").catch((err) => {
     // Reset so the next call can retry.
     opPromise = null;
     throw err;
@@ -69,9 +47,9 @@ export default function PreviewPanel() {
   async function handleFile(file: File) {
     setState({ kind: "loading", filename: file.name });
     try {
-      const parser = await ensureOfficeparser();
+      const { parseOffice } = await loadOfficeparser();
       const arrayBuffer = await file.arrayBuffer();
-      const ast = await parser.parseOffice(arrayBuffer, {
+      const ast = await parseOffice(arrayBuffer, {
         extractAttachments: true,
       });
       const { value, warnings } = extractAll(ast);
@@ -103,7 +81,7 @@ export default function PreviewPanel() {
 
   // Pre-load the bundle on mount so the first drop is responsive.
   useEffect(() => {
-    ensureOfficeparser().catch(() => {});
+    loadOfficeparser().catch(() => {});
   }, []);
 
   return (
