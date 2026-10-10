@@ -284,7 +284,11 @@ function APLSection({
   section,
 }: {
   title: string;
-  section: { items: { raw: string }[]; websitesAccessedOn?: string; websitesNote?: string };
+  section: {
+    items: { raw: string }[];
+    websitesAccessedOn?: string;
+    websitesNote?: string;
+  };
 }) {
   if (!section?.items?.length) {
     return (

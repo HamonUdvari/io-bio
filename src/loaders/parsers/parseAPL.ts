@@ -1,9 +1,10 @@
 import type { APLSectionData, Citation, ParserResult, Warning } from "./types";
 
-/** A paragraph's first run with visible text (image and blank runs skipped). */
+/** A paragraph's first non-blank text run (image and blank runs skipped). */
 function firstTextRun(node: any): any {
   return node?.children?.find(
-    (c: any) => c?.type === "text" && typeof c.text === "string" && c.text.trim() !== "",
+    (c: any) =>
+      c?.type === "text" && typeof c.text === "string" && c.text.trim() !== "",
   );
 }
 
@@ -35,8 +36,8 @@ export function extractSectionNodes(
   for (let i = startIndex + 1; i < content.length; i++) {
     const node = content[i];
     // A paragraph that opens with bold text is the next labelled section. Judge
-    // by its first visible text: Sadik-IN 2026.docx opens LITERATURE with three
-    // ink drawings (image runs).
+    // by its first non-blank text run: Sadik-IN 2026.docx opens LITERATURE with
+    // three ink drawings (six image runs).
     if (firstTextRun(node)?.formatting?.bold) break;
     nodes.push(node);
     consumed.push(i);
@@ -152,12 +153,13 @@ const WEBSITES_ACCESSED_RE = /\(\s*all\s+websites\s+accessed\s+([^)]+)\)\s*\.?\s
 
 // Other wordings of that closing note, e.g. "[all accessed 15 June 2011]",
 // "(all websites visited at 29 August 2025)", "(all websites approached on
-// 20 July 2026)": a final simple bracketed note that names a websites verb and
-// says "all". Shown as written. A note without "all" ("(website accessed on …)")
-// belongs to its own item and stays there.
+// 20 July 2026)": a final simple bracketed note that says "all websites" or
+// "all accessed / visited / approached" and names one of those verbs. Shown as
+// written. A note without it ("(website accessed on …)") belongs to its own
+// item and stays there.
 const FINAL_NOTE_RE = /(\([^()[\]]*\)|\[[^()[\]]*\])\s*\.?\s*$/;
 const WEBSITES_VERB_RE = /\b(?:accessed|visited|approached)\b/i;
-const ALL_RE = /\ball\b/i;
+const ALL_RE = /\ball\s+(?:websites?|accessed|visited|approached)\b/i;
 
 /**
  * Split a section's raw text into Citation items.
@@ -180,7 +182,11 @@ export function parseAPLItems(rawText: string): APLSectionData {
   if (websitesMatch) {
     websitesAccessedOn = websitesMatch[1].trim();
     text = text.substring(0, websitesMatch.index ?? text.length).trim();
-  } else if (noteMatch && WEBSITES_VERB_RE.test(noteMatch[1]) && ALL_RE.test(noteMatch[1])) {
+  } else if (
+    noteMatch &&
+    WEBSITES_VERB_RE.test(noteMatch[1]) &&
+    ALL_RE.test(noteMatch[1])
+  ) {
     websitesNote = noteMatch[1];
     text = text.substring(0, noteMatch.index ?? text.length).trim();
   }

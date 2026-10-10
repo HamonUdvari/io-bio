@@ -7,7 +7,9 @@ describe("parseAPLItems", () => {
       "M.F. Imber, The USA, ILO, UNESCO and IAEA, London 1989; M. Abley, 'Time for Change', 1998; A. Smith, 'Another Article', 2000";
     const { items, websitesAccessedOn } = parseAPLItems(raw);
     expect(items).toHaveLength(3);
-    expect(items[0].raw).toBe("M.F. Imber, The USA, ILO, UNESCO and IAEA, London 1989");
+    expect(items[0].raw).toBe(
+      "M.F. Imber, The USA, ILO, UNESCO and IAEA, London 1989",
+    );
     expect(items[1].raw).toBe("M. Abley, 'Time for Change', 1998");
     expect(items[2].raw).toBe("A. Smith, 'Another Article', 2000");
     expect(websitesAccessedOn).toBeUndefined();
@@ -52,8 +54,12 @@ describe("semicolons inside brackets", () => {
 
   it("keeps a URL and its search note in one item (Gardiner)", () => {
     expect(
-      raws("Papers are located at the UN Archives (http://archives.un.org; search term ‘Gardiner’)."),
-    ).toEqual(["Papers are located at the UN Archives (http://archives.un.org; search term ‘Gardiner’)"]);
+      raws(
+        "Papers are located at the UN Archives (http://archives.un.org; search term ‘Gardiner’).",
+      ),
+    ).toEqual([
+      "Papers are located at the UN Archives (http://archives.un.org; search term ‘Gardiner’)",
+    ]);
   });
 
   it("handles square brackets", () => {
@@ -71,7 +77,9 @@ describe("semicolons inside brackets", () => {
       "B, 1995",
     ]);
     // A forgotten ")" + a later stray ")" with another note in between: no merge.
-    expect(raws("A (with X; B, 1995; C (Lecture, 2003) at www.y.org/z); D, 2004")).toEqual([
+    expect(
+      raws("A (with X; B, 1995; C (Lecture, 2003) at www.y.org/z); D, 2004"),
+    ).toEqual([
       "A (with X",
       "B, 1995",
       "C (Lecture, 2003) at www.y.org/z)",
@@ -84,15 +92,19 @@ describe("semicolons inside brackets", () => {
   it("known limit: a forgotten ')' plus a later stray ')' reads as one note", () => {
     // No other bracket in between, so the brackets balance; structure alone
     // can't tell. No current source doc has this; no text is lost.
-    expect(raws("A (with X; B, 1995; C, 2003 at www.y.org/z); D, 2004")).toEqual([
-      "A (with X; B, 1995; C, 2003 at www.y.org/z)",
-      "D, 2004",
-    ]);
+    expect(
+      raws("A (with X; B, 1995; C, 2003 at www.y.org/z); D, 2004"),
+    ).toEqual(["A (with X; B, 1995; C, 2003 at www.y.org/z)", "D, 2004"]);
   });
 
   it("falls back to the plain split when brackets don't balance", () => {
     // A stray ")" (as in a few source docs) or an unclosed "(".
-    expect(raws("A, 1990); B (x; y), 1995; C")).toEqual(["A, 1990)", "B (x", "y), 1995", "C"]);
+    expect(raws("A, 1990); B (x; y), 1995; C")).toEqual([
+      "A, 1990)",
+      "B (x",
+      "y), 1995",
+      "C",
+    ]);
     expect(raws("A (open; B, 1995; C")).toEqual(["A (open", "B, 1995", "C"]);
     // The real shape: the stray ")" comes after earlier items and notes.
     expect(raws("A; B (x; y), 1990; C, www.z.org); D")).toEqual([
@@ -105,10 +117,9 @@ describe("semicolons inside brackets", () => {
   });
 
   it("still keeps a URL that contains ';' whole", () => {
-    expect(raws("See http://archives.nato.int/;search?query=X; B, 1995")).toEqual([
-      "See http://archives.nato.int/;search?query=X",
-      "B, 1995",
-    ]);
+    expect(
+      raws("See http://archives.nato.int/;search?query=X; B, 1995"),
+    ).toEqual(["See http://archives.nato.int/;search?query=X", "B, 1995"]);
   });
 
   it("strips trailing punctuation as before", () => {
@@ -116,7 +127,17 @@ describe("semicolons inside brackets", () => {
   });
 
   it("matches the previous split on text without brackets", () => {
-    for (const s of ["A; B; C", "A;  B;", "A;\tB", "A;\u00a0B", "A;\nB", "x;y; z", "", ";", "A; ; B"])
+    for (const s of [
+      "A; B; C",
+      "A;  B;",
+      "A;\tB",
+      "A;\u00a0B",
+      "A;\nB",
+      "x;y; z",
+      "",
+      ";",
+      "A; ; B",
+    ])
       expect(splitAPLText(s).map((p) => p.trim())).toEqual(
         s.split(/;(?:\s+|$)/).map((p) => p.trim()),
       );
@@ -199,7 +220,10 @@ describe("semicolons inside quoted titles", () => {
   });
 
   it("doesn't end the title at a ’ before a digit", () => {
-    expect(raws("‘The ’60s; A Decade’ in X; Y")).toEqual(["‘The ’60s; A Decade’ in X", "Y"]);
+    expect(raws("‘The ’60s; A Decade’ in X; Y")).toEqual([
+      "‘The ’60s; A Decade’ in X",
+      "Y",
+    ]);
   });
 
   it("doesn't end the title at a ’ inside a nested double quote", () => {
@@ -211,10 +235,9 @@ describe("semicolons inside quoted titles", () => {
 
   it("known limit: a forgotten ’ plus a later plural possessive reads as one title", () => {
     // No other ‘ or bracket in between; no current source doc has this.
-    expect(raws("A, ‘Title in X, 1990; B, The Peoples’ Bank, 1991; C")).toEqual([
-      "A, ‘Title in X, 1990; B, The Peoples’ Bank, 1991",
-      "C",
-    ]);
+    expect(raws("A, ‘Title in X, 1990; B, The Peoples’ Bank, 1991; C")).toEqual(
+      ["A, ‘Title in X, 1990; B, The Peoples’ Bank, 1991", "C"],
+    );
   });
 
   it("still splits when a stray closing double quote leaves the nesting unbalanced", () => {
@@ -232,7 +255,11 @@ describe("semicolons inside quoted titles", () => {
 
 describe("extractSectionNodes: where a section ends", () => {
   // Fresh nodes per test: extractSectionNodes strips the label from the head.
-  const text = (t: string, bold = false) => ({ type: "text", text: t, formatting: bold ? { bold: true } : {} });
+  const text = (t: string, bold = false) => ({
+    type: "text",
+    text: t,
+    formatting: bold ? { bold: true } : {},
+  });
   const image = () => ({ type: "image", text: "" });
   const para = (...children: any[]) => ({
     type: "paragraph",
@@ -242,7 +269,10 @@ describe("extractSectionNodes: where a section ends", () => {
   const head = () => para(text("PUBLICATIONS", true), text(": A; B"));
 
   it("ends at a bold label that follows image-only runs (Sadik)", () => {
-    const content = [head(), para(image(), image(), image(), text("LITERATURE", true), text(": C; D"))];
+    const content = [
+      head(),
+      para(image(), image(), image(), text("LITERATURE", true), text(": C; D")),
+    ];
     const s = extractSectionNodes(content, "PUBLICATIONS");
     expect(s.consumed).toEqual([0]);
     expect(s.rawText).toBe("A; B");
@@ -255,8 +285,22 @@ describe("extractSectionNodes: where a section ends", () => {
     expect(s.rawText).toBe("A; B C; D");
   });
 
+  it("ends at a bold label that follows a blank plain run", () => {
+    const content = [
+      head(),
+      para(text(" "), text("LITERATURE", true), text(": C")),
+    ];
+    const s = extractSectionNodes(content, "PUBLICATIONS");
+    expect(s.consumed).toEqual([0]);
+  });
+
   it("continues past plain and empty paragraphs, and ends at the next bold one", () => {
-    const content = [head(), para(text("C;")), para(), para(text("LITERATURE", true), text(": E"))];
+    const content = [
+      head(),
+      para(text("C;")),
+      para(),
+      para(text("LITERATURE", true), text(": E")),
+    ];
     const s = extractSectionNodes(content, "PUBLICATIONS");
     expect(s.consumed).toEqual([0, 1, 2]);
     expect(s.rawText).toBe("A; B C;");
@@ -266,11 +310,19 @@ describe("extractSectionNodes: where a section ends", () => {
 describe("other wordings of the websites footer", () => {
   const parse = (text: string) => {
     const r = parseAPLItems(text);
-    return { items: r.items.map((i) => i.raw), accessedOn: r.websitesAccessedOn, note: r.websitesNote };
+    return {
+      items: r.items.map((i) => i.raw),
+      accessedOn: r.websitesAccessedOn,
+      note: r.websitesNote,
+    };
   };
 
   it("keeps the standard footer as websitesAccessedOn only", () => {
-    expect(parse("A, 1990; B, www.x.org (all websites accessed  on 12 September 2017).")).toEqual({
+    expect(
+      parse(
+        "A, 1990; B, www.x.org (all websites accessed  on 12 September 2017).",
+      ),
+    ).toEqual({
       items: ["A, 1990", "B, www.x.org"],
       accessedOn: "on 12 September 2017",
       note: undefined,
@@ -278,9 +330,21 @@ describe("other wordings of the websites footer", () => {
   });
 
   it.each([
-    ["square brackets (Avenol)", "A, 1999; http://rulers.org/indexa5.html [all accessed 15 June 2011].", "[all accessed 15 June 2011]"],
-    ["visited (Rooth)", "A, 2024, https://doi.org/10.1/2 (all websites visited at 29 August 2025).", "(all websites visited at 29 August 2025)"],
-    ["approached (La Guardia)", "A, https://unfoundation.org/blog/, 1 October 2015 (all websites approached on 20 July 2026)", "(all websites approached on 20 July 2026)"],
+    [
+      "square brackets (Avenol)",
+      "A, 1999; http://rulers.org/indexa5.html [all accessed 15 June 2011].",
+      "[all accessed 15 June 2011]",
+    ],
+    [
+      "visited (Rooth)",
+      "A, 2024, https://doi.org/10.1/2 (all websites visited at 29 August 2025).",
+      "(all websites visited at 29 August 2025)",
+    ],
+    [
+      "approached (La Guardia)",
+      "A, https://unfoundation.org/blog/, 1 October 2015 (all websites approached on 20 July 2026)",
+      "(all websites approached on 20 July 2026)",
+    ],
     [
       "a note with a ';' (Curchod)",
       "A, www.itu.int/x (translations by the authors; all websites, including the ITU Digital Collections, at www.itu.int/en/history, accessed on 7 August 2017).",
@@ -290,19 +354,35 @@ describe("other wordings of the websites footer", () => {
     const r = parse(text);
     expect(r.note).toBe(note);
     expect(r.accessedOn).toBeUndefined();
-    expect(r.items.join("; ")).not.toContain(note);
-    expect(r.items.at(-1)).not.toMatch(/[([]$/);
+    // Only the note leaves the list.
+    expect(r.items.join("; ")).toBe(
+      text.slice(0, text.lastIndexOf(note)).trim(),
+    );
   });
 
   it.each([
-    ["a note without 'all' (Michiels)", "A, 1990; ‘L.P.M.H. baron Michiels’ available at www.parlement.com/x (website accessed on 18 February 2019)."],
+    [
+      "a note without 'all' (Michiels)",
+      "A, 1990; ‘L.P.M.H. baron Michiels’ available at www.parlement.com/x (website accessed on 18 February 2019).",
+    ],
     ["a closing role note", "A, 1990; B (Editor)"],
-    ["a note with 'all' but no websites verb", "A, 1990; B, Collected Works, Oslo 1930 (all volumes)"],
-    ["'accessed' without 'all'", "A, 1990; B, www.x.org (accessed 12 February 2014)"],
+    [
+      "a note with 'all' but no websites verb",
+      "A, 1990; B, Collected Works, Oslo 1930 (all volumes)",
+    ],
+    [
+      "'accessed' without 'all'",
+      "A, 1990; B, www.x.org (accessed 12 February 2014)",
+    ],
     ["mismatched brackets", "A, 1990; B (all websites accessed on 1 May 2020]"],
+    [
+      "a note where 'all' is not about the websites",
+      "A, 1990; B, Oxford (All Souls College, visited 12 May 1990)",
+    ],
   ])("leaves %s in its item", (_, text) => {
     const r = parse(text);
     expect(r.note).toBeUndefined();
     expect(r.accessedOn).toBeUndefined();
+    expect(r.items.join("; ")).toBe(text.replace(/\.$/, ""));
   });
 });

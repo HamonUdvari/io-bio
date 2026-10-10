@@ -15,7 +15,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-const SCRIPT = fileURLToPath(new URL("./sync-entry-overrides.ts", import.meta.url));
+const SCRIPT = fileURLToPath(
+  new URL("./sync-entry-overrides.ts", import.meta.url),
+);
 const SLUG = "a-a-2020";
 const CARD = `src/data/entry-overrides/${SLUG}.json`;
 const ARCHIVED = `src/data/entry-overrides-archive/${SLUG}.json`;
@@ -53,7 +55,8 @@ const entry = (details: Record<string, string> = {}) => ({
   },
   imageFn: "",
 });
-const setEntries = (list: unknown[]) => write("dist/entry-data.json", JSON.stringify(list));
+const setEntries = (list: unknown[]) =>
+  write("dist/entry-data.json", JSON.stringify(list));
 
 /** Runs the sync; returns its counts. */
 function sync() {
@@ -85,7 +88,8 @@ function tree(sub = ""): Record<string, string> {
   if (existsSync(p(sub))) walk(sub);
   return out;
 }
-const history = () => (existsSync(p(HISTORY)) ? readdirSync(p(HISTORY)).sort() : []);
+const history = () =>
+  existsSync(p(HISTORY)) ? readdirSync(p(HISTORY)).sort() : [];
 const historyName = (kind: string) =>
   new RegExp(`^${SLUG}\\.\\d{4}-\\d\\d-\\d\\dT[\\d-]+Z\\.${kind}\\.json$`);
 
@@ -97,7 +101,11 @@ function withManualFields(card: Record<string, any>) {
     roles: [{ title: "Director-General", organisation: "Manual Org" }],
     portraitImage: "/src/content/bios-images/a.jpg",
     facePosition: 2,
-    details: { ...card.details, summary: "Manual summary", summaryOverride: true },
+    details: {
+      ...card.details,
+      summary: "Manual summary",
+      summaryOverride: true,
+    },
   };
 }
 
@@ -119,7 +127,10 @@ describe("sync-entry-overrides lifecycle", () => {
       portraitImage: "",
       facePosition: null,
     });
-    expect(card.details).toMatchObject({ summary: "Secretary-General of Org", summaryOverride: false });
+    expect(card.details).toMatchObject({
+      summary: "Secretary-General of Org",
+      summaryOverride: false,
+    });
     const before = tree();
     expect(sync()).toMatchObject(NONE);
     expect(tree()).toEqual(before);
@@ -182,7 +193,9 @@ describe("sync-entry-overrides lifecycle", () => {
     const card = JSON.parse(read(CARD));
     expect(card.details.life).toBe("1900-1991");
     expect(card.details.summary).toBe("Manual summary");
-    expect(card.roles).toEqual([{ title: "Director-General", organisation: "Manual Org" }]);
+    expect(card.roles).toEqual([
+      { title: "Director-General", organisation: "Manual Org" },
+    ]);
     expect(existsSync(p(ARCHIVED))).toBe(false);
   });
 
