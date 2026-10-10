@@ -1,3 +1,13 @@
+## [1.27.3](https://github.com/HamonUdvari/io-bio/compare/v1.27.2...v1.27.3) (2026-10-10)
+
+
+### Bug Fixes
+
+* **parser:** ignore paragraph-mark bold/italic (patch officeparser 6.1.1) ([](https://github.com/HamonUdvari/io-bio/commit/b781af510c0099e8fd072e212e3b14009c361686))
+* **parser:** keep semicolons inside brackets in one archive/publication/literature item ([](https://github.com/HamonUdvari/io-bio/commit/efd5cd2d5c952c65c1657f3a4a945b83554a8b03))
+* **parser:** only keep a ';' inside a simple bracketed note (review) ([](https://github.com/HamonUdvari/io-bio/commit/18570d8144d80db3f625f8fafb94823922e1b8d4))
+* **preview:** parse with the bundled (patched) officeparser instead of the CDN copy ([](https://github.com/HamonUdvari/io-bio/commit/02f7ffacb2f422a23c20018a64101a11683480e3))
+
 ## [1.27.2](https://github.com/HamonUdvari/io-bio/compare/v1.27.1...v1.27.2) (2026-10-08)
 
 
