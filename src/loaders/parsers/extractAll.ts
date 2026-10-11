@@ -7,6 +7,7 @@ import { parseIntro } from "./parseIntro";
 import { parseNationality } from "./parseNationality";
 import { parseRoles } from "./parseRoles";
 import { parseVersion } from "./parseVersion";
+import { repairUrlSpaces } from "./repairUrlSpaces";
 import type { ExtractedBio, ParserResult, Warning } from "./types";
 
 /**
@@ -18,11 +19,16 @@ import type { ExtractedBio, ParserResult, Warning } from "./types";
  */
 export function extractAll(ast: any): ParserResult<ExtractedBio> {
   const warnings: Warning[] = [];
-  const content: any[] = ast?.content || [];
+
+  // Join web addresses split by a stray space before any parser reads the
+  // text, so every field (and /preview) shows the same repaired address.
+  const repaired = repairUrlSpaces(ast?.content || []);
+  warnings.push(...repaired.warnings);
+  const content: any[] = repaired.content;
 
   const extractedIndices = new Set<number>();
 
-  const image = parseImage(ast);
+  const image = parseImage({ ...ast, content });
   warnings.push(...image.warnings);
   image.value.consumed.forEach((i) => extractedIndices.add(i));
 

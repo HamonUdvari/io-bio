@@ -24,6 +24,7 @@ import { basename } from "node:path";
 import pLimit from "p-limit";
 import { OfficeParser } from "officeparser";
 import { parseImage } from "../src/loaders/parsers/parseImage.ts";
+import { repairUrlSpaces } from "../src/loaders/parsers/repairUrlSpaces.ts";
 import { parseImageSource } from "../src/utils/imageSource.ts";
 
 const BIOS_DIR = path.resolve("./src/content/bios");
@@ -109,7 +110,9 @@ async function main() {
             path.join(BIOS_DIR, file),
             { extractAttachments: false },
           );
-          fullText = parseImage(ast).value.imageSource ?? "";
+          // Same repaired text as extractAll, so the export matches the site.
+          const { content } = repairUrlSpaces(ast.content ?? []);
+          fullText = parseImage({ ...ast, content }).value.imageSource ?? "";
         } catch (err) {
           console.warn(
             `[images] ${entry}: parse failed — ${(err as Error).message}`,

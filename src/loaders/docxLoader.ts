@@ -513,6 +513,10 @@ const docxEntryType: ContentEntryType = {
         );
         for (const e of errors) console.warn(`  - ${e.code}: ${e.message}`);
       }
+      // Every repaired (or possibly split) web address, so a new Word file's
+      // stray spaces show up in the build log.
+      for (const w of warnings.filter((w) => w.code.startsWith("url_space_")))
+        console.warn(`[docx] ${basename(filePath)}: ${w.code}: ${w.message}`);
     }
 
     // Per-entry, per-field "details" override: when a field's <field>Override
