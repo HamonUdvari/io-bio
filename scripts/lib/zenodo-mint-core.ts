@@ -3,7 +3,7 @@
 // a fake client.
 //
 // A new entry gets its DOI in two phases, so that its FIRST PDF already cites
-// it: `reserve` creates a draft with a reserved DOI and saves a "draft" record;
+// it: `reserve` creates a draft, reserves its DOI and saves a "draft" record;
 // the site is then rebuilt (the mint build counts the draft, see citeFor), and
 // `publish` uploads the PDF that cites the reserved DOI and publishes the draft.
 import type { Deposition, ZenodoClient } from "./zenodo-client.ts";
@@ -18,6 +18,7 @@ export type Action = "reserve" | "publish" | "newversion" | "skip";
 export type MintClient = Pick<
   ZenodoClient,
   | "createDeposition"
+  | "reserveDoi"
   | "deleteDeposition"
   | "getDeposition"
   | "uploadFile"
@@ -69,25 +70,30 @@ const DOI_PREFIX: Record<Env, string> = {
 };
 
 /**
- * Phase 1: create a draft that reserves its DOI. Returns the draft's ids and
- * the reserved DOI. The DOI is never derived: when the response lacks it, or
- * it does not belong to the draft or the env, the draft is deleted and this
- * throws.
+ * Phase 1: create a draft and reserve its DOI. Returns the draft's ids and the
+ * reserved DOI, read back from the draft after the reservation. The DOI is
+ * never derived: when the draft has none after the reservation, or it does
+ * not belong to the env, the draft is deleted and this throws.
  */
 export async function reserveDraft(
   zen: MintClient,
   env: Env,
   log: MintLog,
 ): Promise<{ recordId: number; conceptRecId?: number; versionDoi: string }> {
-  const draft = await zen.createDeposition({ prereserve_doi: true });
-  const reserved = draft.metadata?.prereserve_doi;
-  const problem = !reserved?.doi
-    ? "the response has no reserved DOI"
-    : Number(reserved.recid) !== draft.id
-      ? `the reserved DOI belongs to record ${reserved.recid}, not to draft ${draft.id}`
-      : !reserved.doi.startsWith(DOI_PREFIX[env])
-        ? `the reserved DOI ${reserved.doi} is not a ${env} DOI`
+  const draft = await zen.createDeposition({});
+  let problem = "";
+  let versionDoi = "";
+  try {
+    await zen.reserveDoi(draft.id);
+    versionDoi = (await zen.getDeposition(draft.id)).doi ?? "";
+    problem = !versionDoi
+      ? "the draft has no DOI after the reservation"
+      : !versionDoi.startsWith(DOI_PREFIX[env])
+        ? `the reserved DOI ${versionDoi} is not a ${env} DOI`
         : "";
+  } catch (err) {
+    problem = `the DOI reservation failed: ${(err as Error).message}`;
+  }
   if (problem) {
     try {
       await zen.deleteDeposition(draft.id);
@@ -105,7 +111,7 @@ export async function reserveDraft(
       : undefined;
   if (conceptRecId === undefined)
     log.warn(`  draft ${draft.id} has no concept record id`);
-  return { recordId: draft.id, conceptRecId, versionDoi: reserved!.doi };
+  return { recordId: draft.id, conceptRecId, versionDoi };
 }
 
 /**

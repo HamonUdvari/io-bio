@@ -54,15 +54,23 @@ function fakeZen(over: Partial<MintClient> = {}) {
         id: 11,
         conceptrecid: "10",
         links: { bucket: "bucket/11" },
-        metadata: { prereserve_doi: { doi: "10.5072/zenodo.11", recid: 11 } },
+        metadata: {},
       };
+    },
+    reserveDoi: async (id) => {
+      calls.push(`reserve ${id}`);
     },
     deleteDeposition: async (id) => {
       calls.push(`delete draft ${id}`);
     },
     getDeposition: async (id) => {
       calls.push(`get ${id}`);
-      return { id, links: { bucket: `bucket/${id}` }, metadata: {} };
+      return {
+        id,
+        doi: `10.5072/zenodo.${id}`,
+        links: { bucket: `bucket/${id}` },
+        metadata: {},
+      };
     },
     uploadFile: async (bucket, filename) => {
       calls.push(`upload ${bucket} ${filename}`);
@@ -130,48 +138,56 @@ describe("decide", () => {
 });
 
 describe("reserveDraft", () => {
-  it("creates a draft that reserves its DOI, and returns its ids", async () => {
+  it("creates a draft, reserves its DOI, and reads the DOI back", async () => {
     const { zen, calls } = fakeZen();
     expect(await reserveDraft(zen, "sandbox", silent)).toEqual({
       recordId: 11,
       conceptRecId: 10,
       versionDoi: "10.5072/zenodo.11",
     });
-    expect(calls).toEqual(['create {"prereserve_doi":true}']);
+    expect(calls).toEqual(["create {}", "reserve 11", "get 11"]);
   });
 
-  const draftWith = (metadata: Record<string, unknown>) =>
+  const withDoi = (doi?: string) =>
     fakeZen({
-      createDeposition: async () => ({
-        id: 11,
-        conceptrecid: 10,
-        links: {},
-        metadata,
-      }),
+      getDeposition: async (id) => ({ id, doi, links: {}, metadata: {} }),
     });
 
   it.each([
-    ["no reserved DOI", {}, "the response has no reserved DOI"],
     [
-      "a DOI of another record",
-      { prereserve_doi: { doi: "10.5072/zenodo.12", recid: 12 } },
-      "belongs to record 12",
+      "no DOI after the reservation",
+      withDoi(undefined),
+      "has no DOI after the reservation",
     ],
+    // The legacy API's computed DOI has the production prefix on the sandbox.
     [
       "a production DOI in the sandbox",
-      { prereserve_doi: { doi: "10.5281/zenodo.11", recid: 11 } },
+      withDoi("10.5281/zenodo.11"),
       "is not a sandbox DOI",
     ],
-  ])("deletes the draft and throws on %s", async (_, metadata, message) => {
-    const { zen, calls } = draftWith(metadata);
-    await expect(reserveDraft(zen, "sandbox", silent)).rejects.toThrow(message);
-    expect(calls).toContain("delete draft 11");
-  });
+    [
+      "a failed reservation",
+      fakeZen({
+        reserveDoi: async () => {
+          throw Object.assign(new Error("server"), { status: 500 });
+        },
+      }),
+      "the DOI reservation failed: server",
+    ],
+  ])(
+    "deletes the draft and throws on %s",
+    async (_, { zen, calls }, message) => {
+      await expect(reserveDraft(zen, "sandbox", silent)).rejects.toThrow(
+        message,
+      );
+      expect(calls).toContain("delete draft 11");
+    },
+  );
 
   it("still throws the real problem when the delete finds no draft (404)", async () => {
     const warnings: string[] = [];
     const { zen } = fakeZen({
-      createDeposition: async () => ({ id: 11, links: {}, metadata: {} }),
+      getDeposition: async (id) => ({ id, links: {}, metadata: {} }),
       deleteDeposition: async () => {
         throw Object.assign(new Error("not found"), { status: 404 });
       },
@@ -181,25 +197,14 @@ describe("reserveDraft", () => {
         info: () => {},
         warn: (m) => warnings.push(m),
       }),
-    ).rejects.toThrow("no reserved DOI");
+    ).rejects.toThrow("no DOI after the reservation");
     expect(warnings).toEqual([]);
-  });
-
-  it("accepts the reserved record id as a string", async () => {
-    const { zen } = fakeZen({
-      createDeposition: async () => ({
-        id: 11,
-        links: {},
-        metadata: { prereserve_doi: { doi: "10.5072/zenodo.11", recid: "11" } },
-      }),
-    });
-    expect((await reserveDraft(zen, "sandbox", silent)).recordId).toBe(11);
   });
 
   it("warns, and still throws the real problem, when the delete fails", async () => {
     const warnings: string[] = [];
     const { zen } = fakeZen({
-      createDeposition: async () => ({ id: 11, links: {}, metadata: {} }),
+      getDeposition: async (id) => ({ id, links: {}, metadata: {} }),
       deleteDeposition: async () => {
         throw Object.assign(new Error("server"), { status: 500 });
       },
@@ -209,7 +214,7 @@ describe("reserveDraft", () => {
         info: () => {},
         warn: (m) => warnings.push(m),
       }),
-    ).rejects.toThrow("no reserved DOI");
+    ).rejects.toThrow("no DOI after the reservation");
     expect(warnings.join()).toContain("could not delete draft 11");
   });
 
@@ -223,11 +228,7 @@ describe("reserveDraft", () => {
   it("warns when the draft has no concept record id", async () => {
     const warnings: string[] = [];
     const { zen } = fakeZen({
-      createDeposition: async () => ({
-        id: 11,
-        links: {},
-        metadata: { prereserve_doi: { doi: "10.5072/zenodo.11", recid: 11 } },
-      }),
+      createDeposition: async () => ({ id: 11, links: {}, metadata: {} }),
     });
     const r = await reserveDraft(zen, "sandbox", {
       info: () => {},
@@ -235,80 +236,6 @@ describe("reserveDraft", () => {
     });
     expect(r.conceptRecId).toBeUndefined();
     expect(warnings.join()).toContain("no concept record id");
-  });
-});
-
-describe("publishDraft", () => {
-  const draft = record({
-    recordId: 11,
-    conceptRecId: 10,
-    conceptDoi: "",
-    versionDoi: "10.5072/zenodo.11",
-    contentHash: "",
-    status: "draft",
-  });
-
-  it("uploads to the reserved draft, keeps only the entry PDF, and publishes it", async () => {
-    const { zen, calls } = fakeZen();
-    const outcome = await publishDraft(zen, draft, "x-2020", deposit, silent);
-    expect(outcome.kind === "published" && outcome.published.doi).toBe(
-      "10.5072/zenodo.11",
-    );
-    expect(calls).toEqual([
-      "get 11",
-      "upload bucket/11 x-2020-iobio.pdf",
-      "list 11",
-      "delete 11 x-2020.pdf",
-      "metadata 11",
-      "publish 11",
-    ]);
-    expect(outcome.kind).toBe("published");
-  });
-
-  it("throws when the draft has no bucket link", async () => {
-    const { zen } = fakeZen({
-      getDeposition: async (id) => ({ id, links: {}, metadata: {} }),
-    });
-    await expect(
-      publishDraft(zen, draft, "x-2020", deposit, silent),
-    ).rejects.toThrow("no bucket link");
-  });
-
-  it.each([404, 410])("reports a draft that is gone (%i)", async (status) => {
-    const { zen } = fakeZen({
-      getDeposition: async () => {
-        throw Object.assign(new Error("gone"), { status });
-      },
-    });
-    expect(await publishDraft(zen, draft, "x-2020", deposit, silent)).toEqual({
-      kind: "gone",
-    });
-  });
-
-  it("fails on another error (403)", async () => {
-    const { zen } = fakeZen({
-      getDeposition: async () => {
-        throw Object.assign(new Error("forbidden"), { status: 403 });
-      },
-    });
-    await expect(
-      publishDraft(zen, draft, "x-2020", deposit, silent),
-    ).rejects.toThrow("forbidden");
-  });
-
-  it("uploads nothing when the draft was already published", async () => {
-    const { zen, calls } = fakeZen({
-      getDeposition: async (id) => ({
-        id,
-        submitted: true,
-        doi: "10.5072/zenodo.11",
-        links: {},
-        metadata: {},
-      }),
-    });
-    const outcome = await publishDraft(zen, draft, "x-2020", deposit, silent);
-    expect(outcome.kind).toBe("submitted");
-    expect(calls).toEqual([]);
   });
 });
 

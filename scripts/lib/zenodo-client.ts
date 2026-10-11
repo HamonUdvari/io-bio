@@ -160,6 +160,12 @@ export function createZenodoClient(opts: ZenodoClientOptions) {
         `/deposit/depositions/${id}/files/${encodeURIComponent(f.id)}`,
       ),
 
+    /** Reserve the draft's DOI (InvenioRDM API). The legacy create's
+     *  `prereserve_doi` only reports a computed DOI, with the production
+     *  prefix even on the sandbox, and reserves nothing. */
+    reserveDoi: (id: number): Promise<any> =>
+      request("POST", `/records/${id}/draft/pids/doi`),
+
     /** Delete an unpublished draft that was never published. */
     deleteDeposition: (id: number): Promise<any> =>
       request("DELETE", `/deposit/depositions/${id}`),
