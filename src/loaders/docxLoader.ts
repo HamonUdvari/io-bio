@@ -19,6 +19,8 @@ import { slug as githubSlug } from "github-slugger";
 import { extractAll } from "./parsers/extractAll";
 import type { Role } from "./parsers/types";
 import { expandAcronymOrgs, fillRoleAbbr } from "./roleTransforms";
+import { citeFor } from "../../scripts/lib/zenodo-cite.ts";
+import type { CiteRecord } from "../../scripts/lib/zenodo-cite.ts";
 
 const WEB_IMAGE_EXTS = new Set(["png", "jpg", "jpeg", "gif", "svg"]);
 
@@ -27,51 +29,35 @@ const WEB_IMAGE_EXTS = new Set(["png", "jpg", "jpeg", "gif", "svg"]);
 // explicitly sets ZENODO_ENV=sandbox. CI sets no such var, so sandbox test DOIs
 // (prefix 10.5072) can render in local dev but can never ship to the live site.
 const DOI_ENV = process.env.ZENODO_ENV === "sandbox" ? "sandbox" : "production";
-interface DoiEntry {
-  versionDoi?: string;
-  conceptDoi?: string;
-  env?: string;
-}
-function loadDoiMap(): Record<string, DoiEntry> {
+function loadDoiMap(): Record<string, CiteRecord> {
   const file =
     DOI_ENV === "sandbox" ? "zenodo-dois.sandbox.json" : "zenodo-dois.json";
   const p = path.resolve("./src/data", file);
   if (!existsSync(p)) return {};
   try {
-    return (JSON.parse(readFileSync(p, "utf8")) as Record<string, DoiEntry>) ?? {};
+    return (JSON.parse(readFileSync(p, "utf8")) as Record<string, CiteRecord>) ?? {};
   } catch {
     return {};
   }
 }
 const DOI_MAP = loadDoiMap();
-const isSandboxDoi = (s?: string) => !!s && s.startsWith("10.5072/");
 
 // The sandbox DOI map (committed temporarily for the client demo, issue #2) —
 // read REGARDLESS of env so "How to cite" can PREVIEW the per-entry citation
 // pointing at the sandbox deposit before production DOIs are minted. The
 // production versionDoi/conceptDoi above always take precedence once they exist.
-interface SandboxEntry {
-  recordId?: number | string;
-  conceptRecId?: number | string;
-  versionDoi?: string;
-  conceptDoi?: string;
-}
-function loadSandboxMap(): Record<string, SandboxEntry> {
+// The production mint build (ZENODO_MINT_ENV=production) skips this map: see
+// citeFor in scripts/lib/zenodo-cite.ts.
+function loadSandboxMap(): Record<string, CiteRecord> {
   const p = path.resolve("./src/data", "zenodo-dois.sandbox.json");
   if (!existsSync(p)) return {};
   try {
-    return (JSON.parse(readFileSync(p, "utf8")) as Record<string, SandboxEntry>) ?? {};
+    return (JSON.parse(readFileSync(p, "utf8")) as Record<string, CiteRecord>) ?? {};
   } catch {
     return {};
   }
 }
-// The production mint builds with ZENODO_MINT_ENV=production
-// (.github/workflows/zenodo-mint.yml): its PDFs must never print the sandbox
-// preview citation, so that build skips this map. An entry then prints no
-// per-entry citation until it has a production DOI; the citation kind is in the
-// content hash, so the next production mint adds the doi.org citation.
-const SANDBOX_MAP =
-  process.env.ZENODO_MINT_ENV === "production" ? {} : loadSandboxMap();
+const SANDBOX_MAP = loadSandboxMap();
 
 // --- Per-entry override (src/data/entry-overrides/<slug>.json) ----------------
 // One CMS-editable JSON file per entry (a folder collection), reconciled 1:1
@@ -578,41 +564,24 @@ const docxEntryType: ContentEntryType = {
     // bio is ever nested in a subdir, page.id becomes "subdir/slug" while this
     // key stays the bare slug — re-key here if that ever changes.
     const doiKey = githubSlug(basename(filePath, path.extname(filePath)));
-    const doi = DOI_MAP[doiKey];
-    if (doi && (!doi.env || doi.env === DOI_ENV)) {
-      if (
-        DOI_ENV === "production" &&
-        (isSandboxDoi(doi.versionDoi) || isSandboxDoi(doi.conceptDoi))
-      ) {
-        console.warn(`[docx] ${doiKey}: ignoring sandbox DOI under production env`);
-      } else {
-        if (doi.versionDoi) (data as Record<string, unknown>).versionDoi = doi.versionDoi;
-        if (doi.conceptDoi) (data as Record<string, unknown>).conceptDoi = doi.conceptDoi;
-      }
-    }
-
-    // Build the per-entry citation for "How to cite" (issue #2). Prefer a real
-    // production DOI (resolves via doi.org); otherwise fall back to the sandbox
-    // deposit's CONCEPT record (always-latest version) so the client can preview
-    // the per-entry citation now. concept > version. Sandbox DOIs (10.5072) are
-    // NOT used as doi.org links — they don't resolve — so they route to the
-    // sandbox.zenodo.org record URL instead.
-    const dataConcept = (data as Record<string, unknown>).conceptDoi as string | undefined;
-    const dataVersion = (data as Record<string, unknown>).versionDoi as string | undefined;
-    const prodDoi = [dataConcept, dataVersion].find((d) => d && !isSandboxDoi(d));
-    const sb = SANDBOX_MAP[doiKey];
-    if (prodDoi) {
-      (data as Record<string, unknown>).zenodoCite = {
-        url: `https://doi.org/${prodDoi}`,
-        sandbox: false,
-      };
-    } else if (sb && (sb.conceptRecId || sb.recordId)) {
-      const recId = sb.conceptRecId ?? sb.recordId;
-      (data as Record<string, unknown>).zenodoCite = {
-        url: `https://sandbox.zenodo.org/records/${recId}`,
-        sandbox: true,
-      };
-    }
+    // The per-entry citation for "How to cite" (issue #2): a production DOI
+    // (doi.org) when one exists, else the sandbox deposit's concept record as a
+    // preview. The rule lives in scripts/lib/zenodo-cite.ts.
+    const cite = citeFor({
+      doi: DOI_MAP[doiKey],
+      sandbox: SANDBOX_MAP[doiKey],
+      doiEnv: DOI_ENV,
+      mintEnv: process.env.ZENODO_MINT_ENV,
+    });
+    if (cite.ignoredSandboxDoi)
+      console.warn(
+        `[docx] ${doiKey}: ignoring sandbox DOI under production env`,
+      );
+    if (cite.versionDoi)
+      (data as Record<string, unknown>).versionDoi = cite.versionDoi;
+    if (cite.conceptDoi)
+      (data as Record<string, unknown>).conceptDoi = cite.conceptDoi;
+    if (cite.cite) (data as Record<string, unknown>).zenodoCite = cite.cite;
 
     return {
       body: extracted?.body ?? "",
@@ -725,7 +694,7 @@ export function docxLoader(globOptions: DocxGlobOptions): Loader {
             : null,
         );
         const digest = generateDigest(
-          Buffer.concat([fileBuffer, Buffer.from(" " + overrideJson, "utf8")]),
+          Buffer.concat([fileBuffer, Buffer.from("\0" + overrideJson, "utf8")]),
         );
 
         const { body, data } = await entryType.getEntryInfo({
