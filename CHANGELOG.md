@@ -1,3 +1,17 @@
+# [1.28.0](https://github.com/HamonUdvari/io-bio/compare/v1.27.4...v1.28.0) (2026-10-11)
+
+
+### Bug Fixes
+
+* **parser:** match a byline that marks a deceased author with (†) ([](https://github.com/HamonUdvari/io-bio/commit/edccd784c9471866abed69d6e90e4327b71ba34d))
+* **zenodo:** reserve the DOI through the InvenioRDM API ([](https://github.com/HamonUdvari/io-bio/commit/a7e1fee160735ee3ec083aadbf72c9c42e5591da))
+
+
+### Website Features
+
+* **parser:** repair web addresses split by a stray space ([](https://github.com/HamonUdvari/io-bio/commit/091f9395264df530e05ddc1754f79a86bef65459))
+* **zenodo:** reserve DOIs first so every deposited PDF cites its own record ([](https://github.com/HamonUdvari/io-bio/commit/c5cfea024899c412b0447c6c8f08619f30fa1ff0))
+
 ## [1.27.4](https://github.com/HamonUdvari/io-bio/compare/v1.27.3...v1.27.4) (2026-10-11)
 
 
