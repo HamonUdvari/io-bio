@@ -1,3 +1,15 @@
+## [1.27.4](https://github.com/HamonUdvari/io-bio/compare/v1.27.3...v1.27.4) (2026-10-11)
+
+
+### Bug Fixes
+
+* **parser:** end a list section at the next bold label even after image-only runs ([](https://github.com/HamonUdvari/io-bio/commit/a719fa8fc19c3b34767281e0fc1244972f89f003))
+* **parser:** keep semicolons inside quoted titles in one archive/publication/literature item ([](https://github.com/HamonUdvari/io-bio/commit/f5eda38881f0c7e615cc6108013f35bb6f8c5239))
+* **parser:** show other "all websites accessed/visited/approached" notes as the section footer ([](https://github.com/HamonUdvari/io-bio/commit/a28b07305262ef150926c12b28e5fdcb6903f6fc))
+* **zenodo:** hash exactly what the entry PDF shows (content hash v2) ([](https://github.com/HamonUdvari/io-bio/commit/bd7e9fc7abd3cdf30461f141f37be0971b5e4493))
+* **zenodo:** never print the sandbox citation into production PDFs ([](https://github.com/HamonUdvari/io-bio/commit/b2ea1a6610523425c6faf6397fecc27045bc9f1b))
+* **zenodo:** remove legacy files from each new deposit version ([](https://github.com/HamonUdvari/io-bio/commit/7d6eed9e9db9221a9d90f8aeacdecf7017480f6c))
+
 ## [1.27.3](https://github.com/HamonUdvari/io-bio/compare/v1.27.2...v1.27.3) (2026-10-10)
 
 
