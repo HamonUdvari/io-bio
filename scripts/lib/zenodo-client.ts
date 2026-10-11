@@ -12,7 +12,7 @@ export interface ZenodoClientOptions {
 export interface Deposition {
   id: number;
   links: { bucket?: string; publish?: string; self?: string; [k: string]: any };
-  metadata: { prereserve_doi?: { doi: string; recid: number }; [k: string]: any };
+  metadata: { [k: string]: any };
   conceptdoi?: string;
   conceptrecid?: number | string; // the legacy API returns a string
   doi?: string;
@@ -123,7 +123,7 @@ export function createZenodoClient(opts: ZenodoClientOptions) {
   }
 
   return {
-    /** Create a draft. Pass prereserve to get the version DOI before publishing. */
+    /** Create a draft. reserveDoi() then reserves its DOI. */
     createDeposition: (metadata?: Record<string, any>): Promise<Deposition> =>
       request("POST", "/deposit/depositions", {
         json: metadata ? { metadata } : {},

@@ -107,8 +107,9 @@ jobs:
       - name: Commit refreshed sandbox DOI map + trigger deploy
         # Runs even when the refresh step FAILED or was cancelled: the mint saves
         # the map after every successful entry (and every reserved draft), so a
-        # partial run still holds new DOIs. Skipping this commit would lose them, and the next run would mint
-        # those entries again (duplicate deposits). The job still ends as failed.
+        # partial run still holds new DOIs. Skipping this commit would lose them,
+        # and the next run would mint those entries again (duplicate deposits).
+        # The job still ends as failed.
         # Skipped only when the refresh never started.
         if: ${{ always() && steps.mint.outcome != 'skipped' }}
         env:

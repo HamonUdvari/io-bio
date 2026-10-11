@@ -79,8 +79,8 @@ jobs:
           node scripts/zenodo-mint.ts $ARGS
       - name: Commit DOI map + trigger deploy
         # Runs even when the mint step FAILED or was cancelled: the mint saves the
-        # map after every successful entry, so a partial run still holds DOIs that
-        # now exist on Zenodo. Skipping this commit would lose them with the
+        # map after every successful entry (and every reserved draft), so a
+        # partial run still holds DOIs that now exist on Zenodo. Skipping this commit would lose them with the
         # runner, and the next run would mint those entries again — duplicate
         # concept DOIs. (The job still ends as failed.) Skipped only when the mint
         # never started.

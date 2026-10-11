@@ -85,25 +85,33 @@ export async function reserveDraft(
   let versionDoi = "";
   try {
     await zen.reserveDoi(draft.id);
-    versionDoi = (await zen.getDeposition(draft.id)).doi ?? "";
+  } catch (err) {
+    problem = `the DOI reservation failed: ${(err as Error).message}`;
+  }
+  if (!problem) {
+    try {
+      versionDoi = (await zen.getDeposition(draft.id)).doi ?? "";
+    } catch (err) {
+      problem = `the reserved DOI could not be read back: ${(err as Error).message}`;
+    }
+  }
+  if (!problem)
     problem = !versionDoi
       ? "the draft has no DOI after the reservation"
       : !versionDoi.startsWith(DOI_PREFIX[env])
         ? `the reserved DOI ${versionDoi} is not a ${env} DOI`
         : "";
-  } catch (err) {
-    problem = `the DOI reservation failed: ${(err as Error).message}`;
-  }
   if (problem) {
+    let outcome = `deleted draft ${draft.id}`;
     try {
       await zen.deleteDeposition(draft.id);
     } catch (err) {
-      if (httpStatus(err) !== 404)
-        log.warn(
-          `  could not delete draft ${draft.id}: ${(err as Error).message}`,
-        );
+      if (httpStatus(err) !== 404) {
+        outcome = `could not delete draft ${draft.id}`;
+        log.warn(`  ${outcome}: ${(err as Error).message}`);
+      }
     }
-    throw new Error(`${problem}; deleted draft ${draft.id}`);
+    throw new Error(`${problem}; ${outcome}`);
   }
   const conceptRecId =
     draft.conceptrecid != null && String(draft.conceptrecid) !== ""

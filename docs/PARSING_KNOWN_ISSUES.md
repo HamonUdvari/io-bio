@@ -64,6 +64,20 @@ Possible mitigations:
 
 ---
 
+## 5. Web addresses split by a stray space (repaired; unclear cases warned)
+
+Authors sometimes type a space inside a web address, for example `www.huffpost.com/ entry/…` or `start.htm? infoid=…`. The parser joins the address again before any other parser reads the text (`src/loaders/parsers/repairUrlSpaces.ts`). It joins only clear patterns. The build log shows each repair as `url_space_repaired`.
+
+- When an address looks split but matches no rule, the parser keeps the text and logs `url_space_unclear`. Examples: a digits-only tail (`Record/ 4594398.`) or a long plain word (`at_download/ publicationfile;`). Fix these in the Word file.
+- Known limits: a hyphenated word after a trailing `/` is joined (`…/ well-known`), and so is `…/ and/or`. A space directly after the scheme (`http:// www.x.org`) is not found. Tables are not scanned.
+- The Word hyperlink targets can keep the old space as `%20`. The site does not read them.
+
+## 6. Byline with a deceased-author mark `(†)`
+
+`Lie-TH 2017.docx` marks a deceased author in the byline: `James P. Muldoon, Jr. (†) and Ellen Jenny Ravndal`. The "How to cite" line has no mark. The author-line match ignores `(†)`. The entry header shows the byline as written (`byline`). The citation, the Zenodo creators and the search use `authors`, which has no mark.
+
+---
+
 ## How to verify
 
 ```bash
