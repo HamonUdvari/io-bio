@@ -8,6 +8,10 @@ on:
     # against a full, pointless Release build on every refresh.
     paths-ignore:
       - "src/data/zenodo-dois*.json"
+  # Re-run by hand on the latest main when a release push lost a race with a
+  # bot commit ("rejected … fetch first"); semantic-release then releases all
+  # commits since the last tag.
+  workflow_dispatch:
 
 permissions:
   contents: write
