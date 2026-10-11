@@ -68,6 +68,19 @@ describe("readDoiMap", () => {
     expect(() => readDoiMap(file)).toThrow(/"x-x-2020" is not a DOI record/);
   });
 
+  it("accepts a draft record (a reserved DOI, no concept DOI or hash yet)", () => {
+    const map = {
+      "a-a-2020": {
+        ...rec(""),
+        versionDoi: "10.5281/zenodo.40",
+        contentHash: "",
+        status: "draft",
+      },
+    };
+    writeDoiMap(file, map);
+    expect(readDoiMap(file)).toEqual(map);
+  });
+
   it("accepts an empty conceptDoi (the mint writes one when Zenodo omits it)", () => {
     const map = { "a-a-2020": rec("") };
     writeDoiMap(file, map);
@@ -94,6 +107,16 @@ describe("mergeDoiMaps (commit a run's map onto a main that moved)", () => {
   it("does not revert a record that only main changed", () => {
     const b2 = rec("10.5281/zenodo.2", "2");
     expect(mergeDoiMaps({ a, b }, { a, b }, { a, b: b2 })).toEqual({ a, b: b2 });
+  });
+
+  it("replaces a draft record with its published record", () => {
+    const draft = { ...rec(""), status: "draft", contentHash: "" };
+    expect(mergeDoiMaps({ a, d: draft }, { a, d: c }, { a, d: draft })).toEqual(
+      {
+        a,
+        d: c,
+      },
+    );
   });
 
   it("never drops a record", () => {

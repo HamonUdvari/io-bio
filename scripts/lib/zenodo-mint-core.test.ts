@@ -1,9 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
-  createRecord,
+  citesRecord,
   decide,
+  draftRecord,
+  draftState,
   idFromUrl,
   newVersionOf,
+  publishDraft,
+  publishedDoiProblem,
+  publishedRecord,
+  recordAfterPublish,
+  reserveDraft,
 } from "./zenodo-mint-core.ts";
 import type { MintClient } from "./zenodo-mint-core.ts";
 import { computeStateHash } from "./zenodo-metadata.ts";
@@ -11,7 +18,12 @@ import type { MetaEntry, MetadataConfig } from "./zenodo-metadata.ts";
 import type { DoiRecord } from "./zenodo-state.ts";
 
 const cfg = { license: "cc-by-nc-nd-4.0" } as MetadataConfig;
-const entry = { slug: "x-2020", contentHash: "sha256:abc" } as MetaEntry;
+const entry = {
+  slug: "x-2020",
+  contentHash: "sha256:abc",
+  version: "Version 1 January 2020",
+  authors: "Ann Author",
+} as MetaEntry;
 const record = (over: Partial<DoiRecord> = {}): DoiRecord => ({
   recordId: 5,
   conceptRecId: 1,
@@ -38,7 +50,15 @@ function fakeZen(over: Partial<MintClient> = {}) {
   const zen: MintClient = {
     createDeposition: async (m) => {
       calls.push(`create ${JSON.stringify(m)}`);
-      return { id: 11, links: { bucket: "bucket/11" }, metadata: {} };
+      return {
+        id: 11,
+        conceptrecid: "10",
+        links: { bucket: "bucket/11" },
+        metadata: { prereserve_doi: { doi: "10.5072/zenodo.11", recid: 11 } },
+      };
+    },
+    deleteDeposition: async (id) => {
+      calls.push(`delete draft ${id}`);
     },
     getDeposition: async (id) => {
       calls.push(`get ${id}`);
@@ -93,7 +113,9 @@ describe("idFromUrl", () => {
 
 describe("decide", () => {
   it.each([
-    ["no record", undefined, false, "create"],
+    ["no record", undefined, false, "reserve"],
+    ["a draft", record({ status: "draft", contentHash: "" }), false, "publish"],
+    ["a draft, --force", record({ status: "draft" }), true, "publish"],
     ["the same hash", record(), false, "skip"],
     [
       "another hash",
@@ -107,51 +129,390 @@ describe("decide", () => {
   });
 });
 
-describe("createRecord", () => {
-  it("reserves the DOI, uploads, sets the metadata, then publishes", async () => {
+describe("reserveDraft", () => {
+  it("creates a draft that reserves its DOI, and returns its ids", async () => {
     const { zen, calls } = fakeZen();
-    const { published, conceptDoi } = await createRecord(zen, deposit);
+    expect(await reserveDraft(zen, "sandbox", silent)).toEqual({
+      recordId: 11,
+      conceptRecId: 10,
+      versionDoi: "10.5072/zenodo.11",
+    });
+    expect(calls).toEqual(['create {"prereserve_doi":true}']);
+  });
+
+  const draftWith = (metadata: Record<string, unknown>) =>
+    fakeZen({
+      createDeposition: async () => ({
+        id: 11,
+        conceptrecid: 10,
+        links: {},
+        metadata,
+      }),
+    });
+
+  it.each([
+    ["no reserved DOI", {}, "the response has no reserved DOI"],
+    [
+      "a DOI of another record",
+      { prereserve_doi: { doi: "10.5072/zenodo.12", recid: 12 } },
+      "belongs to record 12",
+    ],
+    [
+      "a production DOI in the sandbox",
+      { prereserve_doi: { doi: "10.5281/zenodo.11", recid: 11 } },
+      "is not a sandbox DOI",
+    ],
+  ])("deletes the draft and throws on %s", async (_, metadata, message) => {
+    const { zen, calls } = draftWith(metadata);
+    await expect(reserveDraft(zen, "sandbox", silent)).rejects.toThrow(message);
+    expect(calls).toContain("delete draft 11");
+  });
+
+  it("still throws the real problem when the delete finds no draft (404)", async () => {
+    const warnings: string[] = [];
+    const { zen } = fakeZen({
+      createDeposition: async () => ({ id: 11, links: {}, metadata: {} }),
+      deleteDeposition: async () => {
+        throw Object.assign(new Error("not found"), { status: 404 });
+      },
+    });
+    await expect(
+      reserveDraft(zen, "sandbox", {
+        info: () => {},
+        warn: (m) => warnings.push(m),
+      }),
+    ).rejects.toThrow("no reserved DOI");
+    expect(warnings).toEqual([]);
+  });
+
+  it("accepts the reserved record id as a string", async () => {
+    const { zen } = fakeZen({
+      createDeposition: async () => ({
+        id: 11,
+        links: {},
+        metadata: { prereserve_doi: { doi: "10.5072/zenodo.11", recid: "11" } },
+      }),
+    });
+    expect((await reserveDraft(zen, "sandbox", silent)).recordId).toBe(11);
+  });
+
+  it("warns, and still throws the real problem, when the delete fails", async () => {
+    const warnings: string[] = [];
+    const { zen } = fakeZen({
+      createDeposition: async () => ({ id: 11, links: {}, metadata: {} }),
+      deleteDeposition: async () => {
+        throw Object.assign(new Error("server"), { status: 500 });
+      },
+    });
+    await expect(
+      reserveDraft(zen, "sandbox", {
+        info: () => {},
+        warn: (m) => warnings.push(m),
+      }),
+    ).rejects.toThrow("no reserved DOI");
+    expect(warnings.join()).toContain("could not delete draft 11");
+  });
+
+  it("checks the production prefix in production", async () => {
+    const { zen } = fakeZen();
+    await expect(reserveDraft(zen, "production", silent)).rejects.toThrow(
+      "is not a production DOI",
+    );
+  });
+
+  it("warns when the draft has no concept record id", async () => {
+    const warnings: string[] = [];
+    const { zen } = fakeZen({
+      createDeposition: async () => ({
+        id: 11,
+        links: {},
+        metadata: { prereserve_doi: { doi: "10.5072/zenodo.11", recid: 11 } },
+      }),
+    });
+    const r = await reserveDraft(zen, "sandbox", {
+      info: () => {},
+      warn: (m) => warnings.push(m),
+    });
+    expect(r.conceptRecId).toBeUndefined();
+    expect(warnings.join()).toContain("no concept record id");
+  });
+});
+
+describe("publishDraft", () => {
+  const draft = record({
+    recordId: 11,
+    conceptRecId: 10,
+    conceptDoi: "",
+    versionDoi: "10.5072/zenodo.11",
+    contentHash: "",
+    status: "draft",
+  });
+
+  it("uploads to the reserved draft, keeps only the entry PDF, and publishes it", async () => {
+    const { zen, calls } = fakeZen();
+    const outcome = await publishDraft(zen, draft, "x-2020", deposit, silent);
+    expect(outcome.kind === "published" && outcome.published.doi).toBe(
+      "10.5072/zenodo.11",
+    );
     expect(calls).toEqual([
-      'create {"prereserve_doi":true}',
+      "get 11",
       "upload bucket/11 x-2020-iobio.pdf",
+      "list 11",
+      "delete 11 x-2020.pdf",
       "metadata 11",
       "publish 11",
     ]);
-    expect(published.doi).toBe("10.5072/zenodo.11");
-    expect(conceptDoi).toBe("10.5072/zenodo.1");
+    expect(outcome.kind).toBe("published");
   });
 
-  it("falls back to the draft's concept DOI, then to empty", async () => {
-    const noConcept = async (id: number) => ({ id, links: {}, metadata: {} });
-    const withDraftConcept = fakeZen({
-      publish: noConcept,
-      createDeposition: async () => ({
-        id: 11,
-        links: { bucket: "bucket/11" },
+  it("throws when the draft has no bucket link", async () => {
+    const { zen } = fakeZen({
+      getDeposition: async (id) => ({ id, links: {}, metadata: {} }),
+    });
+    await expect(
+      publishDraft(zen, draft, "x-2020", deposit, silent),
+    ).rejects.toThrow("no bucket link");
+  });
+
+  it.each([404, 410])("reports a draft that is gone (%i)", async (status) => {
+    const { zen } = fakeZen({
+      getDeposition: async () => {
+        throw Object.assign(new Error("gone"), { status });
+      },
+    });
+    expect(await publishDraft(zen, draft, "x-2020", deposit, silent)).toEqual({
+      kind: "gone",
+    });
+  });
+
+  it("fails on another error (403)", async () => {
+    const { zen } = fakeZen({
+      getDeposition: async () => {
+        throw Object.assign(new Error("forbidden"), { status: 403 });
+      },
+    });
+    await expect(
+      publishDraft(zen, draft, "x-2020", deposit, silent),
+    ).rejects.toThrow("forbidden");
+  });
+
+  it("uploads nothing when the draft was already published", async () => {
+    const { zen, calls } = fakeZen({
+      getDeposition: async (id) => ({
+        id,
+        submitted: true,
+        doi: "10.5072/zenodo.11",
+        links: {},
         metadata: {},
-        conceptdoi: "10.5072/zenodo.9",
       }),
     });
-    expect((await createRecord(withDraftConcept.zen, deposit)).conceptDoi).toBe(
-      "10.5072/zenodo.9",
-    );
-    const neither = fakeZen({ publish: noConcept });
-    expect((await createRecord(neither.zen, deposit)).conceptDoi).toBe("");
+    const outcome = await publishDraft(zen, draft, "x-2020", deposit, silent);
+    expect(outcome.kind).toBe("submitted");
+    expect(calls).toEqual([]);
+  });
+});
+
+describe("draftState", () => {
+  const draft = record({ recordId: 11, status: "draft" });
+  it("finds a draft that is still a draft", async () => {
+    expect(await draftState(fakeZen().zen, draft)).toEqual({ kind: "draft" });
+  });
+  it("finds a draft that an earlier run published", async () => {
+    const { zen } = fakeZen({
+      getDeposition: async (id) => ({
+        id,
+        submitted: true,
+        doi: "10.5072/zenodo.11",
+        links: {},
+        metadata: {},
+      }),
+    });
+    const now = await draftState(zen, draft);
+    expect(now.kind).toBe("submitted");
+  });
+  it.each([404, 410])("reports a gone draft (%i)", async (status) => {
+    const { zen } = fakeZen({
+      getDeposition: async () => {
+        throw Object.assign(new Error("gone"), { status });
+      },
+    });
+    expect(await draftState(zen, draft)).toEqual({ kind: "gone" });
+  });
+  it("throws on another error", async () => {
+    const { zen } = fakeZen({
+      getDeposition: async () => {
+        throw Object.assign(new Error("server"), { status: 500 });
+      },
+    });
+    await expect(draftState(zen, draft)).rejects.toThrow("server");
+  });
+});
+
+describe("recordAfterPublish", () => {
+  const draft = record({
+    recordId: 11,
+    conceptRecId: 10,
+    conceptDoi: "",
+    versionDoi: "10.5072/zenodo.11",
+    contentHash: "",
+    status: "draft",
+  });
+  const dep = (doi: string) => ({
+    id: 11,
+    doi,
+    conceptdoi: "10.5072/zenodo.10",
+    conceptrecid: "10",
+    links: {},
+    metadata: {},
   });
 
-  it.each(["uploadFile", "publish"] as const)(
-    "rejects when %s fails",
-    async (step) => {
-      const { zen } = fakeZen({
-        [step]: async () => {
-          throw new Error(`${step} failed`);
+  it("records the published DOIs and the content hash", () => {
+    const { record: r, problem } = recordAfterPublish(
+      draft,
+      { kind: "published", published: dep("10.5072/zenodo.11") },
+      entry,
+      cfg,
+      "sandbox",
+      "X, Y",
+    );
+    expect(problem).toBeNull();
+    expect(r).toMatchObject({
+      recordId: 11,
+      conceptRecId: 10,
+      conceptDoi: "10.5072/zenodo.10",
+      versionDoi: "10.5072/zenodo.11",
+      contentHash: computeStateHash(entry, cfg),
+      status: "published",
+    });
+  });
+
+  it("keeps the hash empty for a draft an earlier run published", () => {
+    const { record: r, problem } = recordAfterPublish(
+      draft,
+      { kind: "submitted", published: dep("10.5072/zenodo.11") },
+      entry,
+      cfg,
+      "sandbox",
+      "X, Y",
+    );
+    expect(problem).toBeNull();
+    expect(r.contentHash).toBe("");
+    expect(r.status).toBe("published");
+  });
+
+  it("records the REAL DOI with an empty hash when it is not the reserved one", () => {
+    const { record: r, problem } = recordAfterPublish(
+      draft,
+      { kind: "published", published: dep("10.5072/zenodo.99") },
+      entry,
+      cfg,
+      "sandbox",
+      "X, Y",
+    );
+    expect(problem).toContain("is not the reserved");
+    expect(r.versionDoi).toBe("10.5072/zenodo.99");
+    expect(r.contentHash).toBe("");
+  });
+});
+
+describe("publishedDoiProblem", () => {
+  const draft = record({
+    recordId: 11,
+    conceptRecId: 10,
+    versionDoi: "10.5072/zenodo.11",
+    status: "draft",
+  });
+  const published = (doi: string, conceptrecid: number) => ({
+    id: 11,
+    doi,
+    conceptrecid,
+    links: {},
+    metadata: {},
+  });
+
+  it("accepts the reserved DOI and concept record", () => {
+    expect(
+      publishedDoiProblem(draft, published("10.5072/zenodo.11", 10), "sandbox"),
+    ).toBeNull();
+  });
+  it("reports another DOI", () => {
+    expect(
+      publishedDoiProblem(draft, published("10.5072/zenodo.12", 10), "sandbox"),
+    ).toContain("is not the reserved");
+  });
+  it("reports another concept record in the sandbox only", () => {
+    expect(
+      publishedDoiProblem(draft, published("10.5072/zenodo.11", 9), "sandbox"),
+    ).toContain("which the PDF cites");
+    expect(
+      publishedDoiProblem(
+        draft,
+        published("10.5072/zenodo.11", 9),
+        "production",
+      ),
+    ).toBeNull();
+  });
+});
+
+describe("citesRecord", () => {
+  const html = '<a href="https://sandbox.zenodo.org/records/506411">x</a>';
+  it("matches the exact link", () => {
+    expect(citesRecord(html, "https://sandbox.zenodo.org/records/506411")).toBe(
+      true,
+    );
+  });
+  it("does not match a prefix of another record", () => {
+    expect(citesRecord(html, "https://sandbox.zenodo.org/records/50641")).toBe(
+      false,
+    );
+  });
+});
+
+describe("map records", () => {
+  it("builds a draft record with no concept DOI and no hash", () => {
+    expect(
+      draftRecord(entry, "X, Y", "production", {
+        recordId: 40,
+        versionDoi: "10.5281/zenodo.40",
+      }),
+    ).toMatchObject({
+      recordId: 40,
+      conceptDoi: "",
+      versionDoi: "10.5281/zenodo.40",
+      contentHash: "",
+      status: "draft",
+      version: "1 January 2020",
+      env: "production",
+      title: "X, Y",
+      authors: "Ann Author",
+    });
+  });
+
+  it("builds a published record from Zenodo's response", () => {
+    expect(
+      publishedRecord(
+        entry,
+        "X, Y",
+        "sandbox",
+        {
+          id: 12,
+          doi: "10.5072/zenodo.12",
+          conceptrecid: "10",
+          links: {},
+          metadata: {},
         },
-      });
-      await expect(createRecord(zen, deposit)).rejects.toThrow(
-        `${step} failed`,
-      );
-    },
-  );
+        "10.5072/zenodo.10",
+        "sha256:h",
+      ),
+    ).toMatchObject({
+      recordId: 12,
+      conceptRecId: 10,
+      conceptDoi: "10.5072/zenodo.10",
+      versionDoi: "10.5072/zenodo.12",
+      contentHash: "sha256:h",
+      status: "published",
+    });
+  });
 });
 
 describe("newVersionOf", () => {

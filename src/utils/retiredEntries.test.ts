@@ -50,6 +50,17 @@ describe("retiredEntries", () => {
     ]);
   });
 
+  it("never retires a draft (a reserved DOI that is not published yet)", () => {
+    const drafts = {
+      "a-a-2020": {
+        conceptDoi: "",
+        versionDoi: "10.5281/zenodo.40",
+        status: "draft",
+      },
+    };
+    expect(retiredEntries(drafts, new Set())).toEqual([]);
+  });
+
   it("ignores sandbox records copied into the production map", () => {
     const mixed = {
       "a-a-2020": { conceptDoi: "10.5072/zenodo.9" }, // sandbox concept DOI

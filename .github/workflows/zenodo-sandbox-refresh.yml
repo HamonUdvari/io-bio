@@ -90,8 +90,15 @@ jobs:
           sudo apt-get install -y --no-install-recommends libreoffice-core libreoffice-draw
           soffice --version
       - name: Build (emits dist/zenodo-meta.json + the /print routes)
+        # The mint build: it also counts DOIs that an earlier run reserved but
+        # did not publish, so their print pages cite them (see citeFor in
+        # scripts/lib/zenodo-cite.ts). Deploy builds never set this.
+        env:
+          ZENODO_MINT_ENV: sandbox
         run: pnpm run build
-      - name: Refresh sandbox deposits (re-versions changed content/layout only)
+      # A new entry is reserved, the site rebuilt and the entry published, all
+      # in this one step (scripts/zenodo-mint.ts), so its first PDF cites it.
+      - name: Refresh sandbox deposits (new entries + changed content/layout)
         id: mint
         env:
           ZENODO_TOKEN: ${{ secrets.ZENODO_SANDBOX_TOKEN }}
@@ -99,8 +106,8 @@ jobs:
         run: pnpm run zenodo:mint:sandbox
       - name: Commit refreshed sandbox DOI map + trigger deploy
         # Runs even when the refresh step FAILED or was cancelled: the mint saves
-        # the map after every successful entry, so a partial run still holds new
-        # DOIs. Skipping this commit would lose them, and the next run would mint
+        # the map after every successful entry (and every reserved draft), so a
+        # partial run still holds new DOIs. Skipping this commit would lose them, and the next run would mint
         # those entries again (duplicate deposits). The job still ends as failed.
         # Skipped only when the refresh never started.
         if: ${{ always() && steps.mint.outcome != 'skipped' }}
@@ -159,13 +166,6 @@ jobs:
             # workflow's `paths:`, and Deploy makes no commits.
             echo "dispatching Deploy"
             gh workflow run deploy.yml --ref main
-            # A record CREATED in this run has no citation in its first PDF: the
-            # build ran before its DOI existed. One more refresh re-versions just
-            # those records with the citation; it creates nothing, so it stops.
-            if node -e 'const [b, o] = process.argv.slice(1).map((f) => Object.keys(JSON.parse(require("fs").readFileSync(f, "utf8")))); process.exit(o.some((k) => !b.includes(k)) ? 0 : 1)' "$RUNNER_TEMP/base-map.json" "$RUNNER_TEMP/doi-map.json"; then
-              echo "records created; dispatching one more sandbox refresh"
-              gh workflow run zenodo-sandbox-refresh.yml --ref main
-            fi
             exit 0
           done
           echo "::error::could not push refreshed sandbox map after 5 attempts"

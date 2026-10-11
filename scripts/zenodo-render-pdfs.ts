@@ -232,6 +232,17 @@ export async function renderPdfs(
     throw new Error("dist/ not found — run `npm run build` first.");
   if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
 
+  // Refuse a busy port: the preview server would quietly move to another
+  // port, and the PDFs would come from whatever already listens here.
+  const busy = await fetch(`http://localhost:${PORT}/`).then(
+    () => true,
+    () => false,
+  );
+  if (busy)
+    throw new Error(
+      `port ${PORT} is already in use — stop that server or set ZENODO_PREVIEW_PORT`,
+    );
+
   const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
   const preview = spawn(
     npmCmd,

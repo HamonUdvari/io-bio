@@ -61,7 +61,8 @@ const printHref = `${base}print/${slug}`;
 // CONCEPT record (conceptRecId, always-latest), matching the "How to cite"
 // citation built in docxLoader, so both Zenodo surfaces on the page resolve to
 // the same deposit. Read the sandbox DOI map via glob so the build won't fail
-// when it's absent; independent of ZENODO_ENV.
+// when it's absent; independent of ZENODO_ENV. A draft (a DOI the mint
+// reserved but has not published) has no public record page yet: skip it.
 const sandboxDoiMap = (Object.values(
   import.meta.glob("/src/data/zenodo-dois.sandbox.json", {
     eager: true,
@@ -69,9 +70,14 @@ const sandboxDoiMap = (Object.values(
   }),
 )[0] ?? {}) as Record<
   string,
-  { recordId?: number | string; conceptRecId?: number | string }
+  {
+    recordId?: number | string;
+    conceptRecId?: number | string;
+    status?: string;
+  }
 >;
-const sandboxRec = sandboxDoiMap[slug ?? ""];
+const mapRec = sandboxDoiMap[slug ?? ""];
+const sandboxRec = mapRec?.status === "draft" ? undefined : mapRec;
 const sandboxRecordId = sandboxRec?.conceptRecId ?? sandboxRec?.recordId;
 const sandboxUrl = sandboxRecordId
   ? `https://sandbox.zenodo.org/records/${sandboxRecordId}`

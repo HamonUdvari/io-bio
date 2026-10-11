@@ -1,17 +1,24 @@
 // The mint's per-entry decision and Zenodo steps, apart from the CLI in
 // scripts/zenodo-mint.ts (which runs on import), so tests can drive them with
 // a fake client.
+//
+// A new entry gets its DOI in two phases, so that its FIRST PDF already cites
+// it: `reserve` creates a draft with a reserved DOI and saves a "draft" record;
+// the site is then rebuilt (the mint build counts the draft, see citeFor), and
+// `publish` uploads the PDF that cites the reserved DOI and publishes the draft.
 import type { Deposition, ZenodoClient } from "./zenodo-client.ts";
 import { pruneDraftFiles } from "./zenodo-files.ts";
-import { computeStateHash } from "./zenodo-metadata.ts";
+import { computeStateHash, versionLabel } from "./zenodo-metadata.ts";
 import type { MetaEntry, MetadataConfig } from "./zenodo-metadata.ts";
 import type { DoiRecord } from "./zenodo-state.ts";
 
-export type Action = "create" | "newversion" | "skip";
+export type Env = "sandbox" | "production";
+export type Action = "reserve" | "publish" | "newversion" | "skip";
 
 export type MintClient = Pick<
   ZenodoClient,
   | "createDeposition"
+  | "deleteDeposition"
   | "getDeposition"
   | "uploadFile"
   | "updateMetadata"
@@ -33,15 +40,19 @@ export function idFromUrl(url: string): number {
   return Number(m[1]);
 }
 
+export const isDraft = (r?: DoiRecord) => r?.status === "draft";
+
 export function decide(
   entry: MetaEntry,
   cfg: MetadataConfig,
   state?: DoiRecord,
   force = false,
 ): Action {
-  const hash = computeStateHash(entry, cfg);
-  if (!state) return "create";
-  if (force || state.contentHash !== hash) return "newversion";
+  // A reserved draft is always finished first, whatever --force says.
+  if (isDraft(state)) return "publish";
+  if (!state) return "reserve";
+  if (force || state.contentHash !== computeStateHash(entry, cfg))
+    return "newversion";
   return "skip";
 }
 
@@ -51,22 +62,228 @@ export interface Deposit {
   metadata: Record<string, any>;
 }
 
-/** A new record: a draft reserving the DOI, the file, the metadata, publish. */
-export async function createRecord(
+const httpStatus = (err: unknown) => (err as { status?: number })?.status;
+const DOI_PREFIX: Record<Env, string> = {
+  sandbox: "10.5072/",
+  production: "10.5281/",
+};
+
+/**
+ * Phase 1: create a draft that reserves its DOI. Returns the draft's ids and
+ * the reserved DOI. The DOI is never derived: when the response lacks it, or
+ * it does not belong to the draft or the env, the draft is deleted and this
+ * throws.
+ */
+export async function reserveDraft(
   zen: MintClient,
-  { filename, bytes, metadata }: Deposit,
-): Promise<{ published: Deposition; conceptDoi: string }> {
-  // Create a draft reserving the DOI; metadata is set authoritatively by
-  // the updateMetadata call below (not duplicated in the create body).
+  env: Env,
+  log: MintLog,
+): Promise<{ recordId: number; conceptRecId?: number; versionDoi: string }> {
   const draft = await zen.createDeposition({ prereserve_doi: true });
+  const reserved = draft.metadata?.prereserve_doi;
+  const problem = !reserved?.doi
+    ? "the response has no reserved DOI"
+    : Number(reserved.recid) !== draft.id
+      ? `the reserved DOI belongs to record ${reserved.recid}, not to draft ${draft.id}`
+      : !reserved.doi.startsWith(DOI_PREFIX[env])
+        ? `the reserved DOI ${reserved.doi} is not a ${env} DOI`
+        : "";
+  if (problem) {
+    try {
+      await zen.deleteDeposition(draft.id);
+    } catch (err) {
+      if (httpStatus(err) !== 404)
+        log.warn(
+          `  could not delete draft ${draft.id}: ${(err as Error).message}`,
+        );
+    }
+    throw new Error(`${problem}; deleted draft ${draft.id}`);
+  }
+  const conceptRecId =
+    draft.conceptrecid != null && String(draft.conceptrecid) !== ""
+      ? Number(draft.conceptrecid)
+      : undefined;
+  if (conceptRecId === undefined)
+    log.warn(`  draft ${draft.id} has no concept record id`);
+  return { recordId: draft.id, conceptRecId, versionDoi: reserved!.doi };
+}
+
+/**
+ * Before a run publishes a draft reserved in an EARLIER run: is it still a
+ * draft? "gone" (404/410) means the entry needs a new reservation;
+ * "submitted" means an earlier run published it but stopped before it saved
+ * the record. Other errors throw.
+ */
+export async function draftState(
+  zen: MintClient,
+  rec: DoiRecord,
+): Promise<
+  | { kind: "draft" }
+  | { kind: "gone" }
+  | { kind: "submitted"; published: Deposition }
+> {
+  let dep: Deposition;
+  try {
+    dep = await zen.getDeposition(rec.recordId);
+  } catch (err) {
+    const status = httpStatus(err);
+    if (status === 404 || status === 410) return { kind: "gone" };
+    throw err;
+  }
+  return dep.submitted === true
+    ? { kind: "submitted", published: dep }
+    : { kind: "draft" };
+}
+
+export type DraftOutcome =
+  | { kind: "gone" }
+  | { kind: "submitted"; published: Deposition }
+  | { kind: "published"; published: Deposition };
+
+/**
+ * Phase 2: upload the PDF (which cites the reserved DOI) to the reserved
+ * draft and publish it.
+ * - "gone": the draft no longer exists (404/410). The record stays: the next
+ *   run finds it gone (draftState) and reserves a new DOI.
+ * - "submitted": the draft was already published (a run stopped before it
+ *   saved the record); nothing is uploaded.
+ */
+export async function publishDraft(
+  zen: MintClient,
+  rec: DoiRecord,
+  slug: string,
+  { filename, bytes, metadata }: Deposit,
+  log: MintLog,
+): Promise<DraftOutcome> {
+  let draft: Deposition;
+  try {
+    draft = await zen.getDeposition(rec.recordId);
+  } catch (err) {
+    const status = httpStatus(err);
+    if (status === 404 || status === 410) return { kind: "gone" };
+    throw err;
+  }
+  if (draft.submitted === true) return { kind: "submitted", published: draft };
   const bucket = draft.links.bucket;
-  if (!bucket) throw new Error("no bucket link on draft");
-  await zen.uploadFile(bucket, filename, bytes);
-  await zen.updateMetadata(draft.id, metadata);
-  const published = await zen.publish(draft.id);
+  if (!bucket) throw new Error("no bucket link on the reserved draft");
+  await zen.uploadFile(bucket, filename, bytes); // same filename overwrites
+  await pruneDraftFiles(
+    zen,
+    rec.recordId,
+    filename,
+    (m) => log.warn(`  ! ${slug}: ${m}`),
+    (m) => log.info(`  ${slug}: ${m}`),
+  );
+  await zen.updateMetadata(rec.recordId, metadata);
+  return { kind: "published", published: await zen.publish(rec.recordId) };
+}
+
+/**
+ * The published record must carry the DOI its PDF cites: the reserved DOI
+ * (production), or for the sandbox the concept record. Returns the problem,
+ * or null.
+ */
+export function publishedDoiProblem(
+  rec: DoiRecord,
+  published: Deposition,
+  env: Env,
+): string | null {
+  if (published.doi !== rec.versionDoi)
+    return `published DOI ${published.doi} is not the reserved ${rec.versionDoi}`;
+  if (
+    env === "sandbox" &&
+    rec.conceptRecId != null &&
+    Number(published.conceptrecid) !== rec.conceptRecId
+  )
+    return `published concept record ${published.conceptrecid} is not ${rec.conceptRecId}, which the PDF cites`;
+  return null;
+}
+
+/**
+ * The map record after a reserved draft was published (now or by an earlier
+ * run). A published DOI is permanent, so the record always holds what Zenodo
+ * published. The hash stays empty, so the next run makes a fresh version,
+ * when the DOI is not the reserved one (`problem`) or when an earlier run
+ * published the draft (its PDF was not checked by this run).
+ */
+export function recordAfterPublish(
+  rec: DoiRecord,
+  outcome: { kind: "published" | "submitted"; published: Deposition },
+  entry: MetaEntry,
+  cfg: MetadataConfig,
+  env: Env,
+  title: string,
+): { record: DoiRecord; problem: string | null } {
+  const { published } = outcome;
+  const problem = publishedDoiProblem(rec, published, env);
+  const hash =
+    problem || outcome.kind === "submitted" ? "" : computeStateHash(entry, cfg);
   return {
-    published,
-    conceptDoi: published.conceptdoi ?? draft.conceptdoi ?? "",
+    record: publishedRecord(
+      entry,
+      title,
+      env,
+      published,
+      published.conceptdoi ?? "",
+      hash,
+    ),
+    problem,
+  };
+}
+
+/** Does the built print page link exactly this citation URL? */
+export function citesRecord(html: string, url: string): boolean {
+  return html.includes(`href="${url}"`);
+}
+
+/** The map record of a reserved, unpublished draft. */
+export function draftRecord(
+  entry: MetaEntry,
+  title: string,
+  env: Env,
+  reserved: { recordId: number; conceptRecId?: number; versionDoi: string },
+): DoiRecord {
+  return {
+    recordId: reserved.recordId,
+    ...(reserved.conceptRecId !== undefined
+      ? { conceptRecId: reserved.conceptRecId }
+      : {}),
+    conceptDoi: "",
+    versionDoi: reserved.versionDoi,
+    contentHash: "",
+    status: "draft",
+    version: versionLabel(entry.version),
+    mintedAt: new Date().toISOString(),
+    env,
+    title,
+    ...(entry.authors ? { authors: entry.authors } : {}),
+  };
+}
+
+/** The map record of a published version. */
+export function publishedRecord(
+  entry: MetaEntry,
+  title: string,
+  env: Env,
+  published: Deposition,
+  conceptDoi: string,
+  contentHash: string,
+): DoiRecord {
+  return {
+    recordId: published.id,
+    conceptRecId:
+      published.conceptrecid != null
+        ? Number(published.conceptrecid)
+        : undefined,
+    conceptDoi,
+    versionDoi: published.doi ?? "",
+    contentHash,
+    status: "published",
+    version: versionLabel(entry.version),
+    mintedAt: new Date().toISOString(),
+    env,
+    title,
+    ...(entry.authors ? { authors: entry.authors } : {}),
   };
 }
 

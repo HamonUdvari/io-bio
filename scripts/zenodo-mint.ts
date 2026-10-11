@@ -1,28 +1,54 @@
 // Per-entry Zenodo DOI minter (sandbox-first).
 //
 //   node scripts/zenodo-mint.ts [--env sandbox|production] [--limit N]
-//        [--only slugA,slugB] [--dry-run] [--yes-production]
+//        [--only slugA,slugB] [--dry-run] [--reserve-only] [--yes-production]
 //
 // Reads dist/zenodo-meta.json (produced by `astro build` via the
-// src/pages/zenodo-meta.json.ts endpoint), decides create / new-version / skip
-// per entry by content hash, renders the entry PDF artifact, deposits to Zenodo,
-// and records the result in src/data/zenodo-dois[.sandbox].json.
+// src/pages/zenodo-meta.json.ts endpoint), decides reserve / publish /
+// new-version / skip per entry by content hash, renders the entry PDF artifact,
+// deposits to Zenodo, and records the result in src/data/zenodo-dois[.sandbox].json.
+//
+// A new entry takes two phases in one run, so its first PDF already cites its
+// DOI: reserve a draft DOI (saved as a "draft" record), rebuild the site with
+// ZENODO_MINT_ENV=<env> so the print page cites it, then publish. A run that
+// stops in between leaves the draft record; the next run publishes it.
+// --reserve-only stops after the first phase.
 //
 // Token: ZENODO_TOKEN (scopes deposit:write + deposit:actions). dry-run needs none.
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import {
+  existsSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+} from "node:fs";
 import path from "node:path";
 import { marked } from "marked";
 import { createZenodoClient } from "./lib/zenodo-client.ts";
-import {
-  buildMetadata,
-  computeStateHash,
-  versionLabel,
-} from "./lib/zenodo-metadata.ts";
+import { mintCiteUrl } from "./lib/zenodo-cite.ts";
+import { buildMetadata, computeStateHash } from "./lib/zenodo-metadata.ts";
 import type { MetaEntry, MetadataConfig } from "./lib/zenodo-metadata.ts";
-import { createRecord, decide, newVersionOf } from "./lib/zenodo-mint-core.ts";
-import { loadState, saveState } from "./lib/zenodo-state.ts";
-import type { DoiRecord } from "./lib/zenodo-state.ts";
+import {
+  citesRecord,
+  decide,
+  draftRecord,
+  draftState,
+  isDraft,
+  newVersionOf,
+  publishDraft,
+  publishedRecord,
+  recordAfterPublish,
+  reserveDraft,
+} from "./lib/zenodo-mint-core.ts";
+import type { Env } from "./lib/zenodo-mint-core.ts";
+import {
+  loadState,
+  readDoiMap,
+  saveState,
+  stateFile,
+} from "./lib/zenodo-state.ts";
 import { renderPdfs } from "./zenodo-render-pdfs.ts";
 
 const SITE = (process.env.SITE_URL ?? "https://www.io-bio.ch").replace(/\/$/, "");
@@ -170,16 +196,23 @@ function printTemplateVersion(): string {
 }
 
 interface Args {
-  env: "sandbox" | "production";
+  env: Env;
   limit?: number;
   only?: string[];
   dryRun: boolean;
+  reserveOnly: boolean;
   yesProduction: boolean;
   force: boolean;
 }
 
 function parseArgs(argv: string[]): Args {
-  const a: Args = { env: "sandbox", dryRun: false, yesProduction: false, force: false };
+  const a: Args = {
+    env: "sandbox",
+    dryRun: false,
+    reserveOnly: false,
+    yesProduction: false,
+    force: false,
+  };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === "--env") a.env = argv[++i] === "production" ? "production" : "sandbox";
@@ -189,6 +222,7 @@ function parseArgs(argv: string[]): Args {
       a.only = v.split(",").map((s) => s.trim()).filter(Boolean);
     }
     else if (arg === "--dry-run") a.dryRun = true;
+    else if (arg === "--reserve-only") a.reserveOnly = true;
     else if (arg === "--yes-production") a.yesProduction = true;
     // Force a new version for every (already-minted) entry regardless of the
     // content hash — used to re-render all artifacts after a layout/template
@@ -207,6 +241,44 @@ function readMeta(): MetaEntry[] {
       "dist/zenodo-meta.json not found — run `npm run build` first (it emits the metadata endpoint).",
     );
   return JSON.parse(readFileSync(f, "utf8")) as MetaEntry[];
+}
+
+/**
+ * A cold build with ZENODO_MINT_ENV=<env>, so the pages of the drafts reserved
+ * in this run cite them. ZENODO_ENV is dropped: the workflow builds never set
+ * it, and the citation check below assumes the same maps.
+ */
+function rebuildSite(env: Env) {
+  const root = path.resolve(".");
+  if (!existsSync(path.join(root, "astro.config.mjs")))
+    throw new Error(`not the site root, so no rebuild: ${root}`);
+  for (const d of [
+    ".astro",
+    "node_modules/.astro",
+    "node_modules/.vite",
+    "dist",
+  ])
+    rmSync(path.join(root, d), { recursive: true, force: true });
+  const childEnv: NodeJS.ProcessEnv = { ...process.env, ZENODO_MINT_ENV: env };
+  delete childEnv.ZENODO_ENV;
+  delete childEnv.ZENODO_TOKEN; // the build needs no token
+  const r = spawnSync("pnpm", ["run", "build"], {
+    stdio: "inherit",
+    env: childEnv,
+  });
+  if (r.status !== 0)
+    throw new Error(
+      `the rebuild failed (${r.error?.message ?? (r.signal ? `signal ${r.signal}` : `exit ${r.status}`)})`,
+    );
+}
+
+/** The citation URL the entry's print page must link (same rule as the build). */
+function expectedCite(slug: string, env: Env): string | undefined {
+  return mintCiteUrl({
+    prod: readDoiMap(stateFile("production"))[slug],
+    sandbox: readDoiMap(stateFile("sandbox"))[slug],
+    env,
+  });
 }
 
 async function main() {
@@ -274,7 +346,7 @@ async function main() {
       console.error(
         `Refusing to mint PRODUCTION DOIs: ${bad.length} print page(s) are missing or cite ` +
           `a sandbox record (${bad.slice(0, 5).join(", ")}${bad.length > 5 ? ", …" : ""}). ` +
-          "Run a COLD production build first: rm -rf .astro node_modules/.astro dist && " +
+          "Run a COLD production build first: rm -rf .astro node_modules/.astro node_modules/.vite dist && " +
           "ZENODO_MINT_ENV=production pnpm build.",
       );
       process.exit(1);
@@ -288,12 +360,12 @@ async function main() {
     e,
     action: decide(e, cfg, state[e.slug], args.force),
   }));
-  const counts = { create: 0, newversion: 0, skip: 0 };
+  const counts = { reserve: 0, publish: 0, newversion: 0, skip: 0 };
   for (const p of plan) counts[p.action]++;
 
   console.log(
     `\nZenodo mint — env=${args.env}  license=${LICENSE}  entries=${meta.length}  ` +
-      `(create=${counts.create}, newversion=${counts.newversion}, skip=${counts.skip})\n`,
+      `(reserve=${counts.reserve}, publish=${counts.publish}, newversion=${counts.newversion}, skip=${counts.skip})\n`,
   );
 
   if (args.dryRun) {
@@ -321,22 +393,187 @@ async function main() {
   if (!token) throw new Error("ZENODO_TOKEN is not set (needs scopes deposit:write + deposit:actions).");
   const zen = createZenodoClient({ baseUrl, token });
 
-  const todo = plan.filter((p) => p.action !== "skip");
-  if (todo.length === 0) {
-    console.log("Nothing to do — all selected entries are up to date.");
-    return;
-  }
-
-  // Render PDFs only for the entries we will (re)deposit.
-  console.log(`Rendering ${todo.length} entry PDF(s)…`);
-  const pdfs = await renderPdfs(todo.map((p) => p.e.slug));
-
   const log = {
     info: (m: string) => console.log(m),
     warn: (m: string) => console.warn(m),
   };
   let ok = 0;
+  let reserved = 0;
   let failed = 0;
+  const finish = () => {
+    console.log(
+      `\nDone: ${ok} minted/updated, ${reserved} reserved, ${failed} failed. State: ${args.env}`,
+    );
+    if (failed > 0) process.exitCode = 1;
+  };
+
+  // Drafts reserved by an earlier run. One that no longer exists on Zenodo
+  // gets a new reservation (its record is replaced, never deleted: the
+  // workflow's map merge never drops a record). One that an earlier run
+  // published is recorded now, before anything else can fail.
+  for (const p of plan.filter((p) => p.action === "publish")) {
+    const { e } = p;
+    const rec = state[e.slug];
+    try {
+      const now = await draftState(zen, rec);
+      if (now.kind === "gone") {
+        console.warn(
+          `  ! ${e.slug}: reserved draft ${rec.recordId} no longer exists; reserving a new DOI`,
+        );
+        p.action = "reserve";
+      } else if (now.kind === "submitted") {
+        const title = rec.title || String(buildMetadata(e, cfg).metadata.title);
+        const { record, problem } = recordAfterPublish(
+          rec,
+          now,
+          e,
+          cfg,
+          args.env,
+          title,
+        );
+        state[e.slug] = record;
+        saveState(args.env, state);
+        p.action = "skip";
+        if (problem) {
+          failed++;
+          console.error(
+            `✗ ${e.slug}: ${problem} — recorded what Zenodo published; the next run makes a corrected version`,
+          );
+        } else {
+          ok++;
+          console.warn(
+            `  ! ${e.slug}: draft ${rec.recordId} was already published; recorded it (the next run makes a fresh version)`,
+          );
+        }
+      }
+    } catch (err) {
+      failed++;
+      p.action = "skip";
+      console.error(
+        `✗ ${p.e.slug}: could not check reserved draft ${rec.recordId}: ${(err as Error).message}`,
+      );
+    }
+  }
+
+  // Phase 1: reserve a DOI for each new entry. The draft record is saved at
+  // once: the next build then prints the citation, and any later run can
+  // finish the draft.
+  for (const p of plan.filter((p) => p.action === "reserve")) {
+    const { e } = p;
+    p.action = "skip";
+    const title = String(buildMetadata(e, cfg).metadata.title ?? "").trim();
+    if (!title) {
+      console.error(
+        `✗ ${e.slug}: empty title (name failed to parse?) — no DOI reserved`,
+      );
+      failed++;
+      continue;
+    }
+    try {
+      const r = await reserveDraft(zen, args.env, log);
+      state[e.slug] = draftRecord(e, title, args.env, r);
+      saveState(args.env, state);
+      reserved++;
+      p.action = "publish";
+      console.log(
+        `✓ reserved ${e.slug} → ${r.versionDoi} (draft ${r.recordId})`,
+      );
+    } catch (err) {
+      failed++;
+      console.error(
+        `✗ ${e.slug}: could not reserve a DOI: ${(err as Error).message}`,
+      );
+    }
+  }
+  if (args.reserveOnly) {
+    const waiting = plan.filter((p) => p.action === "publish").length;
+    if (waiting > 0)
+      console.log(
+        `\n${waiting} draft(s) wait to be published: build with ZENODO_MINT_ENV=${args.env} and run the mint again.`,
+      );
+    finish();
+    return;
+  }
+
+  // Rebuild, so the print pages of the new drafts cite their reserved DOIs.
+  if (reserved > 0) {
+    console.log(
+      `\nReserved ${reserved} DOI(s); rebuilding the site (ZENODO_MINT_ENV=${args.env}) so their PDFs cite them…`,
+    );
+    const untouched = new Set(
+      plan.filter((p) => p.action === "newversion" || p.action === "skip"),
+    );
+    try {
+      rebuildSite(args.env);
+    } catch (err) {
+      failed += plan.filter(
+        (p) => p.action === "publish" || p.action === "newversion",
+      ).length;
+      console.error(
+        `✗ ${(err as Error).message}. The ${reserved} reserved draft(s) are saved: ` +
+          `build with ZENODO_MINT_ENV=${args.env} and run the mint again to publish them.`,
+      );
+      finish();
+      return;
+    }
+    const fresh = new Map(readMeta().map((e) => [e.slug, e]));
+    for (const p of plan) {
+      const e = fresh.get(p.e.slug);
+      if (!e) {
+        if (p.action !== "skip") {
+          console.error(
+            `✗ ${p.e.slug}: not in dist/zenodo-meta.json after the rebuild`,
+          );
+          failed++;
+          p.action = "skip";
+        }
+        continue;
+      }
+      p.e = e;
+      // Decide again on the rebuilt data for the entries this run left alone.
+      const rec = state[e.slug];
+      if (untouched.has(p) && rec && !isDraft(rec))
+        p.action = decide(e, cfg, rec, args.force);
+    }
+  }
+
+  // Phase 2. Every deposited PDF must cite its own record: check the built
+  // print page before rendering it.
+  const todo = plan.filter((p) => {
+    if (p.action !== "newversion" && p.action !== "publish") return false;
+    const url = expectedCite(p.e.slug, args.env);
+    const f = path.resolve("dist/print", p.e.slug, "index.html");
+    if (url && existsSync(f) && citesRecord(readFileSync(f, "utf8"), url))
+      return true;
+    console.error(
+      `✗ ${p.e.slug}: the print page does not cite ${url ?? "its record"} — ` +
+        `rebuild with ZENODO_MINT_ENV=${args.env} and run the mint again`,
+    );
+    failed++;
+    return false;
+  });
+  if (todo.length === 0) {
+    if (reserved === 0 && failed === 0)
+      console.log("Nothing to do — all selected entries are up to date.");
+    finish();
+    return;
+  }
+
+  // Render PDFs only for the entries we will (re)deposit.
+  console.log(`Rendering ${todo.length} entry PDF(s)…`);
+  let pdfs: Map<string, string>;
+  try {
+    pdfs = await renderPdfs(todo.map((p) => p.e.slug));
+  } catch (err) {
+    failed += todo.length;
+    console.error(
+      `✗ rendering the PDFs failed: ${(err as Error).message}. Nothing was ` +
+        "deposited; reserved drafts stay saved for the next run.",
+    );
+    finish();
+    return;
+  }
+
   for (const { e, action } of todo) {
     const pdfPath = pdfs.get(e.slug);
     if (!pdfPath || !existsSync(pdfPath)) {
@@ -352,7 +589,8 @@ async function main() {
     // blocks every future newversion ("remove all files first") and wedges the
     // deposit. Refuse to start such a mint: skip the entry with a clear error so
     // the source (the docx name/intro) can be fixed, rather than corrupting the
-    // Zenodo state.
+    // Zenodo state. (A reserved draft already exists; its title was checked at
+    // reserve time, and this check covers a title lost in the rebuild.)
     if (!metadata.title || !String(metadata.title).trim()) {
       console.error(
         `✗ ${e.slug}: empty title (name failed to parse?) — skipping to avoid a dangling draft`,
@@ -360,6 +598,7 @@ async function main() {
       failed++;
       continue;
     }
+    const title = String(metadata.title);
 
     const bytes = readFileSync(pdfPath);
     // The file Zenodo shows/serves gets an "-iobio" suffix so a downloaded
@@ -370,28 +609,54 @@ async function main() {
 
     try {
       const deposit = { filename, bytes, metadata };
-      const { published, conceptDoi } =
-        action === "create"
-          ? await createRecord(zen, deposit)
-          : await newVersionOf(zen, state[e.slug], e.slug, deposit, log);
-
-      const record: DoiRecord = {
-        recordId: published.id,
-        conceptRecId:
-          published.conceptrecid != null ? Number(published.conceptrecid) : undefined,
-        conceptDoi,
-        versionDoi: published.doi ?? "",
-        contentHash: computeStateHash(e, cfg),
-        status: "published",
-        version: versionLabel(e.version),
-        mintedAt: new Date().toISOString(),
-        env: args.env,
-        title: String(metadata.title),
-        ...(e.authors ? { authors: e.authors } : {}),
-      };
-      state[e.slug] = record;
-      saveState(args.env, state); // persist after every successful entry
+      let published;
+      if (action === "publish") {
+        const rec = state[e.slug];
+        const outcome = await publishDraft(zen, rec, e.slug, deposit, log);
+        if (outcome.kind === "gone") {
+          failed++;
+          console.error(
+            `✗ ${e.slug}: reserved draft ${rec.recordId} disappeared during the run; the next run reserves a new DOI`,
+          );
+          continue;
+        }
+        published = outcome.published;
+        const { record, problem } = recordAfterPublish(
+          rec,
+          outcome,
+          e,
+          cfg,
+          args.env,
+          title,
+        );
+        state[e.slug] = record;
+        saveState(args.env, state);
+        if (problem) {
+          failed++;
+          console.error(
+            `✗ ${e.slug}: ${problem} — recorded what Zenodo published; the next run makes a corrected version`,
+          );
+          continue;
+        }
+        if (outcome.kind === "submitted")
+          console.warn(
+            `  ! ${e.slug}: draft ${rec.recordId} was already published; recorded it (the next run makes a fresh version)`,
+          );
+      } else {
+        const r = await newVersionOf(zen, state[e.slug], e.slug, deposit, log);
+        published = r.published;
+        state[e.slug] = publishedRecord(
+          e,
+          title,
+          args.env,
+          published,
+          r.conceptDoi,
+          computeStateHash(e, cfg),
+        );
+        saveState(args.env, state); // persist after every successful entry
+      }
       ok++;
+      const record = state[e.slug];
       // Warn if the published version doesn't hold exactly the entry PDF
       // (after saveState, so this can never lose a minted DOI).
       const files = Array.isArray(published.files)
@@ -409,8 +674,7 @@ async function main() {
     }
   }
 
-  console.log(`\nDone: ${ok} minted/updated, ${failed} failed. State: ${args.env}`);
-  if (failed > 0) process.exitCode = 1;
+  finish();
 }
 
 main().catch((e) => {

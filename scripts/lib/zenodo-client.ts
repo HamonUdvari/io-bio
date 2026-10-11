@@ -14,7 +14,7 @@ export interface Deposition {
   links: { bucket?: string; publish?: string; self?: string; [k: string]: any };
   metadata: { prereserve_doi?: { doi: string; recid: number }; [k: string]: any };
   conceptdoi?: string;
-  conceptrecid?: number;
+  conceptrecid?: number | string; // the legacy API returns a string
   doi?: string;
   [k: string]: any;
 }
@@ -159,6 +159,10 @@ export function createZenodoClient(opts: ZenodoClientOptions) {
         "DELETE",
         `/deposit/depositions/${id}/files/${encodeURIComponent(f.id)}`,
       ),
+
+    /** Delete an unpublished draft that was never published. */
+    deleteDeposition: (id: number): Promise<any> =>
+      request("DELETE", `/deposit/depositions/${id}`),
 
     /** Discard an unpublished draft (clears a dangling new-version draft). */
     discard: (id: number): Promise<any> =>

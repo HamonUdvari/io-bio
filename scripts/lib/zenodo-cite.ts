@@ -9,6 +9,8 @@ export interface CiteRecord {
   versionDoi?: string;
   conceptDoi?: string;
   env?: string;
+  /** "draft": a DOI the mint reserved but has not published yet. */
+  status?: string;
 }
 
 export interface ZenodoCite {
@@ -33,8 +35,11 @@ const isSandboxDoi = (s?: string) => !!s && s.startsWith("10.5072/");
  *   production map, unless ZENODO_ENV=sandbox).
  * - `sandbox`: its record in the sandbox map.
  * - `mintEnv`: ZENODO_MINT_ENV of the build. The production mint build skips
- *   the sandbox map, so its PDFs never cite a sandbox record; an entry then
- *   prints no citation until it has a production DOI.
+ *   the sandbox map, so its PDFs never cite a sandbox record. A draft record
+ *   (a DOI reserved by the two-phase mint, not yet published) counts only in
+ *   the mint build of its own env, so a deploy never shows an unpublished DOI.
+ *   A production draft has no concept DOI yet, so it cites its reserved
+ *   version DOI.
  */
 export function citeFor(opts: {
   doi?: CiteRecord;
@@ -42,8 +47,13 @@ export function citeFor(opts: {
   doiEnv: "sandbox" | "production";
   mintEnv?: string;
 }): CiteResult {
-  const { doi, doiEnv } = opts;
-  const sandbox = opts.mintEnv === "production" ? undefined : opts.sandbox;
+  const { doiEnv, mintEnv } = opts;
+  const usable = (r?: CiteRecord) =>
+    r && (r.status !== "draft" || (!!mintEnv && r.env === mintEnv))
+      ? r
+      : undefined;
+  const doi = usable(opts.doi);
+  const sandbox = mintEnv === "production" ? undefined : usable(opts.sandbox);
   const out: CiteResult = {};
   if (doi && (!doi.env || doi.env === doiEnv)) {
     if (
@@ -72,4 +82,23 @@ export function citeFor(opts: {
     };
   }
   return out;
+}
+
+/**
+ * The citation URL a deposited PDF must link, as the mint build prints it:
+ * the workflows build without ZENODO_ENV (so with the production map) and with
+ * ZENODO_MINT_ENV=<env>. Note: once an entry has a production DOI, its sandbox
+ * deposit cites that production DOI too, as the site does.
+ */
+export function mintCiteUrl(opts: {
+  prod?: CiteRecord;
+  sandbox?: CiteRecord;
+  env: "sandbox" | "production";
+}): string | undefined {
+  return citeFor({
+    doi: opts.prod,
+    sandbox: opts.sandbox,
+    doiEnv: "production",
+    mintEnv: opts.env,
+  }).cite?.url;
 }

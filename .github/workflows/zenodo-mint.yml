@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           # Always mint from the LATEST main — not the commit the run was queued
-          # or dispatched on (e.g. dev) — so the run starts from the current map.
+          # or dispatched on — so the run starts from the current map.
           ref: main
       - uses: pnpm/action-setup@v6
         with:
@@ -54,7 +54,10 @@ jobs:
           chrome-version: stable
       - name: Build (emits dist/zenodo-meta.json + entry pages)
         # A production build skips the sandbox citation fallback, so the
-        # production PDFs never cite a sandbox record (see docxLoader.ts).
+        # production PDFs never cite a sandbox record. The mint build also
+        # counts the env's reserved, unpublished DOIs (see citeFor in
+        # scripts/lib/zenodo-cite.ts). The mint step reserves new DOIs,
+        # rebuilds the site and publishes, so one run is enough.
         env:
           ZENODO_MINT_ENV: ${{ inputs.env }}
         run: pnpm run build
