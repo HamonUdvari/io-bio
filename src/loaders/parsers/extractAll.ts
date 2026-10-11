@@ -122,6 +122,7 @@ export function extractAll(ast: any): ParserResult<ExtractedBio> {
     imageAttachment: image.value.attachment,
     version: version.value.version,
     authors: citation.value.authors,
+    byline: citation.value.byline,
     editors: citation.value.editors,
     archives: apl.value.archives,
     publications: apl.value.publications,

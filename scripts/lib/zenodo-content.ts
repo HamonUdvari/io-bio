@@ -25,6 +25,7 @@ export const HASHED_FIELDS = [
   "introNotes",
   "imageSource",
   "authors",
+  "byline",
   "editors",
   "version",
   "archives",
@@ -77,6 +78,8 @@ export function pdfContent(d: Data, opts: { citationEditors?: string } = {}) {
     introNotes: (d.introNotes ?? []).map(str),
     imageSource: str(d.imageSource),
     authors: str(d.authors),
+    // Only when set, so an entry without a byline keeps its hash.
+    ...(str(d.byline) ? { byline: str(d.byline) } : {}),
     editors: str(d.editors),
     // The CMS default, which the template prints only when the entry has no
     // editors of its own.

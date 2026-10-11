@@ -58,6 +58,7 @@ const base = () => ({
   introNotes: ["A note"],
   imageSource: "Source: Archive, www.example.org",
   authors: "Author One",
+  byline: undefined as string | undefined,
   editors: "Editor One",
   version: "1 January 2020",
   archives: { items: [{ raw: "Papers" }] },
@@ -95,6 +96,7 @@ const CHANGE: Record<(typeof HASHED_FIELDS)[number], (d: Entry) => void> = {
   introNotes: (d) => d.introNotes.push("Second note"),
   imageSource: (d) => (d.imageSource = "Source: Other"),
   authors: (d) => (d.authors = "Author Two"),
+  byline: (d) => (d.byline = "Author One (†)"),
   editors: (d) => (d.editors = "Editor Two"),
   version: (d) => (d.version = "2 January 2020"),
   archives: (d) => (d.archives.items[0].raw = "Papers, box 1"),
@@ -157,6 +159,14 @@ describe("pdfContentHash field coverage", () => {
 });
 
 describe("pdfContentHash details", () => {
+  it("hashes an entry without a byline exactly as before the field existed", () => {
+    // base() without a byline hashes as at 091f939. Change only together with
+    // a CONTENT_VERSION bump.
+    expect(hash(base())).toBe(
+      "sha256:00bec6b39b22283cbb2864f3c7bb8d35e02e25b8356bf0110aa8890ad79f1170",
+    );
+  });
+
   it("hashes the citation kind, not its URL", () => {
     const moved = base();
     moved.zenodoCite.url = "https://sandbox.zenodo.org/records/9";

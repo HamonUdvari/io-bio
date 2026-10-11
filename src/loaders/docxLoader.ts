@@ -523,9 +523,10 @@ const docxEntryType: ContentEntryType = {
     // flag is ON, its stored value REPLACES the Word value (an absent value
     // falls back to Word; an explicit "" sticks). When OFF, the Word value is
     // used (the stored value is just the CMS mirror).
+    const isOverridden = (k: DetailField) =>
+      !!(ov?.detailOverrides?.[k] && ov.details?.[k] !== undefined);
     const detailVal = (k: DetailField): string | undefined => {
-      if (ov?.detailOverrides?.[k] && ov.details?.[k] !== undefined)
-        return ov.details[k];
+      if (isOverridden(k)) return ov!.details[k];
       const w = (extracted as Record<string, unknown> | null | undefined)?.[k];
       return typeof w === "string" ? w : undefined;
     };
@@ -564,6 +565,13 @@ const docxEntryType: ContentEntryType = {
       // the full-text search index endpoint (src/pages/search-index.json.ts).
       body: extracted?.body ?? "",
     };
+
+    // The byline as written when it marks a deceased author: the header shows
+    // it, the citation and Zenodo keep `authors`. Set only when present, and
+    // dropped when the CMS overrides the authors, so the header shows the
+    // override.
+    if (extracted?.byline && !isOverridden("authors"))
+      (data as Record<string, unknown>).byline = extracted.byline;
 
     // Inject the per-entry Zenodo DOIs (if minted), keyed by the canonical route
     // slug. NOTE: this equals page.id only because all bios are flat files; if a

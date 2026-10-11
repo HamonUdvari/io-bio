@@ -124,3 +124,80 @@ describe("parseCitation — Literature that cites other IO BIO entries", () => {
     expect(value.consumed).not.toContain(0); // not the self-citing Literature
   });
 });
+
+// Lie: the byline marks a deceased author with "(†)", the citation does not.
+describe("parseCitation — byline with a deceased-author mark", () => {
+  const citation = (authors: string) => ({
+    type: "paragraph",
+    text:
+      `${authors}, ‘Lie, Trygve Halvdan’ in IO BIO, Biographical Dictionary ` +
+      "of Secretaries-General of International Organizations, Edited by Bob " +
+      "Reinalda, Kent J. Kille and Jaci L. Eisenberg, www.ru.nl/fm/iobio, " +
+      "Accessed DAY MONTH YEAR",
+  });
+  const lie = citation("James P. Muldoon, Jr. and Ellen Jenny Ravndal");
+
+  it("consumes the byline and keeps it as written; authors has no mark", () => {
+    const byline = {
+      type: "paragraph",
+      text: "James P. Muldoon, Jr. (†) and Ellen Jenny Ravndal",
+    };
+    const { value } = parseCitation([byline, lie]);
+    expect(value.consumed).toEqual(expect.arrayContaining([0, 1]));
+    expect(value.authors).toBe("James P. Muldoon, Jr. and Ellen Jenny Ravndal");
+    expect(value.byline).toBe(
+      "James P. Muldoon, Jr. (†) and Ellen Jenny Ravndal",
+    );
+  });
+
+  it("trims the byline (a trailing NBSP, as in Nakajima's author line)", () => {
+    const byline = {
+      type: "paragraph",
+      text: "James P. Muldoon, Jr. (†) and Ellen Jenny Ravndal ",
+    };
+    const { value } = parseCitation([byline, lie]);
+    expect(value.consumed).toContain(0);
+    expect(value.byline).toBe(
+      "James P. Muldoon, Jr. (†) and Ellen Jenny Ravndal",
+    );
+  });
+
+  it("matches with an NBSP after the mark and collapses it in the byline", () => {
+    const byline = {
+      type: "paragraph",
+      text: "James P. Muldoon, Jr. (†)\u00a0and Ellen Jenny Ravndal",
+    };
+    const { value } = parseCitation([byline, lie]);
+    expect(value.consumed).toContain(0);
+    expect(value.byline).toBe(
+      "James P. Muldoon, Jr. (†) and Ellen Jenny Ravndal",
+    );
+  });
+
+  it("never takes a list that names a deceased author as the byline", () => {
+    const literature = {
+      type: "paragraph",
+      text: "LITERATURE: James P. Muldoon, Jr. (†) and Ellen Jenny Ravndal, Book, 2010",
+    };
+    const { value } = parseCitation([literature, lie]);
+    expect(value.byline).toBeNull();
+  });
+
+  it("returns no byline for an author line without the mark", () => {
+    const author = { type: "paragraph", text: "Gusztáv D. Kecskés " };
+    const { value } = parseCitation([author, citation("Gusztáv D. Kecskés")]);
+    expect(value.consumed).toContain(0);
+    expect(value.byline).toBeNull();
+  });
+
+  it("leaves other bracketed text alone (Luns)", () => {
+    const authors = "Jan-Willem Brouwer and Ine (C.M.) Megens";
+    const { value } = parseCitation([
+      { type: "paragraph", text: authors },
+      citation(authors),
+    ]);
+    expect(value.consumed).toContain(0);
+    expect(value.authors).toBe(authors);
+    expect(value.byline).toBeNull();
+  });
+});

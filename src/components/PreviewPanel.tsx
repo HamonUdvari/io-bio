@@ -206,6 +206,9 @@ function ResultPanel({
         <Field label="Nationality">{bio.nationality || "—"}</Field>
         <Field label="Version">{bio.version}</Field>
         <Field label="Author(s)">{bio.authors}</Field>
+        {/* The byline as written, when it marks a deceased author; the entry
+            header shows it instead of the authors above. */}
+        {bio.byline && <Field label="Byline">{bio.byline}</Field>}
         {/* Per-entry editors from the "How to cite" line. "—" means the docx had
             no "Edited by …", so the site falls back to the default credit. */}
         <Field label="Editors">{bio.editors || "—"}</Field>

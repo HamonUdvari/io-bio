@@ -73,6 +73,11 @@ export type ExtractedBio = {
   imageAttachment: ImageAttachment | null;
   version: string | null;
   authors: string | null;
+  /** The byline as written when it marks a deceased author ("James P. Muldoon,
+   * Jr. (†) and …"); the header shows it. `authors` (from the citation) has no
+   * mark and feeds the citation and Zenodo. Null when the author line has no
+   * "(†)". */
+  byline: string | null;
   /** Per-entry editors credit from the "How to cite" line ("Bob Reinalda, Kent
    * J. Kille and Jaci L. Eisenberg"). Null when the docx lacks the segment. */
   editors: string | null;

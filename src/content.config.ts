@@ -80,6 +80,9 @@ export const bioDataSchema = z.object({
     .optional(),
   publishedYear: z.number().optional(), // citation year; else derive from `version` date
   authors: z.string().optional(),
+  // The Word byline when it marks a deceased author ("(†)"); the header shows
+  // it instead of `authors`.
+  byline: z.string().optional(),
   // Per-entry editors credit from the entry's own "How to cite" line (see
   // docxLoader / parseCitation) — shown in "How to cite", mirrored to Zenodo.
   editors: z.string().optional(),

@@ -104,6 +104,21 @@ describe("buildMetadata — belongs-to-the-dictionary shape", () => {
     expect(metadata.creators.map((c) => c.name)).toEqual(["Jane Doe", "John Smith"]);
     expect(metadata.publication_date).toBe("2019-09-23");
   });
+
+  it("builds Lie's creators from the authors, never from the byline", () => {
+    const { metadata } = buildMetadata(
+      {
+        ...entry,
+        authors: "James P. Muldoon, Jr. and Ellen Jenny Ravndal",
+        byline: "James P. Muldoon, Jr. (†) and Ellen Jenny Ravndal",
+      } as MetaEntry,
+      cfg,
+    );
+    expect(metadata.creators.map((c) => c.name)).toEqual([
+      "James P. Muldoon, Jr.",
+      "Ellen Jenny Ravndal",
+    ]);
+  });
 });
 
 describe("splitEditors", () => {

@@ -8,6 +8,12 @@ const CITATION_MARKER = "in IO BIO, Biographical Dictionary";
 
 const HOW_TO_CITE_MARKER = "how to cite this io bio entry";
 
+// A dagger in brackets marks a deceased author in the byline ("James P.
+// Muldoon, Jr. (†) and Ellen Jenny Ravndal"). The citation has no dagger, so
+// the byline is matched without it; the header shows the byline as written.
+const DECEASED_MARK = "(\u2020)";
+const DECEASED_MARK_RE = /\s*\(\u2020\)/g;
+
 // The citation reads:  AUTHORS, 'LASTNAME, Firstname' in IO BIO, Biographical …
 // Authors = the text before the quoted entry title. The old behaviour split on the
 // first comma, which dropped co-authors and the "Jr." suffix because the title
@@ -51,13 +57,16 @@ function extractEditors(citationText: string): string | null {
 /**
  * Find the citation paragraph (which contains the author name) and any
  * companion "How to cite this IO BIO entry" paragraph + standalone author
- * paragraph. Each is reported as consumed so the body excludes them.
+ * paragraph. Each is reported as consumed so the body excludes them. When the
+ * author line marks a deceased author ("(†)"), it is also returned as `byline`.
  *
  * Mirrors the original loader's behaviour: even when no citation paragraph
  * exists, the "How to cite" header is still consumed if present.
  */
 export function parseCitation(content: any[]): ParserResult<{
   authors: string | null;
+  /** The byline as written when it marks a deceased author ("(†)"); else null. */
+  byline: string | null;
   editors: string | null;
   consumed: number[];
 }> {
@@ -65,6 +74,7 @@ export function parseCitation(content: any[]): ParserResult<{
   const consumed: number[] = [];
   let authors: string | null = null;
   let editors: string | null = null;
+  let byline: string | null = null;
 
   // Take the LAST matching paragraph: the entry's own citation always closes the
   // document, whereas a Literature / Publications list may cite OTHER IO BIO
@@ -104,6 +114,11 @@ export function parseCitation(content: any[]): ParserResult<{
   if (howToIdx >= 0 && !consumed.includes(howToIdx)) consumed.push(howToIdx);
 
   if (authors) {
+    // Compare without the deceased-author mark and with the spaces collapsed,
+    // on both sides.
+    const norm = (s: string) =>
+      s.replace(DECEASED_MARK_RE, "").replace(/\s+/g, " ").trim().toLowerCase();
+    const want = norm(authors);
     // Search BACKWARD from the citation: the standalone author line sits just
     // above it, whereas a Literature list further up may also name the author
     // (a self-citation) — the first match would consume that list instead and
@@ -113,11 +128,17 @@ export function parseCitation(content: any[]): ParserResult<{
         i < citationIdx &&
         c?.type === "paragraph" &&
         typeof c.text === "string" &&
-        c.text.toLowerCase().includes(authors!.toLowerCase()),
+        norm(c.text).includes(want),
     );
-    if (authorIdx >= 0 && !consumed.includes(authorIdx))
-      consumed.push(authorIdx);
+    if (authorIdx >= 0) {
+      if (!consumed.includes(authorIdx)) consumed.push(authorIdx);
+      // Only a line that IS the author line becomes the byline, never a list
+      // that happens to name a deceased author.
+      const line: string = content[authorIdx].text;
+      if (line.includes(DECEASED_MARK) && norm(line) === want)
+        byline = line.replace(/\s+/g, " ").trim();
+    }
   }
 
-  return { value: { authors, editors, consumed }, warnings };
+  return { value: { authors, editors, byline, consumed }, warnings };
 }

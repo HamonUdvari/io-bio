@@ -47,6 +47,7 @@ const {
   imageSource,
   summary,
   authors,
+  byline,
   editors,
   version,
   imageFn,
@@ -121,7 +122,7 @@ const source = parseImageSource(imageSource);
       <h1 class="text-h2 leading-none">{displayName}</h1>
       <h2 class="text-h2 max-w-[45ch] mx-auto leading-none">{summary}</h2>
     </div>
-    <p>By <strong>{authors}</strong> · {version}</p>
+    <p>By <strong>{byline || authors}</strong> · {version}</p>
     <p class="text-balance">{life}</p>
     {introNotes?.map((note) => <p class="text-balance">{note}</p>)}
     <slot name="controls" />
