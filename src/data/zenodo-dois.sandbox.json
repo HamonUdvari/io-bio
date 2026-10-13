@@ -726,14 +726,14 @@
     "authors": "Matthias Schmelzer"
   },
   "la-guardia-frh-2026": {
-    "recordId": 618982,
+    "recordId": 619559,
     "conceptRecId": 611856,
     "conceptDoi": "10.5072/zenodo.611856",
-    "versionDoi": "10.5072/zenodo.618982",
-    "contentHash": "sha256:7a48df85287102081205657c7c88891e05f9f7282c64131786255f6530a36772",
+    "versionDoi": "10.5072/zenodo.619559",
+    "contentHash": "sha256:dfb8bb92bd906d63538cceded0ffe26bc18c361cc9619044d09ea34ee17412f9",
     "status": "published",
     "version": "29 September 2026",
-    "mintedAt": "2026-10-11T12:43:37.892Z",
+    "mintedAt": "2026-10-13T10:37:48.754Z",
     "env": "sandbox",
     "title": "LA GUARDIA, Fiorello Raffaele Enrico",
     "authors": "Chloé Maurel"
