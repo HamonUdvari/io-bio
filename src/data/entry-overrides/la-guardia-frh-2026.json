@@ -1,6 +1,17 @@
 {
   "slug": "la-guardia-frh-2026",
   "name": "LA GUARDIA, Fiorello Raffaele Enrico",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director-General",
+      "organisation": "United Nations Relief and Rehabilitation Administration",
+      "abbreviation": "UNRRA",
+      "startYear": 1946,
+      "endYear": 1946,
+      "ordinalText": "second"
+    }
+  ],
   "wordPortrait": "/src/content/bios-portraits/la-guardia-frh-2026.webp",
   "portraitImage": "",
   "facePosition": null,
@@ -27,16 +38,5 @@
     "authorsOverride": false,
     "editors": "Bob Reinalda, Kent J. Kille, Jaci L. Eisenberg, Ellen Ravndal and Dawisson Belém Lopes",
     "editorsOverride": false
-  },
-  "rolesOverride": false,
-  "roles": [
-    {
-      "title": "Director-General",
-      "organisation": "United Nations Relief and Rehabilitation Administration",
-      "abbreviation": "UNRRA",
-      "startYear": 1946,
-      "endYear": 1946,
-      "ordinalText": "second"
-    }
-  ]
+  }
 }

@@ -1,0 +1,42 @@
+{
+  "slug": "blix-hm-2026",
+  "name": "BLIX, Hans Mårten",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Director General",
+      "organisation": "International Atomic Energy Agency",
+      "abbreviation": "IAEA",
+      "startYear": 1981,
+      "endYear": 1997,
+      "ordinalText": "third"
+    }
+  ],
+  "wordPortrait": "/src/content/bios-portraits/blix-hm-2026.webp",
+  "portraitImage": "",
+  "facePosition": null,
+  "details": {
+    "imageSource": "Blix at the NATO debate in Stockholm 30 September 2015, photographer Frankie Fouganthin CC BY-SA 4.0",
+    "imageSourceOverride": false,
+    "lastName": "Blix",
+    "lastNameOverride": false,
+    "firstName": "Hans Mårten",
+    "firstNameOverride": false,
+    "knownAs": "",
+    "knownAsOverride": false,
+    "nee": "",
+    "neeOverride": false,
+    "summary": "Swedish Foreign Minister and third Director General of the International Atomic Energy Agency (IAEA) 1981-1997",
+    "summaryOverride": false,
+    "life": "Was born in Uppsala, Sweden on 28 June 1928. He is the son of Gunnar Blix, professor of medicine, and Hertha Wiberg, nurse. On 17 March 1962 he married Eva Margareta Kettis, later Swedish diplomat and Ambassador for Arctic and Antarctic Affairs, with whom he has two sons.",
+    "lifeOverride": false,
+    "nationality": "Swedish",
+    "nationalityOverride": false,
+    "version": "Version 29 October 2026",
+    "versionOverride": false,
+    "authors": "Malcolm Byrne",
+    "authorsOverride": false,
+    "editors": "Bob Reinalda, Kent J. Kille, Jaci L. Eisenberg, Ellen Ravndal and Dawisson Belém Lopes",
+    "editorsOverride": false
+  }
+}
