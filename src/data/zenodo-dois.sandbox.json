@@ -114,6 +114,19 @@
     "title": "BLACK, Eugene Robert",
     "authors": "Michael G. Schechter"
   },
+  "blix-hm-2026": {
+    "recordId": 627632,
+    "conceptRecId": 627631,
+    "conceptDoi": "10.5072/zenodo.627631",
+    "versionDoi": "10.5072/zenodo.627632",
+    "contentHash": "sha256:a1442bdecfa039923cf868bf79805cc34298f36996b9bed3fd08c435649479c7",
+    "status": "published",
+    "version": "29 October 2026",
+    "mintedAt": "2026-10-29T09:49:26.029Z",
+    "env": "sandbox",
+    "title": "BLIX, Hans Mårten",
+    "authors": "Malcolm Byrne"
+  },
   "bodenhausen-ghc-2023": {
     "recordId": 618933,
     "conceptRecId": 506427,
