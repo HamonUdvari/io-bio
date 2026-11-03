@@ -1,3 +1,18 @@
+## [1.28.1](https://github.com/HamonUdvari/io-bio/compare/v1.28.0...v1.28.1) (2026-11-03)
+
+
+### Bug Fixes
+
+* **bios:** rename the Matsuura file to Matsuura-K 2026 ([](https://github.com/HamonUdvari/io-bio/commit/496e0ee241cf3e02fbbf533d30473744ac23aef6))
+* **entries:** remove the space before the comma in "How to cite" ([](https://github.com/HamonUdvari/io-bio/commit/35a0aff781155bf190ec6ee4b4283ddc32bce946))
+* **seo:** replace the placeholder meta descriptions ([](https://github.com/HamonUdvari/io-bio/commit/e2d6bf6291fbdd95303fc96db76eb9d1dcf43d42))
+* **zenodo:** cite sandbox records only in sandbox builds ([](https://github.com/HamonUdvari/io-bio/commit/542f1dc9cb7b8e36d02eff0db719cf995e34f12a))
+* **zenodo:** harden the author split and the HTML escaping ([](https://github.com/HamonUdvari/io-bio/commit/67ece97eab41f865191af03a2ce040402e4d49fd))
+* **zenodo:** keep a suffixed author name whole in the record creators ([](https://github.com/HamonUdvari/io-bio/commit/4f37c184abf0218946f7bfab7de2bc9b2aae5598))
+* **zenodo:** keep IO BIO as the publisher when the setting is empty ([](https://github.com/HamonUdvari/io-bio/commit/b975fca9558915a9d36b679e2b0a032b73cfcd8a))
+* **zenodo:** name IO BIO as the publisher ([](https://github.com/HamonUdvari/io-bio/commit/c12f5341fb17ad3ac9de87fbefaaf84eb52a0e11))
+* **zenodo:** send the record description and notes as HTML paragraphs ([](https://github.com/HamonUdvari/io-bio/commit/6d3ca8290bbf09dba8937a94b1c5f9318b9d06d1))
+
 # [1.28.0](https://github.com/HamonUdvari/io-bio/compare/v1.27.4...v1.28.0) (2026-10-11)
 
 
