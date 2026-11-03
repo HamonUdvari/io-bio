@@ -80,6 +80,11 @@ const displayName = `${title}${aliasSuffix(knownAs, `${firstName} ${lastName}`, 
 // record: the citation then shows without a link (the whole-dictionary DOI is
 // intentionally never shown as an entry citation — it confuses casual readers).
 const zenodoCite = data.zenodoCite ?? null;
+// The host work in "How to cite". It stays on one line with the comma after
+// it (the "prettier-ignore" below keeps it so): a line break after </cite>
+// printed "Organizations , edited by" on the site and in the PDFs.
+const dictionaryTitle =
+  "IO BIO, Biographical Dictionary of Secretaries-General of International Organizations";
 
 // Image credit: parsed into a short clickable host label + full URL (see
 // @utils/imageSource). The same parser is used by the image-source CSV export.
@@ -206,33 +211,26 @@ const source = parseImageSource(imageSource);
     <h2 class="section__title">How to cite</h2>
 
     {
-      zenodoCite && (
+      zenodoCite &&
+        // prettier-ignore
         <p>
           {authors}, '{lastName}, {firstName}' in{" "}
-          <cite>
-            IO BIO, Biographical Dictionary of Secretaries-General of
-            International Organizations
-          </cite>
-          , {editorsCredit}. <a href={zenodoCite.url}>{zenodoCite.url}</a>
+          <cite>{dictionaryTitle}</cite>, {editorsCredit}.{" "}
+          <a href={zenodoCite.url}>{zenodoCite.url}</a>
           {zenodoCite.sandbox && (
             <span class="text-small opacity-70"> (sandbox preview)</span>
           )}
         </p>
-      )
     }
     {
       /* No DOI yet (an entry the mint has not reached): the same citation,
         without the link. */
-      !zenodoCite && (
+      !zenodoCite &&
+        // prettier-ignore
         <p>
           {authors}, '{lastName}, {firstName}' in{" "}
-          <cite>
-            IO BIO, Biographical Dictionary of Secretaries-General of
-            International Organizations
-          </cite>
-          , {editorsCredit}.
+          <cite>{dictionaryTitle}</cite>, {editorsCredit}.
         </p>
-      )
     }
     {
       /* Rights/colophon footnote — CMS-editable (Site text → Rights notice),
