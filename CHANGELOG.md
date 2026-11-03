@@ -1,3 +1,10 @@
+## [1.28.4](https://github.com/HamonUdvari/io-bio/compare/v1.28.3...v1.28.4) (2026-11-03)
+
+
+### Bug Fixes
+
+* **bios:** correct the surname capitals in four citations (overrides) ([](https://github.com/HamonUdvari/io-bio/commit/19734231bf55c9690707c53aa15e1c4cefc4d307))
+
 ## [1.28.3](https://github.com/HamonUdvari/io-bio/compare/v1.28.2...v1.28.3) (2026-11-03)
 
 
