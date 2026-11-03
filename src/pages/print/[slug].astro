@@ -22,6 +22,7 @@ const { lastName, firstName } = data;
 const { Content } = await render(Astro.props);
 
 const slug = Astro.params.slug ?? Astro.props.id;
+// Also the PDF's title metadata: the entry name, as on the entry page.
 const title = `${lastName.toUpperCase()}, ${firstName}`;
 ---
 
@@ -30,7 +31,7 @@ const title = `${lastName.toUpperCase()}, ${firstName}`;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>{`Print · ${title}`}</title>
+    <title>{title}</title>
   </head>
   <body class="pagedjs-print-root">
     <EntryArticle data={data} Content={Content} />
