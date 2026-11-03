@@ -1,3 +1,11 @@
+## [1.28.2](https://github.com/HamonUdvari/io-bio/compare/v1.28.1...v1.28.2) (2026-11-03)
+
+
+### Bug Fixes
+
+* **bios:** start Orfila's life text at "Was born" (override) ([](https://github.com/HamonUdvari/io-bio/commit/9b0b064c4752250e8da5aaa69dc942cf2c5279b0))
+* **print:** use the entry name as the PDF title ([](https://github.com/HamonUdvari/io-bio/commit/8a2cf900e8a5193ea859fe1c8a7d8f2681819f7d))
+
 ## [1.28.1](https://github.com/HamonUdvari/io-bio/compare/v1.28.0...v1.28.1) (2026-11-03)
 
 
