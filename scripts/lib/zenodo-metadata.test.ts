@@ -13,8 +13,8 @@ const cfg: MetadataConfig = {
   dictionaryHomeUrl: "https://www.io-bio.ch",
   partofTitle:
     "IO BIO, Biographical Dictionary of Secretaries-General of International Organizations",
-  imprintPublisher: "IO BIO Project, Radboud University Nijmegen",
-  imprintPlace: "Nijmegen, Netherlands",
+  imprintPublisher: "IO BIO",
+  imprintPlace: "",
   editors: [
     { name: "Reinalda, Bob", type: "Editor" },
     { name: "Kille, Kent J.", type: "Editor" },
@@ -47,8 +47,16 @@ describe("buildMetadata — belongs-to-the-dictionary shape", () => {
     const { metadata } = buildMetadata(entry, cfg);
     expect(metadata.publication_type).toBe("section");
     expect(metadata.partof_title).toBe(cfg.partofTitle);
-    expect(metadata.imprint_publisher).toBe(cfg.imprintPublisher);
-    expect(metadata.imprint_place).toBe(cfg.imprintPlace);
+    expect(metadata.imprint_publisher).toBe("IO BIO");
+  });
+
+  it("sends no place of publication when none is set, and a set one as is", () => {
+    expect(buildMetadata(entry, cfg).metadata.imprint_place).toBeUndefined();
+    const { metadata } = buildMetadata(entry, {
+      ...cfg,
+      imprintPlace: "City, Country",
+    });
+    expect(metadata.imprint_place).toBe("City, Country");
   });
 
   it("mirrors the entry's own editors as contributors (type Editor)", () => {

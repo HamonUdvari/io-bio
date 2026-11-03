@@ -69,9 +69,10 @@ const DICTIONARY_HOME_URL = (
 const PARTOF_TITLE =
   process.env.ZENODO_PARTOF_TITLE ??
   "IO BIO, Biographical Dictionary of Secretaries-General of International Organizations";
-const IMPRINT_PUBLISHER =
-  process.env.ZENODO_IMPRINT_PUBLISHER ?? "IO BIO Project, Radboud University Nijmegen";
-const IMPRINT_PLACE = process.env.ZENODO_IMPRINT_PLACE ?? "Nijmegen, Netherlands";
+// The publisher is IO BIO itself: the editors manage the content (About page).
+// No place of publication is sent (an empty value is omitted).
+const IMPRINT_PUBLISHER = process.env.ZENODO_IMPRINT_PUBLISHER ?? "IO BIO";
+const IMPRINT_PLACE = process.env.ZENODO_IMPRINT_PLACE ?? "";
 
 // FALLBACK editors → Zenodo `contributors` (type "Editor"). Each entry normally
 // mirrors its OWN "How to cite" editors (meta `editors` → splitEditors); this
@@ -378,6 +379,9 @@ async function main() {
         console.log(`    editors: ${(metadata.contributors ?? []).map((c) => c.name).join("; ") || "—"}`);
         console.log(`    type:    ${metadata.publication_type}  license: ${metadata.license}`);
         console.log(`    partOf:  ${metadata.partof_title ?? "—"}`);
+        console.log(
+          `    imprint: ${metadata.imprint_publisher ?? "—"}  place: ${metadata.imprint_place ?? "—"}`,
+        );
         console.log(`    date:    ${metadata.publication_date}  version: ${metadata.version ?? "—"}`);
         console.log(
           `    rels:    ${metadata.related_identifiers.map((r) => `${r.relation}→${r.identifier}`).join("  ")}`,
