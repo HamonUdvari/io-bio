@@ -222,6 +222,20 @@ const source = parseImageSource(imageSource);
       )
     }
     {
+      /* No DOI yet (an entry the mint has not reached): the same citation,
+        without the link. */
+      !zenodoCite && (
+        <p>
+          {authors}, '{lastName}, {firstName}' in{" "}
+          <cite>
+            IO BIO, Biographical Dictionary of Secretaries-General of
+            International Organizations
+          </cite>
+          , {editorsCredit}.
+        </p>
+      )
+    }
+    {
       /* Rights/colophon footnote — CMS-editable (Site text → Rights notice),
         rendered from markdown. Keep in sync with RIGHTS_NOTE in
         scripts/zenodo-mint.ts (the Zenodo record's `notes`). */

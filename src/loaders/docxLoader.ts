@@ -42,12 +42,11 @@ function loadDoiMap(): Record<string, CiteRecord> {
 }
 const DOI_MAP = loadDoiMap();
 
-// The sandbox DOI map (committed temporarily for the client demo, issue #2) —
-// read REGARDLESS of env so "How to cite" can PREVIEW the per-entry citation
-// pointing at the sandbox deposit before production DOIs are minted. The
-// production versionDoi/conceptDoi above always take precedence once they exist.
-// The production mint build (ZENODO_MINT_ENV=production) skips this map: see
-// citeFor in scripts/lib/zenodo-cite.ts.
+// The sandbox DOI map. Only a sandbox build cites it: the sandbox mint build
+// (ZENODO_MINT_ENV=sandbox), so the sandbox deposits cite their own records,
+// or a local preview with ZENODO_ENV=sandbox. A deploy build never does, so the
+// live site never links to sandbox.zenodo.org: see citeFor in
+// scripts/lib/zenodo-cite.ts.
 function loadSandboxMap(): Record<string, CiteRecord> {
   const p = path.resolve("./src/data", "zenodo-dois.sandbox.json");
   if (!existsSync(p)) return {};

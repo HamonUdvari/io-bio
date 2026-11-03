@@ -55,33 +55,6 @@ const pdfHref = `${base}entries/${slug}.pdf`;
 // Live Paged.js print preview (the design surface; also what the PDF is rendered
 // from) — the debug link opens it.
 const printHref = `${base}print/${slug}`;
-
-// Per-entry Zenodo SANDBOX record link — a build-time debug aid (next to the
-// print-preview debug control) to eyeball the sandbox deposit. Points at the
-// CONCEPT record (conceptRecId, always-latest), matching the "How to cite"
-// citation built in docxLoader, so both Zenodo surfaces on the page resolve to
-// the same deposit. Read the sandbox DOI map via glob so the build won't fail
-// when it's absent; independent of ZENODO_ENV. A draft (a DOI the mint
-// reserved but has not published) has no public record page yet: skip it.
-const sandboxDoiMap = (Object.values(
-  import.meta.glob("/src/data/zenodo-dois.sandbox.json", {
-    eager: true,
-    import: "default",
-  }),
-)[0] ?? {}) as Record<
-  string,
-  {
-    recordId?: number | string;
-    conceptRecId?: number | string;
-    status?: string;
-  }
->;
-const mapRec = sandboxDoiMap[slug ?? ""];
-const sandboxRec = mapRec?.status === "draft" ? undefined : mapRec;
-const sandboxRecordId = sandboxRec?.conceptRecId ?? sandboxRec?.recordId;
-const sandboxUrl = sandboxRecordId
-  ? `https://sandbox.zenodo.org/records/${sandboxRecordId}`
-  : null;
 ---
 
 {
@@ -105,22 +78,12 @@ const sandboxUrl = sandboxRecordId
             download={`${slug}-iobio.pdf`}
             >Download (PDF)</a
           >
-          {/* Debug links (screen only): the live browser-print view for iterating
-              on print styles, and the per-entry Zenodo sandbox deposit if minted. */}
-          <div class="flex flex-row gap-x-4 text-small">
-            {/* <a class="cursor-pointer underline opacity-70 hover:opacity-100"
-                   href={printHref}>Print preview</a> */}
-            {sandboxUrl && (
-              <a
-                class="underline opacity-70 hover:opacity-100"
-                href={sandboxUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Zenodo
-              </a>
-            )}
-          </div>
+          {/* Debug link (screen only), off: the live browser-print view for
+              iterating on print styles. To use it, restore:
+              <div class="flex flex-row gap-x-4 text-small">
+                <a class="cursor-pointer underline opacity-70 hover:opacity-100"
+                   href={printHref}>Print preview</a>
+              </div> */}
         </div>
       </EntryArticle>
     </Layout>

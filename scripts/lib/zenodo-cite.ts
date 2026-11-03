@@ -33,13 +33,15 @@ const isSandboxDoi = (s?: string) => !!s && s.startsWith("10.5072/");
 /**
  * - `doi`: the entry's record in the map the loader reads for `doiEnv` (the
  *   production map, unless ZENODO_ENV=sandbox).
- * - `sandbox`: its record in the sandbox map.
- * - `mintEnv`: ZENODO_MINT_ENV of the build. The production mint build skips
- *   the sandbox map, so its PDFs never cite a sandbox record. A draft record
- *   (a DOI reserved by the two-phase mint, not yet published) counts only in
- *   the mint build of its own env, so a deploy never shows an unpublished DOI.
- *   A production draft has no concept DOI yet, so it cites its reserved
- *   version DOI.
+ * - `sandbox`: its record in the sandbox map. Only a sandbox build reads it:
+ *   the sandbox mint build (ZENODO_MINT_ENV=sandbox) or a local preview with
+ *   ZENODO_ENV=sandbox. A deploy build (neither var set) and the production
+ *   mint build never cite a sandbox record, so the live site and its PDFs
+ *   never link to sandbox.zenodo.org.
+ * - `mintEnv`: ZENODO_MINT_ENV of the build. A draft record (a DOI reserved by
+ *   the two-phase mint, not yet published) counts only in the mint build of
+ *   its own env, so a deploy never shows an unpublished DOI. A production
+ *   draft has no concept DOI yet, so it cites its reserved version DOI.
  */
 export function citeFor(opts: {
   doi?: CiteRecord;
@@ -53,7 +55,9 @@ export function citeFor(opts: {
       ? r
       : undefined;
   const doi = usable(opts.doi);
-  const sandbox = mintEnv === "production" ? undefined : usable(opts.sandbox);
+  const sandboxBuild =
+    mintEnv !== "production" && (mintEnv === "sandbox" || doiEnv === "sandbox");
+  const sandbox = sandboxBuild ? usable(opts.sandbox) : undefined;
   const out: CiteResult = {};
   if (doi && (!doi.env || doi.env === doiEnv)) {
     if (

@@ -6,15 +6,19 @@ type Env = "sandbox" | "production";
 const isSandboxDoi = (s?: string) => !!s && s.startsWith("10.5072/");
 
 // The loader's rule before citeFor existed (docxLoader.ts in release 1.27.4),
-// kept here to prove that citeFor gives the same result in every case. The
-// production mint build (ZENODO_MINT_ENV=production) read an empty sandbox map.
-function oldLoaderRule(
+// with one change: only a sandbox build (the sandbox mint build, or
+// ZENODO_ENV=sandbox) reads the sandbox map; a deploy build and the production
+// mint build read none. Kept here to prove citeFor in every case.
+function referenceRule(
   doi: CiteRecord | undefined,
   sandboxRecord: CiteRecord | undefined,
   env: Env,
   mintEnv: string | undefined,
 ) {
-  const sb = mintEnv === "production" ? undefined : sandboxRecord;
+  const sb =
+    mintEnv !== "production" && (mintEnv === "sandbox" || env === "sandbox")
+      ? sandboxRecord
+      : undefined;
   const data: Record<string, unknown> = {};
   if (doi && (!doi.env || doi.env === env)) {
     if (
@@ -105,7 +109,7 @@ describe("citeFor", () => {
   );
 
   it.each(cases)(
-    "matches the old loader rule (%j, %j, %s, mint %s)",
+    "matches the reference rule (%j, %j, %s, mint %s)",
     (doi, sb, env, mintEnv) => {
       const r = citeFor({ doi, sandbox: sb, doiEnv: env, mintEnv });
       const now: Record<string, unknown> = {};
@@ -113,16 +117,36 @@ describe("citeFor", () => {
       if (r.versionDoi) now.versionDoi = r.versionDoi;
       if (r.conceptDoi) now.conceptDoi = r.conceptDoi;
       if (r.cite) now.zenodoCite = r.cite;
-      expect(now).toEqual(oldLoaderRule(doi, sb, env, mintEnv));
+      expect(now).toEqual(referenceRule(doi, sb, env, mintEnv));
     },
   );
 
+  const sandbox = { recordId: 5, conceptRecId: 1 };
+
+  it("never cites the sandbox in a deploy build (no ZENODO_ENV, no mint env)", () => {
+    expect(citeFor({ sandbox, doiEnv: "production" }).cite).toBeUndefined();
+  });
+
   it("never cites the sandbox in the production mint build", () => {
-    const sandbox = { recordId: 5, conceptRecId: 1 };
-    expect(citeFor({ sandbox, doiEnv: "production" }).cite?.sandbox).toBe(true);
     expect(
       citeFor({ sandbox, doiEnv: "production", mintEnv: "production" }).cite,
     ).toBeUndefined();
+    expect(
+      citeFor({ sandbox, doiEnv: "sandbox", mintEnv: "production" }).cite,
+    ).toBeUndefined();
+  });
+
+  it("cites the sandbox record in the sandbox mint build", () => {
+    expect(
+      citeFor({ sandbox, doiEnv: "production", mintEnv: "sandbox" }).cite,
+    ).toEqual({ url: "https://sandbox.zenodo.org/records/1", sandbox: true });
+  });
+
+  it("still previews the sandbox record locally with ZENODO_ENV=sandbox", () => {
+    expect(citeFor({ sandbox, doiEnv: "sandbox" }).cite).toEqual({
+      url: "https://sandbox.zenodo.org/records/1",
+      sandbox: true,
+    });
   });
 });
 
@@ -186,7 +210,8 @@ describe("citeFor: draft records (DOIs reserved, not yet published)", () => {
   it("treats a record without status as published", () => {
     const { status: _, ...published } = sandboxDraft;
     expect(
-      citeFor({ sandbox: published, doiEnv: "production" }).cite?.url,
+      citeFor({ sandbox: published, doiEnv: "production", mintEnv: "sandbox" })
+        .cite?.url,
     ).toBe("https://sandbox.zenodo.org/records/49");
   });
 });
