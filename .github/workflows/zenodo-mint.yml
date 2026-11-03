@@ -52,12 +52,20 @@ jobs:
         id: chrome
         with:
           chrome-version: stable
+      # Convert non-web embedded images (e.g. a .tif portrait) to PNG at build
+      # time — the runner lacks LibreOffice by default, so without this the
+      # entry PDF is rendered without its portrait. Mirrors deploy.yml.
+      - name: Install LibreOffice (headless image conversion)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-core libreoffice-draw
+          soffice --version
       - name: Build (emits dist/zenodo-meta.json + entry pages)
         # Only a sandbox build cites sandbox records, so the production PDFs
-        # never cite one. The mint build also
-        # counts the env's reserved, unpublished DOIs (see citeFor in
-        # scripts/lib/zenodo-cite.ts). The mint step reserves new DOIs,
-        # rebuilds the site and publishes, so one run is enough.
+        # never cite one. The mint build also counts the env's reserved,
+        # unpublished DOIs (see citeFor in scripts/lib/zenodo-cite.ts). The
+        # mint step reserves new DOIs, rebuilds the site and publishes, so one
+        # run is enough.
         env:
           ZENODO_MINT_ENV: ${{ inputs.env }}
         run: pnpm run build
