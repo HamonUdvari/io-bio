@@ -18,8 +18,8 @@
   "details": {
     "imageSource": "M’Bow, November 1974, UNESCO, photographer Dominique Roger",
     "imageSourceOverride": false,
-    "lastName": "M’bow",
-    "lastNameOverride": false,
+    "lastName": "M’Bow",
+    "lastNameOverride": true,
     "firstName": "Amadou Mahtar",
     "firstNameOverride": false,
     "knownAs": "",

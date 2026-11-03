@@ -18,8 +18,8 @@
   "details": {
     "imageSource": "La Guardia, 23 March 1940, World-Telegram, photographer Fred Palumbo",
     "imageSourceOverride": false,
-    "lastName": "la Guardia",
-    "lastNameOverride": false,
+    "lastName": "La Guardia",
+    "lastNameOverride": true,
     "firstName": "Fiorello Raffaele Enrico",
     "firstNameOverride": false,
     "knownAs": "‘Raffaele’ was removed later and ‘Enrico’ Americanized to ‘Henry’",

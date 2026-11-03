@@ -16,8 +16,8 @@
   "details": {
     "imageSource": "McDonald, 1951, Wikimedia Commons",
     "imageSourceOverride": false,
-    "lastName": "McDONALD",
-    "lastNameOverride": false,
+    "lastName": "McDonald",
+    "lastNameOverride": true,
     "firstName": "James Grover",
     "firstNameOverride": false,
     "knownAs": "",

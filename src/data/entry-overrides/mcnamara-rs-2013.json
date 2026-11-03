@@ -18,8 +18,8 @@
   "details": {
     "imageSource": "McNamara, 25 September 1978, World Bank Group, photographer Giuseppe Franchini",
     "imageSourceOverride": false,
-    "lastName": "McNAMARA",
-    "lastNameOverride": false,
+    "lastName": "McNamara",
+    "lastNameOverride": true,
     "firstName": "Robert Strange",
     "firstNameOverride": false,
     "knownAs": "",
