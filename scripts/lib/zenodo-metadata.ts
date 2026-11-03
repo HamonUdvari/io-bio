@@ -133,15 +133,32 @@ export function parsePublicationDate(version: string): string | null {
   return null;
 }
 
-/** Split a display author string into Zenodo creators (no ORCID in source). */
+// A name suffix that follows a comma inside ONE name ("James P. Muldoon, Jr.").
+const NAME_SUFFIX_RE = /^(?:jr|sr)\.?$|^(?:ii|iii|iv)$/i;
+
+/**
+ * Split a display author string into Zenodo creators (no ORCID in source).
+ *
+ * Zenodo's legacy API reads a comma in `name` as "Family, Given". The authors
+ * are "First Last" prose, so no creator name may keep a comma:
+ * - "A, B and C" (a list) splits at the commas, like `splitEditors`;
+ * - a suffix after a comma ("James P. Muldoon, Jr.") joins its name with a
+ *   space ("James P. Muldoon Jr."), so Zenodo stores the whole name as written.
+ * The site and the PDF keep the authors exactly as the Word file has them.
+ */
 export function splitAuthors(authors: string): ZenodoCreator[] {
   const raw = (authors ?? "").trim();
   if (!raw) return [{ name: "IO BIO" }];
-  const parts = raw
-    .split(/\s+and\s+|\s*&\s*/i)
-    .map((s) => s.trim())
-    .filter(Boolean);
-  return (parts.length ? parts : [raw]).map((name) => ({ name }));
+  const names: string[] = [];
+  for (const part of raw.split(/\s+and\s+|\s*&\s*/i)) {
+    for (const piece of part.split(",").map((s) => s.trim())) {
+      if (!piece) continue;
+      if (NAME_SUFFIX_RE.test(piece) && names.length) {
+        names[names.length - 1] += ` ${piece}`;
+      } else names.push(piece);
+    }
+  }
+  return (names.length ? names : [raw]).map((name) => ({ name }));
 }
 
 /**

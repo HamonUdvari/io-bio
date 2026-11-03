@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildMetadata,
   computeStateHash,
+  splitAuthors,
   splitEditors,
 } from "./zenodo-metadata.ts";
 import type { MetaEntry, MetadataConfig } from "./zenodo-metadata.ts";
@@ -115,9 +116,64 @@ describe("buildMetadata — belongs-to-the-dictionary shape", () => {
       cfg,
     );
     expect(metadata.creators.map((c) => c.name)).toEqual([
-      "James P. Muldoon, Jr.",
+      "James P. Muldoon Jr.",
       "Ellen Jenny Ravndal",
     ]);
+  });
+});
+
+describe("splitAuthors", () => {
+  const names = (s: string) => splitAuthors(s).map((c) => c.name);
+
+  it("keeps 'First Last' names as written", () => {
+    expect(names("Auriane Guilbaud")).toEqual(["Auriane Guilbaud"]);
+    expect(names("Valentine M. Moghadam and Jessica Walker")).toEqual([
+      "Valentine M. Moghadam",
+      "Jessica Walker",
+    ]);
+    expect(names("Marijke van Faassen & Marina Pérez de Arcos")).toEqual([
+      "Marijke van Faassen",
+      "Marina Pérez de Arcos",
+    ]);
+  });
+
+  it("joins a suffix to its name without the comma (Zenodo reads a comma as 'Family, Given')", () => {
+    expect(names("James P. Muldoon, Jr. and Ellen Jenny Ravndal")).toEqual([
+      "James P. Muldoon Jr.",
+      "Ellen Jenny Ravndal",
+    ]);
+    expect(names("John Smith, Sr.")).toEqual(["John Smith Sr."]);
+    expect(names("John Smith, III and Jane Doe")).toEqual([
+      "John Smith III",
+      "Jane Doe",
+    ]);
+  });
+
+  it("splits a comma list of authors, with or without the serial comma", () => {
+    expect(names("Ann Lee, Bo Chen and Cy Diaz")).toEqual([
+      "Ann Lee",
+      "Bo Chen",
+      "Cy Diaz",
+    ]);
+    expect(names("Ann Lee, Bo Chen, and Cy Diaz")).toEqual([
+      "Ann Lee",
+      "Bo Chen",
+      "Cy Diaz",
+    ]);
+  });
+
+  it("never sends a comma to Zenodo", () => {
+    for (const s of [
+      "James P. Muldoon, Jr. and Ellen Jenny Ravndal",
+      "Ann Lee, Bo Chen, and Cy Diaz",
+      "John Smith, III",
+    ]) {
+      for (const n of names(s)) expect(n).not.toContain(",");
+    }
+  });
+
+  it("falls back to IO BIO when there are no authors", () => {
+    expect(names("")).toEqual(["IO BIO"]);
   });
 });
 
