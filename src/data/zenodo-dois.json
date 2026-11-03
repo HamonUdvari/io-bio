@@ -1,1 +1,15 @@
-{}
+{
+  "lie-th-2017": {
+    "recordId": 23923685,
+    "conceptRecId": 23923684,
+    "conceptDoi": "10.5281/zenodo.23923684",
+    "versionDoi": "10.5281/zenodo.23923685",
+    "contentHash": "sha256:413c0992925e9d47498d23d1c9811f2b072260faf33a0536a2b68e74314118a6",
+    "status": "published",
+    "version": "22 October 2017",
+    "mintedAt": "2026-11-03T16:01:24.829Z",
+    "env": "production",
+    "title": "LIE, Trygve Halvdan",
+    "authors": "James P. Muldoon, Jr. and Ellen Jenny Ravndal"
+  }
+}
