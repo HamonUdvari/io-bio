@@ -1,4 +1,4 @@
 ---
 title: IO BIO
-description: IO Bio description
+description: IO BIO, Biographical Dictionary of Secretaries-General of International Organizations
 ---
