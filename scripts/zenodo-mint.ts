@@ -241,7 +241,7 @@ function readMeta(): MetaEntry[] {
   const f = path.resolve("dist/zenodo-meta.json");
   if (!existsSync(f))
     throw new Error(
-      "dist/zenodo-meta.json not found — run `npm run build` first (it emits the metadata endpoint).",
+      "dist/zenodo-meta.json not found — run `ZENODO_MINT_ENV=<env> pnpm build` first (it emits the metadata endpoint).",
     );
   return JSON.parse(readFileSync(f, "utf8")) as MetaEntry[];
 }
@@ -332,9 +332,9 @@ async function main() {
     meta = meta.slice(0, args.limit);
   }
 
-  // Production PDFs must never cite a sandbox record. The build reads the
-  // sandbox map as a citation preview unless ZENODO_MINT_ENV=production, so
-  // check the built print pages themselves (dry runs too).
+  // Production PDFs must never cite a sandbox record. Only a sandbox build
+  // cites the sandbox map (see citeFor), but check the built print pages
+  // themselves (dry runs too).
   if (args.env === "production") {
     const bad = meta
       .map((e) => e.slug)

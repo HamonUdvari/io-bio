@@ -19,10 +19,9 @@ dist/
 
 # Zenodo pipeline: rendered entry PDFs (build artifact).
 dist-pdf/
-# NOTE: src/data/zenodo-dois.sandbox.json is TEMPORARILY committed (issue #2) so
-# the deployed demo can preview the per-entry "How to cite" citation + the
-# Zenodo-sandbox debug links (both absent in CI otherwise, since the map is
-# gitignored). Remove the commit + re-ignore once production DOIs are minted.
+# NOTE: src/data/zenodo-dois.sandbox.json is committed: it records the sandbox
+# deposits for the sandbox refresh workflow. Deploy builds never cite it (see
+# citeFor in scripts/lib/zenodo-cite.ts); only sandbox builds do.
 
 # Incremental entry-PDF render cache (rebuilt in CI via actions/cache).
 .pdf-cache/

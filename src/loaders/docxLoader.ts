@@ -564,8 +564,9 @@ const docxEntryType: ContentEntryType = {
     // key stays the bare slug — re-key here if that ever changes.
     const doiKey = githubSlug(basename(filePath, path.extname(filePath)));
     // The per-entry citation for "How to cite" (issue #2): a production DOI
-    // (doi.org) when one exists, else the sandbox deposit's concept record as a
-    // preview. The rule lives in scripts/lib/zenodo-cite.ts.
+    // (doi.org) when one exists. Only a sandbox build cites the sandbox
+    // deposit's concept record instead. The rule lives in
+    // scripts/lib/zenodo-cite.ts.
     const cite = citeFor({
       doi: DOI_MAP[doiKey],
       sandbox: SANDBOX_MAP[doiKey],

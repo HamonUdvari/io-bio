@@ -53,8 +53,8 @@ jobs:
         with:
           chrome-version: stable
       - name: Build (emits dist/zenodo-meta.json + entry pages)
-        # A production build skips the sandbox citation fallback, so the
-        # production PDFs never cite a sandbox record. The mint build also
+        # Only a sandbox build cites sandbox records, so the production PDFs
+        # never cite one. The mint build also
         # counts the env's reserved, unpublished DOIs (see citeFor in
         # scripts/lib/zenodo-cite.ts). The mint step reserves new DOIs,
         # rebuilds the site and publishes, so one run is enough.

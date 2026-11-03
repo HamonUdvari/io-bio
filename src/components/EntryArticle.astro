@@ -75,11 +75,10 @@ const displayName = `${title}${aliasSuffix(knownAs, `${firstName} ${lastName}`, 
 // --- How to cite ----------------------------------------------------------
 // Per-entry Zenodo citation (issue #2), built in docxLoader. It points to the
 // entry's OWN up-to-date Zenodo record: a production DOI via doi.org once
-// minted, else — for the current client preview — the sandbox deposit's concept
-// record (always-latest version) on sandbox.zenodo.org. Null when the entry has
-// no per-entry deposit, in which case only the URL "accessed on" citation shows
-// (the whole-dictionary DOI is intentionally never shown as an entry citation —
-// it confuses casual readers).
+// minted. Only a sandbox build (the sandbox mint, or ZENODO_ENV=sandbox) cites
+// the sandbox deposit's concept record instead. Null when there is no such
+// record: the citation then shows without a link (the whole-dictionary DOI is
+// intentionally never shown as an entry citation — it confuses casual readers).
 const zenodoCite = data.zenodoCite ?? null;
 
 // Image credit: parsed into a short clickable host label + full URL (see
