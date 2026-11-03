@@ -200,7 +200,7 @@ const escapeHtml = (s: string) =>
  * Zenodo shows `description` and `notes` as HTML, so plain parts joined by a
  * space run together ("…1946-1953 Was born…"). Each part becomes one escaped
  * paragraph. The "\n" between them keeps a space where Zenodo strips the tags
- * (DataCite export, the page's meta description).
+ * without one (the record page's meta description).
  */
 export function htmlParagraphs(parts: (string | undefined)[]): string {
   return parts
@@ -266,6 +266,9 @@ export function buildMetadata(
     : (cfg.editors ?? []);
 
   const creators = splitAuthors(e.authors);
+  if (!(e.authors ?? "").trim()) {
+    warnings.push('no authors in "How to cite": the creator is "IO BIO"');
+  }
   for (const c of [...creators, ...contributors]) {
     if (!/\s/.test(c.name)) {
       warnings.push(

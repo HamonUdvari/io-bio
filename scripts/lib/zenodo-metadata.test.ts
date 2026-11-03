@@ -273,6 +273,15 @@ describe("splitAuthors", () => {
     expect(warnings.join("\n")).toContain('one-word name "Kille"');
     expect(buildMetadata(entry, cfg).warnings).toEqual([]);
   });
+
+  it("warns when an entry has no authors and IO BIO becomes the creator", () => {
+    const { metadata, warnings } = buildMetadata(
+      { ...entry, authors: "" },
+      cfg,
+    );
+    expect(metadata.creators).toEqual([{ name: "IO BIO" }]);
+    expect(warnings.join("\n")).toContain("no authors");
+  });
 });
 
 describe("splitEditors", () => {

@@ -70,8 +70,10 @@ const PARTOF_TITLE =
   process.env.ZENODO_PARTOF_TITLE ??
   "IO BIO, Biographical Dictionary of Secretaries-General of International Organizations";
 // The publisher is IO BIO itself: the editors manage the content (About page).
-// No place of publication is sent (an empty value is omitted).
-const IMPRINT_PUBLISHER = process.env.ZENODO_IMPRINT_PUBLISHER ?? "IO BIO";
+// An empty setting keeps "IO BIO": without a publisher, Zenodo would put its
+// own name. No place of publication is sent (an empty value is omitted).
+const IMPRINT_PUBLISHER =
+  process.env.ZENODO_IMPRINT_PUBLISHER?.trim() || "IO BIO";
 const IMPRINT_PLACE = process.env.ZENODO_IMPRINT_PLACE ?? "";
 
 // FALLBACK editors → Zenodo `contributors` (type "Editor"). Each entry normally
