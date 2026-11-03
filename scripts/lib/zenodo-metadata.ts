@@ -266,7 +266,12 @@ export function buildMetadata(
     : (cfg.editors ?? []);
 
   const creators = splitAuthors(e.authors);
-  if (!(e.authors ?? "").trim()) {
+  // splitAuthors found no name (empty, or e.g. only "et al.").
+  const noNames =
+    creators.length === 1 &&
+    creators[0].name === "IO BIO" &&
+    !(e.authors ?? "").includes("IO BIO");
+  if (noNames) {
     warnings.push('no authors in "How to cite": the creator is "IO BIO"');
   }
   for (const c of [...creators, ...contributors]) {

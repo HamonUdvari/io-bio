@@ -204,8 +204,9 @@ describe("citeFor: draft records (DOIs reserved, not yet published)", () => {
       expect(
         citeFor({ sandbox: sandboxDraft, doiEnv: "production", mintEnv }).cite,
       ).toBeUndefined();
-      // Also in a local sandbox preview (ZENODO_ENV=sandbox), which reads the
-      // sandbox map but must still skip an unpublished draft.
+      // Also with ZENODO_ENV=sandbox. With no mint env, that local preview
+      // reads the sandbox map but must still skip an unpublished draft (a
+      // production mint build reads no sandbox map at all).
       expect(
         citeFor({ sandbox: sandboxDraft, doiEnv: "sandbox", mintEnv }).cite,
       ).toBeUndefined();

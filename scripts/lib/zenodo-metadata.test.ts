@@ -281,6 +281,8 @@ describe("splitAuthors", () => {
     );
     expect(metadata.creators).toEqual([{ name: "IO BIO" }]);
     expect(warnings.join("\n")).toContain("no authors");
+    const etAl = buildMetadata({ ...entry, authors: "et al." }, cfg);
+    expect(etAl.warnings.join("\n")).toContain("no authors");
   });
 });
 
