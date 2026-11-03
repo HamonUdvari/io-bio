@@ -1,3 +1,10 @@
+## [1.28.3](https://github.com/HamonUdvari/io-bio/compare/v1.28.2...v1.28.3) (2026-11-03)
+
+
+### Bug Fixes
+
+* **zenodo:** send a User-Agent with every Zenodo request ([](https://github.com/HamonUdvari/io-bio/commit/82037d0d2020de82aeff113868ed3b7f78179af4))
+
 ## [1.28.2](https://github.com/HamonUdvari/io-bio/compare/v1.28.1...v1.28.2) (2026-11-03)
 
 
