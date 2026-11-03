@@ -30,6 +30,11 @@ export interface DepositionFile {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+// Every request names its client. The front server of zenodo.org (not of the
+// sandbox) answers 403 with an HTML page to Node's default User-Agent
+// ("node"), so without this header no production request gets through.
+export const USER_AGENT = "io-bio-zenodo-mint/1.0 (+https://www.io-bio.ch)";
+
 export function createZenodoClient(opts: ZenodoClientOptions) {
   const baseUrl = opts.baseUrl.replace(/\/$/, "");
   const minInterval = opts.minIntervalMs ?? 700;
@@ -52,6 +57,7 @@ export function createZenodoClient(opts: ZenodoClientOptions) {
   async function request(method: string, url: string, o: ReqOpts = {}): Promise<any> {
     const target = o.absolute ? url : `${baseUrl}${url}`;
     const headers: Record<string, string> = {
+      "User-Agent": USER_AGENT,
       Authorization: `Bearer ${opts.token}`,
       ...(o.headers ?? {}),
     };
