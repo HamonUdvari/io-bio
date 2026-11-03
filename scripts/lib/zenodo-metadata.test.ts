@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildMetadata,
   computeStateHash,
+  htmlParagraphs,
   splitAuthors,
   splitEditors,
 } from "./zenodo-metadata.ts";
@@ -119,6 +120,65 @@ describe("buildMetadata — belongs-to-the-dictionary shape", () => {
       "James P. Muldoon Jr.",
       "Ellen Jenny Ravndal",
     ]);
+  });
+});
+
+describe("description and notes as HTML paragraphs", () => {
+  const strip = (html: string) => html.replace(/<[^>]+>/g, "");
+
+  it("puts the summary, the life text and the provenance in separate paragraphs", () => {
+    const { metadata } = buildMetadata(entry, cfg);
+    expect(metadata.description).toBe(
+      [
+        "<p>Ghanaian diplomat, seventh Secretary-General of the United Nations</p>",
+        "<p>Born 8 April 1938 in Kumasi; died 18 August 2018 in Bern.</p>",
+        "<p>Entry in IO BIO, Biographical Dictionary of Secretaries-General of International Organizations.</p>",
+      ].join("\n"),
+    );
+  });
+
+  it("keeps a space between the parts when Zenodo strips the tags", () => {
+    const { metadata } = buildMetadata(
+      {
+        ...entry,
+        summary: "First Secretary-General of the United Nations 1946-1953",
+        life: "Was born 16 July 1896 in Oslo.",
+      },
+      cfg,
+    );
+    const text = strip(metadata.description);
+    expect(text).not.toContain("1953Was");
+    expect(text).toContain("1946-1953\nWas born 16 July 1896");
+  });
+
+  it("escapes &, < and > in the text", () => {
+    expect(htmlParagraphs(["Food & Agriculture <FAO>", "", undefined])).toBe(
+      "<p>Food &amp; Agriculture &lt;FAO&gt;</p>",
+    );
+  });
+
+  it("puts the canonical link and each rights paragraph in its own paragraph", () => {
+    const { metadata } = buildMetadata(entry, {
+      ...cfg,
+      rightsNote: "Text © the author(s).\n\nThe portrait is excluded.",
+    });
+    expect(metadata.notes).toBe(
+      [
+        "<p>Canonical entry: https://www.io-bio.ch/entries/annan-k-2018</p>",
+        "<p>Text © the author(s).</p>",
+        "<p>The portrait is excluded.</p>",
+      ].join("\n"),
+    );
+  });
+
+  it("sends only the canonical link when there is no rights note", () => {
+    const { metadata } = buildMetadata(entry, {
+      ...cfg,
+      rightsNote: undefined,
+    });
+    expect(metadata.notes).toBe(
+      "<p>Canonical entry: https://www.io-bio.ch/entries/annan-k-2018</p>",
+    );
   });
 });
 

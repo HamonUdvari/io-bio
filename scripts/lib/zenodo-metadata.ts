@@ -186,6 +186,23 @@ export function splitEditors(editors: string): ZenodoContributor[] {
     .map((name) => ({ name, type: "Editor" }));
 }
 
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/**
+ * Zenodo shows `description` and `notes` as HTML, so plain parts joined by a
+ * space run together ("…1946-1953 Was born…"). Each part becomes one escaped
+ * paragraph. The "\n" between them keeps a space where Zenodo strips the tags
+ * (DataCite export, the page's meta description).
+ */
+export function htmlParagraphs(parts: (string | undefined)[]): string {
+  return parts
+    .map((s) => (s ?? "").trim())
+    .filter(Boolean)
+    .map((s) => `<p>${escapeHtml(s)}</p>`)
+    .join("\n");
+}
+
 export function buildMetadata(
   e: MetaEntry,
   cfg: MetadataConfig,
@@ -197,10 +214,9 @@ export function buildMetadata(
 
   const provenance =
     "Entry in IO BIO, Biographical Dictionary of Secretaries-General of International Organizations.";
-  const description = [e.summary, e.life, provenance]
-    .map((s) => (s ?? "").trim())
-    .filter(Boolean)
-    .join(" ");
+  // The summary, the life text and the provenance as separate paragraphs, as
+  // the entry header shows them.
+  const description = htmlParagraphs([e.summary, e.life, provenance]);
 
   let publication_date = parsePublicationDate(e.version);
   if (!publication_date) {
@@ -229,10 +245,11 @@ export function buildMetadata(
   const canonicalUrl = cfg.entryUrl(e.slug);
   // Canonical link + the rights/colophon note (mirrors the in-document footnote,
   // so the record's license claim is correct given the third-party portrait).
-  const notes = [`Canonical entry: ${canonicalUrl}`, cfg.rightsNote]
-    .map((s) => (s ?? "").trim())
-    .filter(Boolean)
-    .join("\n\n");
+  // Each paragraph of the note (blank-line separated) is its own <p>.
+  const notes = htmlParagraphs([
+    `Canonical entry: ${canonicalUrl}`,
+    ...(cfg.rightsNote ?? "").split(/\n\s*\n/),
+  ]);
 
   // Editors mirror THIS entry's own "How to cite" line; fall back to the curated
   // list only when an entry's docx carries no editors segment.
