@@ -1,7 +1,8 @@
 # Auto-refresh the SANDBOX Zenodo deposits when the print template / CSS or entry
 # content changes on main, so the demo's per-entry "How to cite" deposits track
-# the design as it evolves. SANDBOX ONLY — production minting stays in the gated,
-# manual zenodo-mint.yml (this workflow never touches production).
+# the design as it evolves. SANDBOX ONLY — production has its own refresh
+# (zenodo-production-refresh.yml) and the manual zenodo-mint.yml; this workflow
+# never touches production.
 #
 # OPT-IN — dormant until you set BOTH (Settings → Secrets and variables → Actions):
 #   • repo VARIABLE  ZENODO_SANDBOX_AUTOMINT = true

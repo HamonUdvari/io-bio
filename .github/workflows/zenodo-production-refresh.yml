@@ -1,0 +1,178 @@
+# Auto-refresh the PRODUCTION Zenodo records (zenodo.org, permanent DOIs) when
+# entry content changes on main, e.g. when Bob saves an entry in the CMS or
+# uploads a Word file. The same flow as zenodo-sandbox-refresh.yml, but on
+# production: a new entry gets its DOI (reserve → rebuild → publish, in one
+# step, so its first PDF cites it), an entry whose content changed gets a new
+# version, and every other entry is skipped.
+#
+# OPT-IN — dormant until you set BOTH (Settings → Secrets and variables → Actions):
+#   • repo VARIABLE  ZENODO_PRODUCTION_AUTOMINT = true
+#   • repo SECRET    ZENODO_TOKEN  (a zenodo.org token: deposit:write + deposit:actions)
+# Set the variable to anything else to switch it off. The manual
+# zenodo-mint.yml stays available for one-off runs (they share one queue).
+#
+# Why a template change is a no-op here: the production idempotency hash is
+# content-only (no renderVersion, unlike the sandbox), so a layout/CSS edit
+# never re-versions a permanent record; such a run skips every entry.
+name: Zenodo production refresh (auto)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      # Same paths as zenodo-sandbox-refresh.yml — keep the two in sync.
+      # Print template / styling (no production re-version by itself, see header).
+      - "src/styles/global.css"
+      - "src/pages/print/**"
+      - "src/components/EntryArticle.astro"
+      - "src/components/Image.astro"
+      - "src/utils/displayName.ts"
+      - "src/utils/imageSource.ts"
+      - "src/remarkPlugins/**"
+      - "src/rehypePlugins/**"
+      - "astro.config.mjs"
+      # Entry content / extraction → the per-entry content hash:
+      - "src/content/bios/**"
+      - "src/loaders/**"
+      - "patches/**" # dependency patches, e.g. the officeparser Word-parsing fix
+      - "src/content.config.ts"
+      - "src/pages/zenodo-meta.json.ts"
+      # Also in the content hash (scripts/lib/zenodo-content.ts): the CMS
+      # default editors, per-entry overrides (details, roles, portrait choice),
+      # uploaded portraits, and the acronym map (roles → record keywords).
+      - "src/content/globals/citation.md"
+      - "src/data/entry-overrides/**"
+      - "src/data/entry-overrides-archive/**" # the loader's fallback for a re-added entry
+      - "src/content/bios-images/**"
+      - "src/data/org-abbreviations.json"
+      # Rights note (single source) → folded into the state hash (see
+      # computeStateHash), so a CMS edit re-versions the records.
+      - "src/content/globals/rights.md"
+      # The mint pipeline itself:
+      - "scripts/zenodo-*.ts"
+      - "scripts/lib/zenodo-*.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: write # to commit the updated DOI map
+  actions: write # to dispatch the Deploy workflow after pushing the map
+
+jobs:
+  refresh:
+    # Opt-in: only runs once the maintainer enables it (see header).
+    if: ${{ vars.ZENODO_PRODUCTION_AUTOMINT == 'true' }}
+    # The same group as the manual production mint (zenodo-mint.yml), so two
+    # production runs never work on the same map at once. At the JOB level, so
+    # a run skipped by the switch above never joins the queue (and so never
+    # replaces a waiting manual mint). Never cancel a run: a cancelled mint can
+    # leave DOIs that the map does not record yet.
+    concurrency:
+      group: zenodo-prod
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # The LATEST main, not the (possibly older) commit a queued run was
+          # triggered by — so the refresh starts from the current map.
+          ref: main
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.5.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: browser-actions/setup-chrome@v2
+        id: chrome
+        with:
+          chrome-version: stable
+      # Convert non-web embedded images (e.g. a .tif portrait) to PNG at build
+      # time — the runner lacks LibreOffice by default, so without this the
+      # entry PDF is rendered without its portrait. Mirrors deploy.yml.
+      - name: Install LibreOffice (headless image conversion)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-core libreoffice-draw
+          soffice --version
+      - name: Build (emits dist/zenodo-meta.json + the /print routes)
+        # The production mint build: it never cites a sandbox record, and it
+        # counts DOIs that an earlier run reserved but did not publish, so their
+        # print pages cite them (see citeFor in scripts/lib/zenodo-cite.ts).
+        env:
+          ZENODO_MINT_ENV: production
+        run: pnpm run build
+      # A new entry is reserved, the site rebuilt and the entry published, all
+      # in this one step (scripts/zenodo-mint.ts), so its first PDF cites it.
+      # No ZENODO_ENV here: "sandbox" there would switch the mint to the sandbox.
+      - name: Refresh production records (new entries + changed content)
+        id: mint
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: pnpm run zenodo:mint
+      - name: Commit DOI map + trigger deploy
+        # Runs even when the refresh step FAILED or was cancelled: the mint saves
+        # the map after every successful entry (and every reserved draft), so a
+        # partial run still holds new DOIs. Skipping this commit would lose them,
+        # and the next run would mint those entries again (duplicate DOIs).
+        # The job still ends as failed.
+        # Skipped only when the refresh never started.
+        if: ${{ always() && steps.mint.outcome != 'skipped' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for `gh workflow run` (Deploy dispatch)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          MAP=src/data/zenodo-dois.json
+          if [ -z "$(git status --porcelain -- "$MAP")" ]; then
+            echo "no DOI map changes to commit"
+            exit 0
+          fi
+          # Same commit logic as zenodo-mint.yml — keep the two in sync.
+          # Keep the map this run started from (base) and the one it minted (ours).
+          git show "HEAD:$MAP" > "$RUNNER_TEMP/base-map.json" 2>/dev/null ||
+            echo "{}" > "$RUNNER_TEMP/base-map.json"
+          cp "$MAP" "$RUNNER_TEMP/doi-map.json"
+          # Whatever fails below before the map lands on main, print this run's
+          # changed records so they can be added by hand.
+          pushed=false
+          trap '[ "$pushed" = true ] || { echo "::error::DOI map NOT pushed — add (or replace) the records below in $MAP on main by hand, keeping all other records"; cat "$RUNNER_TEMP/doi-delta.json" 2>/dev/null || cat "$RUNNER_TEMP/doi-map.json"; }' EXIT
+          node scripts/zenodo-merge-map.ts "$RUNNER_TEMP/base-map.json" "$RUNNER_TEMP/doi-map.json" "$RUNNER_TEMP/doi-delta.json"
+          # Merge onto the LATEST main and push, retrying if main advances meanwhile.
+          # Only the records this run changed are applied, so a hand fix to the
+          # map committed during the run is never reverted.
+          for attempt in 1 2 3 4 5; do
+            if ! git fetch origin main; then
+              echo "fetch failed; retrying ($attempt/5)"
+              sleep 5
+              continue
+            fi
+            git reset --hard FETCH_HEAD
+            node scripts/zenodo-merge-map.ts "$RUNNER_TEMP/base-map.json" "$RUNNER_TEMP/doi-map.json" "$MAP"
+            if [ -n "$(git status --porcelain -- "$MAP")" ]; then
+              git add -- "$MAP"
+              git commit -m "chore(zenodo): update DOI map [skip ci]"
+              if ! git push origin HEAD:main; then
+                echo "push rejected (main advanced); retrying ($attempt/5)"
+                sleep 5
+                continue
+              fi
+              echo "pushed DOI map (attempt $attempt)"
+            else
+              echo "DOI map already current on main"
+            fi
+            pushed=true
+            # The DOI map is read at BUILD time, so a new DOI only reaches the
+            # live entry page when the site rebuilds. A push made with the default
+            # GITHUB_TOKEN starts no workflow (GitHub's recursion guard), so we
+            # DISPATCH Deploy ourselves (workflow_dispatch is exempt; needs
+            # `actions: write`). No loop: the map file is not in this workflow's
+            # `paths:`, and Deploy makes no commits.
+            echo "dispatching Deploy"
+            gh workflow run deploy.yml --ref main
+            exit 0
+          done
+          echo "::error::could not push the DOI map after 5 attempts"
+          exit 1

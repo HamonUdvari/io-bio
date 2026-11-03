@@ -2,7 +2,9 @@
 # DOIs must be an explicit human action. Requires repo secrets:
 #   ZENODO_SANDBOX_TOKEN  (sandbox.zenodo.org token)
 #   ZENODO_TOKEN          (production zenodo.org token — only for env=production)
-# Production also requires Zenodo bulk-mint permission + a locked license first.
+# Production records are normally kept up to date by the automatic
+# zenodo-production-refresh.yml; this manual workflow is for one-off runs
+# (e.g. `only=<slugs>`). Both share the zenodo-prod queue.
 name: Zenodo mint (manual)
 
 on:
