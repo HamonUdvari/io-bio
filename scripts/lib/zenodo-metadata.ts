@@ -134,7 +134,8 @@ export function parsePublicationDate(version: string): string | null {
 }
 
 // A name suffix that follows a comma inside ONE name ("James P. Muldoon, Jr.").
-const NAME_SUFFIX_RE = /^(?:jr|sr)\.?$|^(?:ii|iii|iv)$/i;
+const NAME_SUFFIX_RE = /^(?:jr|sr|jnr|snr)\.?$|^(?:ii|iii|iv|v)\.?$/i;
+const ET_AL_RE = /^et\s*al\.?$/i;
 
 /**
  * Split a display author string into Zenodo creators (no ORCID in source).
@@ -144,21 +145,23 @@ const NAME_SUFFIX_RE = /^(?:jr|sr)\.?$|^(?:ii|iii|iv)$/i;
  * - "A, B and C" (a list) splits at the commas, like `splitEditors`;
  * - a suffix after a comma ("James P. Muldoon, Jr.") joins its name with a
  *   space ("James P. Muldoon Jr."), so Zenodo stores the whole name as written.
+ * An "et al." is dropped, as in `splitEditors`. `buildMetadata` warns about a
+ * one-word name, which a "Last, First" form would give.
  * The site and the PDF keep the authors exactly as the Word file has them.
  */
 export function splitAuthors(authors: string): ZenodoCreator[] {
-  const raw = (authors ?? "").trim();
-  if (!raw) return [{ name: "IO BIO" }];
+  const raw = (authors ?? "").replace(/[,\s]+et\s*al\.?\s*$/i, "").trim();
   const names: string[] = [];
   for (const part of raw.split(/\s+and\s+|\s*&\s*/i)) {
-    for (const piece of part.split(",").map((s) => s.trim())) {
-      if (!piece) continue;
-      if (NAME_SUFFIX_RE.test(piece) && names.length) {
+    const pieces = part.split(",").map((s) => s.trim());
+    pieces.forEach((piece, i) => {
+      if (!piece || ET_AL_RE.test(piece)) return;
+      if (i > 0 && NAME_SUFFIX_RE.test(piece) && names.length) {
         names[names.length - 1] += ` ${piece}`;
       } else names.push(piece);
-    }
+    });
   }
-  return (names.length ? names : [raw]).map((name) => ({ name }));
+  return (names.length ? names : ["IO BIO"]).map((name) => ({ name }));
 }
 
 /**
@@ -186,8 +189,12 @@ export function splitEditors(editors: string): ZenodoContributor[] {
     .map((name) => ({ name, type: "Editor" }));
 }
 
+// Escape for HTML; an "&" that already starts an entity ("&copy;") stays.
 const escapeHtml = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  s
+    .replace(/&(?!(?:[a-z][a-z0-9]*|#\d+|#x[0-9a-f]+);)/gi, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 
 /**
  * Zenodo shows `description` and `notes` as HTML, so plain parts joined by a
@@ -258,11 +265,20 @@ export function buildMetadata(
     ? perEntryEditors
     : (cfg.editors ?? []);
 
+  const creators = splitAuthors(e.authors);
+  for (const c of [...creators, ...contributors]) {
+    if (!/\s/.test(c.name)) {
+      warnings.push(
+        `one-word name "${c.name}": check the "How to cite" names ("First Last", no "Last, First")`,
+      );
+    }
+  }
+
   const metadata: ZenodoMetadata = {
     upload_type: "publication",
     publication_type: cfg.publicationType ?? "section",
     title,
-    creators: splitAuthors(e.authors),
+    creators,
     contributors: contributors.length ? contributors : undefined,
     description,
     publication_date,

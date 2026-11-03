@@ -159,6 +159,12 @@ describe("description and notes as HTML paragraphs", () => {
     expect(text).toContain("1946-1953\nWas born 16 July 1896");
   });
 
+  it("keeps an entity that the text already holds", () => {
+    expect(htmlParagraphs(["&copy; IO BIO &#169; &amp; R & D"])).toBe(
+      "<p>&copy; IO BIO &#169; &amp; R &amp; D</p>",
+    );
+  });
+
   it("escapes &, < and > in the text", () => {
     expect(htmlParagraphs(["Food & Agriculture <FAO>", "", undefined])).toBe(
       "<p>Food &amp; Agriculture &lt;FAO&gt;</p>",
@@ -242,6 +248,30 @@ describe("splitAuthors", () => {
 
   it("falls back to IO BIO when there are no authors", () => {
     expect(names("")).toEqual(["IO BIO"]);
+    expect(names(" , ")).toEqual(["IO BIO"]);
+  });
+
+  it("drops an 'et al.', as for the editors", () => {
+    expect(names("Ann Lee et al.")).toEqual(["Ann Lee"]);
+    expect(names("Ann Lee, et al.")).toEqual(["Ann Lee"]);
+  });
+
+  it("joins only a suffix that follows a comma", () => {
+    expect(names("John Smith, Jnr and Jane Doe, V")).toEqual([
+      "John Smith Jnr",
+      "Jane Doe V",
+    ]);
+    expect(names("Ann Lee and Jr.")).toEqual(["Ann Lee", "Jr."]);
+  });
+
+  it("warns about a one-word name, e.g. from a 'Last, First' form", () => {
+    const { metadata, warnings } = buildMetadata(
+      { ...entry, authors: "Kille, Kent J." },
+      cfg,
+    );
+    expect(metadata.creators.map((c) => c.name)).toEqual(["Kille", "Kent J."]);
+    expect(warnings.join("\n")).toContain('one-word name "Kille"');
+    expect(buildMetadata(entry, cfg).warnings).toEqual([]);
   });
 });
 
