@@ -83,7 +83,7 @@ sections:
       * Marieke Louis :muted[(HANSENNE)]
       * N. Piers Ludlow :muted[(JENKINS)]
       * Daniel Maul :muted[(MORSE)]
-      * Chloé Maurel :muted[(ANNAN, EVANS, HUXLEY, LA GUARDIA, MAHEU, MAYOR ZARAGOZA, MYRDAL, SADIK)]
+      * Chloé Maurel :muted[(ANNAN, EVANS, HUXLEY, LA GUARDIA, MAHEU, MAYOR ZARAGOZA, MYRDAL, SADIK, STRONG)]
       * Francine McKenzie :muted[(WYNDHAM WHITE)]
       * Ine (C.M.) Megens :muted[(LUNS)]
       * Seiko Mimaki :muted[(ADATCI)]
