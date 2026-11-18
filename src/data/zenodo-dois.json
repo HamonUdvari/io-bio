@@ -1325,6 +1325,19 @@
     "title": "STOPPANI, Pietro Angelo",
     "authors": "Bob Reinalda"
   },
+  "strong-mf-2026": {
+    "recordId": 24334778,
+    "conceptRecId": 24334777,
+    "conceptDoi": "10.5281/zenodo.24334777",
+    "versionDoi": "10.5281/zenodo.24334778",
+    "contentHash": "sha256:c36105d1640f2f94ced30ccb89d0f663f7e692191adb8180c426368ea3445c99",
+    "status": "published",
+    "version": "18 November 2026",
+    "mintedAt": "2026-11-18T08:08:41.971Z",
+    "env": "production",
+    "title": "STRONG, Maurice Frederick",
+    "authors": "Chloé Maurel"
+  },
   "sweetser-a-2026": {
     "recordId": 23924108,
     "conceptRecId": 23924107,
