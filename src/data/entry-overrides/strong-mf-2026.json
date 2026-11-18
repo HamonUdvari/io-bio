@@ -1,0 +1,42 @@
+{
+  "slug": "strong-mf-2026",
+  "name": "STRONG, Maurice Frederick",
+  "rolesOverride": false,
+  "roles": [
+    {
+      "title": "Executive Director",
+      "organisation": "United Nations Environment Programme",
+      "abbreviation": "UNEP",
+      "startYear": 1973,
+      "endYear": 1975,
+      "ordinalText": "first"
+    }
+  ],
+  "wordPortrait": "/src/content/bios-portraits/strong-mf-2026.webp",
+  "portraitImage": "",
+  "facePosition": null,
+  "details": {
+    "imageSource": "Strong, 1971, UN7666168",
+    "imageSourceOverride": false,
+    "lastName": "Strong",
+    "lastNameOverride": false,
+    "firstName": "Maurice Frederick",
+    "firstNameOverride": false,
+    "knownAs": "",
+    "knownAsOverride": false,
+    "nee": "",
+    "neeOverride": false,
+    "summary": "Canadian businessman and first Executive Director of the United Nations Environment Programme (UNEP) 1973-1975",
+    "summaryOverride": false,
+    "life": "Was born 29 April 1929 in Oak Lake, Manitoba, Canada and died 28 November 2015 in Ottawa, Canada. He was the son of Frederick Milton Strong, railway telegraph operator, and Mary Fyfe, teacher. On 29 July 1950 he married Pauline Olivette, teacher, with whom he had two daughters and two sons. After their divorce in 1980 he married Hanne Marstrand, interior designer, journalist and environmental and philanthropic leader, with whom he had one foster daughter, in 1981.",
+    "lifeOverride": false,
+    "nationality": "Canadian",
+    "nationalityOverride": false,
+    "version": "Version 18 November 2026",
+    "versionOverride": false,
+    "authors": "Chloé Maurel",
+    "authorsOverride": false,
+    "editors": "Bob Reinalda, Kent J. Kille, Jaci L. Eisenberg, Ellen Ravndal and Dawisson Belém Lopes",
+    "editorsOverride": false
+  }
+}
